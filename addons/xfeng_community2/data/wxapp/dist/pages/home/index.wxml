@@ -1,0 +1,11 @@
+<view class="page">
+    <!--<layout-head></layout-head>-->
+    <!-- wxp template -->
+    <view class="page__bd">
+        <web-view src="{{url}}" wx:if="{{canIUse && url}}"></web-view>
+        <view wx:if="{{!canIUse}}">请升级到最新微信</view>
+    </view>
+    <!--<view class="page__ft">-->
+    <!--<layout-foot></layout-foot>-->
+    <!--</view>-->
+</view>

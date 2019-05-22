@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商家入驻</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/css/demos.css">
+</head>
+<style>
+    .weui-cells:first-child{
+        margin-top: 0rem;
+    }
+    .weui-cells{
+        margin-top: 15px;
+        font-size: 1em;
+    }
+    .weui-cell__hd{
+        margin-right: 1em;
+        min-width: 4em;
+        text-align: justify;
+        text-align-last: justify;
+    }
+    .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+        color: #FF5400;
+    }
+    .check-box{
+        position: relative;
+        top: -2px;
+    }
+</style>
+<body>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd">店铺名称</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入店铺名称">
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd">联系人</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入联系人姓名">
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell  weui-cell_access">
+        <div class="weui-cell__hd">联系电话</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入联系人电话">
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access ">
+        <div class="weui-cell__hd">地址</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入详细地址">
+        </div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd">地址定位</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请选择经纬度" readonly>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd">营业时间</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="列如(8:00)" style="text-align: center" >
+        </div>
+        ▬
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="列如(24:00)" style="text-align: center">
+        </div>
+        <div class="weui-cell__ft"></div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access ">
+        <div class="weui-cell__hd">选择分类</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="in" type="text" value="" placeholder="请选择分类">
+        </div>
+        <div class="weui-cell__ft"></div>
+    </div>
+</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access ">
+        <div class="weui-cell__hd">选择套餐</div>
+    </div>
+    <div class="weui-cell weui-cell_access ">
+        <div class="weui-cell__bd">
+            <div style="float: left">
+                <div class="check-box fl">
+                    <label>
+                        <input type="radio" name="role" class="newslist" value="1" checked="checked">
+                    </label>
+                </div>
+                19.9元/年
+            </div>
+            <div style="float: left;">
+                <div class="check-box fl">
+                    <label>
+                        <input type="radio" name="role" class="newslist" value="2">
+                    </label>
+                </div>
+                29.9元/年
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui-cells ">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="请输入店铺简介" rows="3"></textarea>
+            <div class="weui-textarea-counter"><span>0</span>/200</div>
+        </div>
+    </div>
+</div>
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <div class="weui-uploader">
+                <div class="weui-uploader__hd">
+                    <p class="weui-uploader__title">图片上传</p>
+                </div>
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                            <!--<div class="weui-uploader__file-content">50%</div>-->
+                        <!--</li>-->
+                    </ul>
+                    <div class="weui-uploader__input-box">
+                        <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-top: 2rem;margin-bottom: 15px">
+    <a href="javascript:;" class="weui-btn register-guide-btn">提交</a>
+</div>
+
+
+
+<script src="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+<script src="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/js/common.js"></script>
+<script src="../../../weiqing/addons/xxxfeng_community/template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script>
+    $("#in").select({
+        title: "选择分类",
+        multi: true,
+        items: [
+            {
+                title: "画画",
+                value: 1,
+                description: "额外的数据1"
+            },
+            {
+                title: "打球",
+                value: 2,
+                description: "额外的数据2"
+            },
+            {
+                title: "唱歌",
+                value: 3,
+                description: "额外的数据3"
+            },
+            {
+                title: "游泳",
+                value: 4,
+                description: "额外的数据4"
+            },
+            {
+                title: "健身",
+                value: 5,
+                description: "额外的数据5"
+            },
+            {
+                title: "睡觉",
+                value: 6,
+                description: "额外的数据6"
+            },
+        ],
+        beforeClose: function(values, titles) {
+            if(values.indexOf("6") !== -1) {
+                $.toast("不能选睡觉", "cancel");
+                return false;
+            }
+            return true;
+        },
+        onChange: function(d) {
+            console.log(this, d);
+        },
+        onClose: function (d) {
+            console.log('close')
+        }
+    });
+</script>
+</body>
+</html>

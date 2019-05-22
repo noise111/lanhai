@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>{$_W['page']['title']}</title>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+    <script>
+        $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
+    
+    <script src="../addons/xfeng_community/libs/js/axios/0.16.2/axios.min.js"></script> 
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/swiper4.min.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/jquery-weui.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/swiper.css">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/jquery-weui.css">
+    
+    <link href="/addons/xfeng_community/template/mobile/default2/core/static/css/vendor.css" rel="stylesheet">
+    <link href="/addons/xfeng_community/template/mobile/default2/core/static/css/mobile/home.css?ceb0ad8e67263e1e72d9" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/main.css">
+    
+    <script type="text/javascript">
+        // jssdk config 对象
+        jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
+        // 是否启用调试
+        jssdkconfig.debug = false;
+        jssdkconfig.jsApiList = [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'translateVoice',
+            'startRecord',
+            'stopRecord',
+            'onRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard',
+            'openAddress'
+        ];
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            // var sharedata = window.settings.share || null;
+            var sharedata = {php echo json_encode($_share);};
+            wx.onMenuShareAppMessage(sharedata);
+            wx.onMenuShareTimeline(sharedata);
+            wx.onMenuShareQQ(sharedata);
+            wx.onMenuShareWeibo(sharedata);
+        });
+    </script>
+
+</head>
+<body>
+<div style="height:100%;">
+    <div class="weui-tab container">
+        <div class="weui-tab__panel vux-fix-safari-overflow-scrolling">
+            <!-- 幻灯片 -->
+            <div class="swiper-container shouye">
+                    <div class="swiper-wrapper">
+
+                    </div>
+                    <div class="swiper-pagination"></div>
+            </div>
+            <!-- 位置 -->
+            <div  class="default-home-head" >
+                <a href="{php echo $this->createMobileUrl('register',array('op'=>'region'))}" class="default-home-item"><i  class="iconfamily icon-dizhi"></i>&nbsp;<span  class="default-dizhi">{$_W['page']['title']}</span>&nbsp;<i  class="iconfamily icon-xiala1"></i></a>
+            </div>
+            <!-- 板块 -->
+            <div class="vux-swiper" style="height: auto">
+                <div  class="vux-swiper-item" dots-position="center" >
+                    <div  class="navlist">
+                        <div  class="weui-grids">
+                            <a  href="{php echo $this->createMobileUrl('introduction')}" class="weui-grid" style="width: 25%;">
+                                <div class="weui-grid__icon" style="background:#1da6f4;border-radius: 50%;"><img style="width: 36px;height: auto;margin: 0 auto;padding-top: 3px;" src="../addons/xfeng_community/template/mobile/default2/static/images/icon/home01.png"></div>
+                                <p class="weui-grid__label"><span>社区介绍</span></p>
+                            </a>
+                            <a  href="{php echo $this->createMobileUrl('servicefacilities')}" class="weui-grid" style="width: 25%;">
+                                <div class="weui-grid__icon" style="background:#7688f2;border-radius: 50%;"><img style="width: 32px; height: auto; margin: 0 auto; padding-top: 8px;" src="../addons/xfeng_community/template/mobile/default2/static/images/icon/home02.png"></div>
+                                <p class="weui-grid__label"><span>社区服务</span></p>
+                            </a>
+                            <a  href="{php echo $this->createMobileUrl('friend')}" class="weui-grid" style="width: 25%;">
+                                <div class="weui-grid__icon" style="background:#ff9b70;border-radius: 50%;"><img style="width: 32px; height: auto; margin: 0 auto; padding-top: 6px;" src="../addons/xfeng_community/template/mobile/default2/static/images/icon/home03.png"></div>
+                                <p class="weui-grid__label"><span>社区家友</span></p>
+                            </a>
+                            <a  href="{php echo $this->createMobileUrl('activityphotos')}" class="weui-grid" style="width: 25%;">
+                                <div class="weui-grid__icon" style="background:#d786f8;border-radius: 50%;"><img style="width: 32px; height: auto; margin: 0 auto; padding-top: 9px;" src="../addons/xfeng_community/template/mobile/default2/static/images/icon/home04.png"></div>
+                                <p class="weui-grid__label"><span>活动照片</span></p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 房源介绍 -->
+            <div class="homes_main">
+                    <div class="homes_title">
+                       房源介绍
+                    </div>
+                    <!-- 标签 -->
+                    <div class="homes_label">
+                        <ul>
+                            <li>
+                                    游戏主题
+                            </li>
+                            <li>
+                                    萌宠主题
+                            </li>
+                            <li>
+                                    读书主题
+                            </li>
+                            <li>
+                                    音乐主题
+                            </li>
+                            <li>
+                                    跑步主题
+                            </li>
+                            <li>
+                                    户外徒步主题
+                            </li>
+                        </ul>
+                    </div>
+                    <div  class="weui-panel weui-panel_access">
+                        <div  class="weui-panel__bd">
+                            <a  href="{php echo $this->createMobileUrl('houselease',array('op'=>'detail','id'=>'8'))}" class="weui-media-box weui-media-box_appmsg">
+                                <div  class="weui-media-box__hd" style="background: url('http://ming.ngrok.365safewalk.com/attachment/images/1/2018/11/VOivAAS0rj3GgfDfIY6nES6Eg2nbJk.png') no-repeat center center;    background-size: 100% auto;"></div>
+                                <div  class="weui-media-box__bd">
+                                    <div  class="lease-tit">
+                                        <p  style="width:100%;">测试租屋</p>
+                                    </div>
+                                    <div  class="lease-jianjie lease-tit">
+                                        <font>￥<b>1500</b>/月</font>
+                                        <span>30㎡ | 4/8层</span>
+                                    </div>
+                                    <p class="dizhi">
+                                            <i class="iconfamily icon-dizhi"></i>
+                                            距夏西大道公交站直线380米    
+                                    </p>
+                                    <p  class="fitmentlease-label"><span  class="fit">&nbsp;离公交近&nbsp;</span>
+                                        <span  class="fit">&nbsp;首次出租&nbsp;</span></p>
+                                </div>
+                            </a>
+                            <a  href="{php echo $this->createMobileUrl('houselease',array('op'=>'detail','id'=>'8'))}" class="weui-media-box weui-media-box_appmsg">
+                                    <div  class="weui-media-box__hd" style="background: url('http://ming.ngrok.365safewalk.com/attachment/images/1/2018/11/VOivAAS0rj3GgfDfIY6nES6Eg2nbJk.png') no-repeat center center;    background-size: 100% auto;"></div>
+                                    <div  class="weui-media-box__bd">
+                                        <div  class="lease-tit">
+                                            <p  style="width:100%;">测试租屋2</p>
+                                        </div>
+                                        <div  class="lease-jianjie lease-tit">
+                                            <font>￥<b>1500</b>/月</font>
+                                            <span>30㎡ | 4/8层</span>
+                                        </div>
+                                        <p class="dizhi">
+                                                <i class="iconfamily icon-dizhi"></i>
+                                                距夏西大道公交站直线380米    
+                                        </p>
+                                        <p  class="fitmentlease-label">
+                                            <span  class="fit">&nbsp;离公交近&nbsp;</span>
+                                            <span  class="fit">&nbsp;首次出租&nbsp;</span>
+                                        </p>
+                                    </div>
+                                </a>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div  class="weui-tabbar">
+        
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $.showLoading("正在加载");
+$(document).ready(function(){
+    //底部菜单
+        axios.get("{php echo $this->createMobileUrl('getFootersList',array('a'=>'wxapp'))}",
+         {}) //也可以直接拼接在url
+            .then(function(res){
+                $.hideLoading();
+                var err = res.data;
+                if(err.err_code==0){
+                    var html = '';
+                    $.each(err.data,function(i,val){  
+                        var _do = "{$_GPC['do']}";
+                        if(val.url.indexOf(_do) != -1){
+                            html += '<a  href="'+ val.url +'" class="weui-tabbar__item weui-bar__item_on">';
+                            html += '<div class="weui-tabbar__icon">';
+                            html += '<img  src="'+ val.clickIcon +'">';
+                        }else{
+                            html += '<a  href="'+ val.url +'" class="weui-tabbar__item ">';
+                            html += '<div class="weui-tabbar__icon">';
+                            html += '<img  src="'+ val.icon +'">';
+                        }
+                        html += '</div>';
+                        html += '<p class="weui-tabbar__label"><span >'+val.title+'</span></p>';
+                        html += '</div>';
+                    })
+                    $('.weui-tabbar').html(html);
+                }
+            })
+            .catch(function(e){
+                console.log('请求post失败')
+            });
+
+    //幻灯片
+    axios.get("{php echo $this->createMobileUrl('display',array('a'=>'wxapp','op'=>'home'))}",
+         {}) //也可以直接拼接在url
+            .then(function(res){
+                $.hideLoading();
+                var err = res.data;
+                if(err.err_code==0){
+                    $.each(err.data,function(i,val){  
+                      if(val.component=='LnAdv'){
+                        var html = '';
+                        if(val.items.length>0){
+                            $.each(val.items,function(i2,val2){  
+                                html += '<div class="swiper-slide"><img src="/attachment/'+ val2.thumb +'"></div>';
+                            })
+                            $('.swiper-wrapper').html(html);
+                            var swiper = new Swiper('.swiper-container', {
+                                autoHeight: true, //enable auto height
+                                spaceBetween: 20,
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                },
+                                autoplay: {
+                                    delay: 3000,
+                                    stopOnLastSlide: false,
+                                    disableOnInteraction: true,
+                                },
+                            });
+                        }else{
+                            $('.swiper-container').remove();
+                        }
+                      }
+                    })
+                }
+            })
+            .catch(function(e){
+                console.log('请求post失败')
+            });
+ 
+});
+</script>
+</body>
+</html>

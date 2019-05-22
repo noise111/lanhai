@@ -1,0 +1,95 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op' => 'list'))}" title="房屋管理" >房屋管理</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op'=>'add','p'=>'list','id'=>$id))}" title="添加房号" >添加房号</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op'=>'import'))}" title="导入房号" >导入房号</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op'=>'show','p'=>'list','addressid'=>$addressid))}" title="预留信息管理" >预留信息管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('room', array('op'=>'show','p'=>'add','addressid'=>$addressid,'id' => $id))}" title="添加预留信息" >添加预留信息</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" id="form">
+                        <input name="id" type="hidden" value="{$id}" class='form-control'/>
+                        <input name="addressid" type="hidden" value="{$addressid}" class='form-control'/>
+                        <input name="regionid" type="hidden" value="{$regionid}" class='form-control'/>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="realname" id="realname" value="{$item['realname']}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">电话</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="mobile" id="mobile" value="{$item['mobile']}" class="form-control"/>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">身份</label>
+                            <div class="col-xs-5">
+                                <select name="status" id="" class="form-control">
+                                    <option value="1" {if $item['status']==1}selected{/if}>户主</option>
+                                    <option value="2" {if $item['status']==2}selected{/if}>家属</option>
+                                    <option value="3" {if $item['status']==3}selected{/if}>租户</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                                <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#submit').on('click', function () {
+        if (!$("#realname").val()) {
+            alert('请输入姓名。');
+            return false;
+        }
+        if (!$("#mobile").val()) {
+            alert('请输入电话。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('room',array('op'=>'show','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

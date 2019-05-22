@@ -1,0 +1,185 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('fee', array('op' => 'list'))}"></a>收费账单</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'list','p'=> 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">所属小区</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">账单名称</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" name="title" id="title" class="form-control" placeholder="例如：某某账单"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">收费分组</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select id="group" class="form-control" name="group">
+                                    <option value="-1">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">收费项目</label>
+                            <div class="col-sm-6 col-xs-6" id="category">
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">开始日期</label>
+                            <div class="col-sm-6 col-xs-6">
+                                {php echo tpl_form_field_date('startdate',$startdate);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">截止日期</label>
+                            <div class="col-sm-6 col-xs-6">
+                                {php echo tpl_form_field_date('enddate',$enddate);}
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10 col-xs-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入账单名称。');
+            return false;
+        }
+        if(!$("#group").val() || $("#group").val() == -1){
+            alert('请选择收费分组。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'list','p' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.post("{php echo $this->createWebUrl('fee',array('op'=> 'list','p' => 'group'))}",{regionid:data.regionid},function (data) {
+                        var content = "<option>请选择</option>";
+                        for(var o in data){
+                            content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                        }
+                        $("#group").html(content);
+                    },'json')
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.post("{php echo $this->createWebUrl('fee',array('op'=> 'list','p' => 'group'))}",{regionid:regionid},function (data) {
+                if(data==''){
+                    alert('请先设置收费分组');
+                    window.location.href="{php echo $this->createWebUrl('fee',array('op'=>'category'))}"
+                }
+                var content = "<option>请选择</option>";
+                for(var o in data){
+                    content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                }
+                $("#group").html(content);
+            },'json')
+        })
+        $("#group").change(function () {
+            var group = $("#group option:selected").val();
+            $.post("{php echo $this->createWebUrl('fee',array('op'=> 'cate'))}",{group:group},function (data) {
+                var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="categoryid[]" id="categoryid_0" data-group="categoryids"><label for="categoryid_0">全部</label></div>';
+                for(var o in data){
+                    content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categoryids'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                }
+                $("#category").html(content);
+                $("#categoryid_0").click(function() {
+                    var checked = $(this).get(0).checked;
+                    var group = $(this).data('group');
+                    $("input:checkbox[data-group='" +group + "']").each(function(){
+                        $(this).get(0).checked = checked;
+                    })
+                });
+            },'json')
+
+        })
+    })
+
+</script>
+

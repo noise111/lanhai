@@ -1,0 +1,61 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('advertiser')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+
+
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启广告主</label>
+                            <div class="col-sm-5">
+                                <div class="radio radio-success checkbox-inline">
+                                    <input type="radio" name="set[p94]" id="inlineCheckbox2" value="1" {if $set['p94']['value']==1}
+                                    checked{/if} />
+                                    <!--<input type="checkbox" id="inlineCheckbox2" value="1" {if intval($settings['status'])==1}checked='checked'{/if}>-->
+                                    <label for="inlineCheckbox2"> 启用 </label>
+
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p94]" id="inlineCheckbox1" value="0" {if empty($set['p94']['value'])}
+                                    checked{/if} />
+                                    <label for="inlineCheckbox1">关闭</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">红包背景</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('set[p117]', $set['p117']['value'])}
+                                <!--<span class="help-block">图片比例4:3</span>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">红包图片</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('set[p118]', $set['p118']['value'])}
+                                <!--<span class="help-block">图片比例4:3</span>-->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary span3"
+                                       style="height:30px"/>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,438 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+        <script> document.documentElement.style.fontSize =document.documentElement.clientWidth/750*40 +"px";</script>
+        <meta name="format-detection" content="telephone=no" />
+        <title>{if empty($this->merch_user)}{$_W['shopset']['shop']['name']}{else}{php echo $this->merch_user['merchname']}{/if}</title>
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/fonts/iconfont.css?v=2017070719">
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/js/dist/foxui/css/foxui.min.css?v={php echo time()}">
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/template/mobile/default/static/css/style.css?v={php echo time()}">
+        <link rel="stylesheet" type="text/css" href="{php echo EWEI_SHOPV2_LOCAL}static/fonts/iconfont.css?v=2017070719">
+        <script src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+       <script src='//res.wx.qq.com/open/js/jweixin-1.3.2.js'></script>
+    </head>
+    <body ontouchstart>
+		<div class='fui-page-group {if is_ios()}statusbar{/if}'>
+{template 'commission/common'}
+<script>document.title = "业绩订单"; </script>
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/css/dateRange.css">
+<script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/jquery.min.js"></script>
+<script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/dateRange.js"></script>
+<style>
+.fui-tab.fui-tab-warning a.active {
+    color: #a81515;
+    border-color: #a81515;
+    z-index: 100;
+}
+
+.container_header {
+  width: 100%;
+  height: auto;
+  background-color: white;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  z-index: 101;
+}
+
+.container_header_flex {
+  display: -webkit-flex;
+  display: -webkit-inline-flex;
+  display: flex;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.container_header_flex .iitem {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.container_header_flex .iitem2 {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.container_header_flex .iitem:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  width: 0;
+  bottom: 10%;
+  border-right: 1px solid #d0d0d0;
+  transform-origin: 0 100%;
+  transform: scaleX(0.5);
+}
+
+.container_header_flex .iitem:last-child:after {
+  display: none;
+}
+
+.container_header_flex .iitem .text01 {
+  color: #333;
+  font-size: 0.7rem;
+  line-height: 100%;
+  margin-left: 0.6rem;
+  margin-right: 0.5rem;
+}
+
+.container_header_flex .iitem2 {
+  margin: 0.25rem 0;
+}
+
+.container_header_flex .iitem .text02 {
+  color: #a81515;
+  font-size: 0.7rem;
+  line-height: 100%;
+}
+
+.fui-tab-o, .fui-tab{
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.tongji{
+    font-size: 0.7rem;
+    margin: 0.7rem 0.6rem 0 0.6rem;
+    display: flex;
+    line-height: 150%;
+    padding: 0;
+    background: none;
+}
+
+.text01{
+  color:#333333;
+  display: inline-block;
+}
+
+.text02{
+  color:#a81515;
+  display: inline-block;
+  margin-left:0.1rem;
+}
+
+.fui-cell-group {
+    background-color:#ffffff;
+    position:relative;
+    margin:0 0.6rem;
+    margin-bottom:0.6rem;
+    overflow:hidden;
+    border-radius:0.15rem;
+}
+
+.fui-list-type {
+    font-size:0.6rem;
+    border-radius:100px;
+    border:1px solid #ff8000;
+    padding:0.2rem 0.5rem;
+    margin-right:0.5rem;
+    color:#ff8000;
+}
+
+.fui-list-type.share {
+    border:1px solid #0290be;
+    color:#0290be;
+}
+
+.jiantou {
+  color: #999;
+  text-align: right;
+  font-size: 0.65rem;
+  margin-right: 0rpx;
+  margin-top:0.05rem;
+}
+
+.jiantou:after {
+  content: " ";
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 0.45rem;
+  width: 0.45rem;
+  border-width: 1px 1px 0 0;
+  border-color: #b3b3b3;
+  border-style: solid;
+  position: relative;
+  top: 0rpx;
+  margin-left: 0.25rem;
+}
+
+.fui-list-inner .row {
+    flex-direction:column;
+    height:auto;
+    line-height:auto;
+}
+
+.fui-list .fui-list-inner .row .row-text {
+    font-size:0.7rem;
+}
+
+.row-text2 {
+    font-size:0.65rem;
+    color:#999999;
+}
+
+.fui-list:after {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: auto;
+    right: 0.6rem;
+    bottom: 0;
+    border-bottom: 1px solid #eeeeee;
+    transform-origin: 0 100%;
+    transform: scaleY(0.5);
+}
+
+
+.fui-list_text02 img{
+  width:1.1rem;
+  height:1.1rem;
+  border-radius: 50%;
+  margin-right:0.25rem;
+  position: relative;
+  float:left;
+}
+
+.fui-list_footer{
+  position:relative;
+  display:flex;
+  padding:0.4rem 0.625rem;
+  transition-duration:300ms;
+  align-items:center;
+  overflow:hidden;
+}
+
+.fui-list_footer:before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  right: 0.5rem;
+  height: 0;
+  border-top: 21px solid #ebebeb;
+  transform-origin: 0 0;
+  transform: scaleY(0.5);
+  left: 20.5rem;
+}
+
+.fui-text{
+  font-size:0.6rem;
+  color:#666666;
+  flex:1;
+}
+
+.fui-list-info{
+  display:flex;
+  height:1.2rem;
+  overflow:hidden;
+}
+
+.fui-list_text01{
+  margin-right:0.375rem;
+  white-space:nowrap;
+  min-width:2rem;
+}
+
+.fui-list_text02{
+  text-align:left;
+  color:#666666;
+}
+
+.fui-flex{
+  flex:1;
+}
+
+.container_header_flex:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  border-bottom: 1px solid #d0d0d0;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+</style>
+<div class="fui-page fui-page-current page-commission-order">
+    <div class="container_header">
+        <div class="container_header_flex">
+            <div class="iitem">
+                <div class="iitem2">
+                    <div class="text01">当日订单</div>
+                    <div class="text02">1</div>
+                </div>
+                <div class="iitem2">
+                    <div class="text01">当月订单</div>
+                    <div class="text02">2</div>
+                </div>
+                <div class="iitem2">
+                    <div class="text01">累计订单</div>
+                    <div class="text02">3</div>
+                </div>
+            </div>
+            <div class="iitem">
+                <div class="iitem2">
+                    <div class="text01">当日业绩</div>
+                    <div class="text02">1.00</div>
+                </div>
+                <div class="iitem2">
+                    <div class="text01">当月业绩</div>
+                    <div class="text02">2.00</div>
+                </div>
+                <div class="iitem2">
+                    <div class="text01">累计业绩</div>
+                    <div class="text02">3.00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="fui-content navbar" style="top:4.6rem;">
+        <div id="container">
+            <div class="time_div">
+              <span></span><input type="text" id="time" readonly="readonly" unselectable="on"><i class="icon icon-sanjiao1"></i>
+            </div>
+            <div style="margin-top:0rpx;">
+                <div class="fui-cell-group">
+                    <a class="fui-list noclick " url="">
+                        <div class="fui-list-type">
+                            佣金订单
+                        </div>
+                        <div class="fui-list-inner">
+                            <div class="row">
+                                <div class="row-text">SH20190114-2018122601</div>
+                                <div class="row-text2">2019-01-14 14:33</div>
+                            </div>
+                        </div>
+                        <div class="jiantou"></div>
+                    </a>
+
+                    <div class="fui-list noclick" style="font-size: 0.65rem;color: #999;line-height: 1.15rem;align-items:start;">
+                        <div class="fui-flex">
+                            <div class="fui-list-info">
+                                <div class="fui-list_text01">商品名称</div>
+                                <div class="fui-list_text02">测试商品</div>
+                            </div>
+                            <div class="fui-list-info">
+                                <div class="fui-list_text01">佣金类型</div>
+                                <div class="fui-list_text02">一级佣金</div>
+                            </div>
+
+                        </div>
+                        <div class="fui-flex">
+                            <div class="fui-list-info" >
+                                <div class="fui-list_text01">业务员</div>
+                                <div class="fui-list_text02">
+                                    <img src="https://wx.qlogo.cn/mmopen/vi_32/GF4vJEBicgE8k1zyIdBZaYQ0q85Cj78CnMudwxCMgeRSHArwEZdlGhp8oGJiae1gE0icQicxx5Z2iana6bYJvWaATxg/132"></img>Wz源
+                                </div>
+                            </div>
+                            <div class="fui-list-info" >
+                                <div class="fui-list_text01">客户</div>
+                                <div class="fui-list_text02">
+                                    <img src="https://wx.qlogo.cn/mmopen/vi_32/GF4vJEBicgE8k1zyIdBZaYQ0q85Cj78CnMudwxCMgeRSHArwEZdlGhp8oGJiae1gE0icQicxx5Z2iana6bYJvWaATxg/132"></img>Wz源2
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fui-list_footer">
+                        <div class="fui-text">
+                            订单金额：1.00
+                        </div>
+                        <div class="fui-text" style="text-align:right;">
+                            佣金金额：2.00
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fui-cell-group">
+                        <a class="fui-list noclick " url="">
+                            <div class="fui-list-type share">
+                                推广订单
+                            </div>
+                            <div class="fui-list-inner">
+                                <div class="row">
+                                    <div class="row-text">SH20190114-2018122601</div>
+                                    <div class="row-text2">2019-01-14 14:33</div>
+                                </div>
+                            </div>
+                            <div class="jiantou"></div>
+                        </a>
+    
+                        <div class="fui-list noclick" style="font-size: 0.65rem;color: #999;line-height: 1.15rem;align-items:start;">
+                            <div class="fui-flex">
+                                <div class="fui-list-info">
+                                    <div class="fui-list_text01">商品名称</div>
+                                    <div class="fui-list_text02">测试商品</div>
+                                </div>
+                                <div class="fui-list-info">
+                                    <div class="fui-list_text01">佣金类型</div>
+                                    <div class="fui-list_text02">一级佣金</div>
+                                </div>
+    
+                            </div>
+                            <div class="fui-flex">
+                                <div class="fui-list-info" >
+                                    <div class="fui-list_text01">业务员</div>
+                                    <div class="fui-list_text02">
+                                        <img src="https://wx.qlogo.cn/mmopen/vi_32/GF4vJEBicgE8k1zyIdBZaYQ0q85Cj78CnMudwxCMgeRSHArwEZdlGhp8oGJiae1gE0icQicxx5Z2iana6bYJvWaATxg/132"></img>Wz源
+                                    </div>
+                                </div>
+                                <div class="fui-list-info" >
+                                    <div class="fui-list_text01">客户</div>
+                                    <div class="fui-list_text02">
+                                        <img src="https://wx.qlogo.cn/mmopen/vi_32/GF4vJEBicgE8k1zyIdBZaYQ0q85Cj78CnMudwxCMgeRSHArwEZdlGhp8oGJiae1gE0icQicxx5Z2iana6bYJvWaATxg/132"></img>Wz源2
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="fui-list_footer">
+                            <div class="fui-text">
+                                订单金额：1.00
+                            </div>
+                            <div class="fui-text" style="text-align:right;">
+                                佣金金额：2.00
+                            </div>
+                        </div>
+                    </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+	<script type="text/javascript">
+		var dateRange1 = new pickerDateRange('time', {
+			stopToday : false,
+			isTodayValid : true,
+			startDate: '<?php echo date("Y-m-d", strtotime("-1 month")) ?>',
+			endDate: '<?php echo date("Y-m-d")?>',
+			needCompare : false,
+			defaultText : ' 至 ',
+			autoSubmit : false,
+			inputTrigger : 'input_trigger1',
+			theme : 'ta'
+		});
+        $(document).ready(function(){ 
+            $('.ta_btn_primary').bind('click', function() {
+               var _val = $('#time').val();
+               alert(_val)
+            });
+        })
+	</script>
+
+{php $this->footerMenus()}
+</body>
+</html>

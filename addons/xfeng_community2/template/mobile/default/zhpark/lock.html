@@ -1,0 +1,72 @@
+{template 'default/zhpark/header'}
+
+<form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+
+    <div class="weui-cell">
+
+        <div class="weui-cell__hd"><label class="weui-label" style="color: #CCCCCC">解/锁车</label></div>
+
+        <div class="weui-cell__bd">
+
+            <input class="weui-input" type="number" name="scene" >
+
+        </div>
+
+    </div>
+
+    <div style="background-color: #F2F2F2;height: 230px"  >
+        {if id ==1}
+        <i class="weui-icon-warn weui-icon_msg" style="margin:25% 35%"></i>
+        {else}
+        <i class="weui-icon-success weui-icon_msg" style="margin:25% 35%"></i>
+        {/if}
+    </div>
+
+    <div class="weui-cell"style="color: red">
+
+        <div class="weui-cell__hd"><label class="weui-label" >车牌号</label></div>
+
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" name="scene" value="12456">
+        </div>
+    </div>
+
+    <div class="weui-cell">
+
+        <div class="weui-cell__hd" style="width: 100%"><label class="weui-label" style="width: 100%">状态
+            {if id ==1}
+            <span style="margin-left: 70px">未锁定</span>
+            {else}
+            <span style="margin-left: 70px">已锁定</span>
+            {/if}
+        </label>
+
+        </div>
+
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" name="scene" >
+        </div>
+    </div>
+
+    <div class="weui-cell">
+
+        <div class="weui-cell__hd"><label class="weui-label"></label></div>
+
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" name="scene" >
+        </div>
+    </div>
+
+    <div class="demos-content-padded" style="margin-top: 10px;">
+        {if id ==1}
+            <a href="javascript:;" class="weui-btn weui-btn_primary"style="width: 90%">立即锁定</a>
+        {else}
+        <a href="javascript:;" class="weui-btn weui-btn_primary"style="width: 90%">立即解锁</a>
+        {/if}
+    </div>
+
+</form>
+
+</div>
+
+{template 'default/zhpark/footer'}

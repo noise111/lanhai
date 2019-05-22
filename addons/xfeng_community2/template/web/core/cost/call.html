@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>催缴打印</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        table, th, td
+        {
+            border: 1px solid #CCCCCC;
+            text-align: center;
+        }
+        th
+        {
+            font-weight: bold;
+            font-size: 17px
+        }
+        .bodystyle{
+            filter:alpha(opacity=50);
+            -moz-opacity:0.5;
+            -khtml-opacity: 0.5;
+            opacity: 0.5;
+            width:100%;
+            position:absolute;
+            background-attachment:fixed;
+        }
+    </style>
+<body>
+<div style="margin-top: 2%;margin-left:10%;width: 900px;">
+    <h3 style="text-align: center">{$item['ptitle']}</h3>
+    <h3 style="text-align: center">催缴通知单</h3>
+    <div style="float: right;margin-right: 102px;font-weight: bold;">
+        <span>NO：{$item['no']}</span>
+    </div>
+    <div style="clear: both"></div>
+    <div style="float: left">
+        <span>交款人姓名：{$item['username']} {$item['homenumber']}</span>
+    </div>
+    <div style="float: right;margin-right: 111px">
+        <span>收款日期：{if $item['paytime']}{php echo date('Y-m-d',$item['paytime'])}{else}{php echo date('Y-m-d',$item['createtime'])}{/if}</span>
+    </div>
+    <div style="clear: both"></div>
+    <table style="border-collapse:collapse;font-size: 14px">
+        <tr>
+            <th style="width: 150px;">收款项目</th>
+            <th style="width: 350px;">摘 要</th>
+            <th style="width: 100px;">金 额</th>
+            <th style="width: 250px;">备 注</th>
+        </tr>
+        {loop $cate $k $v}
+        <tr>
+            <td>{$v}</td>
+            <td>{$v}{$item['costtime']}</td>
+            <td>{$fee[$k]}</td>
+            <td></td>
+        </tr>
+        {/loop}
+        {$tab}
+    </table>
+    <div style="float: left">
+        <span>金额合计（大写）：{$item['dprice']}</span>
+    </div>
+    <div style="float: right;margin-right: 252px">
+        <span>（小写）：{$item['total']}</span>
+    </div>
+    <div style="clear: both"></div>
+    <div class="bodystyle" style="float: right;position: relative;top: -194px;right: -660px;" >
+        <img src="{php echo tomedia($item['stamp'])}" alt="" width="183px">
+    </div>
+</div>
+</body>
+</html>

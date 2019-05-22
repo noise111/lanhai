@@ -1,0 +1,88 @@
+{template '_header'}
+
+<div class="page-header">
+	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}二维码 <small>{if !empty($item['id'])}修改【{$item['salername']}】{/if}</small></span>
+</div>
+<div class="page-content">
+    {ifp 'store.saler.add'}
+    <div class="page-sub-toolbar">
+        <a class="btn btn-primary btn-sm" href="{php echo webUrl('store/saler/add')}">添加新二维码</a>
+    </div>
+    {/if}
+    <form {ife 'store.saler' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$item['id']}" />
+            <div class="form-group">
+                <label class="col-lg control-label must">选择商品</label>
+                <div class="col-sm-9 col-xs-12">
+                    {ife 'goods.qrcode' $item}
+                       {php echo tpl_selector('goodsid',array('key'=>'id', 'required'=>true, 'text'=>'title', 'thumb'=>'thumb','placeholder'=>'商品名称','buttontext'=>'选择商品 ', 'items'=>$item,'url'=>webUrl('goods/query')))}
+                    {else}
+                         {if !empty($item)}
+                         <span class='help-block'><img  style="width:100px;height:100px;border:1px solid #ccc;padding:1px" src="{php echo tomedia($item['thumb'])}"/><br/>
+                             {if !empty($item)}{$item['goodsname']}{/if}</span>
+                        {/if}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg control-label must">总数量</label>
+                <div class="col-sm-9 col-xs-12">
+                    {ife 'goods.qrcode' $item}
+                    <input type="text" name="total" class="form-control" value="{$item['total']}" />
+                    {else}
+                    <div class='form-control-static'>{$item['total']}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg control-label must">批次号</label>
+                <div class="col-sm-9 col-xs-12">
+                    {ife 'goods.qrcode' $item}
+                    <input type="text" name="batch" class="form-control" value="{$item['batch']}" />
+                    {else}
+                    <div class='form-control-static'>{$item['batch']}</div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="form-group"></div>
+            <div class="form-group">
+                    <label class="col-lg control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        {ife 'goods.qrcode' $item}
+                            <input type="submit" value="提交" class="btn btn-primary"  />
+                        {/if}
+                       <input type="button" name="back" onclick='history.back()' value="返回列表" class="btn btn-default" />
+                    </div>
+            </div>
+    </form>
+</div>
+
+<script language='javascript'>
+    $(document).ready(function () {
+        $('#openid_text').focusout(function () {
+            return false;
+        })
+    })
+
+    function search_users() {
+        $("#module-menus1").html("正在搜索....")
+        $.get('{php echo webUrl("store/perm/role/query")}', {
+            keyword: $.trim($('#search-kwd1').val())
+        }, function(dat){
+            $('#module-menus1').html(dat);
+        });
+    }
+    
+    function select_role(o) {
+        $("#userid").val(o.id);
+        $("#user").val( o.rolename );
+        $(".close2").click();
+    }
+</script>
+
+{template '_footer'}
+
+ 

@@ -1,0 +1,249 @@
+{template 'default2/header'}
+<style>
+    .weui-grid__label {
+        color: #888;
+    }
+
+    @media screen and (max-width: 375px) {
+        .service_card_grid {
+            padding: 10px 5px;
+        }
+
+        .weui-footer, .weui-grid__label {
+            font-size: 0.7em;
+        }
+    }
+</style>
+<style>
+    .cd-bouncy-nav {
+        top: 65vh;
+        max-height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .weui-navbar {
+        background: transparent;
+        width: 95%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .weui-navbar__item {
+        color: #ffffff;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: transparent;
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff;
+
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+</style>
+<body ontouchstart>
+<div class="my-head">
+    <div class="user-name">
+        <div class="my-head-img">
+            <img src="{$_W['member']['avatar']}">
+        </div>
+        <div class="head-dsb">
+            <p class="dsb-name">{$_W['member']['realname']}</p>
+            <p class="dsb-id">手机号: {$_W['member']['mobile']}</p>
+        </div>
+        <span id="head-fanhui" onclick="window.location.href='{php echo $this->createMobileUrl('register',array('op'=>'region'))}'"></span>
+    </div>
+    <div class="shouyi">
+        <dl>
+            <dt>余额{if set('p44')}<a href="{php echo url('entry', array('m' => 'recharge', 'do' => 'pay'));}">充值</a>{/if}</dt>
+            <dd>{$_W['member']['credit2']}</dd>
+        </dl>
+        <dl style="border: 0px;">
+            <dt>积分</dt>
+            <dd>{$_W['member']['credit1']}</dd>
+        </dl>
+    </div>
+</div>
+<div style="padding-bottom: 80px">
+    <!--服务卡片-->
+    <div class="weui-panel weui-panel_access service_card">
+        <div class="weui-panel__hd service_card_hd">基础服务</div>
+        <div class="weui-panel_bd">
+            <div class="weui-grids">
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('room',array('op'=> 'list'))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-house.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        我的房屋
+                    </p>
+                </a>
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('cost')}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-pay.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        物业缴费
+                    </p>
+                </a>
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('repair',array('op'=> 'my'))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-repairs.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        我的报修
+                    </p>
+                </a>
+                <!--<a href="javascript:" class="weui-grid js_grid service_card_grid">-->
+                    <!--<div class="weui-grid__icon">-->
+                        <!--<img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-key.png" alt="">-->
+                    <!--</div>-->
+                    <!--<p class="weui-grid__label">-->
+                        <!--我的钥匙-->
+                    <!--</p>-->
+                <!--</a>-->
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('member',array('op'=>'region'))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-plot.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        我的小区
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-panel weui-panel_access service_card">
+        <div class="weui-panel__hd service_card_hd">商品订单</div>
+        <div class="weui-panel_bd">
+            <div class="weui-grids">
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'myorder','status'=>0))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-drop-obligation.png" alt="">
+                    </div>
+                    <p class="weui-grid__label ">
+                        待付款
+                    </p>
+                </a>
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'myorder','status'=>1))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-drop-shipping.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        待发货
+                    </p>
+                </a>
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'myorder','status'=>2))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-drop-receiving.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        待收货
+                    </p>
+                </a>
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'myorder','status'=>3))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-drop-finish.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        已完成
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-panel weui-panel_access service_card">
+        <div class="weui-panel__hd service_card_hd">服务订单</div>
+        <div class="weui-panel_bd">
+            <div class="weui-grids">
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon'))}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-groupon.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        团购订单
+                    </p>
+                </a>
+                <a href="#" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{php echo $this->createMobileUrl('my')}'">
+                    <div class="weui-grid__icon">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-fb.png" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        我发布的
+                    </p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-panel">
+        <div class="weui-panel__bd">
+            <div class="weui-media-box weui-media-box_small-appmsg">
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access card_access" href="{php echo $this->createMobileUrl('member',array('op'=> 'my'))}">
+                        <div class="weui-cell__hd">
+                            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-set.png" alt=""
+                                 style="width:28px;margin-right:5px;display:block">
+                        </div>
+                        <div class="weui-cell__bd weui-cell_primary">
+                            <p>设置</p>
+                        </div>
+                        <span class="weui-cell__ft"></span>
+                    </a>
+                    <!--<a class="weui-cell weui-cell_access card_access" href="javascript:;">-->
+                        <!--<div class="weui-cell__hd">-->
+                            <!--<img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-call-center.png" alt=""-->
+                                 <!--style="width:28px;margin-right:5px;display:block">-->
+                        <!--</div>-->
+                        <!--<div class="weui-cell__bd weui-cell_primary">-->
+                            <!--<p>客服中心</p>-->
+                        <!--</div>-->
+                        <!--<span class="weui-cell__ft"></span>-->
+                    <!--</a>-->
+                    <a href="javascript:;" class="weui-cell weui-cell_access card_access" onclick="location.href='{php echo $this->createMobileUrl('member',array('op'=> 'js'))}'">
+                        <div class="weui-cell__hd">
+                            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-about-us.png" alt=""
+                                 style="width:28px;margin-right:5px;display:block">
+                        </div>
+                        <div class="weui-cell__bd weui-cell_primary">
+                            <p>关于我们</p>
+                        </div>
+                        <span class="weui-cell__ft"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php
+    $tel = set('p1');
+    $copyright = set('p68');
+    $copright_url = set('p69');
+    ?>
+    {if $copyright}
+    <div class="weui-footer" style="margin-top: 5px" onclick="window.location.href='{$copright_url}'">
+        <p class="weui-footer__text">{$copyright}</p>
+    </div>
+    {/if}
+</div>
+
+
+{template 'default2/footer'}
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+</body>
+</html>

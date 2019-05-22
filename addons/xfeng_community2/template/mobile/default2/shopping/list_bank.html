@@ -1,0 +1,259 @@
+{template 'default2/header'}
+<style>
+    .weui-search-bar {
+        background: #f9f9f9;
+    }
+
+    .weui-media-box__desc {
+        font-size: 15px;
+        color: #020202;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 80px;
+        height: 80px;
+    }
+
+    .weui-badge {
+        background: #ffffff;
+        color: #f43530;
+        margin-left: 38px;
+    }
+
+    .fly_item {
+        border: 1px solid #000;
+        width: 38px;
+        height: 38px;
+        overflow: hidden;
+        position: absolute;
+        visibility: hidden;
+        opacity: .5;
+        filter: alpha(opacity=50);
+    }
+</style>
+
+<body>
+<div class="supermarket-category-top">
+    <header class="weui-header">
+        <div class="weui-search-bar" id="searchBar">
+            <form class="weui-search-bar__form" action="{php echo $this->createMobileUrl('shopping',array('op'=>'list'))}" method="post">
+                <div class="weui-search-bar__box">
+                    <i class="weui-icon-search"></i>
+                    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索您想要的商品"
+                           required="" name="keyword">
+                    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+                </div>
+                <label class="weui-search-bar__label" id="searchText"
+                       style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                    <i class="weui-icon-search"></i>
+                    <span>搜索您想要的商品</span>
+                </label>
+            </form>
+            <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+        </div>
+    </header>
+</div>
+<a class="shopcar barrage" id="shopCart" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'mycart'))}'">
+
+</a>
+<section class="aui-scroll-contents">
+    <div class="aui-scroll-box" id="J_ScrollTab">
+        <div class="aui-scroll-nav" id="category">
+        </div>
+        <div class="aui-scroll-content" id="list">
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/html" id="category_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="#" class="aui-scroll-item">
+        <div class="aui-scroll-item-icon"></div>
+        <div class="aui-scroll-item-text">{{d.list[i].name}}</div>
+    </a>
+    {{# } }}
+</script>
+<script type="text/html" id="cart_list">
+    <span class="shopcar-img"></span>
+    <span class="weui-badge " id="shopBadge">{{d.total}}</span>
+</script>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length;i < len; i++){ }}
+    {{# if(d.list[i].list.length > 0){ }}
+    <div class="aui-scroll-content-item">
+        <h2 class="aui-scroll-content-title">{{d.list[i].name}}</h2>
+        {{# for(var j = 0, leng = d.list[i].list.length;j < leng; j++){ }}
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd"
+                 onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'detail'))}&id={{d.list[i].list[j].id}}'">
+                <img class="weui-media-box__thumb"
+                     src="{{d.list[i].list[j].thumb}}" id="img_{{d.list[i].list[j].id}}">
+            </div>
+            <div class="weui-media-box__bd">
+                <p class="weui-media-box__desc">{{d.list[i].list[j].title}}</p>
+                <p class="aui-shop-price">￥{{d.list[i].list[j].marketprice}}
+                    <del>￥{{d.list[i].list[j].productprice}}</del>
+                    <span class="aui-add-car addcar" onclick="addcar({{d.list[i].list[j].id}})"></span></p>
+            </div>
+        </a>
+        {{# } }}
+    </div>
+    {{# } }}
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    var regionid = "{$_SESSION['community']['regionid']}";
+    $(function () {
+        var category = "{$_GPC['category']}";
+        var keyword = "{$_GPC['keyword']}";
+        var url = "{php echo wxapp_url('shopping/list')}&category=" + category+"&keyword="+keyword+"&regionid="+regionid;
+
+        loaddata(url, $("#list"), 'xq_list', true);
+
+        var _url = "{php echo wxapp_url('category/list')}" + "&type=5";
+        _loaddata(_url, $("#category"), 'category_list', true, function () {
+            if ($('#J_ScrollTab .aui-scroll-item').length > 0) {
+                console.log('默认选项卡')
+                setTimeout(function () {
+                    $('#J_ScrollTab').scrollTab({
+                        initIndex: 0
+                    });
+                }, 0)
+            }
+        });
+
+        var _url = "{php echo wxapp_url('shopping/cart')}&regionid="+regionid;
+        _loaddata(_url, $("#shopCart"), 'cart_list', true);
+    })
+</script>
+
+<script>
+    /*拖动事件*/
+    var cont = $(".barrage");
+    var contW = $(".barrage").width();
+    var contH = $(".barrage").height();
+    var startX, startY, sX, sY, moveX, moveY, disX, disY;
+    var winW = $(window).width();
+    var winH = $(window).height();
+    cont.on({//绑定事件
+        touchstart: function (e) {
+            startX = e.originalEvent.targetTouches[0].pageX;    //获取点击点的X坐标
+            startY = e.originalEvent.targetTouches[0].pageY;    //获取点击点的Y坐标
+            //console.log("startX="+startX+"************startY="+startY);
+            sX = $(this).offset().left;//相对于当前窗口X轴的偏移量
+            sY = $(this).offset().top;//相对于当前窗口Y轴的偏移量
+            //console.log("sX="+sX+"***************sY="+sY);
+            leftX = startX - sX;//鼠标所能移动的最左端是当前鼠标距div左边距的位置
+            rightX = winW - contW + leftX;//鼠标所能移动的最右端是当前窗口距离减去鼠标距div最右端位置
+            topY = startY - sY;//鼠标所能移动最上端是当前鼠标距div上边距的位置
+            bottomY = winH - contH + topY;//鼠标所能移动最下端是当前窗口距离减去鼠标距div最下端位置
+        },
+        touchmove: function (e) {
+//            e.preventdefault();
+            moveX = e.originalEvent.targetTouches[0].pageX;//移动过程中X轴的坐标
+            moveY = e.originalEvent.targetTouches[0].pageY;//移动过程中Y轴的坐标
+            //console.log("moveX="+moveX+"************moveY="+moveY);
+            if (moveX < leftX) {
+                moveX = leftX;
+            }
+            if (moveX > rightX) {
+                moveX = rightX;
+            }
+            if (moveY < topY) {
+                moveY = topY;
+            }
+            if (moveY > bottomY) {
+                moveY = bottomY;
+            }
+            $(this).css({
+//                "left":moveX+sX-startX,
+                "top": moveY + sY - startY,
+            });
+        },
+        mousedown: function (ev) {
+            var patch = parseInt($(this).css("height")) / 2;
+            //console.log(patch);
+            $(this).mousemove(function (ev) {
+                var oEvent = ev || event;
+                //console.log(oEvent.target);
+                var oX = oEvent.clientX;
+                var oY = oEvent.clientY;
+                var t = oY - patch;
+                var l = oX - patch;
+                var w = $(window).width() - $(this).width();
+                var h = $(window).height() - $(this).height();
+                if (t < 0) {
+                    t = 0
+                }
+                if (l < 0) {
+                    l = 0
+                }
+                if (t > h) {
+                    t = h
+                }
+                if (l > w) {
+                    l = w
+                }
+                $(this).css({top: t, left: l})
+            });
+            $(this).mouseup(function () {
+                $(this).unbind('mousemove');
+            });
+        }
+    });
+</script>
+<script>
+
+    function addcar(id) {
+        var img = $("#img_" + id + "");
+        var flyElm = img.clone().css('opacity', 0.75);
+        $('body').append(flyElm);
+        flyElm.css({
+            'z-index': 9000,
+            'display': 'block',
+            'position': 'absolute',
+            'top': img.offset().top + 'px',
+            'left': img.offset().left + 'px',
+            'width': img.width() + 'px',
+            'height': img.height() + 'px'
+        });
+        flyElm.animate({
+            top: $('#shopCart').offset().top,
+            left: $('#shopCart').offset().left,
+            width: 5,
+            height: 5
+        }, 'slow', function () {
+            flyElm.remove();
+        });
+
+        var url = "{php echo wxapp_url('shopping/update')}&id="+id+"&regionid="+regionid;
+        $.getJSON(url, function (s) {
+            if (s.result == 0) {
+                $.toast("库存不足，无法购买。");
+                return false;
+            } else {
+                //数量加
+                var t = $('#shopBadge');
+                t.text(s.data.total);
+                // $('.badge1').text(s.total);
+                // $.toast("添加成功,在购物车等亲~");
+
+            }
+        });
+
+    }
+</script>
+</body>
+</html>

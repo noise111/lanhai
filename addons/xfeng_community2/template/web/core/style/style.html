@@ -1,0 +1,32 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>页面风格</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('style',array('op' => 'list'))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+<form action="" method="post" class="form-horizontal form" id="form1">
+			<div class="form-group clearfix">
+				<label class="col-xs-12 col-sm-4 col-md-3 col-lg-2 control-label">选择风格</label>
+				<div class="clearfix">
+					<div class="col-sm-4 col-lg-4 col-xs-4">
+						<select name="styleid" class="form-control">
+							{loop $template $path}
+							<option value="{$path}" {if $style == $path} selected{/if}>{$path}</option>
+							{/loop}
+						</select>
+					</div>
+					<input name="submit" type="submit" value="提交" class="btn btn-primary col-lg-1">
+					<input type="hidden" name="token" value="{$_W['token']}" />
+				</div>
+			</div>
+	
+</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

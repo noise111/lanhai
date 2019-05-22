@@ -1,0 +1,80 @@
+{template 'default2/header'}
+<style>
+    .weui-cells {
+        font-size: 14px;
+    }
+
+    .weui-vcode-img {
+        height: 26px;
+        padding: 10px;
+    }
+
+    .weui-actionsheet__cell {
+        font-size: 14px;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell weui-cell_vcode">
+        <div class="weui-cell__hd"><label class="weui-label">请选择分类</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="classify" type="text" placeholder="选择分类" value="" readonly="readonly">
+        </div>
+        <div class="weui-cell__ft">
+            <img class="weui-vcode-img" src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-next.png">
+        </div>
+    </div>
+</div>
+<p class="w_txt">选择分类即可进行下一步</p>
+
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script>
+    $(document).on("click", "#classify", function () {
+        var url = "{php echo $this->createMobileUrl('houselease',array('op'=> 'add'))}";
+        $.actions({
+            title: "选择分类",
+            actions: [
+                {
+                    text: "出租",
+                    className: "color-warning",
+                    onClick: function () {
+                        $('#classify').val('出租');
+                        location.href = url+"&category=" + 1;
+                    }
+                },
+                {
+                    text: "出售",
+                    className: "color-warning",
+                    onClick: function () {
+                        $('#classify').val('出售');
+                        location.href = url+"&category=" + 3;
+                    }
+                },
+                {
+                    text: "求购",
+                    className: 'color-warning',
+                    onClick: function () {
+                        $('#classify').val('求购');
+                        location.href = url+"&category=" + 4;
+                    }
+                },
+                {
+                    text: "求租",
+                    className: 'color-warning',
+                    onClick: function () {
+                        $('#classify').val('求租');
+                        location.href = url+"&category=" + 2;
+                    }
+                }
+            ]
+        });
+    });
+
+</script>
+</body>
+</html>

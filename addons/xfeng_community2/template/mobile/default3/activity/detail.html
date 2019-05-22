@@ -1,0 +1,138 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ffffff;
+    }
+
+    .weui-cells {
+        margin-top: 0;
+        font-size: 15px;
+    }
+
+    .weui-tabbar {
+        background-color: transparent;
+        z-index: 1;
+    }
+
+    .weui-label {
+        width: auto;
+        padding-right: 15px;
+    }
+
+    .toolbar .picker-button {
+        color: #FF5500;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-cells" id="list">
+
+</div>
+
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="weui-cells   weui-cells_form  address_cells">
+            <a class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入联系人姓名" id="realname">
+                </div>
+            </a>
+            <a class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">电话</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" pattern="[0-9]*" placeholder="请输入联系人电话" id="tel">
+                </div>
+            </a>
+            <a class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">人数</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="请输入参与活动人数" id="num">
+                </div>
+            </a>
+        </div>
+        <div class="address_form_ft" id="submit">
+            <a href="javascript:;" class="weui-btn address_form_btn close-popup" >提交</a>
+        </div>
+        <!--<a href="javascript:;" class="weui-btn weui-btn_primary ">关闭</a>-->
+    </div>
+</div>
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/html" id="xq_list">
+    <div class="active-banner-contain">
+
+        <div class="active-banner">
+            <img src="{{ d.picurl }}">
+        </div>
+        <div class="active-banner-tit">
+            <p>{{ d.title }}</p>
+            <p class="active-banner-time"><span>{{ d.region }}</span><span>{{ d.starttime }}</span><span></span></p>
+        </div>
+    </div>
+    <div class="active-contain">
+        <div style="text-align: center">
+            {{ d.content }}
+        </div>
+    </div>
+    {{# if((d.total < d.num) && (d.createtime > d.enddate)){ }}
+    <div class="weui-tabbar">
+        <a class="active-btn open-popup" href="javascript:;" data-target="#full">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-apply.png"> <span>报名</span>
+        </a>
+    </div>
+    {{# } }}
+</script>
+<script>
+    $(document).on("open", ".weui-popup-modal", function () {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function () {
+        console.log("close popup");
+    });
+    $(function () {
+        var id= "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('activity/detail')}"+"&id="+id;
+        _loaddata(url, $("#list"), 'xq_list', true);
+
+        var lock = false;
+        $("#submit").click(function () {
+            var realname = $("#realname").val();
+            var num = $("#num").val();
+            var tel = $("#tel").val();
+            if(realname == '' || tel =='' || num ==''){
+                $.toast('您有未填写的信息!','text');return false;
+            }
+            if(lock) return false;
+            lock = true;
+            $.showLoading('正在提交');
+             $.post("{php echo wxapp_url('activity/add')}", {realname: realname, num: num, tel: tel,activityid:id}, function (data) {
+                 if(data.err_code ==0){
+                     $.hideLoading();
+                     //提交成功提示内容: data.data.content
+                     setTimeout(function () {
+                         if(data.data.status ==2 ){
+                             $.toast(data.data.content);
+                             //定时刷新
+                             window.location.href="{php echo $this->createMobileUrl('activity')}";
+                         }
+                         if(data.data.status == 1){
+                             window.location.href=data.data.url;
+                         }
+
+                     }, 500);
+
+                 }
+                 lock = false;
+
+             },'json')
+        })
+
+    })
+</script>
+</body>
+</html>

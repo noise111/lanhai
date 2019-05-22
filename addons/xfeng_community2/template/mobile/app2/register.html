@@ -1,0 +1,124 @@
+{template 'app2/header'}
+<style>
+    .weui-cells:first-child{
+        margin-top: 0rem;
+    }
+    .weui-cells{
+        margin-top: 15px;
+        font-size: 1em;
+    }
+    .weui-cell__hd{
+        margin-right: 1em;
+        min-width: 4em;
+        text-align: justify;
+        text-align-last: justify;
+    }
+    .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+        color: #FF5400;
+    }
+    .check-box{
+        position: relative;
+        top: -2px;
+    }
+</style>
+<body>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>入驻申请</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd">联系人</div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入联系人姓名" v-model = "item.realname">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell  weui-cell_access">
+            <div class="weui-cell__hd">联系电话</div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入联系人电话" v-model = "item.tel">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_access ">
+            <div class="weui-cell__hd">地址</div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入详细地址" v-model = "item.address">
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd">入住类型</div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model = "item.category">
+                    <option value="1">物业公司</option>
+                    <option value="2">独立店铺</option>
+                    <option value="3">网络超市</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 2rem;margin-bottom: 15px">
+        <a href="javascript:;" class="weui-btn register-guide-btn" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+                item:{
+                    realname:'',
+                    tel:'',
+                    address:'',
+                }
+        },
+        beforeMount: function () {
+
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('app/register')}";
+                if(self.item.realname == '' || self.item.tel == '' || self.item.address == '' ){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code ==0){
+                        //提交成功提示内容: data.data.content
+                        setTimeout(function () {
+                            $.toast('申请成功,请耐心等待我们的联系！');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'login'))}";
+                        }, 500);
+                    }
+
+                },'json')
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

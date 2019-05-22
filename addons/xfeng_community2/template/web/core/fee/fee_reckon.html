@@ -1,0 +1,216 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="{php echo $this->createWebUrl('fee',array('op' => 'reckon'))}" title="生成抄表费用" >报表统计</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="reckon"/>
+                        <div class="row">
+                            <div class="col-sm-12 m-b-xs">
+                                <span style="color: red">总计:{$total}</span>
+                                <span style="color: red;margin-left: 5px">应收金额:{$total1}</span>
+                                <span style="color: red;margin-left: 5px">实收金额:{$total2}</span>
+                                <span style="color: red;margin-left: 5px">未收金额:{$total3}</span>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="status" class="form-control">
+                                    <option value="">选择支付状态</option>
+                                    <option value="1" {if $_GPC['status'] == 1} selected{/if}>未支付</option>
+                                    <option value="2" {if $_GPC['status'] == 2} selected{/if}>已支付</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="categoryid" class="form-control">
+                                    <option value="">选择收费项目</option>
+                                    {loop $categorys $category}
+                                    <option value="{$category['id']}" {if $category['id']==$_GPC['categoryid']} selected{/if}>{$category['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <!--<input type="text" class="form-control" name="keyword" placeholder="输入房号" value="{$_GPC['keyword']}">-->
+                                    <select name="dataStatus" class="form-control">
+                                        <option value="">统计的状态</option>
+                                        <option value="1" {if $_GPC['dataStatus'] == 1} selected{/if}>应收金额</option>
+                                        <option value="2" {if $_GPC['dataStatus'] == 2} selected{/if}>实收金额</option>
+                                        <option value="3" {if $_GPC['dataStatus'] == 3} selected{/if}>未收金额</option>
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">明细导出</button>
+                                        <button type="submit" name="export" value="2" class="btn btn-primary">统计导出</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="record">
+                        <input type="hidden" name="limit" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="ok" value="0">
+                        <input type="hidden" name="fail" value="0">
+                        <table class="table table-bordered table-striped">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">ID</th>
+                                <th>所属小区</th>
+                                <th>收费项目</th>
+                                <th>地址</th>
+                                <th>账单日期</th>
+                                <th>房屋面积/用量</th>
+                                <th>单价</th>
+                                <th>状态</th>
+                                <th>应缴费用</th>
+                                <th>实付</th>
+                                <th>支付方式</th>
+                                <th>备注</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['regionTitle']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{$item['address']}</td>
+                                <td>{$item['jftime']}</td>
+                                <td>{$item['amount']}</td>
+                                <td>{$item['unitPrice']}</td>
+                                <td>
+                                    {if $item['status'] == '已支付'}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}
+                                </td>
+                                <td>{$item['price']}</td>
+                                <td>{$item['payPrice']}</td>
+                                <td>{$item['paytype']}</td>
+                                <td>{$item['remark']}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // $('#myButton').on('click',function () {
+    //     var $btn = $(this).button('loading');
+    // })
+    // 提交事件
+    var i = 0;
+    var openid = [];
+    $('#submit').on('click', function () {
+        $('#submit').html("消息正在发送中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#submit').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'wxsend'))}";
+        var type = $("#submit")
+        mass(total, ok, fail, url, type);
+    });
+    $('#del').on('click', function () {
+        $('#del').html("正在删除中,请勿关闭页面。");
+        $('#del').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'list','p'=>'pldel'))}";
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                if (data.status == 'end') {
+                    $('#del').html("处理完成");
+                    $('#del').removeProp('disabled');
+                    location.reload();
+                    return;
+                }
+                if (data.status == 'error') {
+                    $('#del').html("未勾选数据");
+                    $('#del').removeProp('disabled');
+                    location.reload();
+                    return;
+                }
+            }
+        });
+    });
+    function mass(total, ok, fail, url, type) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n + 5);
+                total = data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                // ok += data.ok;//成功发送
+                // fail += data.fail;//发送失败
+                // $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                $("#total").html(data.total)
+                if (data.status == 'end') {
+                    // $("input[name='record']").attr('value','');
+                    $("input[name='limit']").val(0);
+                    // $('#msg1').html("任务完成!");
+                    type.html("处理完成");
+                    type.removeProp('disabled');
+                    return;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page + 1)
+                $("input[name='page']").val(page + 1);
+                mass(total, ok, fail, url, type);
+            }
+        });
+    }
+</script>

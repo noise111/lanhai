@@ -1,0 +1,229 @@
+{template 'default2/header'}
+<style>
+    .weui-popup__modal {
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    .toolbar .picker-button {
+        color: #FF5500;
+    }
+</style>
+
+<body>
+<div id="list"></div>
+<div class="demos-content-padded" style="background: #ffffff;margin-top: 10px">
+    <a href="javascript:;" class="weui-btn homemaking-detail_btn open-popup" data-target="#full">我要预约</a>
+</div>
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal homemaking-detail_model">
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt=""
+                         style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" value="{$member['address']}" placeholder="请输入服务地址">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt=""
+                         style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="time-format" type="text" value="" placeholder="请选择服务时间">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-phone.png" alt=""
+                         style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" value="{$_W['member']['mobile']}" placeholder="请输入手机号">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd" style="position: relative;top: -32px">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-beizhu.png" alt=""
+                         style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="问题描述，长度5-200个字之间" rows="3" id="content"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div style="margin: 15px auto" id="submit">
+                <a href="javascript:;" class="weui-btn register-guide-btn close-popup">立即预约</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    <div class="weui-panel">
+        <div class="weui-panel__hd homemaking-detail_hd"><span class="left-line"></span>服务特色</div>
+        <div class="weui-panel__bd">
+            <div class="weui-grids homemaking-detail_grids">
+                {{# if(d.images){ }}
+                {{# if(d.images.length >0 ){ }}
+                {{# for(var i = 0, len = d.images.length; i < len; i++){ }}
+                <a href="" class="weui-grid js_grid homemaking-detail_grid">
+                    <div class="cube_grid_img" data-ratio="1:1">
+                        <img src="{{d.images[i]}}">
+                    </div>
+                    <!--<p class="weui-grid__label homemaking-detail_label">-->
+                        <!--玻璃“上妆”，开始新的“一面”-->
+                    <!--</p>-->
+                </a>
+                {{# } }}
+                {{# } }}
+                {{# } }}
+            </div>
+        </div>
+    </div>
+    <div class="weui-panel">
+        <div class="weui-panel__hd homemaking-detail_hd"><span class="left-line"></span>服务价格</div>
+        <div class="weui-panel__bd homemaking-detail_bd2">
+            <div class="weui-grids">
+                {{d.price}}
+            </div>
+        </div>
+    </div>
+    <div class="weui-panel">
+        <div class="weui-panel__hd homemaking-detail_hd"><span class="left-line"></span>注意事项</div>
+        <div class="weui-panel__bd homemaking-detail_bd2">
+            <div class="homemaking-detail_contain">
+                {{d.content}}
+            </div>
+        </div>
+        <div class="weui-grids homemaking-detail_grids3">
+            <a href="" class="weui-grid js_grid homemaking-detail_grid3">
+                <div class="weui-grid__icon">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-safeguard.png" alt="">
+                </div>
+                <p class="weui-grid__label">
+                    服务保障
+                </p>
+            </a>
+            <a href="" class="weui-grid js_grid homemaking-detail_grid3">
+                <div class="weui-grid__icon">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-safeguard.png" alt="">
+                </div>
+                <p class="weui-grid__label">
+                    认证保障
+                </p>
+            </a>
+            <a href="" class="weui-grid js_grid homemaking-detail_grid3">
+                <div class="weui-grid__icon">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-safeguard.png" alt="">
+                </div>
+                <p class="weui-grid__label">
+                    财产保障
+                </p>
+            </a>
+            <a href="" class="weui-grid js_grid homemaking-detail_grid3">
+                <div class="weui-grid__icon">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-safeguard.png" alt="">
+                </div>
+                <p class="weui-grid__label">
+                    安全保障
+                </p>
+            </a>
+        </div>
+    </div>
+    <input type="hidden" id="cid" value="{{d.cid}}" />
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        var cid= "{$_GPC['cid']}";
+        var url = "{php echo wxapp_url('homemaking/detail')}"+"&cid="+cid;
+        _loaddata(url, $("#list"), 'xq_list', true);
+        var lock = false;
+        $("#submit").click(function (data) {
+            var addressid = "{$_SESSION['community']['addressid']}";
+            if(addressid ==''){
+                $.toast('请先绑定房号', "text");
+                setTimeout(function() {
+                    window.location.href="{php echo $this->createMobileUrl('member',array('op' => 'room'))}";
+                }, 200);
+                return false;
+            }
+            var cid = "{$_GPC['cid']}";
+            var servicetime = $("#time-format").val();
+            if(servicetime ==''){
+                $.toast('服务时间不可为空', "text");return false;
+            }
+            var content = $("#content").val();
+            if(content ==''){
+                $.toast('填写问题不可为空', "text");return false;
+            }
+            var regionid = "{$_SESSION['community']['regionid']}";
+
+            if(lock) return false;
+
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('homemaking/add')}", {cid:cid,content:content,servicetime:servicetime,regionid:regionid,addressid:addressid}, function (data) {
+                if(data.err_code ==0){
+                    $.hideLoading();
+                    setTimeout(function () {
+                        //提交成功提示内容: data.data.content
+                        $.toast(data.data.content, "text");
+                        //定时刷新
+                        window.location.href="{php echo $this->createMobileUrl('homemaking')}";
+                    }, 1500);
+                }
+                lock = false;
+            })
+        })
+
+    })
+</script>
+<script>
+    $("#time-format").datetimePicker({
+        title: '请选择服务时间',
+        yearSplit: '年',
+        monthSplit: '月',
+        dateSplit: '日',
+        times: function () {
+            return [  // 自定义的时间
+                {
+                    values: (function () {
+                        var hours = [];
+                        for (var i = 0; i < 24; i++) hours.push(i > 9 ? i : '0' + i);
+                        return hours;
+                    })()
+                },
+                {
+                    divider: true,  // 这是一个分隔符
+                    content: '时'
+                },
+                {
+                    values: (function () {
+                        var minutes = [];
+                        for (var i = 0; i < 59; i++) minutes.push(i > 9 ? i : '0' + i);
+                        return minutes;
+                    })()
+                },
+                {
+                    divider: true,  // 这是一个分隔符
+                    content: '分'
+                }
+            ];
+        },
+        onChange: function (picker, values, displayValues) {
+            console.log(values);
+        }
+    });
+</script>
+</body>
+</html>

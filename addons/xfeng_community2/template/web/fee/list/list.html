@@ -1,0 +1,186 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>收费账单列表</h5>
+
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'list'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form" id="form" >
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="list"/>
+                        <input type="hidden" name="record">
+                        <input type="hidden" name="limit" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="ok" value="0">
+                        <input type="hidden" name="fail" value="0">
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'list','p'=> 'add'))}" >
+                                    <i class="fa fa-plus"></i>
+                                    生成账单
+                                </a>
+                                <button type="button" class="btn btn-success" id="submit">批量微信推送</button>
+                                <button type="button" class="btn btn-success" id="del">批量删除</button>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>ID</th>
+                            <th class="col-md-1">收费项目</th>
+                            <th class="col-md-1">所属小区</th>
+                            <th class="col-md-1">楼宇</th>
+                            <th class="col-md-1">单元</th>
+                            <th class="col-md-1">房号</th>
+                            <th class="col-md-1">账单日期</th>
+                            <th class="col-md-1">状态</th>
+                            <th class="col-md-1">费用</th>
+                            <th class="col-md-1">实付</th>
+                            <th class="col-md-4">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                {$item['regiontitle']}
+                            </td>
+                            <td>{$item['build']}栋</td>
+                            <td>{$item['unit']}单元</td>
+                            <td>{$item['room']}室</td>
+                            <td>{php echo date('Y-m-d',$item['starttime'])}~{php echo date('Y-m-d',$item['endtime'])}</td>
+                            <td>
+                                {if $item['status'] == 2}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}
+                            </td>
+                            <td>{$item['price']}</td>
+                            <td>
+                                {$item['pay_price']}
+                            </td>
+
+                            <td>
+                                {if $item['status']== 2}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'list','p' => 'detail','id' => $item['id']))}" title="查看" class="btn btn-primary btn-sm">查看</a>
+                                {else}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'list','p' => 'edit','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                {/if}
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'list','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="text-left">
+                                <span style="color:red" >总计:<span id="total">{$total}</span></span>
+                            </td>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // $('#myButton').on('click',function () {
+    //     var $btn = $(this).button('loading');
+    // })
+    // 提交事件
+    var i=0;
+    var openid=[];
+    $('#submit').on('click',function() {
+        $('#submit').html("消息正在发送中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#submit').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'wxsend'))}";
+        var type = $("#submit")
+        mass(total, ok, fail,url,type);
+    });
+    $('#del').on('click',function() {
+        $('#del').html("正在删除中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#del').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'list','p'=>'pldel'))}";
+        var type =$("#del");
+        mass(total, ok, fail,url,type);
+    });
+    function mass(total, ok, fail,url,type) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n+5);
+                total=data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                // ok += data.ok;//成功发送
+                // fail += data.fail;//发送失败
+                // $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                $("#total").html(data.total)
+                if(data.status == 'end'){
+                    // $("input[name='record']").attr('value','');
+                    $("input[name='limit']").val(0);
+                    // $('#msg1').html("任务完成!");
+                    type.html("处理完成");
+                    type.removeProp('disabled');
+                    return ;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page+1)
+                $("input[name='page']").val(page+1);
+                mass(total, ok, fail ,url,type);
+            }
+        });
+    }
+</script>

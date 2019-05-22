@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>家属分享</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/demos.css">
+    <style>
+        body{
+            background: #f1f1f1;
+        }
+        .weui-cells{
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .weui-form-preview__label{
+            color: #333333;
+        }
+        .weui-cells__title{
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="my-share-head">
+    <img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/my/personal.png">
+</div>
+
+<div class="weui-cells__title">邀请家人或住户</div>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__hd weui-form-preview__label">姓名</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd weui-form-preview__label">手机号</div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label for="rSite04" class="weui-form-preview__label">房号</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="rSite04" type="text" placeholder="">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label for="rSite04" class="weui-form-preview__label">身份</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="identity" type="text" placeholder="">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<a href="javascript:;" class="weui-btn register-guide-btn" style="margin-top: 2rem">分享</a>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/common.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/jquery-weui.js"></script>
+<script>
+    $("#rSite04").select({
+        title: "请选择房号",
+        items: [
+            {
+                title: "101室",
+                value: "001",
+            },
+            {
+                title: "102室",
+                value: "002",
+            },
+            {
+                title: "103室",
+                value: "003",
+            },
+            {
+                title: "104室",
+                value: "004",
+            },
+            {
+                title: "105室",
+                value: "005",
+            },
+            {
+                title: "106室",
+                value: "006",
+            }
+        ]
+    });
+    $("#identity").select({
+        title: "请选择身份",
+        items: [
+            {
+                title: "家属",
+                value: "001",
+            },
+            {
+                title: "租客",
+                value: "002",
+            },
+        ]
+    });
+</script>
+</body>
+</html>

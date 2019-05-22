@@ -1,0 +1,31 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">订单管理</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0 0 60px 0">
+            <ul>
+                {loop $list $item}
+                <li>
+                    <a href="#" class="item-link item-content" onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'business_detail','id' => $item['id']))}'">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['ordersn']}</div>
+                                <div class="item-after">{php echo date('Y-m-d H:i', $item['createtime'])}</div>
+                            </div>
+                            <div class="item-subtitle">{if $item['status']}<span class="label label-success">已支付</span>{else}<span class="label label-default">未支付</span>{/if}</div>
+                            <div class="item-text">{if empty($item['realname'])}{$item['address_realname']}{else}{$item['realname']}{/if}-{if empty($item['mobile'])}{$item['address_telephone']}{else}{$item['mobile']}{/if}-{$item['price']}元</div>
+                        </div>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+
+
+{template 'app/footer'}

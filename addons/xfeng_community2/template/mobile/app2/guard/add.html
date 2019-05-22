@@ -1,0 +1,305 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<style>[v-cloak] { display: none !important; }</style>
+<div class="weui-cells" id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加设备</span>
+        </h1>
+    </div>
+    <div class="weui-cell weui-cell_select header-padd">
+        <div class="weui-cell__bd">
+            <select class="weui-select" id="regionid" >
+                <option value="">选择小区</option>
+                <option v-for="(row, index) in regions" :value="row.id">{{row.title}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_select">
+        <div class="weui-cell__bd">
+            <select class="weui-select" id="type" >
+                <option value="">选择区域</option>
+                <option value="2">小区大门</option>
+                <option value="1">小区单元门</option>
+            </select>
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_select">
+        <div class="weui-cell__bd">
+            <select class="weui-select" id="category" >
+                <option value="">选择设备类型</option>
+                <option value="1">微信开门</option>
+                <option value="2">刷卡开门(楼宇对讲)</option>
+                <option value="3">NB-IOT门禁(电信版)</option>
+            </select>
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">区域名称</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入区域名称" id="title">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">设备编号</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入面板上的设备编号" id="device_code">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">gprs卡号</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入gprs卡号" id="device_gprs">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">外部链接</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="微信开门后跳转的外部链接" id="openurl">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">图片</label></div>
+        <div class="weui-cell__bd">
+            <div class="weui-uploader">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                    </ul>
+                    <div class="weui-uploader__input-box" id="addPic">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin: 20px 20px" id="submit">
+    <a href="javascript:;" class="weui-btn weui-btn_primary">提交</a>
+</div>
+{if $_W['container']=='wechat'}
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+    wx.ready(function () {
+        $("#addPic").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds;
+//调用上传递归函数
+                    wxUploadImg(localIds);
+                }
+            });
+
+            function wxUploadImg(localIds) {
+
+                var localId = localIds[idx]
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        getImg(serverId);
+// 上传序号，上传一张 累计 +1
+                        idx++
+//存储图片媒体ID，用，号分割
+// serverIds+=res.serverId+',';
+                        if (idx < localIds.length) {//本地图片ID 还没全部获取完图片媒体ID
+//调用上传递归函数
+                            wxUploadImg(localIds);
+                        }
+                        else {
+                            idx = 0;
+                            serverIds = '';
+                            return true;
+                        }
+                    },
+                    fail: function (res) {//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg：" + JSON.stringify(res));
+                    }
+                });
+            }
+
+            function getImg(serverId) {
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url, {serverId: serverId}, function (ret) {
+                    var imgUrl = ret.data.imgUrl
+                    var content = '<li class="weui-uploader__file" style="background-image:url(' + imgUrl + ')" id="li_' + serverId + '"><input type="hidden" name="thumb" id="pic" value="' + imgUrl + '"><i class="iconfont icon-shanchu" style="color: #ff9800;position: relative;top:-6px;font-size:18px;left:70px;" onclick=\"del(\'' + serverId + '\')"></i></li>'
+                    $("#uploaderFiles").html(content);
+                })
+            }
+        });
+    });
+
+</script>
+{else}
+<script>
+    // 初始化Web Uploader
+    var url = "{php echo wxapp_url('upload')}";
+    var uploader = WebUploader.create({
+        auto: true, // 选完文件后，是否自动上传
+        swf: 'js/Uploader.swf', // swf文件路径
+        server: url, // 文件接收服务端
+        pick: '#addPic', // 选择文件的按钮。可选
+// 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'jpg,jpeg,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        },
+        thumb: {
+            type: 'image/jpg,jpeg,png'
+        },
+        fileNumLimit: 2, //限制上传个数
+        fileSingleSizeLimit: 2048000 //限制单个上传图片的大小
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on('uploadProgress', function (file, percentage) {
+        $.showLoading('正在上传中');
+    });
+    uploader.on('uploadSuccess', function (file, response) {
+        console.log(response.data.imgUrl); //这里可以得到后台返回的数据
+        var imgUrl = response.data.imgUrl
+        var imgid = response.data.imgid
+        var content = '<li class="weui-uploader__file" style="background-image:url(' + imgUrl + ')" id="li_' + imgid + '"><input type="hidden" name="thumb" id="pic" value="' + imgUrl + '"><i class="iconfont icon-shanchu" style="color: #ff9800;position: relative;top:-6px;font-size:18px;left:70px;" onclick=\"del(' + imgid + ')"></i></li>'
+        $("#thumb1").html(content);
+    });
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on('uploadComplete', function (file) {
+        $.hideLoading();
+    });
+</script>
+{/if}
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            id: id,
+            regions: [],
+        },
+        beforeMount: function () {
+            var self = this
+            var link = "{php echo wxapp_url('appregion/list')}";
+            $.getJSON(link, function (ret) {
+                self.regions = ret.data
+            })
+        },
+        mounted: function () {
+            var self = this
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                console.log(self.title)
+            }
+        },
+        watch: {
+
+
+        }
+    })
+
+    $(function () {
+        var lock = false;
+        $("#submit").click(function () {
+            var title = $("#title").val()
+            var regionid = $("#regionid").val()
+            var pic = $("#pic").val()
+            var type = $("#type").val()
+            var category = $("#category").val()
+            var device_code = $("#device_code").val()
+            var device_gprs = $("#device_gprs").val()
+            var openurl = $("#openurl").val()
+            if (lock) return false;
+            if(title == '' || regionid == '' || category == '' || type == '' || device_code == ''){
+                $.toast('有未填写的信息','cancel');return false;
+            }
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('appguard/add')}", {
+                title: title,
+                regionid: regionid,
+                pic: pic,
+                type:type,
+                category:category,
+                device_code:device_code,
+                device_gprs:device_gprs,
+                openurl:openurl
+            }, function (data) {
+                if (data.err_code == 0) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    setTimeout(function () {
+                        $.toast('添加成功');
+                        //定时刷新
+                        window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'guard'))}";
+                    }, 500);
+
+                }
+                if(ret.err_code == 2){
+                    setTimeout(function () {
+                        $.toast(ret.err_msg,'cancel');
+                        //定时刷新
+                        window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                    }, 500);
+                }
+                if(data.err_code == -1){
+                    $.toast('添加失败','cancel');
+                }
+                lock = false;
+            }, 'json')
+        })
+    })
+</script>
+{template 'app2/footer'}

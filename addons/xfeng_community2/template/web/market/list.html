@@ -1,0 +1,171 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>信息管理</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('market',array('op' => 'list'))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+					<form action="./index.php" method="get" class="form-horizontal" role="form">
+						<input type="hidden" name="c" value="site"/>
+						<input type="hidden" name="a" value="entry"/>
+						<input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+						<input type="hidden" name="do" value="market"/>
+						<input type="hidden" name="op" value="list"/>
+					<div class="row">
+						<div class="col-sm-3 m-b-xs">
+							<select name="regionid" class="form-control">
+								<option value="0">全部小区</option>
+								{loop $regions $region}
+								<option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+								{/loop}
+							</select>
+						</div>
+						<div class="col-sm-3 m-b-xs">
+							<select name="category" class="form-control">
+								<option value="0">全部分类</option>
+								{loop $categories $key $category}
+								<option value="{$category['id']}" {if $category['id'] == $_GPC['category']} selected="selected"{/if}>{$category['name']}</option>
+								{/loop}
+							</select>
+						</div>
+						<div class="col-sm-3 m-b-xs">
+							<div class="input-group">
+								<div class="radio radio-success radio-inline" >
+									<input type="radio" name="status" id="ipt_status1" value="0" {if empty($_GPC['status'])}checked='checked'{/if} />
+									<label for="ipt_status1">未成交</label>
+								</div>
+								<div class="radio radio-success radio-inline" >
+									<input type="radio" name="status"  id="ipt_status2" value="1" {if $_GPC['status'] == 1}checked='checked'{/if} />
+									<label for="ipt_status2">已成交</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-3 m-b-xs">
+							<button type="submit" class="btn btn-primary"> 搜索</button>
+							<input type="hidden" name="token" value="{$_W['token']}"/>
+						</div>
+					</div>
+					</form>
+		<form class="form-horizontal form" method="post" >
+		<table class="table table-bordered table-striped">
+			<thead class="navbar-inner">
+				<tr>
+					<th style="width: 40px;">
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input type="checkbox" id="checkids"
+								   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+							<label for="checkids"> </label>
+						</div>
+					</th>
+					<th class="col-sm-2">类别</th>
+					<th class="col-sm-2">名称</th>
+					<th style="width: 80px;">价格</th>
+					<th style="width: 120px;">联系人</th>
+					<th style="width: 160px;">联系电话</th>
+					<th style="width: 100px;">发布时间</th>
+					<th style="width: 60px;">状态</th>
+					<th style="width: 250px;">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $good}
+				<tr>
+					<td>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input type="checkbox" type="checkbox" name="ids[]" id="ids_{$good['id']}"
+								   value="{$good['id']}">
+							<label for="ids_{$good['id']}"></label>
+						</div>
+					</td>
+					<td>{if $good['type'] == 1}二手{elseif $good['type']== 2}租借{/if}{$good['cname']}</td>
+					<td>{$good['title']}</td>
+					<td>{if empty($good['zprice'])}面议{else}{$good['zprice']}元{/if}</td>
+					<td>{$good['realname']}</td>
+					<td>{$good['mobile']}</td>
+					<td>{php echo date('Y-m-d h:i',$good['createtime'])}</td>
+					<td>
+						<label data="{$good['enable']}" class='label  label-default {if $good['enable']==0}label-info{/if}' onclick="verify(this,{$good['id']},'enable')">{if $good['enable']==0}通过{else}禁止{/if}</label>
+					</td>
+					<td>
+						<a href="{php echo $this->createWebUrl('market',array('op' => 'detail','id'=>$good['id']))}" class="btn btn-primary btn-sm" >查看
+						</a>&nbsp;
+						<a  title="删除" class="btn btn-default btn-sm" onclick="del('{$good['id']}')">删除
+						</a>&nbsp;
+						<a onclick="toblack({$good['id']})" href="#" class="btn btn-primary btn-sm">加入黑名单</a>
+					</td>
+				</tr>
+				{/loop}
+			</tbody>
+			</table>
+			<table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+				<thead>
+				{if $list}
+				<tr>
+					<td class="text-left">
+						<input name="token" type="hidden" value="{$_W['token']}" />
+						<input type="submit" class="btn btn-danger btn-sm" name="delete" value="批量删除" /> &nbsp;
+						<button type="submit" name="plverity" value="1" class="btn btn-warning btn-sm">一键全部审核</button>
+					</td>
+					<td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+				</tr>
+				{else}
+				<tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+				{/if}
+				</thead>
+			</table>
+		</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<script type="text/javascript">
+
+		function del(id){
+			var id=id;
+		        var url = "{php echo $this->createWebUrl('market',array('op' => 'delete'),true)}";
+		            $.post(url,
+		            {
+		                id:id
+		            },
+		            function(msg){
+		                    if (msg.status == 1) {
+		                    	setTimeout(function(){
+		                        	window.location.reload();
+		                   		 },100);
+		                    };
+		                    
+		            },
+		            'json');
+		}
+    	function toblack(id){
+	    	var id = id;
+	            if(!id) return false;
+	            $.post("{php echo $this->createWebUrl('market')}", {"op":"toblack","id":id}, function(msg){
+	                var _obj = JSON.parse(msg);
+	                if(_obj.state==1){
+	                   location.reload();
+	                }
+	            });
+	    }
+		function verify(obj, id, type) {
+			$(obj).html($(obj).html() + "...");
+			$.post("{php echo $this->createWebUrl('market',array('op' => 'verify'))}", {
+				id: id,
+				type: type,
+				data: obj.getAttribute("data")
+			}, function(d) {
+				$(obj).html($(obj).html().replace("...", ""));
+				if (type == 'enable') {
+					$(obj).html(d.data == '0' ? '通过' : '禁止');
+				}
+				$(obj).attr("data", d.data);
+				if (d.result == 1) {
+					$(obj).toggleClass("label-info");
+				}
+			}, "json");
+		}
+	</script>

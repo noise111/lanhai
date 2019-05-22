@@ -1,0 +1,151 @@
+{template 'default2/header'}
+<style>
+    .weui-dialog__btn {
+        color: #FF9900;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-panel" style="margin-top: 10px">
+    <div class="weui-panel__bd">
+        <div class="weui-media-box weui-media-box_small-appmsg">
+            <div class="weui-cells my-cells">
+                <a class="weui-cell weui-cell_access" href="javascript:;" id="show-actions">
+                    <div class="weui-cell__bd">
+                        <p>头像</p>
+                    </div>
+                    <div class="my-via">
+                        <img src="{if $_W['member']['avatar']}{$_W['member']['avatar']}{else}{MODULE_URL}template/mobile/default2/static/images/my/personal.png{/if}">
+                    </div>
+                    <div class="weui-cell__ft"></div>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;" id="show-name">
+                    <div class="weui-cell__bd">
+                        <p>姓名</p>
+                    </div>
+                    <div class="weui-cell__ft" id="myName">{$_W['member']['realname']}</div>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;" id="show-phone">
+                    <div class="weui-cell__bd">
+                        <p>手机</p>
+                    </div>
+                    <div class="weui-cell__ft" id="myPhone">{$_W['member']['mobile']}</div>
+                </a>
+                <a class="weui-cell weui-cell_access" href="javascript:;" id="show-number">
+                    <div class="weui-cell__bd">
+                        <p>车牌号</p>
+                    </div>
+                    <div class="weui-cell__ft" id="myNumber">{$member['license']}</div>
+                </a>
+                <a class="weui-cell weui-cell_access" href="{php echo $this->createMobileUrl('address',array('op'=> 'list'))}">
+                    <div class="weui-cell__bd">
+                        <p>收货地址</p>
+                    </div>
+                    <div class="weui-cell__ft">添加，修改收货地址</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{if $_W['container'] != 'wechat'}
+
+<div class="weui-tabbar address_tabbar" onclick="window.location.href='{php echo $this->createMobileUrl('auth',array('op'=>'login'))}'">
+    <a href="javascript:;" class="weui-btn address_tabbar_btn">退出登录</a>
+</div>
+{/if}
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script>
+    $(document).on("click", "#show-actions", function () {
+        $.actions({
+            actions: [
+                {
+                    text: "拍照",
+                    onClick: function () {
+                        $.alert("你选择了“拍照”");
+                    }
+                },
+                {
+                    text: "从相册中选取",
+                    onClick: function () {
+                        $.alert("你选择了“从相册中选取”");
+                    }
+                },
+            ]
+        });
+    });
+    $(document).on("click", "#show-name", function () {
+        var name = $('#myName').text();
+        $.prompt({
+            text: "",
+            title: "请输入新的姓名",
+            onOK: function (text) {
+                // 例子
+                $.get("{php echo wxapp_url('member/update')}", {realname:text},function (data) {
+                    if(data.err_code ==0) {
+                        $.alert("您的名字是:" + text + ',修改成功');
+                        $('#myName').text(text);
+                    }
+                })
+            },
+            onCancel: function () {
+                console.log("取消了");
+            },
+
+            input: name
+        });
+    });
+    $(document).on("click", "#show-phone", function () {
+        var mobile = $('#myPhone').text();
+        $.prompt({
+            text: "",
+            title: "请输入新的手机号",
+            onOK: function (text) {
+                $.get("{php echo wxapp_url('member/update')}", {mobile:text},function (data) {
+                    // $.alert("您的名字是:" + text+'这儿做ajax 请求呀！');
+                    if(data.err_code ==0) {
+                        $.alert("您的名字是:" + text + ',修改成功');
+                        $('#myPhone').text(text);
+                    }
+                })
+            },
+            onCancel: function () {
+                console.log("取消了");
+            },
+
+            input: mobile
+        });
+    });
+    $(document).on("click", "#show-number", function () {
+        var number = $('#myNumber').text();
+        $.prompt({
+            text: "",
+            title: "请输入新的车牌号",
+            onOK: function (text) {
+                // $.alert("您的车牌号是:" + text);
+                $.get("{php echo wxapp_url('member/update')}", {license:text},function (data) {
+                    // $.alert("您的名字是:" + text+'这儿做ajax 请求呀！');
+                    if(data.err_code ==0) {
+                        $.alert("您的车牌号是:" + text + ',修改成功');
+                        $('#myNumber').text(text);
+                    }
+                })
+            },
+            onCancel: function () {
+                console.log("取消了");
+            },
+            input: number
+        });
+    });
+    $(function () {
+        $(".primary").click(function () {
+            var mobile = $('#myPhone').text();
+            var realname = $('#myName').text();
+            var lince = $('#myNumber').text();
+            alert(mobile);alert(realname);alert(lince);return false;
+        })
+    })
+</script>
+</body>
+</html>

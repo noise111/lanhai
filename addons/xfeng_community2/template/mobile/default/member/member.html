@@ -1,0 +1,107 @@
+{template 'default/header'}
+<body class="max-width bg-f2">
+<div class="page">
+    <header class="bar bar-nav bg-green" style="position: fixed">
+        <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+        <h1 class="title txt-fff">个人中心</h1>
+    </header>
+    <div class="content" style="margin-bottom: 4rem">
+        <div class="my-head">
+            <div class="my-head-img">
+                <img src="{if $_W['fans']['tag']['avatar']}{$_W['fans']['tag']['avatar']}{else}{MODULE_URL}template/mobile/default/static/images/detail-personal-img.jpg{/if}">
+            </div>
+            <div class="head-dsb">
+                <p class="dsb-name" style="font-size: 14px;">{if $_W['member']['realname']}{$_W['member']['realname']}{else}{$_W['member']['nickname']}{/if}</p>
+                {if $_W['member']['mobile']}<p class="dsb-id" style="font-size: 14px;">手机号:{$_W['member']['mobile']}</p>{/if}
+            </div>
+            <a onclick="javascript:window.location.href='{php echo $this->createMobileUrl('member',array('op' => 'my'))}';" class="pull-right" style="margin-top: 30px;">
+                <img src="{MODULE_URL}template/mobile/default/static/images/arrow-right.png" alt="">
+            </a>
+        </div>
+        <div class="shop-grids bg-ff">
+            <a class="shop-grid" style='text-align:center'>
+                <div class="grid_icon">
+                    {$_W['member']['credit2']}
+                </div>
+                <p class="grid_label" {if set('p44')}style="text-align: left;padding-left: 30px;"{else}style='text-align:center'{/if}>余额 </p>
+                {if set('p44')}
+                <p class="recharge" onclick="window.location.href='{php echo url('entry', array('m' => 'recharge', 'do' => 'pay'));}'">充值</p>
+                {/if}
+            </a>
+            <a class="shop-grid">
+                <div class="grid_icon " style='text-align:center'>
+                    {$_W['member']['credit1']}
+                </div>
+                <p class="grid_label">
+                    积分
+                </p>
+            </a>
+            </a>
+            <a class="shop-grid" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon'))}'">
+                <div class="grid_icon" style='text-align:center'>
+                    {$coupon_count}
+                </div>
+                <p class="grid_label">
+                    团购卷
+                </p>
+            </a>
+        </div>
+
+        <div class="list-block my-list-block" style="margin-top: 3px;">
+            <ul>
+                <li class="item-content item-link" onclick="window.location.href='{php echo $this->createMobileUrl('myregion')}'">
+                    <div class="item-media"><img src="{MODULE_URL}template/mobile/default/static/images/myregion.png" style="width: 1.5rem;"></div>
+                    <div class="item-inner">
+                        <div class="item-title">我的小区</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="list-block my-list-block" style="margin-top: -8px;">
+            <ul>
+                <li class="item-content item-link" onclick="window.location.href='{php echo $this->createMobileUrl('member',array('op'=> 'my'))}'">
+                    <div class="item-media">
+                        <img src="{MODULE_URL}template/mobile/default/static/images/my.png " style="width: 1.5rem;"></div>
+                    <div class="item-inner">
+                        <div class="item-title">
+                            我的资料
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content item-link" onclick="window.location.href='{php echo $this->createMobileUrl('member',array('op'=> 'family'))}'">
+                    <div class="item-media">
+                        <img src="{MODULE_URL}template/mobile/default/static/images/family.png " style="width: 1.5rem;"></div>
+                    <div class="item-inner">
+                        <div class="item-title">
+                            我的家属
+                        </div>
+                    </div>
+                </li>
+                {loop $menus $menu}
+
+                <li class="item-content item-link" onclick="window.location.href='{$menu['url']}'">
+                    <div class="item-media">
+                        <img src="{MODULE_URL}template/mobile/default/static/images/{$menu['img']} " style="width: 1.5rem;"></div>
+                    <div class="item-inner">
+                        <div class="item-title">
+                            {$menu['title']}
+                        </div>
+                    </div>
+                </li>
+
+                {/loop}
+            </ul>
+        </div>
+    </div>
+
+</div>
+<?php
+    $tel = set('p1');
+    $copyright = set('p68');
+    $copright_url = set('p69');
+    ?>
+{if $copyright}
+<div onclick="window.location.href='{$copright_url}'" style="color:#999;font-size: 13px;z-index:9999;height: 1.5rem;line-height:1.5rem;vertical-align:middle;position: absolute;bottom: 2.5rem;margin: 0 auto;text-align: center;margin-top: 50px;background-color:#e7e7e7;width: 100% ">{$copyright}</div>
+{/if}
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+{template 'default/footer'}

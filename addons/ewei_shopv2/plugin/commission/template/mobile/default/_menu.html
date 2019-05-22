@@ -1,0 +1,26 @@
+<style>
+.fui-navbar .nav-item.active, .fui-navbar .nav-item:active {
+    color: #a81515;
+}
+</style>
+<div class="fui-navbar">
+    <a href="{php echo mobileUrl('commission')}" class="external nav-item {if $_W['routes']=='commission'}active{/if}">
+        <span class="icon icon-home"></span>
+        <span class="label">业务员中心</span>
+
+    </a>
+    <a href="{php echo mobileUrl('commission/statistics')}"   class="external nav-item {if $_W['routes']=='commission.statistics' }active{/if}">
+        <span class="icon icon-rank"></span>
+        <span class="label">业绩中心</span>
+    </a>
+
+    <a href="{php echo mobileUrl('commission/order2')}" class="external nav-item {if $_W['routes']=='commission.order2'}active{/if}">
+        <span class="icon icon-list"></span>
+        <span class="label">业绩订单</span>
+    </a>
+
+    <a href="{php echo mobileUrl('commission/team')}"  class="external nav-item {if $_W['routes']=='commission.team'}active{/if}">
+        <span class="icon icon-group"></span>
+        <span class="label">团队与客户</span>
+    </a>
+</div>

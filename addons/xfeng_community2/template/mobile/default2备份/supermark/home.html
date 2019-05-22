@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>未来超市</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_492571_4u26n8iiuuri19k9.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/demos.css">
+<style>
+    body {
+        background: #F7F7F7;
+        position: relative;
+    }
+
+    .toolbar {
+        background: #FFFFff;
+    }
+
+    .weui-popup__modal {
+        background: #FFFFff;
+    }
+
+    .weui-popup__container .weui-cells {
+        font-size: 0.9em;
+    }
+</style>
+
+<body>
+
+<div class="weui-flex">
+    <div class="defalut-weui-flex">
+        <img src="{$_W['fans']['tag']['avatar']}">
+        <p>{$_W['fans']['tag']['nickname']}</p>
+    </div>
+</div>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+<div class="default-store-box">
+    <div class="default-store-icon">
+        <i class="iconfamily icon-shangmen"></i>
+    </div>
+    <div class="weui-flex">
+        <div class="weui-flex__item" style="text-align: right;flex-grow:2" onclick="window.location.href='{php echo $this->createMobileUrl('supermark',array('op'=>'confirm','code' => $_GPC['code']))}'">
+            <a href="javascript:;">结算</a>
+        </div>
+        <div class="weui-flex__item" style="flex-grow:1">
+
+        </div>
+        <div class="weui-flex__item" style="text-align: left;flex-grow:2" @click="open(items.id)">
+            <a href="javascript:;">开门</a>
+        </div>
+    </div>
+</div>
+<div class="default-store-footer">
+    <div class="weui-flex">
+        <div class="weui-flex__item open-popup" data-target="#full" style="text-align: right;padding-right: 10px" @click="log()">
+            <p><i class="iconfamily icon-jilu" ></i>购物记录</p>
+        </div>
+        <div class="weui-flex__item" style="text-align: left;padding-left: 10px" @click="call(items.tel)">
+            <p><i class="iconfamily icon-lianxikefu"></i>联系客服</p>
+        </div>
+    </div>
+    <div class="weui-footer">
+        <p class="weui-footer__text">{{items.copy}}</p>
+    </div>
+</div>
+
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="toolbar">
+            <div class="toolbar-inner">
+                <a href="javascript:;" class="picker-button close-popup">关闭</a>
+                <h1 class="title">购物记录</h1>
+            </div>
+        </div>
+        <div class="modal-content">
+            <div class="weui-cells">
+                <div class="weui-cell" v-for="row in orderItems">
+                    <div class="weui-cell__bd">
+                        <p>{{row.ordersn}}</p>
+                        <p class="color_y">￥{{row.price}}</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        {{row.createtime}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script>
+    $(document).on("open", ".weui-popup-modal", function () {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function () {
+        console.log("close popup");
+    });
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            code:"{$_GPC['code']}",
+            items:[],
+            orderItems:[]
+        },
+        beforeMount: function () {
+            var self = this
+            // 底部菜单
+            var url = "{php echo wxapp_url('supermark/home')}";
+            var data = {
+                code: self.code
+            }
+            $.getJSON(url, data,function (ret) {
+                if(ret.err_code == -1){
+                    $.toast(ret.err_msg, "cancel");
+                    setTimeout(function () {
+                        window.location.href="{php echo $this->createMobileUrl('home')}";
+                    }, 1000);
+                }
+                self.items = ret.data
+            })
+        },
+        methods:{
+            log:function () {
+                var self = this
+                var url = "{php echo wxapp_url('supermark/home')}";
+                var data = {
+                    code: self.code
+                }
+                $.getJSON(url, data,function (ret) {
+                    self.orderItems = ret.data.orders
+                    console.log(ret.data.orders)
+                })
+            },
+            call:function (tel) {
+                console.log(tel);
+                window.location.href="tel:"+tel
+            },
+            open:function (id) {
+                console.log(id)
+                $.showLoading('正在请求开锁');
+                $.post("{php echo wxapp_url('supermark/lock')}", {id: id}, function (ret) {
+                    $.hideLoading()
+                    if (ret.err_code == 0) {
+                        //提交成功提示内容: data.data.content
+                        $.toast(ret.data.content, "cancel");
+                    }
+                }, 'json')
+            }
+        }
+    })
+</script>
+</body>
+</html>

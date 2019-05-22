@@ -1,0 +1,167 @@
+{template 'default/header'}
+
+<div class="page">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+        <h1 class="title txt-fff">订单信息</h1>
+    </header>
+    <div class="content" style="height: 100%">
+        <form class="form-horizontal" method="post" role="form">
+        <div class="list-block media-list SorderDe-list-block">
+            <ul>
+                <li>
+                    <a href="#" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=> 'address','gid' => $id))}'" class="item-link item-content">
+                        <div class="item-inner">
+                            {if $address}
+                            <div class="item-title-row">
+                                <div class="item-title" style="font-size: 14px;">收货人 : {$_W['member']['realname']}<span>{$_W['member']['mobile']}</span>&nbsp;&nbsp;</div>
+                                <div class="item-after">
+
+                                </div>
+                            </div>
+                            <div class="item-subtitle" style="font-size: 14px;">{$address['address']}</div>
+                            {elseif $member['address']}
+                            <div class="item-title-row">
+                                <div class="item-title" style="font-size: 14px;">收货人 : {$_W['member']['realname']}<span>{$_W['member']['mobile']}</span>&nbsp;&nbsp;</div>
+                                <div class="item-after">
+
+                                </div>
+                            </div>
+                            <div class="item-subtitle" style="font-size: 14px;">{$member['title']}{$member['address']}</div>
+                            <input type="hidden" name="address" value="{$member['title']}{$member['address']}">
+                            {else}
+                            新增地址
+                            {/if}
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="list-block media-list SorderDe-listCenter-block">
+            <ul>
+                {loop $allgoods $item}
+                <li>
+                    <a href="#" class="item-content">
+                        <div class="item-media"><img style="border: 1px solid #e7e4e7;width: 80px;height: 80px;" src="{php echo tomedia($item['thumb'])}?imageView2/1/w/80/h/80/q/100" ></div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['title']}</div>
+                            </div>
+                            <div class="item-title-row">
+                                <div class="item-subtitle item-shopOrder-price">¥{$item['marketprice']}</div>
+                                <div class="item-after">x{$item['total']}</div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+
+        <div class="list-block contacts-block">
+            <div class="list-group">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title" style="font-size: 14px;">
+                                   <b>商品总额:</b> <span class="color-danger">¥{$totalprice}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {if set('p77')}
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title" style="font-size: 14px;">
+                                  <b> 配送费:</b><span class="color-danger">{php echo set('p78')}元(满{php echo set('p79')}元免配送费)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {/if}
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title" style="font-size: 14px;">
+                                   <b> 赠送积分:</b><span class="color-danger">{php echo $c = $totalprice*set('p13')}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {if set('p88')}
+                    <li>
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-title" style="font-size: 14px;">
+                                    <b style="float: left"> 送货时间:</b>
+                                    <span class="color-danger" style="font-size: 14px;float: left;">
+                                             <select name="delivery" style="height: 20px;font-size: 14px;">
+                                                <option value="0">请选择送货时间</option>
+                                                {loop $delivery $v}
+                                                <option value="{$v}">{$v}</option>
+                                                {/loop}
+                                            </select>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    {/if}
+                    <li class="align-top">
+                        <div class="item-content">
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <textarea placeholder="还有什么要嘱咐商家的？"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+            <div style="height: 40px;"></div>
+            <footer class="shopcart-footer" style="position: fixed;">
+                <div class="shopcart-footer-list">
+                    <label class="label-checkbox item-content">
+                        <!--<input type="checkbox" data-group='cart' id="checkcart" name="my-radio">-->
+                        <!--<div class="item-media"><i class="icon icon-form-checkbox" ></i> <span></span></div>-->
+                    </label>
+                </div>
+                <div class="shopcart-footer-list" >
+                    <div class="shopcart-footer-info ">
+                        <p class="color-danger" style="top: -0.8rem;">
+                            合计：
+                            <span>
+                            {if $totalprice < set('p79')}
+                            {php echo $totalprice+set('p78')}元
+                            {else}
+                                {$totalprice}元
+                             {/if}
+                        </span>
+                        </p>
+                        <span class="color-gray"></span>
+                    </div>
+                    <button type="submit" name="submit" value="yes" class="shopcart-js bg-danger" >提交订单</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                    <!--<div class="shopcart-js bg-danger" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'confirm'))}'">-->
+                        <!--提交订单-->
+                    <!--</div>-->
+                </div>
+            </footer>
+        <!--<div class="content-block bg-ff SorderDe-button" >-->
+            <!--<p>应付款:<span class="color-danger">¥{$totalprice}</span></p>-->
+            <!--&lt;!&ndash;<a class="button button-fill button-danger" onclick="window.location.href='../business/group-order2.html'">立即付款</a>&ndash;&gt;-->
+            <!--<button type="submit" name="submit" value="yes" class="button button-fill button-danger" style="width: 60%;margin: 0 auto">确认订单</button>-->
+            <!--<input type="hidden" name="token" value="{$_W['token']}" />-->
+        <!--</div>-->
+        </form>
+
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/jquery.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>
+
+</html>

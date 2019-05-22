@@ -1,0 +1,108 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        {if $_GPC['uuid']}<a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('staff', array('op' => 'perm'))}"></a>&nbsp;&nbsp;&nbsp;{/if}
+                        权限设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'perm','uuid' => $_GPC['uuid']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="staff"/>
+                        <input type="hidden" name="op" value="perm"/>
+                    <div class="row">
+                        <div class="col-sm-6 m-b-xs">
+                            <a class="btn btn-primary" href="{php echo $this->createWebUrl('staff', array('op' => 'perm','p' => 'add','uuid' => $_GPC['uuid']));}"><i class="fa fa-plus"></i> 添加管理员</a>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="输入手机号" value="{$_GPC['keyword']}">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+            <table class="table table-bordered">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="col-lg-1">管理员账号</th>
+                    <th class="col-lg-1">姓名</th>
+                    <th class="col-lg-1">手机号</th>
+                    <th style="width: 120px;">添加时间</th>
+                    <th class="col-lg-7">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td>{$item['username']}</td>
+                    <td>{$item['realname']}</td>
+                    <td>{$item['mobile']}</td>
+                    <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                    <td>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p'=> 'menu','id' => $item['id']));}" title="" data-toggle="tooltip" data-placement="top" data-original-title="设置权限" class="btn btn-primary btn-sm">设置后台权限</a>
+                        </span>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p' => 'commission','id' => $item['id']));}" title="" data-toggle="tooltip" data-placement="top" data-original-title="设置分成" class="btn btn-primary btn-sm">设置分成</a>
+                        </span>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op'=> 'perm','p' => 'm','id' => $item['id']));}" title="" data-toggle="tooltip" data-placement="top" data-original-title="授权手机端权限" class="btn btn-primary btn-sm">授权手机端权限</a>
+                        </span>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p'=> 'list','uuid' => $item['uid']));}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-primary btn-sm" data-original-title="子管理员">子管理员</a>
+                        </span>
+                        <span>
+                            <a onclick="reset({$item['uid']})" href="#" data-placement="top" class="btn btn-primary btn-sm" data-original-title="编辑">重置密码</a>
+                        </span>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p'=> 'add','id' => $item['id']));}" data-placement="top" class="btn btn-primary btn-sm" data-original-title="编辑">编辑</a>
+                        </span>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p'=> 'delete','id' => $item['id']))}" title="删除" class="btn btn-default btn-sm">删除</a>
+						</span>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                <thead>
+                {if $list}
+                <tr>
+                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                </tr>
+                {else}
+                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                {/if}
+                </thead>
+            </table>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function reset(uid) {
+        var pw = Math.floor(Math.random()*100000000);
+        if(confirm("你确定重置此管理密码为:"+pw+"吗？")){
+            $.post("{php echo $this->createWebUrl('staff',array('op' => 'reset'))}",{pw:pw,uid:uid},function (result) {
+                if(result.status){
+                    alert('重置成功');
+                }
+            },'json')
+        }
+    }
+</script>
+
+{template 'web/common/footer'}

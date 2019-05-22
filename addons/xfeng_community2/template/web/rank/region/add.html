@@ -1,0 +1,399 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('rank',array('op' => 'region'))}"></a>&nbsp;&nbsp;&nbsp;添加小区</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('rank',array('op' => 'region','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" role="form" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">小区名称</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='title' id='title' class="form-control" value="{$item['title']}" placeHolder="请输入小区名称"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">选择物业</label>
+                            <div class="col-sm-5">
+                                <select name='pid' class="form-control" id="pid">
+                                    <option value="0">选择物业</option>
+                                    {loop $propertys $property}
+                                    <option value="{$property['id']}" {if $property['id'] == $item['pid']}selected {/if} > {$property['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">触发关键字</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='keyword' id='keyword' class="form-control" value="{$item['keyword']}" placeHolder="请输入触发关键字"/>
+                                <span class="help-block" style="color:red">主要用于关联小区二维码,后期会拓展其他功能,尽量填写小区名称，不能和其他小区有重复</span>
+                            </div>
+
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkmen" class="col-sm-2 control-label">联系人</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='linkmen' id='linkmen' class="form-control" value="{$item['linkmen']}" placeHolder="请输入联系人"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='linkway' class="form-control" id='linkway' value="{$item['linkway']}" placeHolder="请输入联系电话"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="qq" class="col-sm-2 control-label">联系QQ</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='qq' class="form-control" id='qq' value="{$item['qq']}" placeHolder="此处QQ为我的小区里面的客服QQ"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">项目所属地</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_district('project_city',array('province' => $project_city[0],'city' => $project_city[1],'district' => $project_city[2]));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="project" class="col-sm-2 control-label">项目名称</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='project' class="form-control" id='project' value="{$project['project']}" placeHolder="请输入项目名称"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">合同类型</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="pact" id="pact1" value="1" {if empty($project['pact']) || $project['pact'] == 1}checked="true" {/if} />
+                                    <label for="pact1">前期物业</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="pact"  id="pact2" value="2" {if $project['pact']==2}checked="true" {/if} />
+                                    <label for="pact2">后期物业</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="manager" class="col-sm-2 control-label">项目经理姓名</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='manager' class="form-control" id='manager' value="{$project['manager']}" placeHolder="请输入项目经理姓名"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="manager_mobile" class="col-sm-2 control-label">项目经理电话</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='manager_mobile' class="form-control" id='manager_mobile' value="{$project['manager_mobile']}" placeHolder="请输入项目经理电话"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="project_square" class="col-sm-2 control-label">项目总建筑面积</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='project_square' class="form-control" id='project_square' value="{$project['project_square']}" placeHolder="请输入项目总建筑面积"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="house_total" class="col-sm-2 control-label">总户数</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='house_total' class="form-control" id='house_total' value="{$project['house_total']}" placeHolder="请输入总户数"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="build_total" class="col-sm-2 control-label">总栋数</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='build_total' class="form-control" id='build_total' value="{$project['build_total']}" placeHolder="请输入总栋数"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首次交付日期</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_date('other_time',$item['other_time'],ture);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="income" class="col-sm-2 control-label">上年度营业收入</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='income' class="form-control" id='income' value="{$project['income']}" placeHolder="请输入上年度营业收入"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="house_square" class="col-sm-2 control-label">住宅面积</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='house_square' class="form-control" id='house_square' value="{$project['house_square']}" placeHolder="请输入住宅面积"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="house_pfee" class="col-sm-2 control-label">住宅物业费收费标准</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='house_pfee' class="form-control" id='house_pfee' value="{$project['house_pfee']}" placeHolder="请输入住宅物业费收费标准（元/m2/月）"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="house_nsquare" class="col-sm-2 control-label">非住宅面积</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='house_nsquare' class="form-control" id='house_nsquare' value="{$project['house_nsquare']}" placeHolder="请输入非住宅面积"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="house_npfee" class="col-sm-2 control-label">非住宅物业费收标准</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='house_npfee' class="form-control" id='house_npfee' value="{$project['house_npfee']}" placeHolder="请输入非住宅物业费收标准"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="park_price" class="col-sm-2 control-label">车位场地租金</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='park_price' class="form-control" id='park_price' value="{$project['park_price']}" placeHolder="请输入车位场地租金"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="park_fee" class="col-sm-2 control-label">停车服务费</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='park_fee' class="form-control" id='park_fee' value="{$project['park_fee']}" placeHolder="请输入停车服务费"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="lift_total" class="col-sm-2 control-label">电梯总数量</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='lift_total' class="form-control" id='lift_total' value="{$project['lift_total']}" placeHolder="请输入电梯总数量"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="lift_ttotal" class="col-sm-2 control-label">电梯使用超过十年数量</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='lift_ttotal' class="form-control" id='lift_ttotal' value="{$project['lift_ttotal']}" placeHolder="请输入电梯使用超过十年数量"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="psquare" class="col-sm-2 control-label">物业用房面积</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='psquare' class="form-control" id='psquare' value="{$project['psquare']}" placeHolder="请输入物业用房面积"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="park_total" class="col-sm-2 control-label">总停车位</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='park_total' class="form-control" id='park_total' value="{$project['park_total']}" placeHolder="请输入总停车位"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="park_common" class="col-sm-2 control-label">公共停车位</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='park_common' class="form-control" id='park_common' value="{$project['park_common']}" placeHolder="请输入公共停车位"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="camera_total" class="col-sm-2 control-label">可视监控镜头数量</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='camera_total' class="form-control" id='camera_total' value="{$project['camera_total']}" placeHolder="请输入可视监控镜头数量"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="alarm" class="col-sm-2 control-label">周界报警系统</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='alarm' class="form-control" id='alarm' value="{$project['alarm']}" placeHolder="请输入周界报警系统"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="plug" class="col-sm-2 control-label">消防栓数量</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='plug' class="form-control" id='plug' value="{$project['plug']}" placeHolder="请输入消防栓数量"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pname" class="col-sm-2 control-label">项目服务人员</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='pname' class="form-control" id='pname' value="{$project['pname']}" placeHolder="请输入项目服务人员"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="owner_total" class="col-sm-2 control-label">业主委员会人数</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='owner_total' class="form-control" id='owner_total' value="{$project['owner_total']}" placeHolder="请输入业主委员会人数"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="owner_name" class="col-sm-2 control-label">业主委员会主任姓名</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='owner_name' class="form-control" id='owner_name' value="{$project['owner_name']}" placeHolder="请输入业主委员会主任姓名"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="owner_mobile" class="col-sm-2 control-label">业主委员会主任电话</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='owner_mobile' class="form-control" id='owner_mobile' value="{$project['owner_mobile']}" placeHolder="请输入业主委员会主任电话"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="water" class="col-sm-2 control-label">自管二次供水系统</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='water' class="form-control" id='water' value="{$project['water']}" placeHolder="请输入自管二次供水系统"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="electric" class="col-sm-2 control-label">自管供电系统</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='electric' class="form-control" id='electric' value="{$project['electric']}" placeHolder="请输入自管供电系统"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否加入物业管理电子信息平台</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" id="type1" value="1" {if empty($project['type']) || $project['type'] == 1}checked="true" {/if} />
+                                    <label for="type1">是</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type2" value="2" {if $project['type']==2}checked="true" {/if} />
+                                    <label for="type2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">小区图片</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('thumb', $item['thumb'])}
+                                <span class="help-block">建议比例:60px*60px</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">图文图片</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('pic', $item['pic'])}
+                                <span class="help-block">建议比例:360像素 * 200像素<span style="color: red">(独立小区二维码图片)</span></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 地址</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_district('reside',array('province' => $item['province'],'city' => $item['city'],'district' => $item['dist']));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">详细地址</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='address' class="form-control" id='address' value="{$item['address']}" placeHolder="请输入小区地址"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">坐标</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_coordinate('baidumap', $item)}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">外部链接</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_link('url',$item['url'])}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                            <div class="col-sm-9 col-xs-12 help-block">如需要链接到外部网站,请在此设置网址。                  </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+        function check(form){
+                if (!form['title'].value) {
+                    alert('请输入小区名称。');
+                    return false;
+                }
+                if (!form['linkway'].value) {
+                    alert('请输入正确的电话号码！');
+                    return false;
+                }
+                if (!form['linkmen'].value) {
+                    alert('请输入联系人姓名。');
+                    return false;
+                }
+                if (!form['address'].value) {
+                    alert('请输入小区地址。');
+                    return false;
+                }
+                return true;
+        }
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'property'},function (data) {
+                if (data.err_code == 0){
+                    $('#pid').val(data.pid);
+                }
+            },'json')
+        })
+    </script>
+
+{template 'web/common/footer'}

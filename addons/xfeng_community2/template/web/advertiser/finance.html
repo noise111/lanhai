@@ -1,0 +1,221 @@
+{template 'web/common/header-base'}
+<!--<ul class="nav nav-tabs">-->
+<!--<li class="active">-->
+<!--<a href="#">财务统计</a>-->
+<!--</li>-->
+
+<!--</ul>-->
+
+<style>
+    .account-stat {
+        overflow: hidden;
+        color: #666;
+    }
+
+    .account-stat .account-stat-btn {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .account-stat .account-stat-btn > div {
+        text-align: center;
+        margin-bottom: 5px;
+        margin-right: 2%;
+        float: left;
+        width: 18%;
+        padding-top: 10px;
+        font-size: 16px;
+        border-left: 1px #DDD solid;
+    }
+
+    .account-stat .account-stat-btn > div:first-child {
+        border-left: 0;
+    }
+
+    .account-stat .account-stat-btn .stat {
+        width: 80%;
+        margin: 10px auto;
+        font-size: 15px
+    }
+</style>
+{if empty($_W['isfounder'])}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>&nbsp;&nbsp;&nbsp;财务信息
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('advertiser',array('op' => 'finance'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <!--<div class="panel panel-default">-->
+                    <!--<div class="panel-heading">财务信息</div>-->
+                    <div class="account-stat">
+                        <div class="account-stat-btn">
+                            <div>
+                                <strong>总金额</strong>
+                                <div class="stat">
+                                    <div><strong><span
+                                            class="text-success">{if $totalprice}{$totalprice}{else}0.00{/if}</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="stat">
+                                    <div>可用金额 : <strong><span class="text-success">{if $user['balance']}{$user['balance']}{else}0.00{/if}</span></strong>
+                                    </div>
+                                    <div>冻结金额 : <strong><span class="text-success">{if $user['account']}{$user['account']}{else}0.00{/if}</span></strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="stat">
+                                    <a href="javascript:;" class="btn btn-primary min-width js-finance"
+                                       data-toggle="modal" data-target="#finance">充值</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    {/if}
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>数据统计</h5>
+                        <h5 style="float: right">
+                            <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('advertiser',array('op' => 'finance'))}"></a>
+                        </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="advertiser"/>
+                            <input type="hidden" name="op" value="finance"/>
+                            <div class="row" >
+                                <div class="col-sm-9"></div>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        {php echo tpl_form_field_daterange('birth', $birth);}
+                                        <span class="input-group-btn">
+
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form action="" class="form-horizontal form" method="post">
+                        <!--<div id="editable_wrapper" class="dataTables_wrapper form-inline" role="grid">-->
+
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids"
+                                               onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th>广告</th>
+                                <th>领取日期</th>
+                                <th>领取人</th>
+                                <th class="text-center">金额</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                               value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+
+                                </td>
+                                <td>{$item['advtitle']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>{$item['nickname']}</td>
+                                <td class="text-center">{$item['price']}元</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <!--</div>-->
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="text-left">
+                                    <input name="token" type="hidden" value="{$_W['token']}"/>
+                                    <input type="submit" class="btn btn-danger span2" name="delete" value="批量删除"/>
+                                    &nbsp;
+                                    <!--<button type="submit" name="plverity" value="1" class="btn btn-warning">一键全部审核-->
+                                    <!--</button>-->
+                                </td>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="finance" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">广告充值</h4>
+                </div>
+                <form action="" class="form-horizontal form" method="post">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <div class="col-xs-12">
+                                    <div class="input-group form-group">
+                                        <span class="input-group-addon" style="width: 100px;">充值金额</span>
+                                        <input type='text' class="form-control" value="300" name="price"/>
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-right col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <input type="submit" name="submit" class="btn btn-success" value="充值"/>
+                                    <!--<button type="submit" class="btn btn-primary span3" name="submit" value="提交">提交</button>-->
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

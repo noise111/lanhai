@@ -1,0 +1,34 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('settled', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;查看
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('settled',array('op' => 'detail','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <p><code>联系人：{$item['realname']} 联系电话：{$item['tel']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>联系地址：{$item['address']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>联系单位：{$item['company']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>入驻类型：{if $item['category'] == 1}物业公司{elseif $item['category'] == 2}独立店铺{elseif $item['category'] == 3}网络超市{/if}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    {if $item['license']}
+                    <p><code>营业执照：</code>
+                    </p>
+                    <p><code>
+                        <a href="{php echo tomedia($item['license'])}" target="_blank"><img src="{php echo tomedia($item['license'])}" /></a></code>
+                    </p>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

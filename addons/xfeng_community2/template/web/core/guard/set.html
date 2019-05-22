@@ -1,0 +1,133 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('guard',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">门禁设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">开门定位</td>
+                                <td>
+                                    开启后，业主通过通过定位显示附近能开的门，默认不开定位
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="tel" name="set[p87]" value="{$set['p87']['value']}" class="form-control"
+                                               placeholder="输入定位范围"/>
+                                        <span class="input-group-addon">千米（KM）</span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <input type="checkbox" name="" id="p86" class="js-switch_14" {if $set['p86']['value']}checked{/if}/>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">微信开门</td>
+                                <td>
+                                    开启的话，业主注册默认就有微信开门权限
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p32" class="js-switch_15" {if $set['p32']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">授权验证开门</td>
+                                <td>
+                                    默认微信开门采用的业主注册的楼栋单元匹配，进行开门。开启授权验证开门后，需要先在后台设置业主授权开门
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p33" class="js-switch_16" {if $set['p33']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">微信开门关联物业费</td>
+                                <td>此设置与微信开门硬件有关，开启此设置后，会关联业主的物业费</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p34" class="js-switch_17" {if $set['p34']['value']}checked='checked'{/if} />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">取消关注删除人脸授权</td>
+                                <td>
+                                    开启后，粉丝取消关注后删除对应粉丝的人脸授权，默认不删除
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                    <input type="checkbox" name="" id="p165" class="js-switch_165" {if $set['p165']['value']}checked{/if}/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

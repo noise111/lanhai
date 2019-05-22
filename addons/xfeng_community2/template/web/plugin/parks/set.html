@@ -1,0 +1,32 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('parks',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal" role="form" enctype="multipart/form-data" id="form1">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">欠费通知模板id</label>
+                            <div class="col-sm-9 col-xs-5 col-md-5">
+                                <input type="text" class="form-control" value="{$set['t35']['value']}" name="set[t35]"/>
+                                <span class="help-block">欠费通知 (行业: IT科技 互联网|电子商务)</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-md-offset-2 col-lg-offset-1 col-xs-12 col-sm-10 col-md-10 col-lg-11">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m"/>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

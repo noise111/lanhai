@@ -1,0 +1,52 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('counter', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;开柜记录</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'log','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>主柜</th>
+                            <th>小柜子</th>
+                            <th>开柜人</th>
+                            <th>类型</th>
+                            <th>开柜时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{php echo $item['lock']+1}号柜子</td>
+                            <td>{$item['realname']}</td>
+                            <td>{if $item['type'] == 1}投递员{elseif $item['type'] == 2}用户{elseif $item['type'] == 3}超级管理员{elseif $item['type'] == 4}快递管理员{/if}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

@@ -1,0 +1,187 @@
+{template 'default/header'}
+<style>
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        line-height: 15px;
+    }
+
+    .bt {
+        background-color: #F7F7F7;
+        color: black;
+        margin-top: 5px;
+    }
+</style>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/jquery.fly.min.js"
+        charset="utf-8"></script>
+<body class="max-width bg-f2">
+<div class="page">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="#"
+           onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+        <div class="bar more-list-bar">
+            <div class="searchbar">
+                <a class="searchbar-cancel">确定</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <input type="search" id='search' placeholder='找你想要的'/>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="content">
+        <p style="height: 40px;background-color: white;margin-bottom: 0px;overflow-x:auto; white-space:nowrap;width: 100%;margin-top: -4px;">
+            <a href="#" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'list'))}'" class="btn bt" {if empty($pcate)}style="border-left: 3px solid rgb(72, 181, 78);"{/if}>全部</a>
+            {loop $categories $key $category}
+            <a href="#"  onclick="javascript:window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'list','pcate' => $category['id']))}'" class="btn bt" {if $pcate== $category['id']}style='border-left: 3px solid rgb(72, 181, 78);'{/if}>{$category['name']}</a>
+            {/loop}
+        </p>
+        {if $childrens}
+        <p style="margin-top:2px;height: 40px;background-color: white;margin-bottom: 0px;overflow-x:auto; white-space:nowrap;width: 100%">
+            <a href="#" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'list'))}'" class="btn bt" {if empty($ccate)}style="border-left: 3px solid rgb(72, 181, 78);"{/if}>全部</a>
+            {loop $childrens $children}
+            <a href="#" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'list','ccate' => $children['id'],'pcate'=>$pcate))}'" class="btn bt" {if $ccate== $children['id']}style="border-left: 3px solid rgb(72, 181, 78);"{/if}>{$children['name']}</a>
+            {/loop}
+        </p>
+        {/if}
+
+        <div class="content-block" style="padding: 2px;margin:0px">
+            <div class="tabs">
+                <div id="tab0" class="tab active">
+                    <div class="list-block media-list mt0 more-list-block">
+                        <ul id="data-list-0">
+
+                        </ul>
+                    </div>
+                </div>
+                <p><a href="#" class="button button-success" style="width: 50%;margin: 0 auto" id="gdregion">加载更多..</a></p>
+            </div>
+        </div>
+
+        <a class="shop-total-cart" href="#" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'mycart'))}'"><span class="icon icon-cart"></span><span class="badge">{$carttotal}</span></a>
+    </div>
+    <script type="text/html" id="xq_list">
+        {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+        <li style="border-bottom: 1px solid #F2F2F2">
+            <a class="item-content">
+                <div class="item-media" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op'=> 'detail'))}&id={{ d.list[i].id }}'">
+                    <img src="{{ d.list[i].thumb }}?imageView2/1/w/100/h/100/q/100" class="thumb_{{ d.list[i].id }}" style="width: 100px;height: 100px;">
+                </div>
+                <div class="item-inner">
+                    <div class="item-title-row" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op'=> 'detail'))}&id={{ d.list[i].id }}'">
+                        <div class="item-title" style="font-size: 14px;">{{ d.list[i].title }}</div>
+                    </div>
+                    <div class="item-subtitle">
+                        <span class="shop-grid-price" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op'=> 'detail'))}&id={{ d.list[i].id }}'">{{ d.list[i].marketprice }}</span>
+                        <s class="shop-yuanjia">{{ d.list[i].productprice }}</s>
+                    </div>
+                </div>
+            </a>
+            <a class="shop-card">
+                <span class="icon icon-shop-cart" id="cart_{{ d.list[i].id }}" onclick="addtocart({{ d.list[i].id }})">
+
+                </span>
+            </a>
+        </li>
+        {{# } }}
+
+    </script>
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js"
+            charset="utf-8"></script>
+    <script>
+        $(document).ready(function () {
+            var keywords = "{$_GPC['keywords']}";
+            var ccate = "{$ccate}";
+            var pcate = "{$pcate}";
+            loaddata("{php echo $this->createMobileUrl('shopping',array('op' => 'list'))}&keywords=" + keywords + "&pcate=" + pcate + "&ccate=" + ccate, $("#data-list-0"), 'xq_list', true);
+            var page = 1;
+            $("#gdregion").click(function () {
+                page++;
+                link = "{php echo $this->createMobileUrl('shopping',array('op' => 'list'))}&keywords=" + keywords + "&pcate=" + pcate + "&ccate=" + ccate+"&page="+page;
+                $.get(link, function (data) {
+                    if (data.list.length > 0) {
+                        var gettpl = document.getElementById('xq_list').innerHTML;
+                        laytpl(gettpl).render(data, function(html){
+                            $("#data-list-0").append(html);
+                        });
+                    }else{
+                        $("#gdregion").html('全部数据加载完毕');
+                    }
+                }, 'json');
+            })
+        });
+        $('.searchbar-cancel').click(function () {
+            window.location.href = "{php echo $this->createMobileUrl('shopping',array('op' => 'list'))}" + "&keywords=" + $("#search").val();
+        });
+    </script>
+    <script>
+        function xqshop(id) {
+            var id = id;
+            $.post("{php echo $this->createMobileUrl('shopping',array('op'=> 'list'))}", {pcate: id}, function (data) {
+                var content = "<div id='tab" + id + "' class='tab'> <div class='list-block media-list mt0 more-list-block'><ul>";
+                var dat = data.list;
+                for (var o in dat) {
+                    content += "<li><a class='item-content'> <div class='item-media' onclick=\"location.href='" + dat[o].url + "'\"> <img src='" + dat[o].thumb + "' class='thumb_" + dat[o].id + "' style='width:4rem;height: 3rem;'> </div> <div class='item-inner'> <div class='item-title-row' onclick=\"location.href='" + dat[o].url + "'\"> <div class='item-title'  style=\"font-size: 14px;\">" + dat[o].title + "</div> </div> <div class='item-subtitle'> <span class='shop-grid-price' onclick=\"location.href='" + dat[o].url + "'\">" + dat[o].marketprice + "</span> <s class='shop-yuanjia'>" + dat[o].productprice + "</s> </div> </div> </a> <a class='shop-card'><span class='icon icon-shop-cart' id='cart_" + dat[o].id + "' onclick='addtocart(" + dat[o].id + ")'></span></a> </li>";
+                }
+                content += "</ul></div></div>";
+                $(".tabs").append(content);
+
+            }, 'json')
+        }
+    </script>
+    <script type="text/javascript">
+        //添加到购物车
+        function addtocart(id) {
+            var id = id;
+            var st = $('#cart_' + id).offset();
+            var offset = $('.icon-cart').offset();
+            var img = $('.thumb_' + id).attr('src');
+            var flyer = $('<img class="u-flyer" src="' + img + '">');
+            var height = $(window).height();
+            var width = $(window).width() / 2;
+            flyer.fly({
+                start: {
+                    left: st.left, //抛物体起点横坐标
+                    top: st.top - $(document).scrollTop()////抛物体起点纵坐标
+                },
+                end: {
+                    left: offset.left, //抛物体终点横坐标
+                    top: offset.top, //抛物体终点纵坐标
+                    //抛物线完成后留在页面上的图片大小
+                    width: 0,
+                    height: 0
+                },
+                onEnd: function () { //结束回调
+                    var url = "{php echo $this->createMobileUrl('shopping',array('op' => 'mycart','operation' =>'add','type' => 1),'',true)}&id=" + id;
+                    $.getJSON(url, function (s) {
+                        if (s.result == 0) {
+                            $.toast("库存不足，无法购买。");
+                            return false;
+                        } else {
+                            $('.badge').text(s.total);
+                            $.toast("添加成功,在购物车等亲~");
+
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+    {template 'default/footer'}

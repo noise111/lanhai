@@ -1,0 +1,347 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('business', array('op' => 'goods'))}"></a>&nbsp;&nbsp;&nbsp;商品添加
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh"
+                           href="{php echo $this->createWebUrl('business',array('op' => 'goods','operation' => 'add','id' => $id,'dpid' => $_GPC['dpid']))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>所属店铺</label>
+                            <div class="col-sm-8 col-xs-6">
+                                <select name='dpid' class='form-control' id="dpid">
+                                    <option value="0">选择店铺</option>
+                                    {loop $dps $dp}
+                                    <option value="{$dp['id']}" {if $item['dpid'] == $dp['id']}selected ='selected'{/if}>{$dp['sjname']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span style='color:red'>*</span>商品名称</label>
+                            <div class="col-sm-8 col-xs-6">
+                                <input type="text" name="title" id="title" class="form-control"
+                                       value="{$item['title']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">团购说明</label>
+                            <div class="col-sm-8 col-xs-6">
+                                <input type="text" name="instruction" class="form-control"
+                                       placeholder="例如： 团购价19套餐，建议2人使用" value="{$item['instruction']}"/>
+                                <span class="help-block">请用简短的一句话描述（15个字以内）</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否上架</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="status" id="isshow1" value="1" {if $item['status'] ==1}checked="true"{/if} />
+                                    <label for="isshow1">是</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="status" id="isshow2" value="0" {if $item['status'] ==0}checked="true"{/if} />
+                                    <label for="isshow2">关闭</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label">商品属性</label>-->
+                            <!--<div class="col-sm-9 col-xs-12">-->
+
+                                <!--<div class="checkbox checkbox-success checkbox-inline">-->
+                                    <!--<input type="checkbox" id="recommand" name="recommand" value="1" id="recommand" {if $item[ 'recommand']==1 }checked="true" {/if}>-->
+                                    <!--<label for="recommand"> 店铺推荐 </label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">封面图片</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo tpl_form_field_image('thumb', $item['thumb'], '', $options)}
+                                <span class="help-block">图片比例1:1(长*宽)</span>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">幻灯图片</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo tpl_form_field_multi_image('images',$piclist,$options)}
+                                <span class="help-block">图片比例4:3</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品图片</label>
+                            <div class="col-sm-8 col-xs-12">
+                                {php echo tpl_form_field_multi_image('thumbs',$imglist,$options)}
+                                <span class="help-block">图片比例4:3</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品价格</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="input-group form-group">
+                                    <span class="input-group-addon">团购价</span>
+                                    <input type="text" name="marketprice" id="marketprice" class="form-control"
+                                           value="{$item['marketprice']}"/>
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                                <div class="input-group form-group">
+                                    <span class="input-group-addon">门市价</span>
+                                    <input type="text" name="productprice" id="productprice" class="form-control"
+                                           value="{$item['productprice']}"/>
+                                    <span class="input-group-addon">元</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品套餐</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <table class="table table-hover">
+                                    <thead class="navbar-inner">
+                                    <tr>
+                                        <th  style="width:180px" colspan="3">套餐名称</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody id="status-items">
+                                    {loop $menus $key $menu}
+                                    <tr>
+                                        <td colspan="3">
+                                            <input class="form-control" name="combo[{$key}][titles]" title="名称" placeholder="名称" type="text" value="{$menu['titles']}"/><input name="ids[]" type="hidden" value=""/>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:;" onclick="addItem('{$key}')" class="btn btn-default btn-sm"><i class="icon-plus-sign-alt"></i> 添加新套餐</a>
+                                            <a href="javascript:;" onclick="$(this).parent().parent().remove();" class="btn btn-small" title="删除此条目"><i class="fa fa-times"></i>删除</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        {loop $menu['content'] $k $m}
+                                    <tr>
+                                        <td><input class="form-control" name="combo[{$key}][content][{$k}][title]" title="名称" placeholder="名称" type="text" value="{$m['title']}"/><input name="ids[]" type="hidden" value=""/></td>
+                                        <td><input class="form-control" name="combo[{$key}][content][{$k}][spec]" title="规格" placeholder="规格" type="text" value="{$m['spec']}"/></td>
+                                        <td><input class="form-control" name="combo[{$key}][content][{$k}][price]" title="价格" placeholder="价格" type="text" value="{$m['price']}"/></td>
+                                        <td><a href="javascript:;" onclick="$(this).parent().parent().remove();" class="btn btn-small" title="删除此条目"><i class="fa fa-times"></i>删除</a></td>
+                                    </tr>
+                                    {/loop}
+                                    </tr>
+                                    <tr id="item-{$key}">
+
+                                    </tr>
+                                    </tr>
+                                    {/loop}
+                                    </tbody>
+                                    <tr>
+                                        <td colspan="2">
+                                            <a href="javascript:;" onclick="addStatusItem()" class="btn btn-default btn-sm"><i class="icon-plus-sign-alt"></i> 添加套餐</a>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品库存</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="input-group">
+                                    <input type="text" name="total" id="total" class="form-control"
+                                           value="{$item['total']}"/>
+                                    <span class="input-group-addon">张</span>
+                                </div>
+                                <span class="help-block">当前商品的库存数量</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">限购数量</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="input-group">
+                                    <input type="text" name="limitnum" id="limitnum" class="form-control"
+                                           value="{$item['limitnum']}"/>
+                                    <span class="input-group-addon">张</span>
+                                </div>
+                                <span class="help-block">0代表不限制</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否关闭售卖时间</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="saleStatus" id="saleStatus1" value="1" {if $commons['saleStatus'] ==1}checked="true"{/if} />
+                                    <label for="saleStatus1">关闭售卖时间</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="saleStatus" id="saleStatus2" value="2" {if $commons['saleStatus'] ==2 || empty($commons['saleStatus'])}checked="true"{/if} />
+                                    <label for="saleStatus2">开启售卖时间</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">售卖时间</label>
+                            <div class="col-sm-10">
+                                {php echo tpl_form_field_daterange('sale', array('starttime' => date('Y-m-d',empty($startdate) ? TIMESTAMP-86400*30 : $startdate),'endtime' =>date('Y-m-d',empty($enddate) ? TIMESTAMP+86400*30 : $enddate)));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否关闭使用时间</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="useStatus" id="useStatus1" value="1" {if $commons['useStatus'] ==1}checked="true"{/if} />
+                                    <label for="useStatus1">关闭使用时间</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="useStatus" id="useStatus2" value="2" {if $commons['useStatus'] ==2 || empty($commons['saleStatus'])}checked="true"{/if} />
+                                    <label for="useStatus2">开启使用时间</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">使用时间</label>
+                            <div class="col-sm-10">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">产品说明</label>
+                            <div class="col-sm-8 col-xs-12">
+                                <textarea name="rules" class="form-control" style="height: 180px">{$item['rules']}</textarea>
+                                <span class="help-block">多个说明使用‘|’隔开</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">外部链接</label>
+                            <div class="col-xs-8">
+                                {php echo tpl_form_field_link('wlinks',$item['wlinks'])}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label">抢购详情</label>-->
+                            <!--<div class="col-sm-9 col-xs-12">-->
+                                <!--{php //echo tpl_ueditor('content', $item['content']);}-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label">购买须知</label>-->
+                            <!--<div class="col-sm-9 col-xs-12">-->
+                                <!--{php //echo tpl_ueditor('description', $item['description']);}-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="submit" name="submit" value="提交" id="submit"
+                                       class="btn btn-w-m btn-primary"/>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#submit').on('click', function () {
+        var dpid = $("#dpid option:selected").val()
+        if(dpid==='0'){
+            alert('请选择店铺。');
+            return false;
+        }
+        if (!$("#title").val()) {
+            alert('请输入商品名称。');
+            return false;
+        }
+
+        if($("#marketprice").val() === '' || $("#marketprice").val() ==='0.00' || $("#marketprice").val() <= 0){
+            alert('请输入团购价格。');
+            return false;
+        }
+        if($("#productprice").val() === '' || $("#productprice").val() ==='0.00' || $("#productprice").val() <= 0){
+            alert('请输入商品原价。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('business',array('op'=>'goods','operation' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                } else {
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>
+<script type="text/javascript">
+    function addStatusItem() {
+        var index = _rand();
+        var xid = "item-"+index
+        var html = '' +
+            '<tr>' +
+            '<td colspan="3"><input class="form-control" name="combo['+index+'][titles]" title="名称" placeholder="名称" type="text" value=""/><input name="ids[]" type="hidden" value=""/></td>' +
+            '<td><a href="javascript:;" onclick="addItem(\''+index+'\')" class="btn btn-default btn-sm"><i class="icon-plus-sign-alt"></i> 添加新套餐</a><a href="javascript:;" onclick="$(this).parent().parent().remove();" class="btn btn-small" title="删除此条目"><i class="fa fa-times"></i>删除</a></td>' +
+            '</tr><tr id="'+xid+'"></tr>';
+        $('#status-items').append(html);
+    }
+    function addItem(index) {
+        var xindex = _rand();
+        var html = '' +
+            '<tr>' +
+            '<td><input class="form-control" name="combo['+index+'][content]['+xindex+'][title]" title="名称" placeholder="名称" type="text" value=""/><input name="ids[]" type="hidden" value=""/></td>' +
+            '<td><input class="form-control" name="combo['+index+'][content]['+xindex+'][spec]" title="规格" placeholder="规格" type="text" value=""/></td>' +
+            '<td><input class="form-control" name="combo['+index+'][content]['+xindex+'][price]" title="价格" placeholder="价格" type="text" value=""/></td>'
+            '<td><a href="javascript:;" onclick="$(this).parent().parent().remove();" class="btn btn-small" title="删除此条目"><i class="fa fa-times"></i>删除</a></td>' +
+            '</tr>';
+        $('#item-'+index).append(html);
+    }
+    function _rand(){
+        var data=["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+
+        var result="";
+        for(var i=0;i<20;i++){
+            var r=Math.floor(Math.random()*62);		//取得0-62间的随机数，目的是以此当下标取数组data里的值！
+            result+=data[r];		//输出20次随机数的同时，让rrr加20次，就是20位的随机字符串了。
+        }
+        return result;
+    }
+</script>

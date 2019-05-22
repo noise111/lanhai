@@ -1,0 +1,135 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>运营商管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'throw'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="alert alert-info" role="alert">
+                        <p>注意:</p>
+                        <p>1.默认只有一个总运营商，总运营商不可切换成普通运营商</p>
+                        <p>2.普通运营商如切换成总运营商，原总运营会自动切换成普通运营商</p>
+                        <p>3.只有站长才有权限，切换普通运营商成为总运营商</p>
+                        <p>4.充电桩计费规则分按时计费/按量计费。如按时计费，需要用户先充值进入余额，充值的金额会调用总运营商支付接口</p>
+                    </div>
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="charging"/>
+                        <input type="hidden" name="op" value="throw"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('charging_throwAdd', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'throw','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加运营商</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="名称/联系人联系电话/" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>名称</th>
+                            <th>联系人</th>
+                            <th>联系电话</th>
+                            <th>联系地址</th>
+                            <th>类型</th>
+                            <th>余额</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{$item['realname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td>{$item['address']}</td>
+                            <td>{if $item['status']}<span class="label label-warning">总运营商</span>{else}<span class="label label-info">普通运营商</span>{/if}</td>
+                            <td>{$item['credit']}</td>
+                            <td>
+                                {if ($user && $menu_opss && @in_array('charging_throwStatus', $menu_opss)) || empty($user)}
+                                {if empty($item['status']) && $_W['isfounder']==1}<a href="JavaScript:;" onclick="change({$item['id']})" class="btn btn-warning btn-sm" title="切换总运营商" >切换总运营商</a>{/if}
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('charging_throwEdit', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'throw','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-success btn-sm">编辑</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('charging_throwApipay', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'alipay','tid' => $item['id']))}" title="支付接口配置" >支付接口配置</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('charging_throwRules', $menu_opss)) || empty($user)}
+                                <a class="btn btn-info btn-sm" href="{php echo $this->createWebUrl('charging',array('op' => 'rules','tid' => $item['id']))}" title="支付接口配置" >计费规则设置</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('charging_throwDel', $menu_opss)) || empty($user)}
+                                <a href="JavaScript:;" data="{$item['id']}" class="btn btn-default btn-sm" data-original-title="删除" >删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".btn").bind("click", function () {
+            var id = $(this).attr('data');
+            var url = "{php echo $this->createWebUrl('charging',array('op' => 'throw','p' => 'del'))}";
+            $.post(url,
+                {
+                    id: id
+                },
+                function (msg) {
+                    if (msg.status == 1) {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100);
+                    }
+                    ;
+
+                },
+                'json');
+        });
+    });
+    function change(id){
+        var id = id
+        var url = "{php echo $this->createWebUrl('charging',array('op'=>'change'))}"
+        $.post(url,{id:id},function(res){
+            alert(res.content)
+            location.reload();
+        },'json')
+
+    }
+</script>
+{template 'web/common/footer'}

@@ -1,0 +1,122 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>注册方式</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('set',array('op' => 'register'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+                        <table class="table table-hover" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">小区设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">人工审核</td>
+                                <td>开启住户审核后，用户绑定需要管理人员审核方可使用物业相关功能，默认不开启审核</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <div>
+                                        <input type="checkbox" id="p18" class="js-switch_1" {if $set['p18']['value']}checked{/if}/>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">手机号验证</td>
+                                <td>开启手机号验证后，移动端粉丝注册的时候，通过输入手机号码后，进行验证手机号是否已导入系统，建议配合短信验证码来验证当前录入的手机号业主是否为真正的业主</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p19" class="js-switch_2" {if $set['p19']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">楼宇信息验证</td>
+                                <td>开启楼宇信息验证，会和预先后台生成的楼宇，区域，房屋进行验证是否存在</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p89" class="js-switch_18" {if $set['p89']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">楼宇联动选择</td>
+                                <td>开启楼宇联动选择，会根据预先后台录入的楼宇，单元，房号信息，业主进行选择绑定</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p91" class="js-switch_19" {if $set['p91']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">注册码验证</td>
+                                <td>开启发放的注册码来给业主完成注册，减少业主需要输入的资料。如同时开启手机号验证，将同时验证手机号和注册码是否在系统中同时存在</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p20" class="js-switch_3" {if $set['p20']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">游客浏览</td>
+                                <td>开启游客浏览权限后，粉丝可直接进入小区主页，无需注册，需到菜单设置中设置每个菜单权限。</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p22" class="js-switch_4" {if $set['p22']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label for="" class="col-sm-2 control-label"></label>-->
+                            <!--<div class="col-sm-5">-->
+                                <!--<button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>-->
+                                <!--<input type="hidden" name="token" value="{$_W['token']}" />-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品结算</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../wxq4/dist/css/weui.min.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_492571_4u26n8iiuuri19k9.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/demos.css">
+    <style>
+        body{
+            background: #FFFFff;
+        }
+        .weui-cells{
+            margin-top: 0;
+            font-size: 0.9em;
+        }
+        .weui-tabbar{
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-tab">
+    <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="default-store-goods">
+                <div class="weui-cells">
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd">商品标题</div>
+                        <div class="weui-cell__ft">
+                            <span class="color_y">￥1200</span>
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd">商品标题</div>
+                        <div class="weui-cell__ft">
+                            <span class="color_y">￥120</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-tabbar">
+        <div class="shopcart-footer" id="shopcart-footer">
+            <div class="total">
+                <div id="total">
+                    <em>合计：￥<em id="shopcart-total-price">0.00</em></em>
+                </div>
+            </div>
+            <div class="closing">
+                <a href="#" class="btn-sub" id="shop-account">去结算</a>
+                <a href="#" class="btn-sub" id="shop-del" style="display: none">删除</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../wxq4/dist/js/jquery-2.1.4.js"></script>
+<script src="../../wxq4/dist/js/fastclick.js"></script>
+<script src="../../wxq4/dist/js/common.js"></script>
+</body>
+</html>

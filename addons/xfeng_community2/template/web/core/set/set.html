@@ -1,0 +1,166 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('set', array('op' => 'set'));}">基础设置</a></li>
+                    </ul>
+
+                <div class="ibox-content">
+                <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                                <thead>
+                                <tr>
+                                    <th class="col-sm-2">小区设置</th>
+                                    <th class="col-sm-3">说明</td>
+                                    <th class="col-sm-4"></th>
+                                    <th class="col-sm-3">是否启用</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="title">切换小区是否审核</td>
+                                    <td>
+                                        开启后，粉丝切换小区需要审核后，才能使用
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p7" class="js-switch_7" {if $set['p7']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">业主余额充值</td>
+                                    <td>
+                                        开启后，业主端有充值入口
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p44" class="js-switch_8" {if $set['p44']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+
+                                <!--<tr>-->
+                                    <!--<td class="title">业主卡开启</td>-->
+                                    <!--<td>-->
+                                        <!--开启后，需要先到平台设置对应的会员卡，业主卡使用的是会员卡-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+
+                                    <!--</td>-->
+                                    <!--<td>-->
+
+                                        <!--<input type="checkbox" name="" id="p50" class="js-switch_11" {if $set['p50']['value']}checked{/if}/>-->
+
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <tr>
+                                    <td class="title">小区定位</td>
+                                    <td>
+                                        开启后，小区通过定位显示，默认不开定位
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="tel" name="set[p9]" value="{$set['p9']['value']}" class="form-control"
+                                                   placeholder="输入定位范围"/>
+                                            <span class="input-group-addon">千米（KM）</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p8" class="js-switch_12" {if $set['p8']['value']}checked{/if} />
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">后台定时提醒报修</td>
+                                    <td>开启后，设置后台定时提醒时间页面会定时提醒未处理报修；提示音文件目录：小区模块下/static/tishi.mp3</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" name="set[p98]" class="form-control" value="{$set['p98']['value']}" placeholder=""/>
+                                            <span class="input-group-addon">分钟</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p99" class="js-switch_21" {if $set['p99']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区报修闭单码</td>
+                                    <td>开启后，完成报修需要填写闭单码</td>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p162" class="js-switch_22" {if $set['p162']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区报修提交时间段</td>
+                                    <td>开启后，只能在规定时间提交报修</td>
+                                    <td>
+                                        <div class="col-sm-6">
+                                            {php echo tpl_form_field_clock('set[p169]', $set['p169']['value'] ? $set['p169']['value'] : '7:00');}
+                                        </div>
+                                        <div class="col-sm-6">
+                                            {php echo tpl_form_field_clock('set[p170]', $set['p170']['value'] ? $set['p170']['value'] : '20:00');}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p168" class="js-switch_23" {if $set['p168']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+        </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+$(function () {
+    $(':checkbox').on('change', function (e, state) {
+        $this = $(this);
+        var xqkey = $this.attr('id');
+        var status = this.checked ? 1 : 0;
+        $this.val(status);
+        var regionid = '{$regionid}';
+        $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+        })
+    });
+    $('.btn').hover(function () {
+        $(this).tooltip('show');
+    }, function () {
+        $(this).tooltip('hide');
+    });
+});
+
+</script>
+

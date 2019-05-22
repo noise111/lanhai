@@ -1,0 +1,83 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>员工管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'mail'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="staff"/>
+                        <input type="hidden" name="op" value="mail"/>
+                    <div class="row">
+                        <div class="col-sm-6 m-b-xs">
+                            <a class="btn btn-primary" href="{php echo $this->createWebUrl('staff', array('op' => 'mail','p' => 'add'));}"><i class="fa fa-plus"></i> 添加员工</a>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="输入手机号搜索">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+            <table class="table table-bordered">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="col-lg-1">姓名</th>
+                    <th class="col-lg-2">手机号</th>
+                    <th class="col-lg-1">微信号</th>
+                    <th class="col-lg-1">昵称</th>
+                    <th class="col-lg-1">职位</th>
+                    <th class="col-lg-1">部门</th>
+                    <th class="col-lg-2">备注</th>
+                    <th class="col-lg-5">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td>{$item['realname']}</td>
+                    <td>{$item['mobile']}</td>
+                    <td>{$item['wechat']}</td>
+                    <td>{$item['nickname']}</td>
+                    <td>{$item['position']}</td>
+                    <td>{$item['ptitle']}-{$item['title']}</td>
+                    <td>{$item['remark']}</td>
+                    <td>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'mail','p'=> 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm" >编辑</a>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'mail','p'=> 'delete','id' => $item['id']))}" title="删除" class="btn btn-default btn-sm" >删除</a>
+						</span>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                <thead>
+                {if $list}
+                <tr>
+                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                </tr>
+                {else}
+                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                {/if}
+                </thead>
+            </table>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

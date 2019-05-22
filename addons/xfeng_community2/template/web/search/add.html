@@ -1,0 +1,139 @@
+{template 'web/common/header-base'}
+
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('search', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;查询添加</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('search',array('op' => 'add','id' => $id))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+<input type="hidden" name="id" value="{$item['id']}">
+	<input type="hidden" name="regionids" value="" />
+
+    <div class="form-group">
+	    <label for="sname" class="col-sm-2 control-label">查询名称</label>
+	    <div class="col-xs-3">
+	      <input type="text" name="sname" value="{$item['sname']}" id='sname' class="form-control" placeHolder="请输入常用查询名称"/>
+	    </div>
+  	</div>
+	<div class="hr-line-dashed"></div>
+  	<div class="form-group">
+	    <label for="sname" class="col-sm-2 control-label">第三方网址</label>
+	    <div class="col-xs-4">
+	    	{php echo tpl_form_field_link(surl,$item['surl'])}
+			（注：链接需加http://）
+	    </div>
+  	</div>
+	<div class="hr-line-dashed"></div>
+  	<div class="form-group">
+	    <label for="sname" class="col-sm-2 control-label">图标</label>
+	    <div class="col-xs-3">
+	      {php echo tpl_form_field_image('icon',$item['icon'])}
+			<span class="help-block">45px*45px</span>
+	    </div>
+  	</div>
+	<div class="hr-line-dashed"></div>
+  	<div class="form-group">
+	    <label for="sname" class="col-sm-2 control-label">状态</label>
+	    <div class="col-xs-3">
+			<div class="checkbox checkbox-success checkbox-inline">
+				<input name="status" id="ipt_status" type="checkbox" value='1' {if intval($item['status'])==1}checked='checked'{/if} />
+				<label for="ipt_status"> 开启 </label>
+			</div>
+	    </div>
+  	</div>
+	<div class="hr-line-dashed"></div>
+	<div class="form-group">
+		<label for="" class="col-sm-2 control-label">是否选择所有小区</label>
+		<div class="col-xs-5">
+			<div class="radio radio-success checkbox-inline">
+				<input type="radio" name="allregion" id="allregion1" value="1" {if !$item['province']}checked{/if}/>
+				<label for="allregion1"> 是 </label>
+
+			</div>
+			<div class="radio radio-success radio-inline">
+				<input type="radio" name="allregion" id="allregion2" value="0" {if $item['province']}checked{/if} />
+				<label for="allregion2">否</label>
+			</div>
+		</div>
+	</div>
+	<div class="hr-line-dashed"></div>
+	<div id="showbirth" {if $item['province']}style='display:block'{else}style='display:none'{/if}>
+		<div class="form-group">
+			<label for="" class="col-sm-2 control-label">省市区</label>
+			<div class="col-sm-5">
+				{php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'district' => $item['dist']))}
+			</div>
+		</div>
+		<div class="form-group region" {if !$regs}style="display: none"{/if}>
+		<label for="" class="col-sm-2 control-label">小区</label>
+		<div class="col-sm-10 content">
+
+
+		</div>
+	</div>
+	<div class="hr-line-dashed"></div>
+	</div>
+
+  	<div class="form-group">
+	    <label for="" class="col-sm-2 control-label"></label>
+	    <div class="col-sm-10">
+	      <label for="ipt_status" class="checkbox">
+				<button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+			<input type="hidden" name="token" value="{$_W['token']}" />
+		  </label>
+	    </div>
+  	</div>
+</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='allregion']").click(function(){
+            var type = $("input[name='allregion']:checked").val();
+            if(type == 1){
+                $("#showbirth").hide();
+            }
+            if(type == 0){
+                $("#showbirth").show();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+	function check(form){
+            if (!form['sname'].value) {
+                alert('请输入常用查询名称.');
+                return false;
+            }
+            if (!form['surl'].value) {
+                alert('请输入第三方网址！');
+                return false;
+            }
+            if (!form['icon'].value) {
+                alert('请上传图标。');
+                return false;
+            }
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        console.log(regionids);
+        $("input[name='regionids']").val(regionids);
+        return true;
+        }
+</script>
+
+{template 'web/common/footer'}

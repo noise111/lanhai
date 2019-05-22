@@ -1,0 +1,55 @@
+{template '_header'}
+<div class="page-header">
+	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}<small>{if !empty($item['id'])}修改【{$item['couponname']}】{/if}</small>榜单</span>
+</div>
+
+<div class="page-content">
+	<div class="page-sub-toolbar">
+		<span class=''>
+		    {ifp 'rank'}
+                <a class='btn btn-success btn-sm' href="{php echo webUrl('rank/add')}"><i class='fa fa-plus'></i> 添加榜单</a>
+            {/if}
+		</span>
+	</div>
+	<form {ife 'rank.add' $item}action="" method='post'{/if} class='form-horizontal form-validate'>
+        <input type="hidden" name="id" value="{$item['id']}">
+        <input type="hidden" name="tab" id='tab' value="{$_GPC['tab']}" />
+
+        <ul class="nav nav-arrow-next nav-tabs" id="myTab">
+            <li {if $_GPC['tab']=='basic' || empty($_GPC['tab'])}class="active"{/if} ><a href="#tab_basic">基本</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane  {if $_GPC['tab']=='basic' || empty($_GPC['tab'])}active{/if}" id="tab_basic">{template 'rank/post/basic'}</div>
+        </div>
+
+        <div class="form-group"></div>
+        <div class="form-group">
+            <label class="col-lg control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                {ife 'sale.coupon' $item}
+                <input type="submit" name="submit" value="提交" class="btn btn-primary col-lg-1"  />
+                {/if}
+                <input type="button" name="back" onclick='history.back()' {ife 'sale.coupon' $item}style='margin-left:10px;'{/if} value="返回列表" class="btn btn-default" />
+            </div>
+        </div>
+	</form>
+</div>
+<script language='javascript'>
+    require(['bootstrap'],function(){
+        $('#myTab a').click(function (e) {
+            e.preventDefault();
+           $('#tab').val( $(this).attr('href'));
+            $(this).tab('show');
+        });
+     });
+    
+	$(function(){
+		$('form').submit(function(){
+			return true;
+		});
+
+	});
+</script>
+
+{template '_footer'}

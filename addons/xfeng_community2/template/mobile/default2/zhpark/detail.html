@@ -1,0 +1,148 @@
+{template 'default2/header'}
+<style>
+    .weui-flex {
+        margin-top: 10px;
+    }
+
+    .weui-form-preview:before {
+        border-top: none;
+    }
+
+    .weui-form-preview:after {
+        border-bottom: none;
+    }
+</style>
+
+<body style="background-color: #ffffff">
+<div style="display: none" id="car">
+    <div class="property02-head">
+        <p>车牌号（默认)</p>
+        <p><span id="car_no">xxxxxx</span></p>
+        <p class="carpay-time" id="valid_date">到期时间:xxxx-x-x</p>
+    </div>
+    <div class="weui-flex">
+        <ul class="carpay-ul">
+            <li>
+                <p>1个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>2个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>3个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>4个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>5个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>6个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>7个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>8个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>9个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>10个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>11个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <li>
+                <p>12个月</p>
+                <div class="carpay-sel" style=""></div>
+            </li>
+            <div style="clear: both;"></div>
+        </ul>
+    </div>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">预计费用</label>
+                <span class="weui-form-preview__value color_y" id="month_fee">xxx</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">新到期时间</label>
+                <span class="weui-form-preview__value color_y" id="lastTime">xxxx-x-x</span>
+            </div>
+        </div>
+    </div>
+    <div class="address_form_ft">
+        <a href="javascript:;" class="weui-btn address_form_btn">缴费</a>
+    </div>
+</div>
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script>
+
+    var license = "{$_SESSION['community']['license']}";
+    $(function () {
+
+        $.showLoading('正在加载...');
+        var url = "{php echo wxapp_url('zhpark/detail')}&license=" + license;
+        $.getJSON(url,{license:license},function (data) {
+            if(data.err_code ==-1){
+                $.hideLoading();
+                setTimeout(function() {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.err_msg, "text");
+                    setTimeout(function() {
+                        window.location.href="{php echo $this->createMobileUrl('home')}";
+                    }, 1000);
+                }, 1000);
+            }
+            if(data.err_code==0){
+                $("#car").show();
+                $("#car_no").text(data.data.car_no);
+                $("#valid_date").text(data.data.valid_date);
+                $("#lastTime").text(data.data.end_date);
+                $("#month_fee").text(data.data.month_fee);
+            }
+
+        })
+    })
+</script>
+<script>
+    $(".carpay-ul li").click(function (e) {
+        $(this).addClass("carpay-current").siblings("li").removeClass("carpay-current");
+        $(this).children(".carpay-sel").show(0).parent().siblings().children(".carpay-sel").hide(0);
+        var number = $(this).children().text().split("个");
+        targetDate(number[0]);
+    });
+
+    //计算下次日期
+    function targetDate(number) {
+        var time1 = ($('.carpay-time').text().substr(5));
+        var newTime = (new Date(time1)).getTime();
+        var lastTime = newTime + (number * 30 * 24 * 60 * 60 * 1000);
+        var unixTimestamp = new Date(lastTime);
+        commonTime = unixTimestamp.toLocaleString();
+        $('#lastTime').text(commonTime);
+    }
+    Date.prototype.toLocaleString = function () {
+        return this.getFullYear() + "-" + (this.getMonth() + 1) + "-" + this.getDate()
+    };
+</script>
+</body>
+</html>

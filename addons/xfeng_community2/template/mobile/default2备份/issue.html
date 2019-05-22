@@ -1,0 +1,445 @@
+{template 'default22/header'}
+<style>
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 30.542%;
+        height: auto;
+        max-height: 5rem;
+        line-height: 0;
+    }
+
+    .weui-icon-success {
+        font-size: 16px;
+    }
+
+    [class*=" weui-icon-"]:before, [class^=weui-icon-]:before {
+        margin-left: 0;
+    }
+
+    .news-contain {
+        top: 42px;
+    }
+
+    .weui-media-box {
+        padding: 8px 15px;
+    }
+
+    .weui-panel__hd {
+        padding: 8px 15px 8px;
+    }
+
+    .weui-btn_mini {
+        font-size: 12px;
+        margin-right: 10px;
+        margin-left: 0px;
+    }
+
+    .weui-btn_mini:last-child {
+        margin-left: auto;
+    }
+
+    .weui-btn + .weui-btn {
+        margin-top: 0px;
+    }
+
+    .weui-form-preview:before {
+        border-top: none;
+    }
+
+    .weui-form-preview:after {
+        border-bottom: none;
+    }
+
+    .weui-form-preview__hd:after {
+        border-bottom: none;
+    }
+
+    .weui-form-preview__hd {
+        border-bottom: 1px solid #D9D9D9;
+        line-height: inherit;
+    }
+
+    .weui-form-preview__label {
+        text-align: left;
+        text-align-last: left;
+        color: #333333;
+    }
+
+    .homemaking-card-tit {
+        color: #FF5500;
+    }
+
+    .weui-form-preview__bd {
+        padding: 0;
+        text-align: left;
+        color: #333333;
+    }
+
+    .weui-cell:before {
+        right: 15px;
+    }
+
+    .weui-media-box__desc {
+        -webkit-line-clamp: 3;
+    }
+</style>
+
+<body ontouchstart>
+<div class="news-head">
+    <!-- 头部信息 begin -->
+    <div class="swiper-container swiper1 b-line swiper-container-horizontal swiper-container-free-mode">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide selected">家政</div>
+            <div class="swiper-slide">集市</div>
+            <div class="swiper-slide">租赁</div>
+            <div class="swiper-slide">拼车</div>
+        </div>
+    </div>
+    <!-- 头部信息 end -->
+</div>
+<div class="news-contain">
+    <!-- 内容信息 begin -->
+    <div class="swiper-container swiper2 swiper-container-horizontal swiper-container-autoheight">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide swiper-no-swiping ">
+                <div class="weui-form-preview homemaking-order-box">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label"><span class="left-line"></span>保洁</label>
+                            <label class="homemaking-card-tit">未完成</label>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>天津市和平区黄河路1号</p>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>2016-05-01&nbsp;&nbsp; 周日&nbsp;&nbsp; 12：30上门</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form-preview homemaking-order-box">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label"><span class="left-line"></span>擦玻璃</label>
+                            <label class="homemaking-card-tit">已完成</label>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>天津市和平区黄河路1号</p>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>2016-05-01&nbsp;&nbsp; 周日&nbsp;&nbsp; 12：30上门</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form-preview homemaking-order-box">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label"><span class="left-line"></span>保洁</label>
+                            <label class="homemaking-card-tit">未完成</label>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>天津市和平区黄河路1号</p>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>2016-05-01&nbsp;&nbsp; 周日&nbsp;&nbsp; 12：30上门</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-form-preview homemaking-order-box">
+                    <div class="weui-form-preview__hd">
+                        <div class="weui-form-preview__item">
+                            <label class="weui-form-preview__label"><span class="left-line"></span>擦玻璃</label>
+                            <label class="homemaking-card-tit">已完成</label>
+                        </div>
+                    </div>
+                    <div class="weui-form-preview__bd">
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>天津市和平区黄河路1号</p>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">
+                                <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt=""
+                                     style="width:25px;margin-right:15px;display:block">
+                            </div>
+                            <div class="weui-cell__bd">
+                                <p>2016-05-01&nbsp;&nbsp; 周日&nbsp;&nbsp; 12：30上门</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-cell  weui-cell_link my-issue-cell">
+                        <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                        <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide swiper-no-swiping">
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">未完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo02.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title">二手</h4>
+                                <p class="weui-media-box__desc">
+                                    全新家具转让，今天刚刚送到安装的家具，母上大人不喜欢，坚决要转让，真的是全新，有需要的邻居全新家具转让，今天刚刚送到安装的家具，母上大人不喜欢，</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">编辑</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">已完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo02.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title">租借</h4>
+                                <p class="weui-media-box__desc">
+                                    全新家具转让，今天刚刚送到安装的家具，母上大人不喜欢，坚决要转让，真的是全新，有需要的邻居全新家具转让，今天刚刚送到安装的家具，母上大人不喜欢，</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide swiper-no-swiping">
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">未完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo01.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <div class="lease-tit"><p>华府骏苑华府骏苑华府骏苑华府骏苑华府骏苑</p><span>2500<samp>元/月</samp></span>
+                                </div>
+                                <p class="lease-jianjie">三室一厅一卫 | 125m² | 普装</p>
+                                <p class="lease-label">
+                                    <i class="weui-icon-success"></i><span>出售</span>
+                                    <i class="weui-icon-success"></i><span>单间</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">编辑</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">已完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo01.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <div class="lease-tit"><p>华府骏苑华府骏苑华府骏苑华府骏苑华府骏苑</p><span>2500<samp>元/月</samp></span>
+                                </div>
+                                <p class="lease-jianjie">三室一厅一卫 | 125m² | 普装</p>
+                                <p class="lease-label">
+                                    <i class="weui-icon-success"></i><span>出售</span>
+                                    <i class="weui-icon-success"></i><span>单间</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">已完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo01.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <div class="lease-tit"><p>华府骏苑华府骏苑华府骏苑华府骏苑华府骏苑</p><span>2500<samp>元/月</samp></span>
+                                </div>
+                                <p class="lease-jianjie">三室一厅一卫 | 125m² | 普装</p>
+                                <p class="lease-label">
+                                    <i class="weui-icon-success"></i><span>出售</span>
+                                    <i class="weui-icon-success"></i><span>单间</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd">2017-11-20<span style="float: right">未完成</span></div>
+                    <div class="weui-panel__bd">
+                        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/service/demo01.jpg"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <div class="lease-tit"><p>华府骏苑华府骏苑华府骏苑华府骏苑华府骏苑</p><span>2500<samp>元/月</samp></span>
+                                </div>
+                                <p class="lease-jianjie">三室一厅一卫 | 125m² | 普装</p>
+                                <p class="lease-label">
+                                    <i class="weui-icon-success"></i><span>出售</span>
+                                    <i class="weui-icon-success"></i><span>单间</span>
+                                </p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <div class="weui-cell  weui-cell_link my-issue-cell">
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">删除</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default2">编辑</a>
+                            <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default2">确认完成</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide swiper-no-swiping">
+                <h1>4</h1>
+            </div>
+        </div>
+    </div>
+    <!-- 内容信息 end -->
+</div>
+
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script>
+
+    $(function () {
+        function setCurrentSlide(ele, index) {
+            $(".swiper1 .swiper-slide").removeClass("selected");
+            ele.addClass("selected");
+        }
+
+        var swiper1 = new Swiper('.swiper1', {
+            slidesPerView: 4,
+            paginationClickable: true,
+//            spaceBetween:15,
+            freeMode: true,
+            loop: false,
+            loopedSlide: 4,
+            onTab: function (swiper) {
+                var n = swiper1.clickedIndex
+            }
+        });
+        swiper1.slides.each(function (index, val) {
+            var ele = $(this);
+            ele.on("click", function () {
+                setCurrentSlide(ele, index);
+                swiper2.slideTo(index, 500, false);
+            });
+        });
+        var swiper2 = new Swiper('.swiper2', {
+            direction: 'horizontal',
+            loop: false,
+            autoHeight: true,
+            onSlideChangeEnd: function (swiper) {
+                //回调函数，swiper从一个slide过渡到另一个slide结束时执行。
+                var n = swiper.activeIndex;
+                setCurrentSlide($(".swiper1 .swiper-slide").eq(n), n);
+                swiper1.slideTo(n, 500, false);
+            }
+        });
+    })
+</script>
+</body>
+</html>

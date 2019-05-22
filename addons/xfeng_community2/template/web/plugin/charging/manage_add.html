@@ -1,0 +1,144 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'fault'))}" title="故障上报" >故障上报</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'manage'))}" title="接收员管理" >接收员管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'manage', 'p' => 'add', 'id' => $item['id']))}" title="添加接收员" >添加接收员</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="type" value="{$_GPC['type']}">
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="realname" id='realname' value="{$item['realname']}" class="form-control" placeHolder="请输入联系人姓名" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">手机</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="mobile" id='mobile' value="{$item['mobile']}" class="form-control" placeHolder="请输入联系人手机" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入姓名/昵称/手机搜索粉丝openid">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="search">搜索</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="openid" class="col-sm-2 control-label">粉丝openid</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="请输入粉丝openid" name="openid" value="{$item['openid']}" id="openid" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启：</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable" id="enable1" value="1" {if empty($item['enable']) || $item['enable'] == 1}checked="true" {/if} />
+                                    <label for="enable1">是</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable"  id="enable2" value="2" {if $item['enable']==2}checked="true" {/if} />
+                                    <label for="enable2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="build" class="col-sm-2 control-label">选择充电桩</label>
+                            <div class="col-sm-10" id="build">
+                                <div class='checkbox checkbox-success checkbox-inline' >
+                                    <input type='checkbox' id='checkAll' name='checkAll' data-group='chargings' />
+                                    <label for='checkAll'> 全部 </label></div>
+                                {loop $chargings $k $charging}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" value="{$charging['id']}" data-group='chargings' name="chargings[]" id="lid_{$k}" {if @in_array($charging['id'],$chargingids)}checked='checked' {/if}>
+                                    <label for="lid_{$k}"> {$charging['title']}</label>
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('address',array('op'=> 'search'))}",{words:words},function (data) {
+            if (data.err_code == 0){
+                $('#openid').val(data.openid);
+            }
+        },'json')
+    })
+</script>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if (!$("#realname").val()) {
+            alert('请输入姓名。');
+            return false;
+        }
+        if (!$("#mobile").val()) {
+            alert('请输入联系电话。');
+            return false;
+        }
+        if (!$("#openid").val()) {
+            alert('请输入粉丝openid。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('charging',array('op'=>'manage','p' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $("#checkAll").click(function () {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" + group + "']").each(function () {
+            $(this).get(0).checked = checked;
+        })
+    });
+</script>

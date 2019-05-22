@@ -1,0 +1,127 @@
+{template 'default2/header'}
+<style>
+    .weui-cells {
+        width: 100%;
+        margin-top: 5px;
+        font-size: 15px
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        color: #F7624B;
+        background-color: #ffffff;
+        border-bottom: 1px solid #F7624B;
+    }
+
+    .weui-navbar__item {
+        background: #ffffff;
+        border-bottom: 1px solid #CCCCCC;
+        padding: 10px 0;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .repairs-hd {
+        position: relative;
+        top: -33px;
+    }
+
+    .toolbar .picker-button {
+        color: #F7624B;
+    }
+
+    .weui-cells_radio .weui-check:checked + .weui-icon-checked:before {
+        color: #F7624B;
+    }
+
+    .weui-media-box__title {
+        font-size: 15px;
+        color: #333333;
+        margin-bottom: 5px;
+    }
+
+    .weui-panel {
+        margin-top: 0;
+    }
+
+    .weui-cell__ft {
+        font-size: 13px;
+    }
+
+</style>
+
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="weui-navbar vue-table">
+        <a class="weui-navbar__item vux-tab-item" href="#tab2">
+            报事记录
+        </a>
+    </div>
+    <div class="weui-tab__bd">
+        <div id="tab2" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="weui-panel ">
+                <div class="weui-panel__bd" id="list">
+
+                </div>
+                <div class="weui-loadmore" id="loading" style="display: none">
+                    <i class="weui-loading"></i>
+                    <span class="weui-loadmore__tips loading"></span>
+                </div>
+                <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                    <span class="weui-loadmore__tips">暂无数据</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="{php echo $this->createMobileUrl('repair',array('op'=>'detail'))}&id={{d.list[i].id}}"
+       class="weui-media-box weui-media-box_appmsg">
+        <div class="weui-media-box__bd">
+            <p class="weui-media-box__title">{{ d.list[i].name }}</p>
+            <p class="weui-media-box__desc">报修日期:{{ d.list[i].createtime }}</p>
+        </div>
+
+        {{# if(d.list[i].status == 2){ }}
+        <div class="weui-cell__ft color_y">
+            未处理
+        </div>
+        {{# } }}
+        {{# if(d.list[i].status == 3){ }}
+        <div class="weui-cell__ft color_y">
+            处理中
+        </div>
+        {{# } }}
+        {{# if(d.list[i].status == 1){ }}
+        <div class="weui-cell__ft color_g">
+            已处理
+        </div>
+        {{# } }}
+
+    </a>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+
+
+<script>
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('repair/my')}&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

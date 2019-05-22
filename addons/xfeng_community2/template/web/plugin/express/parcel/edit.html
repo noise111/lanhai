@@ -1,0 +1,87 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"  onClick="javascript :history.back(-1);"></a>&nbsp;&nbsp;&nbsp;运单处理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'parcel','p' => 'edit','id' => $_GPC['id']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>寄件人（电话）</th>
+                            <th>寄件地址</th>
+                            <th>收件人（电话）</th>
+                            <th>收件地址</th>
+                            <th>物流公司</th>
+                            <th>物品类型</th>
+                            <th>物品重量</th>
+                            <th>备注</th>
+                            <th>物流状态</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{$linkman['realname']}（{$linkman['phone']}）</td>
+                            <td>{$linkman['address']}{$linkman['address_detail']}</td>
+                            <td>{$parcel['name']}（{$parcel['phone']}）</td>
+                            <td>{$parcel['address']}{$parcel['address_detail']}</td>
+                            <td>{$parcel['company']}</td>
+                            <td>{$parcel['goodstatus']}</td>
+                            <td>{$parcel['weight']}Kg</td>
+                            <td>{$parcel['remark']}</td>
+                            <td>{if $parcel['status'] == 1}无{else if $parcel['status'] == 2}已发货{else if $parcel['status'] == 3}已代收{else if $parcel['status'] == 4}已取件{/if}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="priceId" value="{$editData['id']}">
+                        <div class="form-group">
+                            <input type="hidden" name="id" value="{$parcel['id']}">
+                            <label class="col-sm-2 control-label">运单号</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="waycode" id="waycode" value="{$parcel['waybillcode']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">价格</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="price" id="price" value="{$parcel['price']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".tpl-city").hide();
+    $(".tpl-district").hide();
+    function check(form) {
+        if (!form['waycode'].value) {
+            alert('运单号不可为空。');
+            return false;
+        }
+        if (!form['status'].value) {
+            alert('请选择物流状态');
+            return false;
+        }
+        if (form['price'].value==0) {
+            alert('请填写价格');
+            return false;
+        }
+    }
+</script>

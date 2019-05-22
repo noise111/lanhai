@@ -1,0 +1,166 @@
+{template 'default2/header'}
+<style>
+    .car-detail-cells {
+        top: 0;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    input:-ms-input-placeholder {
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    .car-issue-selector {
+        color: #D9D9D9;
+    }
+    .car-detail-contain{
+        top: 0;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] {display: none !important;  }</style>
+<div class="car-detail-contain" id="app" v-cloak>
+    <div class="weui-cells car-detail-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">用户小区</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="regionid" readonly v-model="item.title">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">用户地址</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="address" readonly v-model="item.address">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">用户姓名</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="realname" readonly v-model="item.realname">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">用户手机</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="mobile" readonly v-model="item.mobile">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">抄表类型</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="category" readonly v-model="item.name">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">上期度数</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" id="old_num" readonly v-model="item.old_num">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">本期度数</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入本期度数" id="" v-model="number">
+            </div>
+        </div>
+    </div>
+    <div class="car-detail-btn" id="carbtn" @click="postdata()">
+        <a href="#" >
+            提交
+        </a>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+<script>
+    var id = "{$_GPC['id']}"
+    var category = "{$_GPC['category']}"
+    var app = new Vue({
+            el: '#app',
+            data: {
+                item: [],
+                id: id,
+                category:category,
+                categorys:[],
+                number:''
+            },
+            beforeMount: function () {
+                var self = this
+                var url = "{php echo wxapp_url('entery/detail')}";
+                var data = {
+                    id: id,
+                    category:category
+                }
+                $.getJSON(url, data, function (ret) {
+                    self.item = ret.data
+                    self.categorys = ret.data.categorys
+                })
+            },
+            mounted: function () {
+            },
+            methods: {
+                postdata: function () {
+                    var self = this
+                    var data = {
+                        regionid:self.item.regionid,
+                        realname:self.item.realname,
+                        mobile:self.item.mobile,
+                        address:id,
+                        old_num:self.item.old_num,
+                        category:category,
+                        number:self.number
+                    }
+                    var url = "{php echo wxapp_url('entery/add')}";
+                    if(data.number < data.old_num){
+                        $.toast("本期度数比上期度数小",'text');return false;
+                    }
+                    $.showLoading('正在提交');
+                    $.post(url,data,function (ret) {
+                        $.hideLoading();
+                        //提交成功提示内容: data.data.content
+                        if(ret.err_code == 0){
+                            $.toast('提交成功');
+                            //定时刷新
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 500);
+                        }
+                        if(ret.err_code == -1){
+                            $.toast('提交失败，请重新提交');
+                        }
+                    },'json')
+                }
+            }
+        })
+
+</script>
+</body>
+</html>

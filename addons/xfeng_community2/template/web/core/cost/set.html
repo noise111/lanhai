@@ -1,0 +1,155 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cost',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">缴费设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">积分抵扣物业费开关</td>
+                                <td>
+                                    开启后，业主可通过积分抵扣部分物业费
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="" id="p16" class="js-switch_17" {if $set['p16']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">积分抵扣物业费比例</td>
+                                <td>
+                                    开启后，业主可通过积分抵扣部分物业费
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" name="set[p17]" class="form-control" value="{$set['p17']['value']}"/>
+                                        <span class="input-group-addon">元/积分</span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">缴物业费最低抵扣积分</td>
+                                <td>
+                                    开启后，业主缴纳物业费最低抵扣积分数量
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" name="set[p159]" class="form-control" value="{$set['p159']['value']}"/>
+                                        <span class="input-group-addon">积分</span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">缴物业费最高抵扣积分</td>
+                                <td>
+                                    开启后，业主缴纳物业费最高抵扣积分数量
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" name="set[p148]" class="form-control" value="{$set['p148']['value']}"/>
+                                        <span class="input-group-addon">积分</span>
+                                    </div>
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="title">物业费赠送积分比例</td>
+                                <td>
+                                    开启后，业主缴纳物业费后，会返还对应的积分
+                                </td>
+                                <td>
+                                    <div class="input-group">
+                                        <input type="text" name="set[p102]" class="form-control" value="{$set['p102']['value']}"/>
+                                        <span class="input-group-addon">积分/元</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="" id="p101" class="js-switch_22" {if $set['p101']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">0元账单显示</td>
+                                <td>
+                                    开启后，业主可以看到0元的账单，后台打印会打印0元账单，默认不显示0元
+                                </td>
+                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="" id="p161" class="js-switch_23" {if $set['p161']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">缴费回复模板</td>
+                                <td colspan="3">
+                                    <div class="col-sm-10">
+                                        <textarea name="set[p51]" class="form-control" placeholder="例如：您已成功缴费，可登陆我-我的账单查看"/>{$set['p51']['value']}</textarea>
+                                    </div>
+                                </td>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

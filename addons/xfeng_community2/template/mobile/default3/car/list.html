@@ -1,0 +1,95 @@
+{template 'default2/header'}
+<style>
+    .weui-navbar {
+        background: #ffffff;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        color: #FF5719;
+        background: #ffffff;
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .weui-tab__bd {
+        margin-bottom: 50px;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="weui-navbar">
+        <a class="weui-navbar__item {if $_GPC['type'] == 1 || empty($_GPC['type'])}weui-bar__item--on{/if}" href="#tab1" onclick="window.location.href='{php echo $this->createMobileUrl('car',array('op' => 'list','type' => 1))}'">
+            我找车
+        </a>
+        <a class="weui-navbar__item {if $_GPC['type'] == 2}weui-bar__item--on{/if}" href="#tab2" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('car',array('op' => 'list','type' => 2))}'">
+            我找人
+        </a>
+    </div>
+    <div class="weui-tab__bd" >
+        <div id="list" class="weui-tab__bd-item weui-tab__bd-item--active" >
+        </div>
+        <div class="weui-loadmore" id="loading" style="display: none">
+            <i class="weui-loading"></i>
+            <span class="weui-loadmore__tips loading"></span>
+        </div>
+        <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+            <span class="weui-loadmore__tips">暂无数据</span>
+        </div>
+    </div>
+    <div class="weui-tabbar address_tabbar">
+        <a href="{php echo $this->createMobileUrl('car',array('op'=> 'add'))}" class="weui-btn address_tabbar_btn">我要拼车</a>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+
+        <div class="car-box" onclick="location='{php echo $this->createMobileUrl('car',array('op'=> 'detail'))}&id={{d.list[i].id}}'">
+            <div class="car-box-head-img">
+                <img src="{{# if(d.list[i].avatar){ }}{{d.list[i].avatar}}{{# }else{ }}{MODULE_URL}template/mobile/default2/static/images/avtar.png{{# } }}">
+            </div>
+            <div class="car-box-content">
+                <div class="car-box-head ">
+                    <div class="car-box-head-name">
+                        {{# if(d.list[i].realname){ }}{{d.list[i].realname}} {{# }else{ }}L{{d.list[i].id}}{{# } }}
+                        <span class="car-box-head-tit">{{d.list[i].title}}</span>
+                    </div>
+                    <div class="car-box-head-price">
+                        拼车报价：￥{{d.list[i].sprice}}
+                    </div>
+                </div>
+                <div class="car-box-list">
+                    <div class="car-box-item">
+                        出发地：<span>{{d.list[i].start_position}}</span>
+                    </div>
+                    <div class="car-box-item">
+                        目的地：<span>{{d.list[i].end_position}}</span>
+                    </div>
+                    <div class="car-box-item">
+                        发布时间：{{ d.list[i].datetime }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    {{# } }}
+
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var type = "{$_GPC['type']}";
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('car/list')}"+"&type="+type+"&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

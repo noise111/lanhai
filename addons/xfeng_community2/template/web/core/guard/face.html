@@ -1,0 +1,107 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('guard',array('op' => 'face'))}" title="人脸授权" >人脸授权</a></li>
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceUploads'))}" title="上传记录" >上传记录</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="guard"/>
+                            <input type="hidden" name="op" value="face"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('guard_faceAdd', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-primary" href="{php echo $this->createWebUrl('guard', array('op' => 'faceAdd'));}"><i class="fa fa-plus"></i> 添加人员</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="姓名">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+                                    <th>guid</th>
+                                    <th>卡号</th>
+                                    <th>图片</th>
+                                    <th>授权状态</th>
+                                    <th>时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['realname']}</td>
+                                    <td>{$item['mobile']}</td>
+                                    <td>{$item['guid']}</td>
+                                    <td>{$item['idcard']}</td>
+                                    <td>
+                                        {loop $item['images'] $img}
+                                        <a href="{$img}" target="_blank"><img src="{$img}" alt="" style="height: 50px;"></a>
+                                        {/loop}
+                                    </td>
+                                    <td><span class="label label-primary">{if $item['status'] == 1}已授权{else}未授权{/if}</span></td>
+                                    <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                    <td>
+                                        {if ($user && $menu_opss && @in_array('guard_faceEdit', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('guard', array('op'=>'faceAdd', 'id' => $item['id']));}">编辑</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('guard_faceDevice', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-danger btn-sm" href="{php echo $this->createWebUrl('guard', array('op'=>'faceDevice', 'id' => $item['id']));}">授权</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('guard_faceUploads', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('guard', array('op'=>'faceUploads', 'uid' => $item['uid']));}">上传记录</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('guard_faceDel', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('guard', array('op'=>'faceDel', 'id' => $item['id']));}" onClick="return confirm('确定删除吗?');">删除</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

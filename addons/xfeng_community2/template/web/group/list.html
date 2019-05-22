@@ -1,0 +1,40 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>用户组管理</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('group',array('op' => 'list'))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+					<div class="row">
+						<div class="col-sm-12 m-b-xs">
+							<a class="btn btn-primary" href="{php echo $this->createWebUrl('group',array('op' => 'add'))}"><i class="fa fa-plus"></i> 添加用户组</a>
+						</div>
+					</div>
+<form action="" method="post">
+	<table class="table table-bordered">
+		<thead class="navbar-inner">
+			<tr>
+				<th style="width:150px;">名称</th>
+				<th>小区数量</th>
+				<th style="min-width:60px;">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{loop $list $item}
+			<tr>
+				<td>{$item['title']}</td>
+				<td>{if empty($item['maxaccount'])}无权限{else}{$item['maxaccount']}{/if}</td>
+				<td><span><a href="{php echo $this->createWebUrl('group',array('op' => 'add','id' => $item['id']))}"  class="btn btn-primary btn-sm">编辑</a></span></td>
+			</tr>
+			{/loop}
+		</tbody>
+	</table>
+</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

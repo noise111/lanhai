@@ -1,0 +1,98 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('staff', array('op' => 'branch'))}"></a>&nbsp;&nbsp;&nbsp;
+                        添加部门</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'branch','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+    <input type="hidden" name="id" value="{$id}">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">搜索</label>
+        <div class="col-sm-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">选择物业</label>
+                <div class="col-xs-4">
+                    <select name="pid" class="form-control" id="pid">
+                        <option value="">选择物业</option>
+                        {loop $properties $property}
+                        <option value="{$property['id']}" {if $item['pid'] == $property['id']}selected='selected'{/if}>{$property['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">部门名称</label>
+                <div class="col-xs-4">
+                    <input type='text' name='title' id="title" class="form-control" value="{$item['title']}" placeHolder="输入部门名称" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#pid").val()){
+            alert('请选择物业。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入部门名称。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('staff',array('op'=>'branch','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'property'},function (data) {
+            if (data.err_code == 0){
+                $('#pid').val(data.pid);
+            }
+        },'json')
+    })
+</script>
+{template 'web/common/footer'}

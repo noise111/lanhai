@@ -1,0 +1,86 @@
+{template 'default2/header'}
+<style>
+    .cd-bouncy-nav {
+        top: 65vh;
+        max-height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .weui-navbar {
+        background: transparent;
+        width: 95%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .weui-navbar__item {
+        color: #ffffff;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: transparent;
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff;
+
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+</style>
+<body ontouchstart>
+<div style="padding-bottom: 80px" id="servicelist">
+    <div class="service_banner">
+        <img src="{MODULE_URL}template/mobile/default2/static/images/service/banner.png">
+    </div>
+
+</div>
+
+<script type="text/html" id="service_list">
+
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-cells__title" style="color: #888">{{ d.list[i].title }}</div>
+    <div class="weui-grids service_grids">
+        {{# if(d.list[i].children){ }}
+        {{# for(var j = 0, le = d.list[i].children.length; j < le; j++){ }}
+        <a href="{{ d.list[i].children[j].url }}" class="weui-grid js_grid">
+            {{# if(d.list[i].children[j].thumb){ }}
+            <div class="weui-grid__icon">
+                <img src="{{ d.list[i].children[j].thumb }}" alt="">
+            </div>
+            {{# } }}
+            <p class="weui-grid__label">
+                {{ d.list[i].children[j].title }}
+            </p>
+        </a>
+        {{# } }}
+        {{# } }}
+    </div>
+    {{# } }}
+</script>
+{template 'default2/footer'}
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('service/list')}&regionid="+regionid;
+        _loaddata(url, $("#servicelist"), 'service_list', true,function () {
+            girdAdd('.weui-grids')
+        });
+    })
+</script>
+
+</body>
+</html>

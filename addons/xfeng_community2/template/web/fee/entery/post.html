@@ -1,0 +1,202 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('fee', array('op' => 'group'))}"></a>收费账单</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'group','p'=> 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">所属小区</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">楼宇</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">房号</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">项目名称</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">计量单位</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">价格</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">交费周期</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">上期读数</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">本期读数</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">用量</label>
+                            <div class="col-sm-6 col-xs-6" id="build">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">计算规则</label>
+                            <div class="col-sm-10">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="status"  id="status_2" value="2" {if empty($item['status']) || $item['status'] == 2} checked{/if} />
+                                    <label for="status_2">禁用</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="status" id="status_1" value="1" {if  $item['status'] == 1} checked{/if} />
+                                    <label for="status_1">开启</label>
+                                </div>
+                                <a href="javascript:;" onclick="addStatusItem()" class="btn btn-primary btn-sm" style="display: none" id="rule"> 添加规则</a>
+                            </div>
+                        </div>
+                        <div id="status-items">
+
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10 col-xs-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['regionid'].value) {
+            alert('请选择小区。');
+            return false;
+        }
+        if (!form['title'].value) {
+            alert('请输入项目名称。');
+            return false;
+        }
+    }
+    function addStatusItem() {
+        var html ='<div class="hr-line-dashed"></div>' +
+            '<div class="form-group">' +
+            '<label class="col-sm-2 control-label">楼层区间</label>' +
+            '<div class="col-sm-8 col-xs-8">' +
+            '<div class="input-group">' +
+            '<span class="input-group-addon">从</span>' +
+            '<input type="number" class="form-control" placeholder="楼层" name="floorstart[]">' +
+            '<span class="input-group-addon">到</span>' +
+            '<input type="number" class="form-control" placeholder="楼层" name="floorend[]">' +
+            '<span class="input-group-addon">单价</span>' +
+            '<input type="text" class="form-control" name="price[]">' +
+            '<span class="input-group-addon">元</span>' +
+            '</div>' +
+            '</div>' +
+            '<button onclick="$(this).parent().parent().remove();" class="btn btn-sm btn-danger" title="删除此条目">删除</button>' +
+            '</div>' ;
+        $('#status-items').append(html);
+    }
+    $(function () {
+        $("input[type='checkbox']").click(function() {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("input[type='checkbox']").each(function(){
+                $(this).get(0).checked = checked;
+            })
+        });
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.post(location.href,{regionid:regionid},function (data) {
+                var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="build[]" id="build_0" ><label for="build_0">全部</label></div>';
+                for(var o in data){
+                    content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='build[]' id='build_"+data[o].id+"' ><label for='build_"+data[o].id+"'>"+data[o].buildtitle+"栋</label></div>";
+                }
+                $("#build").html(content);
+            },'json')
+        })
+        $('input[name="status"]').click(function () {
+            var status = $('input[name="status"]:checked').val();
+            if(status == 1){
+                $("#rule").show();
+            }
+            if(status == 2){
+                $("#rule").hide();
+            }
+        })
+
+    })
+
+</script>
+

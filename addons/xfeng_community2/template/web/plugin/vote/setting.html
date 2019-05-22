@@ -1,0 +1,53 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $op =='setting'}class="active"{/if}><a href="{php echo $this->createWebUrl('vote',array('op' => 'setting'))}" title="基本设置">基本设置</a></li>
+                        <li {if $op =='list' }class="active"{/if}><a href="{php echo $this->createWebUrl('vote',array('op' => 'list'))}" title="问卷调查">问卷调查</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" method="post" class="form-horizontal form" id="form">
+
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">是否开启小区绑定</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" name="set[p159]" id="p159" class="js-switch_19" {if $set['p159']['value']}checked{/if}/>
+                                    <span class="help-block">默认不限制小区,所有用户可见，开启后需要先选择小区绑定</span>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            $.post("{php echo $this->createWebUrl('updatekey')}", {
+                xqkey: xqkey,
+                status: status,
+            }, function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+</script>
+{template 'web/common/footer'}

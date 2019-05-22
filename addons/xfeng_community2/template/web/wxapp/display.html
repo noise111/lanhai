@@ -1,0 +1,110 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>小程序上传配置<a href="{MODULE_URL}wxupload/小程序打包流程.docx" target="_blank" style="font-size:16px;color:red">(下载小程序打包流程说明)</a></h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('wxapp')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">应用APPID</label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="appid" value="{$setting['appid']}" placeholder="请输入appid">
+                                <span class="help-block">小程序的APPID.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">应用APPSECRET</label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="appsecret" value="{$setting['appsecret']}" placeholder="请输入appsecret">
+                                <span class="help-block">小程序的APPSECRET.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 商户号</label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="mchid" value="{$setting['mchid']}" placeholder="输入商户号">
+                                <div class="help-block">对应的商户号,如与公众号商户号相同可以不填写</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 商户支付密钥
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <div class="input-group">
+                                <input type="text" name="apikey" id="facilitator_signkey" class="form-control" maxlength="32" value="{if empty($setting['apikey'])}{php echo random(32);}{else}{php echo substr($setting['apikey'], 0 , 32)}{/if}" autocomplete="off"/>
+                                <span onclick="tokenGen('facilitator_signkey');" style="cursor:pointer" class="input-group-addon">生成新的</span>
+
+                                </div>
+                                <div class="help-block">对应商户号的支付秘钥,如与公众号商户号相同可以不填写</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 小程序标题
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="title" value="{$setting['title']}" placeholder="输入小程序标题">
+                                <div class="help-block">用于打包小程序进入页面的标题</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 小程序URL
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <div class="input-group">
+                                <input class="form-control" name="url" value="{$setting['url']}" placeholder="输入入口url">
+
+                                    <span onclick="wxappdownload()" style="cursor:pointer" class="input-group-addon">点击打包下载</span>
+
+
+                                </div>
+                                <div class="help-block">必须支持https，且已通过域名验证，输入时请包含https，且以/结尾，打包下载后请用微信WEB开发工具上传.</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+    function check(form) {
+        if (!form['appid'].value) {
+            alert('公众号(AppId)不可为空。');
+            return false;
+        }
+        if (!form['appsecret'].value) {
+            alert('公众号(AppSecret)不可为空。');
+            return false;
+        }
+        if (!form['mchid'].value) {
+            alert('微信支付商户号不可为空。');
+            return false;
+        }
+
+    }
+    function wxappdownload() {
+
+        window.location.href="{php echo $this->createWebUrl('wxapp',array('op'=>'download'))}"
+    }
+</script>

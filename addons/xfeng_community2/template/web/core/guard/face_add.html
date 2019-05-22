@@ -1,0 +1,116 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'face'))}" title="人脸授权" >人脸授权</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceAdd','id' => $id))}" title="添加人员" >添加人员</a></li>
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceUploads'))}" title="上传记录" >上传记录</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <div class="form-group">
+                                <label for="realname" class="col-sm-2 control-label">姓名</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="realname" id='realname' value="{$item['realname']}" class="form-control" placeHolder="请输入姓名" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="mobile" class="col-sm-2 control-label">手机</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="mobile" id='mobile' value="{$item['mobile']}" class="form-control" placeHolder="请输入手机" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="idcard" class="col-sm-2 control-label">卡号</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="idcard" id='idcard' value="{$item['idcard']}" class="form-control" placeHolder="请输入卡号" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">绑定设备</label>
+                                <div class="col-sm-6 col-xs-6" id="device">
+                                    {if $categories}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" id="deviceid_00" data-group='deviceidss'>
+                                        <label for="deviceid_00">全部</label>
+                                    </div>
+                                    {loop $categories $category}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" value="{$category['id']}" id="deviceid_{$category['id']}" data-group='deviceidss' {if @in_array($category['id'],$deviceid)}checked{/if} >
+                                        <label for="deviceid_{$category['id']}">{$category['title']}</label>
+                                    </div>
+                                    {/loop}
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">图片</label>
+                                <div class="col-sm-4 col-xs-12">
+                                    {php echo tpl_form_field_multi_image('images',$piclist,$options)}
+                                    <span class="help-block">图片最多放三张，格式为jpg</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#realname").val()){
+            alert('请输入姓名。');
+            return false;
+        }
+        if(!$("#mobile").val()){
+            alert('请输入手机。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('guard',array('op'=>'faceAdd'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $("#deviceid_00").click(function() {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" +group + "']").each(function(){
+            $(this).get(0).checked = checked;
+        })
+    });
+</script>

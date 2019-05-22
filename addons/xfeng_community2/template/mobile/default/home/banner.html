@@ -1,0 +1,13 @@
+<div class="banner bg-f2">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {loop $banners $row}
+            <div class="swiper-slide" onclick="javascript:window.location.href='{$row['url']}';">
+                <img src="{$row['thumb']}?imageView2/1/w/640/h/320/q/100">
+            </div>
+            {/loop}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>

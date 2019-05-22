@@ -1,0 +1,64 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}" title="店铺管理" >店铺管理</a></li>
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'rank','dpid' => $dpid))}" title="评价管理" >评价管理</a></li>
+                    </ul>
+                <div class="ibox-content">
+            <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th width="50">编号</th>
+                        <th width="100">用户</th>
+                        <th width="100">评分</th>
+                        <th width="100">评价内容</th>
+                        <th width="80">评价时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td>{$item['id']}</td>
+                        <td>{$item['realname']}</td>
+                        <td>
+                        <?php 
+
+                            for ($i=0; $i < $item['rank']; $i++) {
+                                echo "<img src=\"".MODULE_URL."static/img/star-on.png\" >";
+                            }
+
+
+                        ?>
+                        </td>
+                        <td>
+                                {$item['content']}
+
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

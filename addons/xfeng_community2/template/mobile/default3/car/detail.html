@@ -1,0 +1,112 @@
+{template 'default2/header'}
+    <style>
+        body{
+            background: #FFFEFF;
+            position: relative;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="car-detail-bg">
+</div>
+<div id="list"></div>
+
+<script type="text/html" id="xq_list">
+
+    <div class="car-detail-contain">
+        <div class="weui-cells car-detail-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-form-preview__label">称呼</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{# if(d.realname){ }}{{d.realname}}{{# }else{ }}L{{d.id}}{{# } }}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-form-preview__label">起点</label></div>
+                <div class="weui-cell__bd">
+                    {{d.start_position}}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-form-preview__label">终点</label></div>
+                <div class="weui-cell__bd">
+                    {{d.end_position}}
+                </div>
+            </div>
+            <!--<div class="weui-cell" id="carItem01">-->
+                <!--<div class="weui-cell__hd"><label class="weui-form-preview__label">途经</label></div>-->
+                <!--<div class="weui-cell__bd">-->
+                    <!--燕灵路口 上上城三级 夏威夷南岸-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="weui-cell">
+                <div class="weui-cell__hd" id="carItem02">
+                    <label class="weui-form-preview__label">剩余座位</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{d.seat}}位
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-form-preview__label">出发时间</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{d.gotime}}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-form-preview__label">返回时间</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{d.backtime}}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-form-preview__label">发布时间</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{d.createtime}}
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-form-preview__label">价格</label>
+                </div>
+                <div class="weui-cell__bd">
+                    {{d.sprice}}元/位
+                </div>
+            </div>
+        </div>
+        <div class="car-detail-btn">
+            <a href="tel:{{d.mobile}}" id="carbtn">
+                联系{{# if(d.type == 1){ }}司机{{# }else{ }}乘客 {{# } }}
+            </a>
+        </div>
+    </div>
+
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var id = "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('car/detail')}"+"&id="+id;
+        _loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+<script>
+    var id = getUrlArgStr();
+    if(id==2){
+        $('#carbtn').text('联系乘客');
+        $('#carItem01').remove();
+        $('#carItem02 .weui-form-preview__label').text('乘客人数')
+    }
+</script>
+</body>
+</html>

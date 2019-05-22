@@ -1,0 +1,96 @@
+{template 'default2/header'}
+<style>
+    .weui-search-bar {
+        background-color: #ffffff;
+    }
+
+    .weui-search-bar__form {
+        border-radius: 10px;
+    }
+
+    .weui-search-bar__label {
+        color: #d5d5d5;
+        background: #EDEDED;
+    }
+
+    .weui-icon-clear, .weui-icon-search {
+        color: #d5d5d5;
+    }
+
+    .weui-check__label {
+        font-size: 0.9em;
+    }
+</style>
+
+<body>
+<div class="weui-search-bar" id="searchBar">
+    <form class="weui-search-bar__form" action="#">
+        <div class="weui-search-bar__box">
+            <i class="weui-icon-search"></i>
+            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+            <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+        </div>
+        <label class="weui-search-bar__label" id="searchText"
+               style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+            <i class="weui-icon-search"></i>
+            <span>请输入小区名称</span>
+        </label>
+    </form>
+    <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+</div>
+<div class="weui-cells__title">附近社区</div>
+<div class="weui-cells weui-cells_radio" id="list">
+
+
+</div>
+
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div onclick="gourl({{d.list[i].id}})" class="weui-cell weui-check__label" for="x1">
+        <div class="weui-cell__bd">
+            <p>{{d.list[i].title}}</p>
+        </div>
+        <div class="weui-cell__ft">
+            {{# if(d.list[i].enable==1){ }}
+            <input type="radio" name="radio1" class="weui-check" id="x1" checked="checked">
+            {{# } }}
+            <span class="weui-icon-checked"></span>
+        </div>
+    </div>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (localStorage.lng == undefined || localStorage.lat == undefined) {
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function (r) {
+                if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                    var mk = new BMap.Marker(r.point);
+                    var lng = localStorage.lng = r.point.lng;
+                    var lat = localStorage.lat = r.point.lat;
+                    var url = "{php echo wxapp_url('region/list')}" + "&lng=" + lng + "&lat=" + lat;
+                    loaddata(url, $("#list"), 'xq_list', true);
+                }
+                else {
+                    alert('获取当前位置失败,请确认是否开启定位服务');
+                }
+            }, {enableHighAccuracy: true})
+        }
+        else {
+            var url = "{php echo wxapp_url('region/list')}" + "&lng=" + localStorage.lng + "&lat=" + localStorage.lat;
+            loaddata(url, $("#list"), 'xq_list', true);
+        }
+    });
+
+    function gourl(id) {
+        window.location.href = '{php echo $this->createMobileUrl('register', array('op' => 'guide'))}&regionid=' + id
+    }
+</script>
+</body>
+</html>

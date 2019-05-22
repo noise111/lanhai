@@ -1,0 +1,75 @@
+{template 'web/common/header-base'}
+<style>
+    .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+        vertical-align:middle;
+        text-align: center;
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>入库列表</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'save'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th style="width: 60px">id</th>
+                                <th>运单号</th>
+                                <th>收件人姓名</th>
+                                <th>收件人手机</th>
+                                <th>取货码</th>
+                                <th>状态</th>
+                                <th>入库日期</th>
+                                <th>取件日期</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $index $item}
+                            <tr>
+                                <td>
+                                    {$item['id']}
+                                </td>
+                                <td>
+                                    {$item['waybillcode']}
+                                </td>
+                                <td>{$item['name']}</td>
+                                <td>
+                                    {$item['mobile']}
+                                </td>
+                                <td>
+                                    {$item['pick_code']}
+                                </td>
+                                <td style="color: {if $item['status']==3}black{else if $item['status']==4}red{/if}">
+                                    {if $item['status']==3}未取件{else if $item['status']==4}已取件{/if}
+                                </td>
+                                <td>
+                                    {php echo date('Y-m-d H:i:s',$item['createtime'])}
+                                </td>
+                                <td>
+                                    {if $item['overtime'] == 0}{else}{php echo date('Y-m-d H:i:s',$item['overtime'])}{/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,280 @@
+<!--{template 'web/common/header-base'}-->
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        border-top: 1px solid #f0f0f0;
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                        <li><a href="{php echo $this->createWebUrl('member',array('addressid' => $_GPC['addressid']))}" title="住户管理" >住户管理</a></li>
+                        <li><a href="{php echo $this->createWebUrl('member',array('op' => 'visit'))}" title="游客管理" >游客管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('member',array('op' => 'users'))}" title="用户管理" >用户管理</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="member"/>
+                            <input type="hidden" name="op" value="users"/>
+                            <div class="row">
+                                <div class="col-sm-4 m-b-xs">
+                                    <select class="form-control" name="regionid">
+                                        <option>全部小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <input type="text" placeholder="请输入用户姓名" class="form-control" name="realname" value="{$_GPC['realname']}">
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" placeholder="请输入用户手机" class="form-control" name="mobile" value="{$_GPC['mobile']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form action="" class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids"
+                                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+                                    <th>小区</th>
+                                    <th>绑定时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                                   value="{$item['id']}">
+                                            <label for="ids_{$item['id']}"></label>
+                                        </div>
+
+                                    </td>
+                                    <td>{$item['realname']}</td>
+                                    <td>{php echo substr_replace($item['mobile'],'****',3,4)}</td>
+                                    <td>{$item['title']}</td>
+                                    <td>{$item['createtime']}</td>
+                                    <td>
+                                        <label data="{$item['status']}" class='label  label-default {if $item['status']==1}label-info{/if}' onclick="verify(this,{$item['id']},'status')" data-id="{$item['id']}">{if $item['status']==1}通过{else}禁止{/if}</label>
+                                    </td>
+                                    <td>
+                                        <a class="label label-default label-info" data-toggle="modal" data-target="#myModal4" onclick="showopenid(this)" data-id="{$item['openid']}">粉丝编号</a>
+                                        <a class="label label-default label-info" onclick="remark(this,'{$item['remark']}')" data-id="{$item['id']}" data-toggle="modal" data-target="#myModal">备注</a>
+                                        <a href="{php echo $this->createWebUrl('member',array('op'=>'post','id' => $item['id']))}" class="label label-default label-info">添加房号</a>
+                                        <a class="label label-default" href="{php echo $this->createWebUrl('member', array('op'=>'usersDel', 'id' => $item['id']));}" onClick="return confirm('确定删除当前用户?');">删除</a>
+                                    </td>
+
+                                </tr>
+                                {/loop}
+
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td id="pager_list_1_left" align="left">
+                                        <input type="submit" name="del" class="btn btn-danger btn-sm" value="批量删除">
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                        <span style="color: red">总计:{$total}</span>
+                                    </td>
+                                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">粉丝编号</h4>
+
+            </div>
+
+            <div class="modal-body">
+                <span id="openid"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='memberid' id='memberid' class="form-control"/>
+                    <textarea name="remark" class="form-control" rows="5" id="xqremark"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="add" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">详情</h4>
+
+            </div>
+
+            <div class="modal-body">
+                <p>身份证:<span id="idcard"></span></p>
+                <p>购房合同编号:</p><span id="contract"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">审核通知</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="status" class="col-sm-2 control-label">审核状态</label>
+                        <div class="col-sm-10">
+                            <select name="status" id="status" class="form-control">
+                                <option value="">选择审核状态</option>
+                                <option value="1">通过</option>
+                                <option value="2">不通过</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content" class="col-sm-2 control-label">审核原因</label>
+                        <div class="col-sm-10">
+                            <textarea name="content" class="form-control" rows="5" id="content" placeholder="请输入审核的原因"></textarea>
+                        </div>
+                    </div>
+                    <input type='hidden' name='memberid' id='mid' class="form-control"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="send" value="提交">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+</script>
+<script type="text/javascript">
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('member',array('op' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'status') {
+                $(obj).html(d.data == '1' ? '通过' : '禁止');
+            }
+            if (type == 'open_status') {
+                $(obj).html(d.data == '1' ? '开启' : '关闭');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+    function remark(obj, remark) {
+        $("#memberid").val(obj.getAttribute("data-id"));
+        var remark = remark;
+        $("#xqremark").html(remark);
+        $("#remark").show();
+    }
+    function showopenid(obj) {
+        $("#openid").html(obj.getAttribute("data-id"));
+    }
+    $("#xqhh").click(function () {
+        $("#remark").hide();
+    })
+    function showmsg(obj) {
+        $("#idcard").html(obj.getAttribute("data-id"));
+        $("#contract").html(obj.getAttribute("data-contract"));
+    }
+</script>
+<!--{template 'web/common/footer'}-->

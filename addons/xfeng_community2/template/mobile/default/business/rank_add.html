@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <title>{$region['title']}</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-status-bar-style" content="black">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/static/css/light7.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/static/css/swiper.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/static/css/style.css">
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/jquery.min.js" charset="utf-8"></script>
+    <style>
+        .jq_star{
+            width:25px;
+            height: 25px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/jquery.raty.min.js"></script>
+<body class="max-width bg-f5">
+<div class="content">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+        <h1 class="title txt-fff">商品评价</h1>
+    </header>
+    <div class="content">
+        <form method="post" action="{php echo $this->createMobileUrl('business',array('op' => 'rank','operation' => 'add'))}" role="form">
+            <input type="hidden" name="dpid" value="{$dp[id]}"/>
+            <div class="list-block mt10 mb10">
+            <ul>
+                <li class="item-content">
+                    <div class="item-media">评价:</div>
+                    <div class="item-inner">
+                        <div class="br-theme-fontawesome-stars-o">
+                            <style>
+
+                            </style>
+                            <span id="jq_star" >
+                                    <input id="jq_star-score" type="hidden" name="rank" value="0">                                </span>
+
+
+                            <script>
+                                $(document).ready(function () {
+                                    $("#jq_star").raty({
+                                        numberMax: 5,
+                                        path: '{MODULE_URL}template/mobile/default/static/images/',
+                                        starOff: 'star-off.png',
+                                        starOn: 'star-on.png',
+                                        scoreName: 'data[score]',
+                                        size:100
+                                    });
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="list-block  media-list mt10">
+            <ul >
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-input">
+                            <textarea placeholder="说说本次团购的亮点和不足吧！（写够15字，才是好同志~）" name="content"></textarea>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <label class=" label-checkbox item-content group-lable-checkbox">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">匿名评价</div>
+                                <div class="item-after">
+                                    <input type="radio" name="my-radio">
+                                    <div class="item-media">
+                                        <i class="icon icon-form-checkbox"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+                </li>
+            </ul>
+        </div>
+        <div class="content-block">
+            <!--<a class="button button-big button-success button-fill">发布</a>-->
+            <input id="total_scole" class="button button-big button-success button-fill" type="submit" value="提交"
+                   style="width: 90%;margin: 0 auto"/>
+            <input type="hidden" name="token" value="{$_W['token']}"/>
+        </div>
+        </form>
+    </div>
+</div>
+</body>
+
+<!--<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>-->
+
+</html>

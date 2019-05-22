@@ -1,0 +1,65 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}" title="店铺管理" >店铺管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="business"/>
+                        <input type="hidden" name="op" value="dp"/>
+                        <div class="row">
+                            <div class="col-sm-8 m-b-xs">
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('business',array('op'=> 'qrpl'))}" ><i class="fa fa-plus"></i>批量生成支付二维码</a>
+                                <a href="{php echo $this->createWebUrl('business',array('op'=> 'download'))}" title="一键下载" class="btn btn-primary">一键下载</a>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th width="100">文件名</th>
+                            <th width="300" >操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $k $item}
+                        {php $k = $k+5}
+                        <tr>
+                            <td>{$item['title']}</td>
+                            <td >
+                                <a href="{php echo tomedia($item['url'])}" title="查看" class="btn btn-primary btn-sm" target="_blank">查看</a>
+                                <a href="{php echo $this->createWebUrl('business',array('op'=> 'qrdel','title' => $item['title']))}" title="删除" class="btn btn-default btn-sm">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

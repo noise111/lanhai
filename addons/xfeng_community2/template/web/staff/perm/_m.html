@@ -1,0 +1,132 @@
+{template 'web/common/header-base'}
+<style>
+    .table>thead>tr>th {
+        border-bottom: 0;
+    }
+
+    .table>thead>tr>th .checkbox label {
+        font-weight: bold;
+    }
+
+    .table>tbody>tr>td {
+        border-top: 0;
+    }
+
+    .table .checkbox {
+        padding-top: 4px;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('staff', array('op' => 'perm'))}"></a>&nbsp;&nbsp;&nbsp;权限设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p' => 'm','id' => $userid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post">
+
+                        <table class="table table-bordered">
+                            {loop $menus $key $sections}
+                            <thead>
+                            <tr class="info">
+                                <th colspan="9">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="menus[]" id="menu_{$sections['id']}_{$key}" class='perm-all' data-group="{$sections['id']}" value="{$sections['id']}" {if in_array($sections['id'],$mmenus)}checked{/if}>
+                                        <label for="menu_{$sections['id']}_{$key}"> {$sections[title]} </label>
+                                    </div>
+
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="system_platform">
+                            {php $i = 1;}
+                            {loop $sections['items'] $k $menu}
+
+                                <td>
+                                    <div class="dropdown">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" class="perm-item" value="{$menu['id']}" id="m_{$menu['id']}_{$k}" name="menus[]" data-group="{$menu['pcate']}" data-child="{$menu['id']}" value="{$menu['id']}" {if in_array($menu['id'],$mmenus)}checked{/if}>
+                                            <label for="m_{$menu['id']}_{$k}"> {$menu['title']} </label>
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                            {/loop}
+
+                            </tbody>
+                            {/loop}
+                        </table>
+
+                        <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交" onclick="if ($('input:checkbox:checked').size() == 0) {return confirm('您未勾选任何菜单权限，意味着允许用户使用所有功能。确定吗？')}">提交</button>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function(){
+        $('.perm-all').click(function(){
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $(".perm-item[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            })
+            $(".perm-child[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+        })
+        $('.perm-item').click(function(){
+            var group = $(this).data('group');
+            var child = $(this).data('child');
+            var check = false;
+            $(".perm-item[data-group='" +group + "']").each(function(){
+                if($(this).get(0).checked){
+                    check =true;
+                    return false;
+                }
+            });
+            var checked = $(this).get(0).checked;
+            $(".perm-child[data-child='" +child + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+            $(".perm-all[data-group=" + group + "]").get(0).checked = check;
+//            $(".perm-all[data-group=" + child + "]").get(0).checked = check;
+        });
+        $('.perm-child').click(function(){
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            var child = $(this).data('child');
+            if(checked){
+                $(".perm-item[data-child='" +child + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                });
+                $(".perm-all[data-group='" +group + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                });
+            }
+
+        })
+    })
+
+    //鼠标悬停事件
+    $(function () {
+        $(".dropdown").mousemove(function () {
+            $(this).addClass("open");
+        })
+        $(".dropdown").mouseleave(function () {
+            $(this).removeClass("open");
+        })
+    })
+    //    $('.dropdown div :checkbox').click(function (e) {
+    //        var _parent = $(this).parent('.dropdown');
+    //        _parent.find()
+    //    })
+
+</script>
+{template 'web/common/footer'}

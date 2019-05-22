@@ -1,0 +1,44 @@
+{template 'default/header'}
+
+<body class="max-width bg-f2">
+<div class="page">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('member')}'"></a>
+        <h1 class="title txt-fff">我的家属</h1>
+    </header>
+    <div class="content">
+        <div class="content-block-title">家庭成员</div>
+        <div class="list-block media-list">
+            <ul>
+                {loop $list $item}
+                <li onclick="window.location.href='{php echo $this->createMobileUrl('member',array('op'=> 'share','logid' => $item['id']))}'">
+                    <a href="#" class="item-link item-content">
+                        <div class="item-media"><img src="{if $item['avatar']}{php echo tomedia($item['avatar'])}{else}{MODULE_URL}template/mobile/default/static/images/tx.png{/if}" style='width: 2.2rem;'></div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title" style="font-size: 14px;">{$item['realname']}</div>
+                            </div>
+                            <div class="item-subtitle"><label style="width: 2.2rem;height: 1.2rem" class="button button-fill button-warning">{if $item['status'] == 2}家属{elseif $item['status'] == 3}租户{/if}</label></div>
+                            {if empty($item['to_uid'])}<div style="float: right;font-size: 14px;position: absolute;bottom: 23px;right: 24px;">未关注</div>{/if}
+                        </div>
+                    </a>
+                </li>
+                {/loop}
+                <li onclick="window.location.href='{php echo $this->createMobileUrl('member',array('op'=> 'add'))}'">
+                    <a href="#" class="item-link item-content">
+                        <div class="item-media"><img src="{MODULE_URL}template/mobile/default/static/images/tx.png" style='width: 2.2rem;'></div>
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title" style="font-size: 14px;">邀请家人</div>
+                            </div>
+                            <div class="item-subtitle"></div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+{template 'default/footer'}

@@ -1,0 +1,222 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'list'))}" title="车场管理" >车场管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'add','id' => $id))}" title="添加车场" >添加车场</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <div class="form-group">
+                                <label for="title" class="col-sm-2 control-label">名称</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="title" id='title' value="{$item['title']}" class="form-control" placeHolder="请输入名称" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">管理人员</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="management" class="form-control" value="{$item['management']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">搜索</label>
+                                <div class="col-xs-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                        <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group" id="region">
+                                <label for="regionid" class="col-sm-2 control-label">选择小区<span style="color: red">*</span></label>
+                                <div class="col-xs-4">
+                                    <select name="regionid" class="form-control" id="regionid">
+                                        <option value="">选择小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected='selected'{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">进出口数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="exitus" class="form-control" value="{$item['exitus']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">车位总数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="cars_num" class="form-control" value="{$item['cars_num']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">月租车位数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="month_num" class="form-control" value="{$item['month_num']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">临时车位数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" class="form-control" placeholder="无需输入,自动计算
+" disabled/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">月租收费标准</label>
+                                <div class="col-sm-4 ">
+                                    <select class="form-control" name="ruleId">
+                                        <option value="0">请选择月租收费标准</option>
+                                        {loop $mon_rules $rule}
+                                        <option value="{$rule['id']}" {if $rule['id'] == $item['rule_id']}selected{/if}>{$rule['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">临时车收费标准</label>
+                                <div class="col-sm-4 ">
+                                    <select class="form-control" name="temrule_id">
+                                        <option value="0">请选择临时车收费标准</option>
+                                        {loop $tem_rules $rule}
+                                        <option value="{$rule['id']}" {if $rule['id'] == $item['temrule_id']}selected{/if}>{$rule['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">缴费后允许停留时间</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="leave_space" class="form-control" value="{$item['leave_space']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">剩余月租车车位数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="over_month_num" class="form-control" value="{$item['over_month_num']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">临时车车位数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="over_short_num" class="form-control" value="{$item['over_short_num']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">是否包月</label>
+                                <div class="col-sm-4">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="month_type" id="month_type_1" value="1" {if $item['month_type'] == 1}checked{/if} />
+                                        <label for="month_type_1">支持</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="month_type" id="month_type_2" value="0" {if $item['month_type'] == 0 || empty($item['month_type'])}checked{/if} />
+                                        <label for="month_type_2">不支持</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">计费规则</label>
+                                <div class="col-sm-4">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type1" value="1" {if $item['type'] == 1 || empty($item['type'])}checked{/if} />
+                                        <label for="type1">按系统计费</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type2" value="2" {if $item['type'] == 2}checked{/if} />
+                                        <label for="type2">按车场计费</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">动态二维码</label>
+                                <div class="col-sm-4">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="qr_status" id="qr_status_1" value="1" {if $item['qr_status'] == 1}checked{/if} />
+                                        <label for="qr_status_1">支持</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="qr_status" id="qr_status_2" value="2" {if $item['qr_status'] == 2 || empty($item['qr_status'])}checked{/if} />
+                                        <label for="qr_status_2">不支持</label>
+                                    </div>
+                                </div>
+                                <span class="help-block">启用后,出口显示屏会下发动态支付二维码,不在显示出场提示</span>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入名称。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'list','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+            }
+        },'json')
+    })
+</script>

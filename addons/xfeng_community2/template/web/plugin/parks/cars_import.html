@@ -1,0 +1,61 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'list'))}" title="车辆管理" >车辆管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'import'))}" title="车辆导入" >车辆导入</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <div class="alert alert-info" role="alert">
+                            默认导入格式:姓名/电话/车牌号/到期时间。具体请下载模板格式。
+                            <p>(<a href="{MODULE_URL}data/files/excel/cars.xlsx" target="_blank" style="font-size:16px;color:red">点击下载上传车牌号格式示例</a>)</p>
+                        </div>
+                        <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">车牌号数据</label>
+                                <div class="col-sm-4">
+                                    <input type="file" name="cars" class="form-control" id="cars">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">所属车场</label>
+                                <div class="col-sm-4 ">
+                                    {if $parks}
+                                    <select class="form-control" name="pid" id="pid">
+                                        <option value="0">请选择车场</option>
+                                        {loop $parks $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $item['prakid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                    {/if}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">收费标准</label>
+                                <div class="col-sm-4 ">
+                                    <select class="form-control" name="ruleId" id="ruleId">
+                                        <option value="0">请选择收费标准</option>
+                                        {loop $rules $rule}
+                                        <option value="{$rule['id']}" {if $rule['id'] == $item['ruleId']}selected{/if}>{$rule['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10 col-xs-10">
+                                    <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

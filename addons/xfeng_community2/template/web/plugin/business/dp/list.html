@@ -1,0 +1,150 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}" title="店铺管理" >店铺管理</a></li>
+                    {if ($user && $menu_opss && @in_array('business_dpQrlist', $menu_opss)) || empty($user)}
+                    <li><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                    {/if}
+                </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="business"/>
+                        <input type="hidden" name="op" value="dp"/>
+                    <div class="row">
+                        <div class="col-sm-8 m-b-xs">
+                            {if ($user && $menu_opss && @in_array('business_dpAdd', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'dp','operation' => 'add','id' => $id))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加店铺</a>
+                            {/if}
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="输入商家名/电话" value="{$_GPC['keyword']}">
+                                <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+
+            <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>商家名</th>
+                        <th>类目</th>
+                        <th>营业时间</th>
+                        <th>联系人</th>
+                        <th>电话</th>
+                        <th>地址</th>
+                        <!--<th>积分支付</th>-->
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $k $item}
+                    {php $k = $k+5}
+                    <tr>
+                        <td>{$item['id']}</td>
+                        <td>{$item['sjname']}</td>
+                        <td>{$item['patename']}->{$item['catename']}</td>
+                        <td>{$item['businesstime']}</td>
+                        <td>{$item['contactname']}</td>
+                        <td>{$item['mobile']}</td>
+                        <td>{$item['district']} {$item['address']}</td>
+                        <!--<td><input type="checkbox" value="1" {if intval($item[creditpay])==1} checked="checked"{/if} data-id="{$item[id]}" class="js-switch_{$k}"/></td>-->
+                        <td>
+                            <label data='{$item['enable']}' class='label  label-default {if $item['enable']==1}label-info{/if}' onclick="change(this,{$item['id']},'enable')">
+                            {if $item['enable']==1}上线{else}下线{/if}
+                            </label>
+                        </td>
+                        <td >
+                            {if ($user && $menu_opss && @in_array('business_dpSet', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'setting','dpid' => $item['id']))}" class="btn btn-primary btn-sm" title="基本设置">基本设置</a>
+                            {/if}
+                            {if empty($user) || ($user && $user['type'] == 1)}
+                            {if ($user && $menu_opss && @in_array('business_dpCommission', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'commission','dpid' => $item['id']))}" class="btn btn-success btn-sm" title="分成设置">分成设置</a>
+                            {/if}
+                            {/if}
+                            {if ($user && $menu_opss && @in_array('business_dpRank', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'rank','operation' => 'list','dpid' => $item['id']))}" class="btn btn-warning btn-sm" title="评价管理">评价管理</a>
+                            {/if}
+                            {if ($user && $menu_opss && @in_array('business_dpGoods', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'goods','operation' => 'list','dpid' => $item['id']))}" class="btn btn-success btn-sm" title="查看商品">查看商品</a>
+                            {/if}
+                            {if ($user && $menu_opss && @in_array('business_dpQr', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'dp','operation' => 'qr','id' => $item['id']))}" class="btn btn-success btn-sm" title="支付码">店铺支付二维码</a>
+                            {/if}
+                            {if ($user && $menu_opss && @in_array('business_dpEdit', $menu_opss)) || empty($user)}
+                            <a href="{php echo $this->createWebUrl('business',array('op' => 'dp','operation' => 'add','id' => $item['id']))}" class="btn btn-primary btn-sm" title="编辑">编辑</a>
+                            {/if}
+                            {if ($user && $menu_opss && @in_array('business_dpDel', $menu_opss)) || empty($user)}
+                            <a class="btn btn-default" href="{php echo $this->createWebUrl('business',array('op' => 'del','id' => $item['id']))}" onclick="return confirm('确定删除该店铺及该店铺下的商品、支付方式、打印机、接收员吗?');" title="删除">删除</a>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function () {
+    $(':checkbox').on('change', function (e, state) {
+        $this = $(this);
+        var id = $this.data('id');
+        var creditpay = this.checked ? 1 : 0;
+        $.post(location.href,{creditpay:creditpay, id: id},function () {
+
+        })
+    });
+    $('.btn').hover(function () {
+        $(this).tooltip('show');
+    }, function () {
+        $(this).tooltip('hide');
+    });
+});
+//function change(obj, id, type) {
+//    $(obj).html($(obj).html() + "...");
+//    $.post("{php echo $this->createWebUrl('business',array('op' => 'dp','operation' => 'change'))}", {
+//        id: id,
+//        type: type,
+//        data: obj.getAttribute("data")
+//    }, function(d) {
+//        $(obj).html($(obj).html().replace("...", ""));
+//        if (type == 'enable') {
+//            $(obj).html(d.data == '1' ? '上线' : '下线');
+//        }
+//        $(obj).attr("data", d.data);
+//        if (d.result == 1) {
+//            $(obj).toggleClass("label-info");
+//        }
+//    }, "json");
+//}
+</script>
+

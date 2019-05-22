@@ -1,0 +1,91 @@
+{template 'web/common/header-base'}
+    <form action="" method="post" class="form-horizontal form" id="form">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>数据维护</h5>
+                            <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('updatedata')}"></a></h5>
+                        </div>
+                        <div class="ibox-content">
+                            <p style="color: blue">一键清空区域：会清空当前公众号下的区域管理数据。</p>
+                            <p style="color: blue">一键清空楼宇单元：会清空当前公众号下的楼宇和单元管理数据。</p>
+                            <p style="color: blue">一键清空房屋：会清空当前公众号下的房屋管理数据。</p>
+                            <p style="color: blue">优化房屋数据：清空公众号下的区域、楼宇、单元管理数据后用房屋信息重新生成区域、楼宇、单元。</p>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                                    <input name="update_area" type="submit" value="一键清空区域" class="btn btn-primary" onClick="return confirm('确定清空所有的区域信息吗?');"/>
+                                    <input name="update_build" type="submit" value="一键清空楼宇单元" class="btn btn-primary" onClick="return confirm('确定清空所有的楼宇单元信息吗?');"/>
+                                    <input name="update_room" type="submit" value="一键清空房屋" class="btn btn-warning" onClick="return confirm('执行此操作前，请先备份数据，确定清空所有的房屋信息吗?');"/>
+                                    <input name="update_house" type="submit" value="优化房屋数据" class="btn btn-primary" onClick="return confirm('执行此操作前，请先备份数据，确定优化房屋数据吗?');"/>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>修复字段、数据</h5>
+                            <!--<h5>v8.0版升级v9.0版数据转化(新安装的请勿操作)</h5>-->
+                        </div>
+                        <div class="ibox-content">
+                <!--<p style="color: red">修复数据主要用于v8升级到v9的时候数据异常，会先清空数据后，重新转化v8数据。可能会一些问题，例如已经发布新的幻灯的话，那就需要重新勾选，已经配置的配置需要重新配置。此操作适合第一次升级的数据出错执行。已经增加新数据不建议执行.一段时间过渡后，会删除此操作。</p>-->
+                <p style="color: blue">修复字段：会修复数据表缺失，数据字段缺失。不影响数据。</p>
+                            <p style="color: blue">修复数据：处理升级中需要变更的数据。</p>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+
+                        <input name="update_field" type="submit" value="修复字段" class="btn btn-warning" />
+                        {if $_W['uid'] == 1}
+                        <input name="update_data" type="submit" value="修复数据" class="btn btn-primary" onClick="return confirm('确定修复数据吗?');"/>&nbsp;&nbsp;
+                        {/if}
+                        <input name="update_appmenu" type="submit" value="生成手机端管理系统菜单" class="btn btn-primary" onClick="return confirm('确定重新生成手机端管理系统菜单吗?');"/>&nbsp;&nbsp;
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>菜单修复</h5>
+                        </div>
+                        <div class="ibox-content">
+                <p style="color: red">后台菜单菜单重置，清空后台菜单，重新生成，此操作会影响设置的权限权限。此操作要谨慎执行。</p>
+                <p style="color: #00a2d4">前台菜单重置，清空已设置的前台菜单，还原到初始状态，此操作要谨慎执行。</p>
+                            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+                        {if $_W['uid'] == 1}
+                        <input name="update_menu" type="submit" value="后台菜单重置" class="btn btn-primary" onClick="return confirm('确定重置后台菜单吗?');"/>&nbsp;&nbsp;
+                        {/if}
+                        <input name="update_nav" type="submit" value="前台菜单重置" class="btn btn-primary" onClick="return confirm('确定重置前台菜单后，需要进入每个公众号页面，页面管理点击首页导航，重新生成菜单吗?');"/>
+                        <input name="update_xqappmenu" type="submit" value="手机端管理菜单重置" class="btn btn-primary" onClick="return confirm('确定重置移动端管理菜单后，需要进入每个公众号页面数据维护，点击数据维护中的生成手机端管理菜单，重新生成菜单吗?');"/>&nbsp;&nbsp;
+                        <input name="update_housenav" type="submit" value="住户中心菜单重置" class="btn btn-primary" onClick="return confirm('确定重置住户中心菜单后，需要进入每个公众号页面，页面管理点击住户中心重新生成住户菜单吗?');"/>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+{template 'web/common/footer'}

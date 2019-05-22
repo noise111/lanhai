@@ -1,0 +1,156 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>统一小区设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('set',array('op' => 'xqset'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+            <table class="table table-hover" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                <thead>
+                <tr>
+                    <th class="col-sm-2">小区设置</th>
+                    <th class="col-sm-3">说明</td>
+                    <th class="col-sm-4"></th>
+                    <th class="col-sm-3">是否启用</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr>
+                    <td class="title">报修审核</td>
+                    <td>开启报修审核后，粉丝发布的报修，需要后台审核后，才可显示</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p24" class="js-switch_6" {if $set['p24']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议审核</td>
+                    <td>开启建议审核后，粉丝发布的建议，需要后台审核后，才可显示</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p25" class="js-switch_7" {if $set['p25']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">报修手机端抢单</td>
+                    <td>
+                        开启抢单模式，手机端报修接收人将启用抢单，第一个点击，就是抢单成功。
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="" id="p75" class="js-switch_11" {if $set['p75']['value']}checked{/if}/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议手机端抢单</td>
+                    <td>
+                        开启抢单模式，手机端建议接收人将启用抢单，第一个点击，就是抢单成功。
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="" id="p76" class="js-switch_12" {if $set['p76']['value']}checked{/if}/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">报修全部显示</td>
+                    <td>开启报修全部显示后，粉丝发布的报修信息在微信端就在当前小区全部显示</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p30" class="js-switch_13" {if $set['p30']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议全部显示</td>
+                    <td>开启建议全部显示后，粉丝发布的建议信息在微信端就在当前小区全部显示</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p31" class="js-switch_14" {if $set['p31']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">报修回复模板</td>
+                    <td>例如：我们已收到您的报修，请等待我们的维修员联系您！</td>
+                    <td>
+                        <textarea name="set[p47]" class="form-control" placeholder="例如：我们已收到您的报修，请等待我们的维修员联系您！  "/>{$set['p47']['value']}</textarea>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议回复模板</td>
+                    <td>例如：我们已收到您的建议，请等待我们的管理员联系您！</td>
+                    <td>
+                        <textarea name="set[p48]" class="form-control" placeholder="例如：我们已收到您的建议，请等待我们的管理员联系您！  "/>{$set['p48']['value']}</textarea>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">新增小区默认勾选</td>
+                    <td>新增小区时公告、幻灯、魔方、广告、家政项目、底部菜单会默认勾选该小区，开启时新增小区不会在该小区显示</td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p106" class="js-switch_20" {if $set['p106']['value']}checked='checked'{/if} />
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label"></label>
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

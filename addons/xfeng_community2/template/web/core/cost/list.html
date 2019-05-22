@@ -1,0 +1,147 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>费用管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cost')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="alert alert-danger" role="alert">
+                            <p>《物业费》：
+                            <p style="color: red">1.开启是否显示，开启后，微信端才会显示</p>
+                            <p style="color: red"> 2.开启是否支付，开启后，微信端才能支付</p>
+                            </p>
+                        </div>
+                    </div>
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="cost"/>
+                    <div class="row">
+                        <div class="col-sm-2 m-b-xs">
+                            {if ($user && $menu_opss && @in_array('cost_add', $menu_opss)) || empty($user)}
+                            <a class="btn btn-sm btn-primary" href="{php echo $this->createWebUrl('cost', array('op' => 'add'))}"><i class="fa fa-plus"></i> 导入费用</a>
+                            {/if}
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+                            <select name="regionid" class="form-control" >
+                                <option value="0">全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="输入备注进行模糊查询" value="{$_GPC['keyword']}">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    </form>
+
+            <table class="table table-bordered" style="width:100%;z-index:-10;" cellspacing="0" cellpadding="0">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="col-lg-2">小区名称</th>
+                    <th class="col-lg-3">费用时间</th>
+                    <th class="col-lg-1">导入时间</th>
+                    <th class="col-lg-1">备注</th>
+                    <th class="col-lg-1">费用显示</th>
+                    <th class="col-lg-1">在线支付</th>
+                    <th class="col-lg-3">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {loop $list $k $item}
+                {php $k = $k+1}
+                {php $j = $k+40}
+                <tr>
+                    <td>{$item['city']}{$item['dist']}{$item['title']}</td>
+                    <td>{$item['costtime']}{$item['costtitle']}</td>
+                    <td>{php echo date('Y-m-d',$item['createtime'])}</td>
+                    <td>{$item['remark']}</td>
+                    <td><input type="checkbox" value="1" {if intval($item[enable])==1} checked="checked"{/if} data-id="{$item[id]}" data-type ="enable" class="js-switch_{$k}"/></td>
+                    <td><input type="checkbox" value="1" {if intval($item[status])==1} checked="checked"{/if} data-id="{$item[id]}" data-type ="status" class="js-switch_{$j}"/></td>
+                    <td>
+                        {if ($user && $menu_opss && @in_array('cost_detail', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('cost',array('op' => 'detail','id' => $item['id'],'regionid' => $item['regionid']))}" title="详情" data-toggle="tooltip" data-placement="top" class="btn btn-primary btn-sm">查看</a>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('cost_order', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('cost',array('op' => 'order','id' => $item['id']))}" title="订单管理" data-toggle="tooltip" data-placement="top" class="btn btn-primary btn-sm">订单管理</a>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('cost_auth', $menu_opss)) || empty($user)}
+                        <a  href="{php echo $this->createWebUrl('cost',array('op' => 'auth','id' => $item['id']))}"  data-toggle="tooltip" data-placement="top" class="btn btn-warning btn-sm">设置支付期限</a>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('cost_del', $menu_opss)) || empty($user)}
+                        <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('cost',array('op' => 'delete','id' => $item['id']))}" title="删除" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm">删除</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+            </tbody>
+            </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var id = $this.data('id');
+            var type = $this.data('type');
+            var enable = this.checked ? 1 : 0;
+            $.post(location.href,{type: type,enable:enable, id: id},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+     function verify(obj, id, type) {
+         $(obj).html($(obj).html() + "...");
+         $.post("{php echo $this->createWebUrl('cost',array('op' => 'verify'))}", {
+             id: id,
+             type: type,
+             data: obj.getAttribute("data")
+         }, function(d) {
+             $(obj).html($(obj).html().replace("...", ""));
+             if (type == 'status') {
+                 $(obj).html(d.data == '1' ? '开启已支付' : '关闭已支付');
+             }
+             if (type == 'open_status') {
+                 $(obj).html(d.data == '1' ? '开启' : '关闭');
+             }
+             $(obj).attr("data", d.data);
+             if (d.result == 1) {
+                 $(obj).toggleClass("label-info");
+             }
+         }, "json");
+     }
+</script>

@@ -1,0 +1,88 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>服务商配置(支付授权目录与“支付选项”中的说明不同，应在 公众平台->微信支付->公众号支付 追加一条支付授权目录:{$_W['siteroot']}app/)</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('payapi',array('op' => 'service'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <a class="btn  btn-primary" href="{php echo $this->createWebUrl('payapi', array('op' => 'sub','operation' => 'list'));}"><i class="glyphicon glyphicon-th-list"></i> 商户管理</a>
+                    <a class="btn  btn-primary" href="{php echo $this->createWebUrl('payapi', array('op' => 'sub','operation' => 'add'));}"><i class="fa fa-plus"></i> 添加商户</a>
+                    <div class="hr-line-dashed"></div>
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+        <input type="hidden" value="{$set['id']}" name="id">
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务商商户号</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="service[f5]" class="form-control"  value="{$pay['f5']['value']}"/>
+                        <span class="help-block">需要填写申请为服务商的商户号。注：服务商的商户号与微信支付的商户号不是同一个号。</span>
+                    </div>
+                </div>
+                 <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥(API密钥)</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                            <input type="text" name="service[f6]" id="facilitator_signkey" class="form-control" maxlength="32" value="{if $pay['f6']['value']}{$pay['f6']['value']}{else}{php echo substr($pay['f6']['value'], 0 , 32)}{/if}" autocomplete="off"/>
+                            <span onclick="tokenGen('facilitator_signkey');" style="cursor:pointer" class="input-group-addon">生成新的</span>
+                        </div>
+                        <span class="help-block">此商户秘钥为服务商商户号对应的支付秘钥，与微信支付的支付秘钥不相同。</span>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppId)</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="service[f20]" class="form-control" value="{$pay['f20']['value']}" />
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppSecret)</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="service[f21]" class="form-control" value="{$pay['f21']['value']}" />
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12 help-block">
+                        <input name="submit" type="submit" value="提交" class="btn btn-w-m btn-primary">
+                    </div>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+
+
+    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+    function check(form) {
+        if (!form['service[f5]'].value) {
+            alert('服务商商户号不可为空。');
+            return false;
+        }
+        if (!form['service[f6]'].value) {
+            alert('商户支付密钥(API密钥)不可为空。');
+            return false;
+        }
+
+
+    }
+</script>
+{template 'web/common/footer'}

@@ -1,0 +1,178 @@
+{template 'default2/header'}
+    <style>
+        .weui-navbar{
+            background: #ffffff;
+            position: fixed;
+        }
+        .weui-navbar__item{
+            padding: 10px 0;
+            font-size: 0.36rem;
+        }
+        .weui-navbar__item:after{
+            border-right: none;
+        }
+        .weui-navbar__item.weui-bar__item--on{
+            background: #ffffff;
+            color: #f58611;
+        }
+        .weui-media-box_appmsg .weui-media-box__hd{
+            width: 90px;
+        }
+        .weui-media-box_appmsg .weui-media-box__thumb{
+            border-radius: 5px;
+        }
+        .weui-media-box__title{
+            position: absolute;
+            top: 10px;
+        }
+        .weui-media-box__desc{
+            position: absolute;
+            bottom: 15px;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="weui-navbar">
+    <a class="weui-navbar__item">
+        分类<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        距离近<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        价格低<i></i>
+    </a>
+</div>
+<div class="nav-modal">
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li>全部</li>
+            <li>出租</li>
+            <li>出售</li>
+            <li>求租</li>
+            <li>求购</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li>全部</li>
+            <li>100-200</li>
+            <li>300-400</li>
+            <li>500-600</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li>7</li>
+            <li>8</li>
+            <li>9</li>
+            <li>10</li>
+        </ul>
+    </div>
+</div>
+<div class="group-contain">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="http://p1.meituan.net/msmerchant/ce03d2e3c24a2cecd52e362c1ffdd4f781281.jpg@368w_208h_1e_1c" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">王异缤纷百果园</h4>
+                    <em class="group-location">5.2km</em>
+                    <p class="weui-media-box__desc">
+                        <span class="group-star">
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="half"></i>
+                            <i class="none"></i>
+                        </span>
+                        月售0单
+                    </p>
+                    <span class="group-mendian">门店自提</span>
+                </div>
+            </a>
+        </div>
+        <div class="weui-panel__ft">
+            <a href="javascript:void(0);" class="group-foot">
+                <p><span class=" group-label group-label-blue">外</span><span style="color: #bbb">店内全9折</span></p>
+                <p><span class=" group-label group-label-green">团</span><span style="color: #bbb">店内全9折店内全9折</span></p>
+            </a>
+        </div>
+    </div>
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="http://p1.meituan.net/msmerchant/ce03d2e3c24a2cecd52e362c1ffdd4f781281.jpg@368w_208h_1e_1c" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">王异缤纷百果园</h4>
+                    <em class="group-location">5.2km</em>
+                    <p class="weui-media-box__desc">
+                        <span class="group-star">
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="half"></i>
+                            <i class="none"></i>
+                        </span>
+                        月售0单
+                    </p>
+                    <span class="group-mendian">门店自提</span>
+                </div>
+            </a>
+        </div>
+        <div class="weui-panel__ft">
+            <a href="javascript:void(0);" class="group-foot">
+                <p><span class=" group-label group-label-blue">外</span><span style="color: #bbb">店内全9折</span></p>
+                <p><span class=" group-label group-label-defalut">超</span><span style="color: #bbb">店内全9折店内全9折</span></p>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/common.js"></script>
+<script>
+    $.each($('.weui-navbar__item'),function (i) {
+        $(this).click(function () {
+            if($(this).hasClass('weui-bar__item--on')){
+                $.each($('.Category-eject'),function (j) {
+                    $(this).slideUp(250);
+                });
+                $(this).removeClass('weui-bar__item--on');
+            }else {
+                $.each($('.Category-eject'),function (j) {
+                    if(i == j){
+                        $(this).slideDown(250);
+                        $(".Category-w li").each(function( index ) {
+                            $( this ).css({'animation-delay': (index/10)+'s'});
+                        });
+                    }else {
+                        $(this).slideUp(250);
+                    }
+                });
+                $(this).addClass('weui-bar__item--on').siblings().removeClass('weui-bar__item--on');
+            }
+        })
+    })
+
+    $(".Category-eject").each(function( i ) {
+        $(this).click(function () {
+            $(this).slideUp(250);
+            $('.weui-navbar__item').each(function (j) {
+                if(j==i){
+                    $(this).removeClass('weui-bar__item--on');
+                }
+            })
+        })
+
+    });
+</script>
+</body>
+</html>

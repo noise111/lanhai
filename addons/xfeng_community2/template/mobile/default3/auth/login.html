@@ -1,0 +1,351 @@
+{template 'default2/header'}
+    <style>
+        body{
+            background: #ffffff;
+        }
+        .register-guide-head-img{
+            width: 80px;
+            height: 80px;
+            margin-top: 35px;
+            margin-left: -40px;
+        }
+        .tab-nav{
+            top: 120px;
+        }
+        .tab-panel{
+            top: 120px;
+        }
+        .tab-nav:after{
+            border-bottom: none;
+        }
+        .weui-cells{
+            margin-bottom: 30px;
+            font-size: 0.9em;
+        }
+        .weui-cells:before{
+            border-top: none;
+        }
+        .register-select:before{
+            border-top: 1px solid #d9d9d9;
+            left: 15px;
+        }
+        .weui-cells:after{
+            border-bottom: none;
+        }
+        .weui-cell:before{
+            top: auto;
+            bottom: 0;
+            border-top: none;
+            border-bottom: 1px solid #d9d9d9;
+        }
+        .weui-cell:first-child:before{
+            display: block;
+        }
+        .step-content{
+            margin-top: 0px;
+        }
+        .weui-cell__hd{
+            margin-right: 1em;
+        }
+        .weui-cells_checkbox .weui-icon-checked:before{
+            font-size: 18px;
+        }
+        .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+            color: #F7624B;
+        }
+        .weui-cell_no_bottom:before{
+            border-bottom:none;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="register-guide-head">
+    <div class="register-guide-head-img">
+    </div>
+</div>
+<div id="J_Tab" class="m-tab" data-ydui-tab>
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><a href="javascript:;">登录</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">注册</a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active">
+            <div class="weui-cells">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">手机号</div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="tel" placeholder="" id="tel">
+                    </div>
+                    <div class="weui-cell__ft">
+                        <a href="javascript:;" class="weui-btn weui-btn_mini step-btn" id="loginCode">获取验证码</a>
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd">验证码</div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="number" placeholder="" id="code">
+                        <input type="hidden" id="login_code">
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:;" class="weui-btn register-guide-btn" id="login">进入智慧社区</a>
+        </div>
+        <div class="tab-panel-item">
+            <div class="step-content">
+                <div class="step firstStep">
+                    <div class="weui-cells">
+                        <div class="weui-cell weui-cell_access">
+                            <div class="weui-cell__hd"><label for="rSite01" class="weui-label">请选择小区</label></div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input"  id="rSite01" type="text" placeholder="">
+                            </div>
+                            <div class="weui-cell__ft">
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">手机号</div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input" type="tel" placeholder="" id="mobile">
+                            </div>
+                            <div class="weui-cell__ft">
+                                <a href="javascript:;" class="weui-btn weui-btn_mini step-btn" id="registerCode">获取验证码</a>
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">验证码</div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input" type="number" placeholder="" id="_code">
+                                <input type="hidden" id="reg_code">
+                            </div>
+                        </div>
+                        <div class="weui-cell">
+                            <div class="weui-cell__hd">姓名</div>
+                            <div class="weui-cell__bd">
+                                <input class="weui-input" type="text" placeholder="" id="realname">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="weui-cells_checkbox">
+                        <label class="weui-cell weui-cell_no_bottom">
+                            <div class="weui-cell__hd" for="s11" style="padding-right: 0;margin-right: 0.5em">
+                                <div class="weui-check__label">
+                                    <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked">
+                                    <i class="weui-icon-checked"></i>
+                                </div>
+                            </div>
+                        </label>
+                        <div class="weui-cell__bd" style="font-size: 0.5em;position: relative;top: -28px;color: #868686;left: 50px;">
+                            <p>我同意<a  href="#" class="color_y open-popup" data-target="#full">智慧社区应用使用条款与隐私规则</a></p>
+                        </div>
+                    </div>
+                    <a href="javascript:;" class="weui-btn register-guide-btn" onclick="closeme()">完成</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="full" class='weui-popup__container'>
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal" style="background: #ffffff">
+            <div style="padding: 10px 15px;font-size: 0.9em">
+                智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则智慧社区应用使用条款与隐私规则
+            </div>
+            <a href="javascript:;" class="weui-btn register-guide-btn close-popup">关闭协议</a>
+        </div>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                var lng = r.point.lng;
+                var lat = r.point.lat;
+                var url = "{php echo wxapp_url('region/list')}"+"&lng="+lng+"&lat="+lat;
+                $.getJSON(url,{type:1},function (data) {
+                    var json = new Array();
+                    json = data.data;
+
+                    $("#rSite01").picker({
+                        title: "请选择小区",
+                        cols: [
+                            {
+                                textAlign: 'center',
+                                values: json
+                            }
+                        ],
+                        onChange: function(p, v, dv) {
+                            console.log(p, v, dv);
+                        },
+                        onClose: function(p, v, d) {
+                            console.log("close");
+                        }
+                    });
+                })
+
+            }
+            else {
+                alert('获取当前位置失败,请确认是否开启定位服务');
+            }
+        },{enableHighAccuracy: true})
+    });
+
+</script>
+<script>
+    var lock = false;
+    $("#login").click(function () {
+        var tel = $("#tel").val();
+        var code = $("#code").val();
+        var login_code = $("#login_code").val();
+        if(code != login_code){
+            $.toast('验证码不正确', "text");return false;
+        }
+        if(lock) return false;
+
+        lock = true;
+        $.showLoading('正在提交');
+        $.post("{php echo wxapp_url('auth/login')}",{mobile:tel},function (data) {
+            if(data.err_code ==0){
+                $.hideLoading();
+                setTimeout(function () {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.data.content, "text");
+
+                    window.location.href="{php echo $this->createMobileUrl('home')}";
+                }, 1000);
+            }
+            if(data.err_code == -1){
+                $.hideLoading();
+                setTimeout(function () {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.err_msg, "text");
+
+                }, 1000);
+            }
+
+            lock = false;
+        },'json')
+    })
+    function shows() {
+        $('.firstStep').hide();
+        $('.secondStep').show();
+    }
+    function showt() {
+        $('.thereStep').show();
+        $('.secondStep').hide();
+    }
+    function closeme() {
+            //注册
+        // $(".step-content").hide();
+        var mobile = $("#mobile").val();
+        var realname = $("#realname").val();
+        var regionid = $("#rSite01").val();
+        var _code = $("#_code").val();
+        var reg_code = $("#reg_code").val();
+        if(_code != reg_code){
+            $.toast('验证码不正确', "text");return false;
+        }
+        if(lock) return false;
+
+        lock = true;
+        $.showLoading('正在提交');
+        $.post("{php echo wxapp_url('auth/register')}",{mobile:mobile,realname:realname,regionid:regionid},function (data) {
+            if(data.err_code ==0){
+                $.hideLoading();
+                setTimeout(function () {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.data.content, "text");
+
+                    window.location.href="{php echo $this->createMobileUrl('home')}";
+                }, 1500);
+            }
+            lock = false;
+        },'json')
+    }
+
+    //登录短信验证码发送
+    var $logCode = $("#loginCode");
+    //定义参数
+    $logCode.sendCode({
+        disClass:'weui-btn_disabled',
+        secs:15,
+        run:false,
+        runStr:'{%s}秒后重新获取',
+        resetStr:'重新获取验证码'
+    });
+    $logCode.on('click',function () {
+        $.showLoading('发送中');
+        var regionid = "{$regionid}";
+        var tel = $('#tel').val();
+        if (!tel) {
+            alert('请输入您的手机号码！');
+            return false;
+        }
+        if (tel.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1) {
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}&mobile=" + tel + "&regionid=" + regionid, function (data) {
+            setTimeout(function () {
+//             YDUI.dialog.loading.close();
+                $.hideLoading();
+                $getCode.sendCode('start');
+//             YDUI.dialog.toast('已发送', 'success', 1500);
+                setTimeout(function () {
+                    $("#login_code").val(data);
+                    $.toast("已发送", '');
+                }, 500);
+//
+            }, 1500);
+        }, 'json');
+    });
+    //注册短信验证码发送
+    var $getCode = $('#registerCode');
+    //定义参数
+    $getCode.sendCode({
+        disClass:'weui-btn_disabled',
+        secs:15,
+        run:false,
+        runStr:'{%s}秒后重新获取',
+        resetStr:'重新获取验证码'
+    });
+    $getCode.on('click',function () {
+        $.showLoading('发送中');
+        var regionid = "{$regionid}";
+        var mobile = $('#mobile').val();
+        if (!mobile) {
+            alert('请输入您的手机号码！');
+            return false;
+        }
+        if (mobile.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1) {
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}&mobile=" + mobile + "&regionid=" + regionid, function (data) {
+            setTimeout(function () {
+//             YDUI.dialog.loading.close();
+                $.hideLoading();
+                $getCode.sendCode('start');
+//             YDUI.dialog.toast('已发送', 'success', 1500);
+                setTimeout(function () {
+                    $("#reg_code").val(data);
+                    $.toast("已发送", '');
+                }, 500);
+//
+            }, 1500);
+        }, 'json');
+    });
+
+    //选择
+
+
+</script>
+</body>
+</html>

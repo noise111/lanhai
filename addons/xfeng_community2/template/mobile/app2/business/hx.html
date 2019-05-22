@@ -1,0 +1,102 @@
+{template 'app2/header'}
+<link rel="stylesheet" href="//at.alicdn.com/t/font_520065_ujlyp5rnoqmh1tt9.css">
+    <style>
+        .weui-navbar__item:after{
+            border-right: none;
+        }
+        .weui-form-preview__label{
+            color: #F43530;
+        }
+        .weui-flex__item{
+            text-align: center;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+<style>[v-cloak] { display: none !important; }</style>
+<div class="weui-tab" id="app" v-cloak>
+    <div class="weui-navbar">
+        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+            手动核销
+        </a>
+        <!--<a class="weui-navbar__item" href="#tab2">-->
+            <!--扫码核销-->
+        <!--</a>-->
+    </div>
+    <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell weui-cell_warn">
+                    <div class="weui-cell__hd"><label for="" class="weui-form-preview__label">卷号</label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text"  placeholder="请输入卡卷号" v-model="item.code">
+                    </div>
+                    <!--<div class="weui-cell__ft">-->
+                        <!--<i class="weui-icon-warn"></i>-->
+                    <!--</div>-->
+                </div>
+            </div>
+            <div class="defalut-pad-btn"  style="width: 100%;display: block;margin: 20px auto">
+                <a href="#" class="weui-btn register-guide-btn" @click="postdata()">提交核销</a>
+            </div>
+        </div>
+        <div id="tab2" class="weui-tab__bd-item">
+            <div class="weui-flex">
+                <div class="weui-flex__item">
+                    <div class="defalut-coupon-code">
+                        <i class="iconfont icon-scancode"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{
+                code:''
+            },
+        },
+        beforeMount: function () {
+            var self = this
+            console.log(self.item)
+        },
+        mounted: function () {
+        },
+        methods: {
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                if (self.item.code == ''){
+                    $.toast('请填写核销码');return false;
+                }
+                var url = "{php echo wxapp_url('appbusiness/hx')}";
+                $.showLoading('正在提交');
+                $.getJSON(url,self.item,function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if (ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('核销成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code ==-1){
+                        setTimeout(function () {
+                            $.toast('券号不存在');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                })
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

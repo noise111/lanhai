@@ -1,0 +1,126 @@
+{template 'default2/header'}
+<style>
+    .swiper-pagination-total {
+        color: #ffffff;
+    }
+
+    .swiper-pagination {
+        color: #ffffff;
+        text-align: right;
+    }
+
+    .swiper-container-horizontal > .swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction {
+        left: auto;
+        right: 10px;
+    }
+
+    .weui-form-preview__hd:after {
+        left: 0;
+    }
+</style>
+
+<body ontouchstart>
+<div id="list">
+
+</div>
+<script type="text/html" id="xq_list">
+    <div class="swiper-container" id="lease-swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            {{# for(var i = 0, len = d.images.length; i < len; i++){ }}
+            <div class="swiper-slide home-swiper-slide" data-ratio="4:3">
+                <img src="{{d.images[i]}}"/>
+                <div class="lease-swiper-tit">
+                    <p>{{d.title}}</p>
+                    <p>{{d.city}}-{{d.dist}}</p>
+                </div>
+            </div>
+            {{# } }}
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+    <div style="margin-bottom: 55px">
+        <div class="weui-flex lease-detail-price">
+            <div class="weui-flex__item">
+                <div class="lease-tit"><span>{{ d.price }}<samp>元/月</samp></span></div>
+                <p class="lease-jianjie">{{ d.house_model }} | {{ d.model_area }}m² | {{ d.fitment }}</p>
+            </div>
+        </div>
+        <div class="weui-form-preview lease-detail-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="">房屋信息</label>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <ul class="lease-detail-info">
+                    <li>类型：{{ d.house }}</li>
+                    <li>朝向：{{ d.house_aspect }}</li>
+                    <li>楼层：{{ d.house_floor }}</li>
+                    <li>可入驻：{{ d.checktime }}</li>
+                    <li>是否成交：{{# if(d.status == 1){ }}已成交{{# } }}{{# if(d.status == 0){ }}未成交{{# } }}</li>
+                    <li>发布时间：{{ d.createtime }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="weui-form-preview lease-detail-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="">配置设施</label>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <ul class="lease-detail-allocation  ">
+                    <ul>
+                        {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+                        <li><i class="{{d.list[i].icon}}"></i>{{d.list[i].title}}</li>
+                        {{# } }}
+                    </ul>
+                </ul>
+            </div>
+        </div>
+        <div class="weui-form-preview lease-detail-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="">房源描述</label>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <ul class="lease-detail-allocation">
+                    {{d.content}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="weui-tabbar address_tabbar" onclick="window.location.href='tel:{{d.tmobile}}'">
+        <a href="javascript:;" class="weui-btn address_tabbar_btn" >我要看房</a>
+    </div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var id = "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('houselease/detail')}" + "&id=" + id;
+        _loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+<script>
+    //    轮播图
+    $("#lease-swiper-container").swiper({
+        loop: true,
+        autoplay: 3000,
+        pagination: '.swiper-pagination',
+        paginationType: 'fraction',
+        observer:true,
+        observeParents:true,
+    });
+
+</script>
+</body>
+</html>

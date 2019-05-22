@@ -1,0 +1,95 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'fault'))}" title="故障上报" >故障上报</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'manage'))}" title="接收员管理" >接收员管理</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="charging"/>
+                        <input type="hidden" name="op" value="manage"/>
+                        <div class="row">
+                            <div class="col-sm-12 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('charging_manageAdd', $menu_opss)) || empty($user)}
+                                <a class="btn btn-sm btn-primary" href="{php echo $this->createWebUrl('charging', array('op' => 'manage','p' => 'add'))}"><i class="fa fa-plus"></i> 添加接收员</a>
+                                {/if}
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>手机</th>
+                            <th>粉丝id</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['realname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td>{$item['openid']}</td>
+                            <td>
+                                <label data="{$item['enable']}" class='label label-default {if $item['enable']==1}label-info{/if}'
+                                onclick="verify(this,{$item['id']},'enable')">{if $item['enable']==1}开启{else}关闭{/if}</label>
+                            </td>
+                            <td >
+                                {if ($user && $menu_opss && @in_array('charging_manageEdit', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'manage','p' => 'add','id' => $item['id']))}" class="btn btn-primary btn-sm" title="编辑">编辑</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('charging_manageDel', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'manage','p' => 'del','id' => $item['id']))}" class="btn btn-default" onclick="return confirm('将删除该接收员，确认吗？')" title="删除">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('charging',array('op' => 'manage','p' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'enable') {
+                $(obj).html(d.data == '1' ? '开启' : '关闭');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+</script>
+

@@ -1,0 +1,35 @@
+<div class="left_title">
+    <a href="">猜你喜欢</a>
+</div>
+<div class="weui-grids Info-grids" id="list_goods">
+
+</div>
+<?php
+    $tel = set('p1');
+    $copyright = set('p68');
+    $copright_url = set('p69');
+    ?>
+{if $copyright}
+<div class="weui-footer" style="margin-top: 5px" onclick="window.location.href='{$copright_url}'">
+    <p class="weui-footer__text">{$copyright}</p>
+</div>
+{/if}
+</div>
+<script type="text/html" id="xq_list_goods">
+    {{# for(var i = 0, len = d.goods.length; i < len; i++){ }}
+    <a href="javascript:" class="weui-grid js_grid Info_grid" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'detail'))}&id={{d.goods[i].id}}'">
+        <div class="InfoPicture">
+            <img class="lazyimg" src="{{ d.goods[i].thumb }}">
+        </div>
+        <div class="InfoTitle">{{ d.goods[i].title }}/{{ d.goods[i].sort }}</div>
+        <div class="InfoPrice">￥{{ d.goods[i].marketprice }} <span><del>￥{{ d.goods[i].productprice }}</del></span></div>
+    </a>
+    {{# } }}
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/goods')}&regionid="+regionid;
+        loaddata(url, $("#list_goods"), 'xq_list_goods', true);
+    })
+</script>

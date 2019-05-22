@@ -1,0 +1,430 @@
+{template 'default2/header'}
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_569908_j3377nprx6rpmn29.css">
+<style>
+
+    .weui-cells {
+        width: 100%;
+        margin-top: 5px;
+        font-size: 15px
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        color: #F7624B;
+        background-color: #ffffff;
+        border-bottom: 1px solid #F7624B;
+    }
+
+    .weui-navbar__item {
+        background: #ffffff;
+        border-bottom: 1px solid #CCCCCC;
+        padding: 10px 0;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .repairs-hd {
+        position: relative;
+        top: -33px;
+    }
+
+    .toolbar .picker-button {
+        color: #F7624B;
+    }
+
+    .weui-cells_radio .weui-check:checked + .weui-icon-checked:before {
+        color: #F7624B;
+    }
+
+    .weui-media-box__title {
+        font-size: 15px;
+        color: #333333;
+        margin-bottom: 5px;
+    }
+
+    .weui-panel {
+        margin-top: 0;
+    }
+
+    .weui-cell__ft {
+        font-size: 13px;
+    }
+
+    .pic {
+        float: left;
+        position: relative;
+        margin-right: 9px;
+        margin-bottom: 9px;
+        width: 77px;
+        height: 77px;
+        border: 1px solid #d9d9d9;
+    }
+
+    .weui-uploader__file {
+        float: left;
+        margin-right: 12px;
+        margin-bottom: 12px;
+        width: 79px;
+        height: 79px;
+        background: no-repeat 50%;
+        background-size: cover;
+
+    }
+
+    .webuploader-element-invisible {
+        opacity: 0; /*设置此控件透明度为零，即完全透明*/
+        filter: alpha(opacity=0); /*设置此控件透明度为零，即完全透明针对IE*/
+        font-size: 100px;
+        position: absolute; /*绝对定位，相对于 .input */
+        top: 0;
+        right: 0;
+    }
+</style>
+<style>
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="weui-navbar vue-table">
+        <a class="weui-navbar__item vux-tab-item weui-bar__item--on" href="#tab1">
+            报事报修
+        </a>
+        <a class="weui-navbar__item vux-tab-item" href="#tab2">
+            报事记录
+        </a>
+    </div>
+    <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="weui-cells">
+                <div class="vux-x-input weui-cell">
+                    <div class="weui-cell__hd">
+                        <label for="" class="weui-label">报修类型:</label>
+                    </div>
+                    <div class="weui-cell__bd weui-cell__primary">
+                        <input id="repair-select" readonly="readonly" type="text" class="weui-input"
+                               placeholder="请选择报修类型" data-values="">
+                    </div>
+                    <div class="weui-cell__ft">
+                    </div>
+                </div>
+                <div class="vux-x-input weui-cell">
+                    <div class="weui-cell__hd">
+                        <label for="vux-x-input-ofu9c" class="weui-label">报修房号:</label>
+                    </div>
+                    <div class="weui-cell__bd weui-cell__primary" id="address">
+                        <input autocomplete="off" autocapitalize="off" autocorrect="off"
+                               spellcheck="false" type="text" class="weui-input" placeholder=""
+                               value="{$member['address']}" disabled id="addr">
+                    </div>
+                </div>
+                <div class="weui-cell">
+                    <div class="weui-cell__hd repairs-hd">
+                        <label for="vux-x-input-ofu9c" class="weui-label">报修内容:</label>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <textarea class="weui-textarea" placeholder="长度5-200个字之间.写下详细的报修内容,有助于我们的工作人员快速帮你解决问题" rows="3"
+                                  id="content"></textarea>
+                        <div class="weui-textarea-counter"><span>0</span>/200</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        <div class="weui-uploader">
+                            <div class="weui-uploader__hd">
+                                <p class="weui-uploader__title">图片上传</p>
+                                <div class="weui-uploader__info">0/4</div>
+                            </div>
+                            <div class="weui-uploader__bd">
+                                <ul class="weui-uploader__files" id="uploaderFiles">
+
+                                </ul>
+
+                                <div class="weui-uploader__input-box" id="addPic">
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-tabbar">
+                <div class="vux-flexbox vux-flex-row">
+                    <div class="vux-flexbox-item">
+                        <button class="weui-btn" onclick="window.location.href='tel:{$member['linkway']}'">电话报修</button>
+                    </div>
+                    <div class="vux-flexbox-item">
+                        <button class="weui-btn" id="submit">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2" class="weui-tab__bd-item">
+            <div class="weui-panel ">
+                <div class="weui-panel__bd" id="list">
+
+                </div>
+                <div class="weui-loadmore" id="loading" style="display: none">
+                    <i class="weui-loading"></i>
+                    <span class="weui-loadmore__tips loading"></span>
+                </div>
+                <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                    <span class="weui-loadmore__tips">暂无数据</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="{php echo $this->createMobileUrl('repair',array('op'=>'detail'))}&id={{d.list[i].id}}"
+       class="weui-media-box weui-media-box_appmsg">
+        <div class="weui-media-box__bd">
+            <p class="weui-media-box__title">{{ d.list[i].name }}</p>
+            <p class="weui-media-box__desc">报修日期:{{ d.list[i].createtime }}</p>
+        </div>
+
+        {{# if(d.list[i].status == 2){ }}
+        <div class="weui-cell__ft color_y">
+            未处理
+        </div>
+        {{# } }}
+        {{# if(d.list[i].status == 3){ }}
+        <div class="weui-cell__ft color_y">
+            处理中
+        </div>
+        {{# } }}
+        {{# if(d.list[i].status == 1){ }}
+        <div class="weui-cell__ft color_g">
+            已处理
+        </div>
+        {{# } }}
+
+    </a>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+{if $_W['container']=='wechat'}
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+    wx.ready(function () {
+        $("#addPic").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds;//本地图片id数组，下标从0开始
+//调用上传递归函数
+                    wxUploadImg(localIds);
+                }
+            });
+        });
+
+        function wxUploadImg(localIds) {
+
+            var localId = localIds[idx].toString()
+            wx.uploadImage({//获取图片媒体ID
+                localId: localId,  // 需要上传的图片的本地ID
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {//获取成功
+
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    getImg(serverId);
+// 上传序号，上传一张 累计 +1
+                    idx++
+//存储图片媒体ID，用，号分割
+// serverIds+=res.serverId+',';
+                    if (idx < localIds.length) {//本地图片ID 还没全部获取完图片媒体ID
+//调用上传递归函数
+                        wxUploadImg(localIds);
+                    }
+                    else {
+                        idx = 0;
+                        serverIds = '';
+                        return true;
+                    }
+                },
+                fail: function (res) {//获取多媒体id失败 返回错误代码
+                    alert("上传失败，msg：" + JSON.stringify(res));
+                }
+            });
+        }
+
+        function getImg(serverId) {
+            var url = "{php echo wxapp_url('getImg')}"
+            $.getJSON(url, {serverId: serverId}, function (ret) {
+                var imgUrl = ret.data.imgUrl
+                var content = '<li class="weui-uploader__file" style="background-image:url(' + imgUrl + ')" id="li_' + serverId + '"><input type="hidden" name="pic[]" value="' + serverId + '"><i class="iconfont icon-shanchu" style="color: #F7624B;position: relative;top:-6px;font-size:18px;left:70px;" onclick=\"del(\'' + serverId + '\')"></i></li>'
+                $("#uploaderFiles").append(content);
+            })
+        }
+
+    });
+
+    function del(id) {
+        var obj = $("#li_" + id);
+        console.log(id);
+        obj.hide();
+    }
+</script>
+{else}
+<script src="{MODULE_URL}template/mobile/default2/static/js/webuploader.min.js"></script>
+<script type="text/javascript">
+    // 初始化Web Uploader
+    var url = "{php echo wxapp_url('upload')}";
+    var uploader = WebUploader.create({
+
+        auto: true, // 选完文件后，是否自动上传
+        swf: 'js/Uploader.swf', // swf文件路径
+        server: url, // 文件接收服务端
+        pick: '#addPic', // 选择文件的按钮。可选
+        // 只允许选择图片文件。
+        accept: {
+            title: 'Images',
+            extensions: 'jpg,jpeg,png',
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
+        },
+        fileNumLimit: 8, //限制上传个数
+        fileSingleSizeLimit: 2048000 //限制单个上传图片的大小
+    });
+    // 文件上传过程中创建进度条实时显示。
+    uploader.on('uploadProgress', function (file, percentage) {
+        $.showLoading('正在上传中');
+    });
+    uploader.on('uploadSuccess', function (file, response) {
+        console.log(response.data.imgUrl); //这里可以得到后台返回的数据
+        var imgUrl = response.data.imgUrl
+        var imgid = response.data.imgid
+        var content = '<li class="weui-uploader__file" style="background-image:url(' + imgUrl + ')" id="li_' + imgid + '"><input type="hidden" name="pic[]" value="' + imgUrl + '"><i class="iconfont icon-shanchu" style="color: #F7624B;position: relative;top:-6px;font-size:18px;left:70px;" onclick=\"del(' + imgid + ')"></i></li>'
+        $("#uploaderFiles").append(content);
+
+    });
+    // 完成上传完了，成功或者失败，先删除进度条。
+    uploader.on('uploadComplete', function (file) {
+        $.hideLoading();
+    });
+
+
+
+
+</script>
+{/if}
+<script>
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('repair/list')}&regionid=" + regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+
+    $(function () {
+        $.post("{php echo wxapp_url('category/list')}", {type: 2}, function (data) {
+            var json = new Array();
+            json = data.data;
+            $("#repair-select").select({
+                title: "报修类型",
+                multi: false,
+                items: json,
+                onChange: function (d) {
+                    console.log(this, d);
+                },
+                onClose: function () {
+                    console.log("close");
+                },
+                onOpen: function () {
+                    console.log("open");
+                },
+            });
+
+        }, 'json')
+
+        var lock = false;
+
+        $("#submit").click(function () {
+            var cid = $("#repair-select").attr('data-values');
+            if (cid == '') {
+                $.toast('分类不可为空', "text");
+                return false;
+            }
+            var addr = $("#addr").val();
+            if (addr == '') {
+                $.toast('请先绑定房号', "text");
+                setTimeout(function () {
+                    window.location.href = "{php echo $this->createMobileUrl('room')}";
+                }, 200);
+                return false;
+            }
+            var content = $("#content").val();
+            if (content == '') {
+                $.toast('信息不可为空', "text");
+                return false;
+            }
+            var pics = '';
+            $('input[name="pic[]"]').each(function () {
+                var t1 = $(this).val();
+                pics += t1 + ',';
+            });
+            var addressid = "{$_SESSION['community']['addressid']}";
+            var regionid = "{$_SESSION['community']['regionid']}";
+            if (lock) return false;
+
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('repair/add')}", {
+                cid: cid,
+                content: content,
+                pics: pics,
+                addressid: addressid,
+                regionid: regionid
+            }, function (data) {
+                if (data.err_code == 0) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    setTimeout(function () {
+                        $.toast(data.data.content);
+                        //定时刷新
+                        window.location.href = "{php echo $this->createMobileUrl('home')}";
+                    }, 500);
+
+                }
+                lock = false;
+            }, 'json')
+        })
+    })
+</script>
+</body>
+</html>

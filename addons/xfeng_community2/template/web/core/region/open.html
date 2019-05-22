@@ -1,0 +1,101 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('region')}"></a>&nbsp;&nbsp;&nbsp;开门记录</h5>
+                        <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('region',array('op' => 'open','regionid' => $regionid))}"></a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <form action="./index.php" method="get" class="form-horizontal" role="form">
+                                <input type="hidden" name="c" value="site"/>
+                                <input type="hidden" name="a" value="entry"/>
+                                <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                                <input type="hidden" name="do" value="region"/>
+                                <input type="hidden" name="op" value="open"/>
+                                <input type="hidden" name="regionid" value="{$regionid}"/>
+                            <div class="col-sm-3 m-b-xs">
+                                <input type="text" placeholder="请输入业主姓名" class="form-control" name="realname" value="{$_GPC['realname']}">
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                <input type="text" placeholder="请输入业主手机" class="form-control" name="mobile" value="{$_GPC['mobile']}">
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" placeholder="请输入身份证" class="form-control" name="idcard" value="{$_GPC['idcard']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn  btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                            <form action="" method="post" class="form-horizontal" role="form">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids"
+                                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>小区名称</th>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+
+                                    <th>区域</th>
+                                    <th>开门时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" type="checkbox" name="ids[]" id="ids"
+                                                   value="{$item['id']}">
+                                            <label for="ids"> </label>
+                                        </div>
+
+                                    </td>
+                                    <td>{$item['title']}</td>
+                                    <td>
+                                        {$item['realname']}
+                                    </td>
+                                    <td>{$item['mobile']}</td>
+
+                                    <td>{$item['type']}</td>
+                                    <td>{php echo date('Y-m-d H:i:s',$item['createtime'])}</td>
+
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td >
+                                        <input type="submit" class="btn btn-primary btn-sm" name="export" value="批量导出"/>
+                                        <input name="token" type="hidden" value="{$_W['token']}"/>
+                                    </td>
+                                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                                {/if}
+                                </thead>
+                            </table>
+                            </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+{template 'web/common/footer'}

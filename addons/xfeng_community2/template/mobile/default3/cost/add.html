@@ -1,0 +1,162 @@
+{template 'default2/header'}
+<style>
+    .weui-media-box__title {
+        font-size: 15px;
+        color: #333333;
+        margin-bottom: 5px;
+    }
+
+    .weui-panel {
+        margin-top: 0;
+    }
+
+    .weui-cells__title {
+        font-size: 15px;
+        color: #666666;
+        margin-bottom: .77em;
+    }
+
+    .magic-radio + label, .magic-checkbox + label {
+        font-size: 15px;
+    }
+
+    .weui-cell__ft {
+        font-size: 12px;
+        color: #333333;
+    }
+
+    .weui-cell__ft > .color_y {
+        font-size: 15px;
+    }
+
+    .weui-cell:before {
+        left: 0;
+    }
+
+    .magic-radio + label, .magic-checkbox + label {
+        color: #333333;
+    }
+
+</style>
+
+<body>
+<div id="list"></div>
+<div class="address_form_ft" id="submit">
+    <a href="javascript:;" class="weui-btn address_form_btn" >缴费</a>
+</div>
+<script type="text/html" id="xq_list">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__bd">
+                    <p class="weui-media-box__title">房屋：{$_W['page']['title']}{$_W['page']['address']}</p>
+                    <p class="weui-media-box__desc" id="price">未缴费用合计：{{d.price}}</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="weui-cells__title">选择缴纳的费用</div>
+    <div class="weui-cells weui-cells_checkbox" style="margin-bottom: 50px">
+        <label class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="magic-checkbox" type="checkbox" id="checkAll" data-group='costid'>
+                <label for="checkAll">全选</label>
+            </div>
+            <div class="weui-cell__ft">
+                <p>费用合计</p>
+                <p class="color_y">￥<span class="total">0</span></p>
+                <input type="hidden" id="total" />
+            </div>
+        </label>
+        {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+        <label class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="magic-checkbox" type="checkbox" name="layout[]" value="{{d.list[i].id}}"
+                       data-value="{{d.list[i].total}}" data-group='costid'>
+                <label for="">{{d.list[i].costtime}}</label>
+            </div>
+            <div class="weui-cell__ft">
+                <p>本期欠缴费用</p>
+                <p class="color_y">￥<span class="price">{{d.list[i].total}}</span></p>
+            </div>
+        </label>
+        {{# } }}
+        {{# if(d.credit){ }}
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label" style="color: #333333">抵扣积分：</label>
+            </div>
+            <div class="weui-cell__bd color_y">
+                <input class="weui-input" type="text" id="credit" placeholder="0.00" style="text-align: right;">
+            </div>
+            <div class="weui-cell__ft" style="margin-left: 5px">
+                积分
+            </div>
+        </div>
+        {{# } }}
+    </div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var status = "{$_GPC['status']}";
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var addressid = "{$_SESSION['community']['addressid']}";
+        var url = "{php echo wxapp_url('cost/list')}&status=" + status + "&regionid=" + regionid;
+        loaddata(url, $("#list"), 'xq_list', true, function () {
+            var checked = true;
+            var conts = 0;
+            $("#checkAll").get(0).checked = checked;
+            $("input:checkbox[name='layout[]']").each(function () {
+                $(this).get(0).checked = checked;
+                conts += Number($(this).data('value'));
+            })
+            $("#total").val(conts);
+            $(".total").text(conts);
+            $("#price").text('未缴费用合计：' + conts);
+            $(".magic-checkbox").click(function () {
+                var cost = 0;
+                $('input[name="layout[]"]:checked').each(function () {
+                    cost += Number($(this).data('value'));
+                })
+                $(".total").text(cost);
+                $("#price").text('未缴费用合计：' + cost);
+                $("#total").val(cost);
+                if(cost ==0){
+                    $("#checkAll").get(0).checked = false;
+                }
+            })
+
+        });
+        var lock = false;
+        $("#submit").click(function () {
+            var url ="{php echo wxapp_url('cost/confirm')}";
+            var costid = "";
+            $('input[name="layout[]"]:checked').each(function(){
+                var t1 = $(this).val();
+                costid += t1 + ',';
+            });
+            var credit = $("#credit").val();
+            var total = $("#total").val();
+            if(lock) return false;
+            lock = true;
+            $.showLoading('正在提交');
+            $.getJSON(url,{costid:costid,credit:credit,addressid:addressid,regionid:regionid,total:total},function (data) {
+                if(data.err_code ==0){
+                    window.location.href=data.data.url;
+                }
+                if(data.err_code ==-1){
+                    $.toast(data.err_msg);
+                }
+                lock = false;
+            })
+        })
+    })
+
+</script>
+
+</body>
+</html>

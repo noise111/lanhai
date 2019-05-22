@@ -1,0 +1,288 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>收费项目管理</h5>
+
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="category"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('fee_categoryAdd', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'category','p'=> 'add'))}" >
+                                    <i class="fa fa-plus"></i>
+                                    添加收费项目
+                                </a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>ID</th>
+                            <th class="col-md-1">项目名称</th>
+                            <th class="col-md-1">所属小区</th>
+                            <th class="col-md-1">计费方式</th>
+                            <th class="col-md-1">是否启用</th>
+                            <th class="col-md-2">备注</th>
+                            <th class="col-md-6">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                {$item['regiontitle']}
+                            </td>
+                            <td>
+                                {if $item['way'] == 1}按建筑面积{elseif $item['way'] == 2}按住户{elseif $item['way'] == 3}按车位{elseif $item['way']==4}按使用量{/if}
+                            </td>
+                            <td>
+                                {if $item['status']==1}
+                                <span class="label label-primary">开启</span>
+                                {else}
+                                <span class="label">禁用</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {$item['remark']}
+                            </td>
+
+                            <td>
+                                {if ($user && $menu_opss && @in_array('fee_categoryEdit', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'category','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_categoryDel', $menu_opss)) || empty($user)}
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'category','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">添加收费项目</h4>
+
+            </div>
+            <form class="form-horizontal form" action="{php echo $this->createWebUrl('fee',array('op'=> 'category','p' => 'add'))}" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <div class="modal-body">
+                    <!--<div class="hr-line-dashed"></div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-sm-2 control-label">所属物业</label>-->
+                        <!--<div class="col-sm-6 col-xs-6">-->
+                            <!--<select name="pid" class="form-control">-->
+                                <!--<option value="0">全部物业</option>-->
+                                <!--{loop $regions $region}-->
+                                <!--<option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>-->
+                                <!--{/loop}-->
+                            <!--</select>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">所属小区</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <select name="regionid" class="form-control">
+                                <option value="0">全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" >{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">项目名称</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">计费方式</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <select name="way" class="form-control">
+                                <option value="0">请选择计费方式</option>
+                                <option value="1">按建筑面积</option>
+                                <option value="2">按住户</option>
+                                <option value="3">按车位</option>
+                                <option value="4">按使用量</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">计量单位</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="例如输入计量单位，如月/平方" name="unit"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">价格</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入单价" name="price"
+                                       value="">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">缴费周期</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入缴费月数" name="cycle"
+                                       value="">
+                                <span class="input-group-addon">个月</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳金率</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳金率" name="rate"
+                                       value="">
+                                <span class="input-group-addon">千分之(‰)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳起算天数</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳起算天数" name="start_day"
+                                       value="">
+                                <span class="input-group-addon">天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">享受折扣</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="number" class="form-control" placeholder="输入折扣" name="discount"
+                                   value="">
+                            <span class="help-block">请输入折扣1~10这间的数值，为空则不折扣</span>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <textarea name="remark" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">状态</label>
+                        <div class="col-sm-10">
+
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="status" id="status_1" value="1" {if empty($item['status']) || $item['status'] == 1} checked{/if} />
+                                <label for="status_1">开启</label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="status"  id="status_2" value="2" {if $item['status'] == 2} checked{/if} />
+                                <label for="status_2">禁用</label>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10 col-xs-10">
+                            <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                            </button>
+                            <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['regionid'].value) {
+            alert('请选择小区。');
+            return false;
+        }
+        if (!form['title'].value) {
+            alert('请输入项目名称。');
+            return false;
+        }
+        if (!form['way'].value) {
+            alert('请选择计费方式。');
+            return false;
+        }
+        if (!form['price'].value) {
+            alert('请输入价格。');
+            return false;
+        }
+        if (!form['cycle'].value) {
+            alert('请输入缴费周期。');
+            return false;
+        }
+
+    }
+</script>

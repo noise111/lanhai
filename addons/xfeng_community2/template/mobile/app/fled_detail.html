@@ -1,0 +1,66 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">二手详情</h1>
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">标题：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['title']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">姓名：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['realname']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">电话：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['mobile']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">时间：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {php echo date('Y-m-d H:i',$item['createtime'])}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Date -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">描述:</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['description']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{template 'app/footer'}

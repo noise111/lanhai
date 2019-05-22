@@ -1,0 +1,68 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('property')}"></a>&nbsp;&nbsp;&nbsp;添加物业</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('property',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" role="form" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionid" value="" />
+
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">物业名称</label>
+                            <div class="col-sm-4">
+                                <input type='text' name='title' id='title' class="form-control" value="{$item['title']}" placeHolder="请输入物业名称" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="telphone" class="col-sm-2 control-label">物业电话</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="telphone" value="{$item['telphone']}" id='telphone' class="form-control" placeHolder="请输入物业电话">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物业图片</label>
+                            <div class="col-sm-4">
+                                {php echo tpl_form_field_image('thumb', $item['thumb'])}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物业介绍</label>
+                            <div class="col-sm-8">
+                                {php echo tpl_ueditor('content', $item['content']);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+function check(form) {
+    if (!form['title'].value) {
+        alert('请输入物业名称。');
+        return false;
+    }
+    if (!form['telphone'].value) {
+        alert('请输入正确的电话号码！');
+        return false;
+    }
+}
+</script>
+{template 'web/common/footer'}

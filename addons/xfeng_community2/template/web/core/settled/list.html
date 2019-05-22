@@ -1,0 +1,133 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>入驻申请</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('settled')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="settled"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a href="{php echo $this->createWebUrl('settled',array('op' => 'manage'))}" class="btn btn-primary">
+                                    接收员管理</a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>联系人</th>
+                                <th>联系电话</th>
+                                <th>联系地址</th>
+                                <th>入驻类型</th>
+                                <th>单位名称</th>
+                                <th>营业执照</th>
+                                <th>状态</th>
+                                <th>时间</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $k $item}
+                            {php $k = $k+1}
+                            <tr>
+                                <td>{$item['realname']}</td>
+                                <td>{$item['tel']}</td>
+                                <td>{$item['address']}</td>
+                                <td>{if $item['category'] == 1}物业公司{elseif $item['category'] == 2}独立商铺{elseif $item['category'] == 3}网络超市{/if}</td>
+                                <td>{$item['company']}</td>
+                                <td>{if $item['license']}<a href="{$item['license']}" target="_blank"><img src="{$item['license']}" alt="" height="40px"></a>{/if}</td>
+                                <td>
+                                    <label data="{$item['status']}" class='label label-default {if $item['status']==1}label-info{/if}'>{if $item['status']==1}通过{else}审核{/if}</label>
+                                </td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>{$item['remark']}</td>
+                                <td>
+                                    <span>
+                                        {if ($user && $menu_opss && @in_array('settled_detail', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-success btn-sm" href="{php echo $this->createWebUrl('settled',array('op' => 'detail','id' => $item['id']))}">查看</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('settled_remark', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-primary btn-sm" onclick="remark(this,'{$item['remark']}')" data-id="{$item['id']}" data-toggle="modal" data-target="#myModal">备注</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('settled_verity', $menu_opss)) || empty($user)}
+                                        {if $item['status'] == 0}<a class="btn btn-primary btn-sm" onclick="return confirm('审核该申请并创建账号，确认吗？'); return false;" href="{php echo $this->createWebUrl('settled',array('op' => 'verify','id' => $item['id']))}">审核</a>{/if}
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('settled_del', $menu_opss)) || empty($user)}
+                                        <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('settled',array('op' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                        {/if}
+                                    </span>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='id' id='id' class="form-control"/>
+                    <textarea name="remark" class="form-control" rows="5" id="xqremark"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="add" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function remark(obj, remark) {
+        $("#id").val(obj.getAttribute("data-id"));
+        var remark = remark;
+        $("#xqremark").html(remark);
+        $("#remark").show();
+    }
+</script>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$_GPC['title']}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/demos.css">
+    <script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/laytpl.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_GPC['regionid']}";
+        var url = "{php echo wxapp_url('setting/set')}&regionid=" + regionid;
+        $.post(url, {}, function (data) {
+            var result = data.data;
+            if (result.code) {
+                $("#send").show();
+                $("#xqcode").show();
+            }
+            if (result.idcard) {
+                $("#_idcard").show();
+            }
+            if (result.gender) {
+                $("#_gender").show();
+            }
+            if (result.license) {
+                $("#_license").show();
+            }
+            if (result.house) {
+                $("#house_1, #house_2, #house_3, #house_4").show();
+                var link = "{php echo wxapp_url('house',array('op'=>'list'))}&regionid=" + regionid;
+                $.getJSON(link, function (ret) {
+
+                    var areas = ret.data.areas;
+                    var builds = ret.data.builds;
+                    var units = ret.data.units;
+                    var rooms = ret.data.rooms;
+
+                    // 选择区域
+                    if( areas != undefined){
+                        $("#area").picker({
+                            title: "请选择所在区域",
+                            cols: [{
+                                textAlign: 'center',
+                                values: areas.values
+                            }],
+                            onClose: function (p) {
+                                var activeIndex = p.cols[0]['activeIndex'];
+                                var areaid = areas.values[activeIndex]
+                                console.log('areaid', areaid)
+
+                                // 选择楼栋
+                                $("#build").picker({
+                                    title: "请选择楼栋",
+                                    cols: [{
+                                        textAlign: 'center',
+                                        values: ret.data.builds[areaid]['values']
+                                    }],
+                                    onClose: function (p) {
+                                        var activeIndex = p.cols[0]['activeIndex'];
+                                        var buildid = ret.data.builds[areaid]['values'][activeIndex]
+                                        console.log('buildid', buildid)
+
+                                        //选择单元
+                                        $("#unit").picker({
+                                            title: "请选择单元",
+                                            cols: [{
+                                                textAlign: 'center',
+                                                values: ret.data.units[buildid]['values']
+                                            }],
+                                            onClose: function (p) {
+                                                var activeIndex = p.cols[0]['activeIndex'];
+                                                var unitid = ret.data.units[buildid]['values'][activeIndex]
+                                                console.log('unitid', unitid)
+
+                                                //选择房号
+                                                $("#room").picker({
+                                                    title: "请选择房号",
+                                                    cols: [
+                                                        {
+                                                            textAlign: 'center',
+                                                            values: ret.data.rooms[unitid]['values'],
+                                                        }
+                                                    ],
+                                                    onClose: function (p) {
+                                                        var activeIndex = p.cols[0]['activeIndex'];
+                                                        var roomid = ret.data.rooms[unitid]['values'][activeIndex]
+                                                        console.log('roomid', roomid)
+                                                    }
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    else {
+                        console.log(ret)
+
+
+                        var _builds = []
+                        for (var _a in ret.data.builds){
+                            _builds.push(ret.data.builds[_a]['buildtitle'])
+                        }
+
+                        // 选择楼栋
+                        $("#build").picker({
+                            title: "请选择楼栋",
+                            cols: [{
+                                textAlign: 'center',
+                                values: _builds
+                            }],
+                            onClose: function (p) {
+                                var activeIndex = p.cols[0]['activeIndex'];
+                                var _buildVal = ret.data.builds[activeIndex]
+                                var buildid = _buildVal.id
+                                console.log('buildid', _buildVal)
+
+
+                                //选择单元
+                                $("#unit").picker({
+                                    title: "请选择单元",
+                                    cols: [{
+                                        textAlign: 'center',
+                                        values: ret.data.units[buildid]
+                                    }],
+                                    onClose: function (p) {
+                                        var activeIndex = p.cols[0]['activeIndex'];
+                                        var unitid = ret.data.units[buildid][activeIndex]
+                                        console.log('unitid', unitid)
+
+                                        var _rooms = []
+                                        for (var _b in ret.data.rooms){
+                                            if(_buildVal.buildtitle==ret.data.rooms[_b]['build'] && unitid == ret.data.rooms[_b]['unit']){
+                                                _rooms.push(ret.data.rooms[_b]['room'])
+                                            }
+                                        }
+                                        console.log(buildid, unitid, _rooms)
+
+                                        //选择房号
+                                        $("#room").picker({
+                                            title: "请选择房号",
+                                            cols: [{
+                                                textAlign: 'center',
+                                                values: _rooms
+                                            }],
+                                            onClose: function (p) {
+                                                var activeIndex = p.cols[0]['activeIndex'];
+                                                var roomid = _rooms[activeIndex]
+                                                console.log('roomid', roomid)
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+
+                })
+            }
+            if (result.area) {
+                $("#_area").show();
+                $("#zd_1").text(result.area_zd);
+            }
+            if (result.build) {
+                $("#_build").show();
+                $("#zd_2").text(result.build_zd);
+            }
+            if (result.unit) {
+                $("#_unit").show();
+                $("#zd_3").text(result.unit_zd);
+            }
+            if (result.room) {
+                $("#_room").show();
+                $("#zd_4").text(result.room_zd);
+            }
+            if (result.xy) {
+                $("#xy").show();
+                $("#xy_content").html(result.xy_content);
+            }
+        }, 'json')
+
+    })
+
+
+</script>
+<style>
+    body {
+        background: #F1F1F1;
+    }
+
+    .weui-flex {
+        position: relative;
+        top: 20px;
+    }
+
+    .weui-flex__item {
+        position: relative;
+        text-align: center;
+    }
+
+    .weui-cells__title {
+        font-size: 0.9em;
+    }
+
+    .weui-btn_mini {
+        display: block;
+        padding: 0 14px;
+        font-size: 0.8em;
+    }
+
+    .weui-cell__hd {
+        margin-right: 1em;
+    }
+
+    .weui-cells {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+
+    .weui-cells_checkbox .weui-icon-checked:before {
+        font-size: 18px;
+    }
+
+    .weui-cells_checkbox .weui-check:checked + .weui-icon-checked:before {
+        color: #ff9800;
+    }
+</style>
+
+<body>
+<div class="weui-flex">
+    <div class="icon_step_line_left"></div>
+    <div class="icon_step_line_right"></div>
+    <div class="weui-flex__item icon_step_active">
+        <span class="icon_step">1</span>
+        <p class="icon_step_text">绑定手机</p>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">2</span>
+        <p class="icon_step_text">房屋信息</p>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">3</span>
+        <p class="icon_step_text">完善信息</p>
+    </div>
+</div>
+<div class="step-content">
+    <div class="step firstStep">
+        <div class="weui-cells__title">手机验证</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">手机号</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel" placeholder="" id="mobile">
+                </div>
+
+                <div class="weui-cell__ft" style="display: none" id='send'>
+                    <a href="javascript:;" class="weui-btn weui-btn_mini step-btn" id="registerCode">获取验证码</a>
+                </div>
+
+            </div>
+
+            <div class="weui-cell" style="display: none" id="xqcode">
+                <div class="weui-cell__hd">验证码</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="" id="code">
+                    <input type="hidden" id="_code">
+                </div>
+            </div>
+
+            <div class="weui-cell">
+                <div class="weui-cell__hd">姓名</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" id="realname">
+                </div>
+            </div>
+            <div class="weui-cell" style="display: none" id="_idcard">
+                <div class="weui-cell__hd">身份证</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" id="idcard">
+                </div>
+            </div>
+            <div class="weui-cell" style="display: none" id="_gender">
+                <div class="weui-cell__hd">性别</div>
+                <div class="weui-cell__bd">
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="1" checked>男
+                    </label>
+                    &nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" value="2">女
+                    </label>
+                </div>
+            </div>
+            <div class="weui-cell" style="display: none" id="_license">
+                <div class="weui-cell__hd">车牌号</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" id="license">
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="shows()">下一步</a>
+    </div>
+
+    <div class="step secondStep" style="display: none">
+
+        <div class="weui-cells__title">选择你的房屋信息</div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_access" style="display: none" id="_area">
+                <div class="weui-cell__hd"><label for="area" class="weui-label" id="zd_1">区域</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="area" type="text" placeholder="例如（A区）">
+                </div>
+                <div class="weui-cell__ft" id="house_1" style="display: none">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="display: none" id="_build">
+                <div class="weui-cell__hd"><label for="build" class="weui-label" id="zd_2">楼栋</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="build" type="text" placeholder="例如（12栋）">
+                </div>
+                <div class="weui-cell__ft" id="house_2" style="display: none">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="display: none" id="_unit">
+                <div class="weui-cell__hd"><label for="unit" class="weui-label" id="zd_3">单元</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="unit" type="text" placeholder="例如（3单元）">
+                </div>
+                <div class="weui-cell__ft" id="house_3" style="display: none">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access" style="display: none" id="_room">
+                <div class="weui-cell__hd"><label for="room" class="weui-label" id="zd_4">房号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="room" type="text" placeholder="例如（102号）">
+                </div>
+                <div class="weui-cell__ft" id="house_4" style="display: none">
+                </div>
+            </div>
+        </div>
+
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="showt()">下一步</a>
+    </div>
+    <div class="step thereStep" style="display: none;">
+        <div class="weui-cells__title">您在家庭中的角色</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_1" class="newslist" value="1" checked>
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_1"><p>房产证在我名下</p></label>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_2" class="newslist" value="2">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_2"><p>我是业主家属</p></label>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_3" class="newslist" value="3">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_3"><p>我是租客</p></label>
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells_checkbox" style="margin-bottom: 10px;display: none" id="xy">
+            <label class="weui-cell weui-check__label" for="s11">
+                <div class="weui-cell__hd" style="padding-right: 0;margin-right: 0.5em">
+                    <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked">
+                    <i class="weui-icon-checked"></i>
+                </div>
+            </label>
+            <div class="weui-cell__bd"
+                 style="font-size: 0.5em;position: relative;top: -28px;color: #868686;left: 50px;">
+                <p>我同意<a href="#" class="color_y open-popup" data-target="#full">智慧社区应用使用条款与隐私规则</a></p>
+            </div>
+        </div>
+        <div id="full" class='weui-popup__container'>
+            <div class="weui-popup__overlay"></div>
+            <div class="weui-popup__modal" style="background: #ffffff">
+                <div style="padding: 10px 15px;font-size: 0.9em" id="xy_content">
+
+                </div>
+                <a href="javascript:;" class="weui-btn register-guide-btn close-popup">关闭协议</a>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="closeme()">完成</a>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script>
+    function shows() {
+        var realname = $("#realname").val();
+        var mobile = $("#mobile").val();
+        if (mobile == '') {
+            $.toast('电话不可为空', "text");
+            return false;
+        }
+        if (!(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/.test(mobile))) {
+            $.toast('不是完整的11位手机号或者正确的手机号前七位', "text");
+            return false;
+        }
+        if ($("#xqcode").css("display") != 'none') {
+            var code = $("#code").val();
+            var _code = $("#_code").val();
+            if (code == '' || _code == '') {
+                $.toast('验证码不可为空', "text");
+                return false;
+            }
+            if (_code) {
+                if (code != _code) {
+                    $.toast('验证码不正确', "text");
+                    return false;
+                }
+            }
+        }
+        if (realname == '') {
+            $.toast('姓名不可为空', "text");
+            return false;
+        }
+        $('.firstStep').hide();
+        $('.secondStep').show();
+        $('.weui-flex__item').eq(0).removeClass('icon_step_active');
+        $('.weui-flex__item').eq(1).addClass('icon_step_active');
+    }
+
+    function showt() {
+        if ($("#_area").css("display") != 'none') {
+            var area = $("#area").val();
+            if(area ==''){
+                $.toast('区域不可为空','text');return false;
+            }
+        }
+        if ($("#_build").css("display") != 'none') {
+            var build = $("#build").val();
+            if(build ==''){
+                $.toast('楼宇不可为空','text');return false;
+            }
+        }
+        if ($("#_unit").css("display") != 'none') {
+            var unit = $("#unit").val();
+            if(unit ==''){
+                $.toast('单元不可为空','text');return false;
+            }
+        }
+        if ($("#_room").css("display") != 'none') {
+            var room = $("#room").val();
+            if(room ==''){
+                $.toast('房号不可为空','text');return false;
+            }
+        }
+        $('.thereStep').show();
+        $('.secondStep').hide();
+        $('.weui-flex__item').eq(1).removeClass('icon_step_active');
+        $('.weui-flex__item').eq(2).addClass('icon_step_active');
+    }
+    var lock = false;
+
+    function closeme() {
+        //$(".step-content").hide();
+
+        var mobile = $("#mobile").val();
+        var realname = $("#realname").val();
+        var regionid = "{$regionid}";
+        var area = $("#area").val();
+        var build = $("#build").val();
+        var unit = $("#unit").val();
+        var room = $("#room").val();
+        var license = $("#license").val();
+        var idcard = $("#idcard").val();
+        var gender = $("#gender").val();
+        var status = $('input[name="status"]:checked').val();
+        if (lock) return false;
+
+        lock = true;
+        $.showLoading('正在提交');
+        $.post("{php echo wxapp_url('register/add')}", {
+            mobile: mobile,
+            realname: realname,
+            regionid: regionid,
+            area: area,
+            build: build,
+            unit: unit,
+            room: room,
+            status: status
+        }, function (data) {
+            $.hideLoading();
+            if (data.err_code == 0) {
+                setTimeout(function () {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.data.content, "text");
+                    window.location.href = "{php echo $this->createMobileUrl('home')}";
+                }, 1500);
+            }
+            if(data.err_code == '10001'){
+                $.toast('微信异常，请重新关注', "text");
+            }
+            lock = false;
+        }, 'json')
+    }
+
+    //短信验证码发送
+    var $getCode = $('#registerCode');
+    //定义参数
+    $getCode.sendCode({
+        disClass: 'weui-btn_disabled',
+        secs: 60,
+        run: false,
+        runStr: '{%s}秒后重新获取',
+        resetStr: '重新获取验证码'
+    });
+    $getCode.on('click', function () {
+        /* ajax 成功发送验证码后调用【start】 */
+//         YDUI.dialog.loading.open('发送中');
+        var regionid = "{$regionid}";
+        var mobile = $('#mobile').val();
+        if (!mobile) {
+            $.toast('请输入您的手机号码', "text");
+            return false;
+        }
+        if (mobile.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1) {
+            $.toast('请输入正确的手机号码', "text");
+            return false;
+        }
+        $.showLoading('发送中');
+        $.post("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}&mobile=" + mobile + "&regionid=" + regionid, function (data) {
+            $.hideLoading();
+            setTimeout(function () {
+//             YDUI.dialog.loading.close();
+
+                $getCode.sendCode('start');
+//             YDUI.dialog.toast('已发送', 'success', 1500);
+                setTimeout(function () {
+                    $("#_code").val(data);
+                    $.toast("已发送", '');
+                }, 500);
+//
+            }, 1500);
+        }, 'json');
+
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+{template 'app2/header'}
+
+<style>
+    .weui-cells {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .weui-cells:before {
+        border-top: none;
+    }
+
+    .weui-cell:before {
+        left: 0;
+    }
+
+    .weui-textarea {
+        min-height: 100px;
+    }
+
+    .toolbar .picker-button {
+        color: #FF5500;
+    }
+
+    .weui-label {
+        width: 60px;
+    }
+
+    .opt {
+        float: left;
+    }
+
+    .opt:last-child {
+        margin-left: 10px;
+    }
+
+    .magic-radio + label, .magic-checkbox + label {
+        padding-left: 22px;
+    }
+
+    .magic-radio:checked + label:before {
+        border: 1px solid #FF9900;
+    }
+
+    .magic-radio + label:after {
+        top: 6px;
+        left: 6px;
+        background: #FF9900;
+    }
+
+    .webuploader-element-invisible {
+        opacity: 0; /*设置此控件透明度为零，即完全透明*/
+        filter: alpha(opacity=0); /*设置此控件透明度为零，即完全透明针对IE*/
+        font-size: 100px;
+        position: absolute; /*绝对定位，相对于 .input */
+        top: 0;
+        right: 0;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加楼宇</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择小区</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="regionvalue">
+                        <option value="">选择小区</option>
+                        <option v-for="(region, index) in regions" :value="region.id">{{region.title}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择区域</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="areavalue">
+                        <option value="">选择区域</option>
+                        <option v-for="(area, index) in areas" :value="area.id">{{area.title}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">楼宇名称</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入楼宇名称" v-model="item.buildtitle" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">单元数量</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入单元数量" v-model="item.unit_num" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">楼宇层数</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入楼宇层数" v-model="item.floor_num" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">楼宇类型</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入楼宇类型" v-model="item.build_type">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋数量</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入房屋数量" v-model="item.room_num">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn" @click="postdel()" v-if="id">删除</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            regions: [],
+            dpid: '',
+            item:{
+                buildtitle:'',
+                unit_num:'',
+                floor_num:''
+            },
+            id:id,
+            areas:[],
+            groupList:[],
+            regionvalue: '',
+            areavalue: '',
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appregion/list')}";
+            $.getJSON(url, function (ret) {
+                self.regions = ret.data
+                console.log(self.regions)
+            })
+            var url = "{php echo wxapp_url('region/areas')}";
+            $.getJSON(url, function (ret) {
+                self.areas = ret.data
+                self.groupList.areas = ret.data
+            })
+            if(id){
+                var url = "{php echo wxapp_url('appbuild/detail')}";
+                var data = {
+                    id:id
+                }
+                $.getJSON(url,data, function (ret) {
+                    self.item = ret.data
+                    self.regionvalue = self.item.regionid
+                    self.areavalue = self.item.areaid
+                })
+            }
+
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('appbuild/add')}";
+                self.item.id=self.id
+                self.item.regionid=self.regionvalue
+                self.item.areaid=self.areavalue
+                if(self.item.regionid == '' || self.item.buildtitle == '' || self.item.unit_num == '' || self.item.floor_num == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('添加成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'build'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == 2){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg,'cancel');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                },'json')
+            },
+            postdel: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('build/del')}";
+                self.item.id=self.id
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    setTimeout(function () {
+                        $.toast('删除成功');
+                        //定时刷新
+                        window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'build'))}";
+                    }, 500);
+                },'json')
+            }
+        },
+        watch: {
+            // 监听 areasValue 变化
+            regionvalue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                // areasValue 变化时根据其值，改变 builds 数组
+                that.areas = that.groupList.areas[val]
+                that.areavalue = ''
+            }
+
+        }
+    })
+
+</script>
+</body>
+</html>

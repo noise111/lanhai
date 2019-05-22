@@ -1,0 +1,204 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('guard', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;设备信息
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('guard',array('op' => 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal form" method="post" role="form" enctype="multipart/form-data"
+                          onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-5">
+                                <select name='regionid' class="form-control" id="regionid">
+                                    {loop $regions $region}
+                                    <option value='{$region['id']}' {if $region['id'] == $item['regionid']}selected {/if} >
+                                    {$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">区域</label>
+                            <div class="col-sm-5">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" value="2" id="s1_2" {if $item['type'] == 2 || empty($item['type'])}checked{/if}>
+                                    <label for="s1_2">大门</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" value="1" id="s1_1" {if $item['type'] == 1 }checked{/if}>
+                                    <label for="s1_1">单元门</a></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">设备类型</label>
+                            <div class="col-sm-10">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="1" id="c1_1" {if $item['category'] == 1 || empty($item['category'])}checked{/if}>
+                                    <label for="c1_1">微信开门(LN-MJ101)(1代/2代)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="6" id="c1_6" {if $item['category'] == 6 || empty($item['category'])}checked{/if}>
+                                    <label for="c1_1">微信开门(LN-MJ101)(3代)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="5" id="c1_5" {if $item['category'] == 5 }checked{/if}>
+                                    <label for="c1_5">触摸门禁(LN-MJ100)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="4" id="c1_4" {if $item['category'] == 4 }checked{/if}>
+                                    <label for="c1_4">刷卡门禁(LN-MJ102)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="7" id="c1_7" {if $item['category'] == 7 }checked{/if}>
+                                    <label for="c1_4">无线刷卡门禁(LN-MJ103)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="8" id="c1_8" {if $item['category'] == 8 }checked{/if}>
+                                    <label for="c1_4">楼宇对讲(LN-LY101)(小款)/楼宇对讲(LN-LY100)(大款)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="2" id="c1_2" {if $item['category'] == 2 }checked{/if}>
+                                    <label for="c1_2">楼宇对讲(新中安)</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="category" value="3" id="c1_3" {if $item['category'] == 3 }checked{/if}>
+                                    <label for="c1_3">NB-IOT门禁(电信版)</a></label>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">区域名称</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='title' id='title1' class="form-control"
+                                       value="{$item['title']}" placeHolder="请输入区域名称"/>
+                                <span class="help-block">例如大门输入名称南大门，楼宇比如15栋就输入15，请勿输入15栋</span>
+                            </div>
+                        </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="unit" class="col-sm-2 control-label">单元号</label>
+                                <div class="col-sm-5">
+                                    <input type='text' name='unit' id='unit' class="form-control" value="{$item['unit']}"
+                                           placeHolder="请输入单号，如是大门无需填写"/>
+                                    <span class="help-block">例如1单元请输入1，请勿输入1单元</span>
+                                </div>
+                            </div>
+
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="linkway" class="col-sm-2 control-label">坐标</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_coordinate('baidumap', $item)}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="device_code" class="col-sm-2 control-label">设备编号</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='device_code' id='device_code' class="form-control"
+                                       value="{$item['device_code']}" placeHolder="请输入面板上的设备编号"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="device_gprs" class="col-sm-2 control-label">gprs卡号</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='device_gprs' id='device_gprs' class="form-control"
+                                       value="{$item['device_gprs']}" placeHolder="请输入gprs卡号"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">图片</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image('thumb', $item['thumb'])}
+                                <span class="help-block">开门图标。比例:60px * 60px</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="device_code" class="col-sm-2 control-label">外部链接</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_link('openurl',$item['openurl'])}
+                                <span class="help-block" style="color: red">微信开门后跳转的外部链接</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['title'].value) {
+            alert('请输入区域名称。');
+            return false;
+        }
+        if (!form['device_code'].value) {
+            alert('请输入设备编号！');
+            return false;
+        }
+        return true;
+    }
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+            }
+        },'json')
+    })
+    $(function () {
+        $("input[name='type']").click(function () {
+            var type = $('input[name="type"]:checked').val();
+            if (type == 2) {
+                $("#s2").show();
+                $("#s1").hide();
+            }
+            if (type == 1) {
+                $("#s1").show();
+                $("#s2").hide();
+            }
+        })
+    })
+</script>
+

@@ -1,0 +1,25 @@
+<div class="left_title">
+    <a href="">推荐商品</a>
+</div>
+<div class="weui-grids Info-grids" id="list_goods">
+
+</div>
+
+<script type="text/html" id="xq_list_goods">
+    {{# for(var i = 0, len = d.goods.length; i < len; i++){ }}
+    <a href="javascript:" class="weui-grid js_grid Info_grid" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'detail'))}&id={{d.goods[i].id}}'">
+        <div class="InfoPicture">
+            <img class="lazyimg" src="{{ d.goods[i].thumb }}">
+        </div>
+        <div class="InfoTitle">{{ d.goods[i].title }}</div>
+        <div class="InfoPrice">￥{{ d.goods[i].marketprice }} <span><del>￥{{ d.goods[i].productprice }}</del></span></div>
+    </a>
+    {{# } }}
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/goods')}&regionid="+regionid;
+        loaddata(url, $("#list_goods"), 'xq_list_goods', true);
+    })
+</script>

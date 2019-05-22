@@ -1,0 +1,410 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基础设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('set',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                                <thead>
+                                <tr>
+                                    <th class="col-sm-2">小区设置</th>
+                                    <th class="col-sm-3">说明</td>
+                                    <th class="col-sm-4"></th>
+                                    <th class="col-sm-3">是否启用</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="title">平台电话</td>
+                                    <td>用于移动端管理系统和业主端底部电话显示</td>
+                                    <td>
+                                        <input type="text" name="set[p1]" id='' class="form-control" value="{$set['p1']['value']}"/>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">商家提成</td>
+                                    <td>
+                                        开启商家提成后，粉丝购买商家商品，平台将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="js-switch_1" id="p2" {if $set['p2']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市提成</td>
+                                    <td>
+                                        开启超市提成后，粉丝购买超市商品，平台将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p3" class="js-switch_2" {if $set['p3']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title">小区提成</td>
+                                    <td>
+                                        开启小区提成后，粉丝购买超市商品，小区将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p54" class="js-switch_3" {if $set['p54']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区集市全部小区显示</td>
+                                    <td>
+                                        开启后，二手信息会在所有小区显示
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p4" class="js-switch_4" {if $set['p4']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">租赁全部小区显示</td>
+                                    <td>
+                                        开启后，租赁信息会在所有小区显示
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p5" class="js-switch_5" {if $set['p5']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">拼车全部小区显示</td>
+                                    <td>
+                                        开启后，拼车信息会在所有小区显示
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p6" class="js-switch_6" {if $set['p6']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">切换小区是否审核</td>
+                                    <td>
+                                        开启后，粉丝切换小区需要审核后，才能使用
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p7" class="js-switch_7" {if $set['p7']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">业主余额充值</td>
+                                    <td>
+                                        开启后，业主端有充值入口
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p44" class="js-switch_8" {if $set['p44']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title">业主卡开启</td>
+                                    <td>
+                                        开启后，需要先到平台设置对应的会员卡，业主卡使用的是会员卡
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p50" class="js-switch_11" {if $set['p50']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区定位</td>
+                                    <td>
+                                        开启后，小区通过通过定位显示，默认不开定位
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="tel" name="set[p9]" value="{$set['p9']['value']}" class="form-control"
+                                                   placeholder="输入定位范围"/>
+                                            <span class="input-group-addon">千米（KM）</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p8" class="js-switch_12" {if $set['p8']['value']}checked{/if} />
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">商家定位</td>
+                                    <td>
+                                        开启后，商家通过通过定位显示，默认不开定位
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="tel" name="set[p11]" value="{$set['p11']['value']}" class="form-control"
+                                                   placeholder="输入定位范围"/>
+                                            <span class="input-group-addon">千米（KM）</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p10" class="js-switch_13" {if $set['p10']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">开门定位</td>
+                                    <td>
+                                        开启后，业主通过通过定位显示附近能开的门，默认不开定位
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="tel" name="set[p87]" value="{$set['p87']['value']}" class="form-control"
+                                                   placeholder="输入定位范围"/>
+                                            <span class="input-group-addon">千米（KM）</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p86" class="js-switch_14" {if $set['p86']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市积分比例</td>
+                                    <td>
+                                        开启后，业主购买商品后，会返还对应的积分
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p13]" class="form-control" value="{$set['p13']['value']}"/>
+                                            <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p12" class="js-switch_15" {if $set['p12']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">商家积分比例</td>
+                                    <td>
+                                        开启后，业主购买商品后，会返还对应的积分
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p15]" class="form-control" value="{$set['p15']['value']}"/>
+                                            <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p14" class="js-switch_16" {if $set['p14']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">积分抵扣物业费比例</td>
+                                    <td>
+                                        开启后，业主可通过积分抵扣部分物业费
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p17]" class="form-control" value="{$set['p17']['value']}"/>
+                                            <span class="input-group-addon">元/积分</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p16" class="js-switch_17" {if $set['p16']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市配送费</td>
+                                    <td>
+                                        开启后，购买超市商品设有配送费，可设置满多少元减配送费
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 50%;float: left">
+                                            <input type="text" name="set[p79]" class="form-control" value="{$set['p79']['value']}" placeholder="包邮金额"/>
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                        <div class="input-group" style="width: 50%;float: left">
+                                            <input type="text" name="set[p78]" class="form-control" value="{$set['p78']['value']}" placeholder="配送费"/>
+                                            <span class="input-group-addon">配送费</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p77" class="js-switch_18" {if $set['p77']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市送货时间</td>
+                                    <td>请用|分割填写的时间</td>
+                                    <td>
+                                        <input type="text" name="set[p85]" class="form-control" value="{$set['p85']['value']}" placeholder="例如：9:00~10:00|11:00~12:00|14:00~15:00"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p88" class="js-switch_19" {if $set['p88']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区超市设置</td>
+                                    <td>默认一个小区一个超市，如一个小区多个超市，请开启</td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p109" class="js-switch_24" {if $set['p109']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市配送方式</td>
+                                    <td>请用|分割填写的配送方式,如需自取，请设置第一个名称为自取</td>
+                                    <td>
+                                        <input type="text" name="set[p92]" class="form-control" value="{$set['p92']['value']}" placeholder="例如：自取|送货上门"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p93" class="js-switch_20" {if $set['p93']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">商家充值赠送积分</td>
+                                    <td>
+                                        商家在线充值购买积分，目前针对于线下扫码支付，赠送消费者积分
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                        <input type="text" name="set[p100]" class="form-control" value="{$set['p100']['value']}" placeholder=""/>
+                                        <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">用户消费积分抵扣比例</td>
+                                    <td>
+                                        用户在商家消费后，用积分抵扣金额比例，用户消费后，默认抵扣费用先结算到商家的余额，商家在进行提现。(该抵扣的费用，由平台结算给商家。)
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p95]" class="form-control" value="{$set['p95']['value']}" placeholder=""/>
+                                            <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">后台定时提醒报修</td>
+                                    <td>开启后，设置后台定时提醒时间页面会定时提醒未处理报修；提示音文件目录：小区模块下/template/web/static/tishi.mp3</td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="number" name="set[p98]" class="form-control" value="{$set['p98']['value']}" placeholder=""/>
+                                            <span class="input-group-addon">分钟</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p99" class="js-switch_21" {if $set['p99']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">物业积分比例</td>
+                                    <td>
+                                        开启后，业主缴纳物业费后，会返还对应的积分
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p102]" class="form-control" value="{$set['p102']['value']}"/>
+                                            <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p101" class="js-switch_22" {if $set['p101']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+$(function () {
+    $(':checkbox').on('change', function (e, state) {
+        $this = $(this);
+        var xqkey = $this.attr('id');
+        var status = this.checked ? 1 : 0;
+        $this.val(status);
+        var regionid = '{$regionid}';
+        $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+        })
+    });
+    $('.btn').hover(function () {
+        $(this).tooltip('show');
+    }, function () {
+        $(this).tooltip('hide');
+    });
+});
+
+</script>
+

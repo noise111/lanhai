@@ -1,0 +1,103 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('houselease',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">租赁设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">房屋托管</td>
+                                <td>
+                                    开启房屋托管后，移动端粉丝发布的手机号码不在显示，会显示托管电话
+                                </td>
+                                <td>
+                                    <input type="text" name="set[p23]" value="{$set['p23']['value']}" class="form-control" placeholder="输入托管电话"/>
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p21" class="js-switch_5" {if $set['p21']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">租赁审核</td>
+                                <td>开启租赁审核后，粉丝发布的房屋租赁，需要后台审核后，才可显示</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p28" class="js-switch_9" {if $set['p28']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">租赁全部小区显示</td>
+                                <td>
+                                    开启后，租赁信息会在所有小区显示
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                    <input type="checkbox" name="" id="p5" class="js-switch_15" {if $set['p5']['value']}checked{/if}/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

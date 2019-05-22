@@ -1,0 +1,83 @@
+{template 'web/common/header-base'}
+<style>
+    .topNav{border-bottom-color: rgb(0, 0, 0);border-bottom-width: 0.1em;border-bottom-style: inset;}
+    .panel>.list-group .list-group-item {border-width: 0px 0;}
+    .panel-title {color: #8d8d8d;}
+    .navbar-nav>li>a {line-height: 30px;}
+    body {background: #e7e8eb;overflow-x:hidden;}
+    .list-group .list-group-item.active{background-color:#44b549;border-color:#44b549;}
+    .home .footer a:hover{color:#44b549;}
+    .nav.nav-tabs{border-color:#44b549;}
+    .nav-tabs>li>a:hover{border-color:#eee #eee #44b549 #eee;}
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus{background-color:#44b549; border-color:#44b549;}
+    .modal-dialog .avatar-browser{color:#44b549;}
+    .modal-dialog .avatar-browser .thumbnail:hover{border-color:#44b549;}
+    .modal-dialog .avatar-browser{color:#44b549;}
+    .modal-dialog .avatar-browser .thumbnail:hover{border-color:#44b549;}
+    .notice-show h5{color:#44b549; border-left:3px solid #44b549; padding-left:15px;}
+    .nav-tabs>li>a {color: black;border-radius: 0 0 0 0;}
+</style>
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>我要提现</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cash',array('op' => 'cash'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">用户账号</label>
+                        <div class="col-xs-3">
+                            <input type="text" name="" id='username' value="{$_W['username']}" class="form-control" readonly="readonly" />
+                        </div>
+                    </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="category" class="col-sm-2 control-label">提现类型</label>
+                <div class="col-xs-3">
+                    <select name="category" id="category" class="form-control">
+                        <option value="">请选择提现类型</option>
+                        <option value="1">余额提现</option>
+                        <option value="2">佣金提现</option>
+                    </select>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="pay" class="col-sm-2 control-label">提现账号</label>
+                        <div class="col-xs-3">
+                            <input type='text' name='pay' id='pay' class="form-control" value="" />
+                            <span class="help-block">支付宝或者微信</span>
+                        </div>
+                    </div>
+            <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">账户余额</label>
+                        <div class="col-xs-3">
+                            {$users['balance']}元
+                        </div>
+                    </div>
+            <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="cash" class="col-sm-2 control-label">提现金额</label>
+                        <div class="col-xs-3">
+                            <input type='text' name='cash' id='cash' class="form-control" value="" />
+                            <span class="help-block">(最多只能提现{$users['balance']}元)</span>
+                        </div>
+                    </div>
+            <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label"></label>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                        </div>
+                    </div>
+
+        </form>
+                </div></div></div></div></div>
+
+{template 'web/common/footer'}

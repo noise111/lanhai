@@ -1,0 +1,231 @@
+{template '_header'}
+{template 'commission/common'}
+<script>document.title = "业绩中心"; </script>
+<style>
+.fui-tab.fui-tab-warning a.active {
+    color: #a81515;
+    border-color: #a81515;
+    z-index: 100;
+}
+
+.container_header {
+  width: 100%;
+  height: auto;
+  background-color: white;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  min-height: 6.35rem;
+  position: fixed;
+  top: 0;
+  z-index: 101;
+}
+
+.container_header_flex {
+  display: -webkit-flex;
+  display: -webkit-inline-flex;
+  display: flex;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.container_header_flex .iitem {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.container_header_flex .iitem2 {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.container_header_flex .iitem:after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 10%;
+  width: 0;
+  bottom: 10%;
+  border-right: 1px solid #d0d0d0;
+  transform-origin: 0 100%;
+  transform: scaleX(0.5);
+}
+
+.container_header_flex .iitem:last-child:after {
+  display: none;
+}
+
+.container_header_flex .iitem .text01 {
+  color: #333;
+  font-size: 0.7rem;
+  line-height: 100%;
+  margin-left: 0.6rem;
+  margin-right: 0.5rem;
+}
+
+.container_header_flex .iitem2 {
+  margin: 0.25rem 0;
+}
+
+.container_header_flex .iitem .text02 {
+  color: #a81515;
+  font-size: 0.7rem;
+  line-height: 100%;
+}
+
+.fui-tab-o, .fui-tab{
+    margin-bottom: 0;
+    width: 100%;
+}
+
+.container_header_flex:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  border-bottom: 1px solid #d0d0d0;
+  transform-origin: 0 100%;
+  transform: scaleY(0.5);
+}
+
+.tongji{
+    font-size: 0.7rem;
+    margin: 0.7rem 0.6rem 0 0.6rem;
+    display: flex;
+    line-height: 150%;
+    padding: 0;
+    background: none;
+}
+
+.text01{
+  color:#333333;
+  display: inline-block;
+}
+
+.text02{
+  color:#a81515;
+  display: inline-block;
+  margin-left:0.1rem;
+}
+
+
+.table {
+  background-color: #ffffff;
+  position: relative;
+  margin:0 0.6rem;
+  margin-top: 0.375rem;
+  overflow: hidden;
+  border-radius: 0.15rem;
+  font-size:0.65rem;
+  color:#666666;
+}
+
+.tr {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.th, .td {
+  padding: 0.4rem 0;
+  text-align: center;
+  width: 100%;
+}
+
+.th {
+  font-weight: 700;
+  font-size:0.7rem;
+  border-bottom:1px solid #eeeeee;
+  color:#333333;
+}
+</style>
+<div class="fui-page fui-page-current page-commission-order">
+        <div class="container_header">
+            <div class="container_header_flex">
+                <div class="iitem">
+                    <div class="iitem2">
+                        <div class="text01">当日订单</div>
+                        <div class="text02">1</div>
+                    </div>
+                    <div class="iitem2">
+                        <div class="text01">当月订单</div>
+                        <div class="text02">2</div>
+                    </div>
+                    <div class="iitem2">
+                        <div class="text01">累计订单</div>
+                        <div class="text02">3</div>
+                    </div>
+                </div>
+                <div class="iitem">
+                    <div class="iitem2">
+                        <div class="text01">当日业绩</div>
+                        <div class="text02">1.00</div>
+                    </div>
+                    <div class="iitem2">
+                        <div class="text01">当月业绩</div>
+                        <div class="text02">2.00</div>
+                    </div>
+                    <div class="iitem2">
+                        <div class="text01">累计业绩</div>
+                        <div class="text02">3.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="fui-tab fui-tab-warning" id="tab">
+                    <a class="active" data-tab='status'>日统计</a>
+                    <a href="javascript:void(0)" data-tab='status0'>月度统计</a>
+                    <a href="javascript:void(0)" data-tab='status1'>年度统计</a>
+            </div>
+        </div>
+    <div class="fui-content navbar" style="top:6.6rem;">
+            <div class="tongji">
+                    <div style="flex:1;text-align:left;">
+                      <div class="text01">交易总量: </div>
+                      <div class="text02">1</div>
+                    </div>
+                    <div style="flex:1;text-align:center;">
+                      <div class="text01">交易总额: </div>
+                      <div class="text02">2</div>
+                    </div>
+                    <div style="flex:1;text-align:right;">
+                      <div class="text01">利润总额: </div>
+                      <div class="text02">3</div>
+                    </div>
+                  </div>
+        
+        <div  id="container">
+
+            
+<div style="margin-top:0rpx;">
+    <div class="table">
+        <div class="tr">
+            <div class="th">日期</div>
+            <div class="th">交易量</div>
+            <div class="th">交易额</div>
+            <div class="th">利润额</div>
+            <div class="th">比例</div>
+        </div>
+        <div class="tr" >
+            <div class="td">1</div>
+            <div class="td">2</div>
+            <div class="td">3</div>
+            <div class="td">4</div>
+            <div class="td">5%</div>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+   </div>
+</div>
+
+{php $this->footerMenus()}
+{template '_footer'}

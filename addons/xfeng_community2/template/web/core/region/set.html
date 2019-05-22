@@ -1,0 +1,273 @@
+{template 'web/common/header-base'}
+
+<style>
+    .title{
+        color:red
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('region')}"></a>&nbsp;&nbsp;&nbsp;小区设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('region',array('op' => 'set','regionid' => $regionid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+    <input type="hidden" value="{$regionid}" name="regionid">
+
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <td class="col-md-2">小区设置</td>
+                    <td class="col-md-3">说明</td>
+                    <td class="col-md-2"></td>
+                    <td class="col-md-4">
+                        是否启用
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="title">报修审核</td>
+                    <td>
+                        开启报修审核后，粉丝发布的报修，需要后台审核后，才可显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x5]" id="x5" class="js-switch_5" {if $set['x5']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议审核</td>
+                    <td>
+                        开启建议审核后，粉丝发布的建议，需要后台审核后，才可显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x6]" id="x6" class="js-switch_6" {if $set['x6']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">二手审核</td>
+                    <td>
+                        开启二手审核后，粉丝发布的二手信息，需要后台审核后，才可显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x7]" id="x7" class="js-switch_7" {if $set['x7']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">租赁审核</td>
+                    <td>
+                        开启租赁审核后，粉丝发布的租赁信息，需要后台审核后，才可显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x8]" id="x8" class="js-switch_8" {if $set['x8']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">拼车审核</td>
+                    <td>
+                        开启拼车审核后，粉丝发布的拼车信息，需要后台审核后，才可显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x9]" id="x9" class="js-switch_9" {if $set['x9']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">报修手机端抢单</td>
+                    <td>
+                        开启抢单模式，手机端报修接收人将启用抢单，第一个点击，就是抢单成功。
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="" id="x50" class="js-switch_10" {if $set['x50']['value']}checked{/if}/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议手机端抢单</td>
+                    <td>
+                        开启抢单模式，手机端建议接收人将启用抢单，第一个点击，就是抢单成功。
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="" id="x51" class="js-switch_11" {if $set['x51']['value']}checked{/if}/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">报修全部显示</td>
+                    <td>
+                        开启报修全部显示后，粉丝发布的报修信息在微信端就在当前小区全部显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x10]" id="x10" class="js-switch_12" {if $set['x10']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">建议全部显示</td>
+                    <td>
+                        开启建议全部显示后，粉丝发布的建议信息在微信端就在当前小区全部显示
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x11]" id="x11" class="js-switch_13" {if $set['x11']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">房屋托管</td>
+                    <td>
+                        开启房屋托管后，移动端粉丝发布的手机号码不在显示，会显示托管电话
+                    </td>
+                    <td>
+                        <input type="tel" name="sett[x12]" value="{$set['x12']['value']}" class="form-control" placeholder="输入托管电话"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x13]" id="x13" class="js-switch_14" {if $set['x13']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">微信开门</td>
+                    <td>
+                        开启的话，业主注册默认就有微信开门权限
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x14]" id="x14" class="js-switch_15" {if $set['x14']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">授权验证开门</td>
+                    <td>
+                        默认微信开门采用的业主注册的楼栋单元匹配，进行开门。开启授权验证开门后，需要先在后台设置业主授权开门
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x15]" id="x15" class="js-switch_16" {if $set['x15']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">微信开门关联物业费</td>
+                    <td>
+                        此设置与微信开门硬件有关，开启此设置后，会关联业主的物业费
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x16]" id="x16" class="js-switch_17" {if $set['x16']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">是否开启小区收入显示</td>
+                    <td>
+                        开启后，将在微信端个人中心，展示小区的总收入
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x59]" id="x59" class="js-switch_25" {if $set['x59']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">是否开启小区注册</td>
+                    <td>
+                        默认可以注册，开启后用户不可注册
+                    </td>
+                    <td>
+                        <input type="tel" name="sett[x63]" value="{$set['x63']['value']}" class="form-control" placeholder="小区注册的提示语"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x61]" id="x61" class="js-switch_26" {if $set['x61']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">是否开启小区报修处理流程</td>
+                    <td>
+                        开启后用户可查看报修处理流程
+                    </td>
+                    <td></td>
+                    <td>
+                        <input type="checkbox" name="set[x66]" id="x66" class="js-switch_27" {if $set['x66']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">是否开启小区建议处理流程</td>
+                    <td>
+                        开启后用户可查看建议处理流程
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" name="set[x67]" id="x67" class="js-switch_28" {if $set['x67']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label"></label>
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+
+{template 'web/common/footer'}

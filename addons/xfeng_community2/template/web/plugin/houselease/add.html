@@ -1,0 +1,43 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('houselease', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;{$item['title']}(<span
+                            style="color:#008CD6;">{if $item['status']}已成交 {else}还未成交{/if}</span>)</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('houselease',array('op' => 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <p><code>联系人：{if $item['realname']}{$item['realname']} {else}{$item['t_realname']} {/if}电话：{if $item['mobile']}{$item['mobile']}{else}{$item['t_mobile']}{/if}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p>
+                        <code>
+                            面积：{$item['model_area']}m<sup>2</sup>&nbsp;&nbsp;楼层：{$item['house_floor']} &nbsp;&nbsp;租金：{$item['price']}{if $item['category'] == 1 || $item['category'] == 2}元{elseif $item['category'] == 3 || $item['category'] == 4}万元{/if}
+                            <div class="hr-line-dashed"></div>
+                            房屋户型：{$item['house_model']}<br/>
+                            <div class="hr-line-dashed"></div>
+                            装修情况：{$item['fitment']}<br/>
+                            <div class="hr-line-dashed"></div>
+                            住宅类型：{$item['house']}<br/>
+                            <div class="hr-line-dashed"></div>
+                            {if $item['category'] == 1 || $item['category'] == 2}
+                            押金方式：{$item['price_way']}<br/>
+                            <div class="hr-line-dashed"></div>{/if}
+                            {loop $images $value}
+                            <a href="{php echo tomedia($value)}" target="_blank"><img
+                                    src="{php echo tomedia($value)}"
+                                    style="width: 60px; height: 60px;border:1px solid white;float:left;"/></a>
+                            {/loop}
+                            <br/>
+                        </code>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

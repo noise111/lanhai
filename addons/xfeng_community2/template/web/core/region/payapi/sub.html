@@ -1,0 +1,94 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('region')}"></a>&nbsp;&nbsp;&nbsp;支付接口配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'sub','regionid' => $regionid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'list','regionid' => $regionid))}" title="支付配置" >支付配置</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'alipay','regionid' => $regionid))}" title="支付宝" >支付宝</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'wechat','regionid' => $regionid))}" title="微信支付" >微信支付</a></li>
+                        <li class="active">
+                            <a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'sub','regionid' => $regionid))}" title="服务商支付" >服务商支付</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'swiftpass','regionid' => $regionid))}" title="微信支付（兴业银行）" >微信支付(兴业银行/中信银行/农商银行）</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'hsyunfu','regionid' => $regionid))}" title="微信支付（华商云付）" >微信支付（华商云付）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'chinaums','regionid' => $regionid))}" title="银联支付" >银联支付</a></li>
+                    </ul>
+                    <div style="margin-top: 30px">
+                        <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+                            <input type="hidden" value="{$item['id']}" name="id" />
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务商商户号</label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="text" name="sub_id" class="form-control"  value="{$item['sub_id']}"/>
+                                    <span class="help-block">需要填写申请为服务商的商户号。注：服务商的商户号与微信支付的商户号不是同一个号。</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥(API密钥)</label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <div class="input-group">
+                                        <input type="text" name="apikey" id="facilitator_signkey" class="form-control" maxlength="32" value="{if $item['apikey']}{$item['apikey']}{else}{php echo substr($item['apikey'], 0 , 32)}{/if}" autocomplete="off"/>
+                                        <span onclick="tokenGen('facilitator_signkey');" style="cursor:pointer" class="input-group-addon">生成新的</span>
+                                    </div>
+                                    <span class="help-block">此商户秘钥为服务商商户号对应的支付秘钥，与微信支付的支付秘钥不相同。</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppId)</label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="text" name="appid" class="form-control" value="{$item['appid']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppSecret)</label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="text" name="appsecret" class="form-control" value="{$item['appsecret']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">子商户号(sub_mch_id)</label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="text" name="sub_mch_id" class="form-control" value="{$item['sub_mch_id']}" autocomplete="off"/>
+                                    <span class="help-block">子商户号是在服务商商户号下申请的子商户号</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+</script>
+{template 'web/common/footer'}

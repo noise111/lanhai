@@ -1,0 +1,309 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #F1F1F1;
+    }
+
+    .weui-flex {
+        position: relative;
+        top: 20px;
+    }
+
+    .weui-flex__item {
+        position: relative;
+        text-align: center;
+    }
+
+    .weui-cells__title {
+        font-size: 0.9em;
+    }
+
+    .weui-btn_mini {
+        display: block;
+        padding: 0 14px;
+        font-size: 0.8em;
+    }
+
+    .weui-cell__hd {
+        margin-right: 1em;
+    }
+
+    .weui-cells {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+
+    .weui-form-preview__label {
+        color: #333333;
+    }
+</style>
+
+<body>
+<div class="weui-flex">
+    <div class="icon_step_line_left"></div>
+    <div class="icon_step_line_right"></div>
+    <div class="weui-flex__item icon_step_active">
+        <span class="icon_step">1</span>
+        <p class="icon_step_text">身份信息</p>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">2</span>
+        <p class="icon_step_text">完善资料</p>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">3</span>
+        <p class="icon_step_text">房屋信息</p>
+    </div>
+</div>
+<div class="step-content">
+    <div class="step firstStep">
+        <div class="weui-cells__title">您在家庭中的角色</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="role" class="newslist" value="1" checked="checked">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>房产证在我名下</p>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="role" class="newslist" value="2">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>我是业主家属</p>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="role" class="newslist" value="3">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>我是租客</p>
+                </div>
+            </a>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="shows()" id="nextOne">下一步</a>
+    </div>
+    <div class="step secondStep" style="display: none">
+        <div class="weui-cells__title">填写你的房屋信息</div>
+        <div class="weui-cells">
+            <div class="weui-cell">
+                <div class="weui-cell__hd weui-form-preview__label">姓名</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="weui-cell" id="identity">
+                <div class="weui-cell__hd weui-form-preview__label">身份证</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd weui-form-preview__label">手机号</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="">
+                </div>
+                <div class="weui-cell__ft">
+                    <a href="javascript:;" class="weui-btn weui-btn_mini step-btn" id="registerCode">获取验证码</a>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd weui-form-preview__label">验证码</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd weui-form-preview__label">购房合同编号</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="">
+                </div>
+            </div>
+        </div>
+
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="showt()">下一步</a>
+    </div>
+    <div class="step thereStep" style="display: none;">
+        <div class="weui-cells__title">选择你的个人信息</div>
+        <div class="weui-cells">
+
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label for="rSite01" class="weui-form-preview__label">区域</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="rSite01" type="text" placeholder="">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label for="rSite02" class="weui-form-preview__label">楼栋</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="rSite02" type="text" placeholder="">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label for="rSite03" class="weui-form-preview__label">单元</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="rSite03" type="text" placeholder="">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell weui-cell_access">
+                <div class="weui-cell__hd"><label for="rSite04" class="weui-form-preview__label">房号</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="rSite04" type="text" placeholder="">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="closeme()">完成</a>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script>
+
+    $(document).on("open", ".weui-popup-modal", function () {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function () {
+        console.log("close popup");
+    });
+
+    function shows() {
+        $('.firstStep').hide();
+        $('.secondStep').show();
+        $('.weui-flex__item').eq(0).removeClass('icon_step_active');
+        $('.weui-flex__item').eq(1).addClass('icon_step_active');
+    }
+    function showt() {
+        $('.thereStep').show();
+        $('.secondStep').hide();
+        $('.weui-flex__item').eq(1).removeClass('icon_step_active');
+        $('.weui-flex__item').eq(2).addClass('icon_step_active');
+    }
+    function closeme() {
+        $(".step-content").hide();
+    }
+
+    //短信验证码发送
+    var $getCode = $('#registerCode');
+    //定义参数
+    $getCode.sendCode({
+        disClass: 'weui-btn_disabled',
+        secs: 15,
+        run: false,
+        runStr: '{%s}秒后重新获取',
+        resetStr: '重新获取验证码'
+    });
+    $getCode.on('click', function () {
+        /* ajax 成功发送验证码后调用【start】 */
+//         YDUI.dialog.loading.open('发送中');
+        $.showLoading('发送中');
+        setTimeout(function () {
+//             YDUI.dialog.loading.close();
+            $.hideLoading();
+            $getCode.sendCode('start');
+//             YDUI.dialog.toast('已发送', 'success', 1500);
+            setTimeout(function () {
+                $.toast("已发送", '');
+            }, 500);
+//
+        }, 1500);
+    });
+    //选择
+    $("#rSite01").picker({
+        title: "请选择所在区域",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['A区', 'B区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite02").picker({
+        title: "请选择楼栋",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['1栋', '2栋', '3栋', '4栋', '5栋', '6栋', '7栋', '8栋', '9栋', '10栋', '11栋', '12栋']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite03").picker({
+        title: "请选择单元",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['1单元', '2单元', '3单元', '4单元', '5单元', '6单元', '7单元', '8单元', '9单元', '10单元', '11单元', '12单元']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite04").picker({
+        title: "请选择房号",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['101室', '102室', '103室', '104室', '105室', '106室', '107室', '108室', '109室', '110室', '120室', '130室']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+</script>
+<script>
+    $(function () {
+        $('#nextOne').click(function () {
+            var val = $('input:radio[name="role"]:checked').val();
+            console.log(val);
+            if (val !== '1') {
+                $('#identity').remove();
+            }
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{template 'default/header'}
+<style>
+    .button{
+        height:40px;
+        line-height: 40px;
+    }
+</style>
+<body class="max-width">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+    <button class="button button-link button-nav pull-right" style="color: white" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('opendoor',array('op'=> 'share','id'=> $id))}'">
+        <span class="icon icon-share"></span>
+        访客二维码
+
+    </button>
+    <h1 class="title txt-fff">手机开门</h1>
+</header>
+<div class="content page" >
+
+
+        <div class="content-block-title" >你拥有的小区开门权限</div>
+        <div class="list-block">
+            <ul>
+                {if $devices}
+                {loop $devices $item}
+                <li class="item-content item-link" onclick="xqdoor({$item['id']})">
+                    <div class="item-inner">
+                        <div class="item-title">{$item['title']}{$item['unit']}</div>
+                        <div class="item-after"></div>
+                    </div>
+                </li>
+                {/loop}
+                {/if}
+            </ul>
+        </div>
+
+</div>
+<script>
+    function xqdoor(id){
+        var id = id;
+        window.location.href = "{php echo $this->createMobileUrl('lock')}&id="+id+"&type=1";
+    }
+</script>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+</body>
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+<!--<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>-->
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/swiper.min.js" charset="utf-8"></script>
+</html>

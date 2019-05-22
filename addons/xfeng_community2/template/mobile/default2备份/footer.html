@@ -1,0 +1,139 @@
+<style>[v-cloak] { display: none !important; }</style>
+<div id="xq-app" v-cloak>
+    <div class="cd-bouncy-nav-modal" :class="{'fade-in':modalIng}">
+        <div class="weui-loadmore" v-if="errorTip" v-html="errorTip" style="position: fixed; top: 30%; width: 100%" ></div>
+        <div class="weui-tab" v-else>
+            <div class="weui-navbar">
+                <a class="weui-navbar__item" :class="{ 'weui-bar__item--on':index === tagIndex ? true : false }"
+                   v-for="(item, index) in opensItems" @click="itemClick(index)">{{item.title}}</a>
+            </div>
+            <div class="weui-tab__bd">
+                <div class="weui-tab__bd-item" :class="{ 'weui-tab__bd-item--active':index === tagIndex ? true : false }"
+                     v-for="(row, index) in opensItems">
+                    <nav>
+                        <ul class="cd-bouncy-nav home-bouncy-nav">
+                            <li v-for="(item, index) in row.items" :key="index" @click="door(item.id)">
+                                <div class="home-bouncy-img">
+                                    <img :src="item.thumb" v-if="item.thumb" alt="开门">
+                                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-rental.png" v-else>
+                                </div>
+                                <p class="home-bouncy-txt">{{item.title}} {{item.unit}}</p>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <a href="#0" class="cd-close" @click="modalIng=false"><i class="iconfont">&#xe60e;</i></a>
+    </div>
+    <div class="weui-tabbar">
+        <a :href="item.url" class="weui-tabbar__item" v-for="(item, index) in tabbarItems" :key="index">
+            <div class="weui-tabbar__icon" v-if="item.type == 'link'">
+                <img :src="item.img">
+            </div>
+            <div class="outbox" v-if="item.type == 'lock'" @click="modalIng = true">
+                <span class="open" :style="{background:'url('+ item.img +')', backgroundSize:'100%'}"></span>
+            </div>
+            <div class="weui-tabbar__icon" v-if="item.type=='lock'" @click="modalIng = true"></div>
+            <p class="weui-tabbar__label" v-text="item.title"></p>
+        </a>
+    </div>
+</div>
+<style>
+    .tips {
+        position: relative;
+        top: -.9em;
+        padding: 0 3em;
+        color: white;
+    }
+</style>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+<!--<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>-->
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#xq-app',
+        data: {
+            regionid: '{$_SESSION['community']['regionid']}',
+            point: [],
+            modalIng: false,
+            tabbarItems:[],
+            tagIndex: 0,
+            opensItems:[],
+            errorTip: ''
+        },
+        beforeMount: function () {
+            var self = this
+            if (localStorage.lng == undefined || localStorage.lat == undefined) {
+                localStorage.lastname = "Smith";
+                var geolocation = new BMap.Geolocation();
+                geolocation.getCurrentPosition(function (r) {
+                    if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                        var mk = new BMap.Marker(r.point);
+                        var lng = localStorage.lng = r.point.lng;
+                        var lat = localStorage.lat = r.point.lat;
+                        self.point = { lng: r.point.lng, lat: r.point.lat }
+                    }
+                    else {
+                        alert('获取当前位置失败,请确认是否开启定位服务');
+                    }
+                }, {enableHighAccuracy: true})
+            }
+            else {
+                self.point = { lng: localStorage.lng, lat: localStorage.lat }
+            }
+            // 底部菜单
+            var url = "{php echo wxapp_url('setting/footer')}";
+            $.getJSON(url, function (ret) {
+                self.tabbarItems = ret.data
+            })
+        },
+        mounted: function () {
+            var self = this
+            self.$nextTick(function () {
+                self.opens()
+            })
+        },
+        methods: {
+            itemClick:function (index) {
+                this.tagIndex = index
+            },
+            opens: function () {
+                var self = this
+                var url = "{php echo wxapp_url('open/list')}";
+                var data = {
+                    regionid: self.regionid,
+                    lng: self.point.lng,
+                    lat: self.point.lat
+                }
+                $.getJSON(url, data, function (ret) {
+                    if(ret.err_code == 0){
+                        self.opensItems = ret.data
+                    }
+                    else {
+                        var errorTpl = '<div class="tips">'+ ret.err_msg +'</div>';
+                        if( ret.err_code == -2 ){
+                            errorTpl+= '<div class="tips"><a href="{php echo $this->createMobileUrl('register',array('op' => 'guide','memberid' => $_SESSION['community']['id'],'regionid' => $_SESSION['community']['regionid'],'p'=>1))}" class="weui-btn weui-btn_mini weui-btn_primary">注册</a></span>';
+                        }
+                        self.errorTip = errorTpl
+                    }
+                })
+            },
+            door: function (id) {
+                $.showLoading('正在请求开锁');
+                $.post("{php echo wxapp_url('open/lock')}", {id: id}, function (ret) {
+                    $.hideLoading()
+                    if (ret.err_code == 0) {
+                        //提交成功提示内容: data.data.content
+                        $.toast(ret.data.content);
+                        setTimeout(function () {
+                            window.location.href=ret.data.url;
+                        }, 1000);
+
+                    }
+                }, 'json')
+            }
+        }
+    })
+
+</script>

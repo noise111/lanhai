@@ -1,0 +1,77 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('direct',array('op' => 'payapi','p' => 'hsyunfu'))}"></a>&nbsp;&nbsp;&nbsp;添加微信支付</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('direct',array('op' => 'payapi','p' => 'hsyunfu','operation' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" value="{$item['id']}" name="id" />
+                        <div class="form-group" id="shopid" >
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">超市</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <select name="shopid" class="form-control">
+                                    {loop $shops $shop}
+                                    <option value="{$shop['id']}" {if $shop['id'] == $item['userid']}selected = 'selected'{/if}>{$shop['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户号</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="account" class="form-control" value="{$item['account']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">密钥</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="secret" class="form-control" value="{$item['secret']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号appid</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="appid" class="form-control" value="{$item['appid']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号appsecret</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="appsecret" class="form-control" value="{$item['appsecret']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function check(form) {
+        if (!form['account'].value) {
+            alert('账号不可为空。');
+            return false;
+        }
+        if (!form['secret'].value) {
+            alert('密钥不可为空。');
+            return false;
+        }
+    }
+</script>
+{template 'web/common/footer'}

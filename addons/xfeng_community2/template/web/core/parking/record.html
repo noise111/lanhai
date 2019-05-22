@@ -1,0 +1,76 @@
+{template 'web/common/header-base'}
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        padding: 10px;
+        border-top: 1px solid #f0f0f0;
+        min-height: 41px;
+        white-space: nowrap;
+    }
+</style>
+<!--<div class="gohome"><a class="animated bounceInUp" href="{php echo $this->createWebUrl('home')}" title="返回首页"><i-->
+<!--class="fa fa-home"></i></a></div>-->
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <form action="" method="post" class="form-horizontal" role="form">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('parking')}"></a>&nbsp;&nbsp;&nbsp;租售记录</h5>
+                        <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('parking',array('op'=>'record','id'=>$id))}"></a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>业主姓名</th>
+                                <th>手机号码</th>
+                                <th>车牌号码</th>
+                                <th>开始日期</th>
+                                <th>结束日期</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['realname']}</td>
+                                <td>{$item['mobile']}</td>
+                                <td>
+                                    {$item['car_num']}
+                                </td>
+                                <td>{if $item['starttime']}{php echo date('Y-m-d',$item['starttime'])}{/if}</td>
+                                <td>{if $item['endtime']}{php echo date('Y-m-d',$item['endtime'])}{/if}</td>
+
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<
+
+{template 'web/common/footer'}

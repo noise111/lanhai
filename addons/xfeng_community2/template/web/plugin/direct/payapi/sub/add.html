@@ -1,0 +1,117 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('direct',array('op' => 'payapi','p' => 'sub','operation' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;添加商户</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('direct',array('op' => 'payapi','p' => 'sub','operation' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+        <input type="hidden" value="{$item['id']}" name="id">
+        <div class="form-group" id="shopid" >
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">超市</label>
+            <div class="col-sm-9 col-xs-12">
+                <select name="shopid" class="form-control">
+                    {loop $shops $shop}
+                    <option value="{$shop['id']}" {if $shop['id'] == $item['userid']}selected = 'selected'{/if}>{$shop['title']}</option>
+                    {/loop}
+                </select>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">服务商商户号</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="sub_id" class="form-control"  value="{$item['sub_id']}"/>
+                <span class="help-block">需要填写申请为服务商的商户号。注：服务商的商户号与微信支付的商户号不是同一个号。</span>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥(API密钥)</label>
+            <div class="col-sm-9 col-xs-12">
+                <div class="input-group">
+                    <input type="text" name="apikey" id="facilitator_signkey" class="form-control" maxlength="32" value="{if $item['apikey']}{$item['apikey']}{else}{php echo substr($item['apikey'], 0 , 32)}{/if}" autocomplete="off"/>
+                    <span onclick="tokenGen('facilitator_signkey');" style="cursor:pointer" class="input-group-addon">生成新的</span>
+                </div>
+                <span class="help-block">此商户秘钥为服务商商户号对应的支付秘钥，与微信支付的支付秘钥不相同。</span>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppId)</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="appid" class="form-control" value="{$item['appid']}" />
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppSecret)</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="appsecret" class="form-control" value="{$item['appsecret']}" />
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">子商户号(sub_mch_id)</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="sub_mch_id" class="form-control" value="{$item['sub_mch_id']}" autocomplete="off"/>
+                        <span class="help-block">子商户号是在服务商商户号下申请的子商户号</span>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='type']").click(function () {
+            var type = $('input[name="type"]:checked ').val();
+            if(type == 2){
+                $("#userid").show();
+                $("#company").hide();
+            }
+            if(type == 1){
+                $("#userid").hide();
+                $("#company").show();
+            }
+            if(type == 3){
+                $("#userid").hide();
+                $("#company").hide();
+            }
+        })
+    })
+    function check(form) {
+        if (!form['sub_mch_id'].value) {
+            alert('子商户号不可为空。');
+            return false;
+        }
+
+
+    }
+</script>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+</script>
+{template 'web/common/footer'}

@@ -1,0 +1,111 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('safety')}"></a>&nbsp;&nbsp;&nbsp;刷卡记录</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('safety',array('op' => 'log','p'=>'display','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form" >
+                        <input type="hidden" name="record" value="0">
+                        <div class="row">
+
+                            <div class="col-sm-10 m-b-xs">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="submit" name="cloud" class="btn btn-primary" value="同步刷卡记录" id="submit"> 同步刷卡记录</button>
+                                    <span>
+                                        <p>已同步<span id="record">{$getCount}</span>条
+                                    </span>
+                            <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th style="width:30px;">ID</th>
+                                <th>门禁名称</th>
+                                <th>卡号</th>
+                                <th>刷卡时间</th>
+                                <th>类型</th>
+                                <th>同步时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['regiontitle']}{$item['devicetitle']}{$item['unit']}</td>
+                                <td>{$item['cardno']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['sktime']);}</td>
+                                <td>{$item['type']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['createtime']);}</td>
+
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 提交事件
+    var page=1
+    $('#submit').on('click',function() {
+        $('#submit').html("正在同步中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        mass();
+    });
+    function mass() {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('guard',array('op'=>'log','p'=>'send'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                $("#record").html(data.record);
+                $("input[name='record']").val(data.record);//
+                if(data.status == 'end'){
+                    $('#submit').html("同步完成");
+                    $('#submit').removeProp('disabled');
+                    window.location.reload();
+                    return ;
+                }
+                if(data.status == 'emp'){
+                    $('#submit').html("同步结束");
+                    $('#submit').removeProp('disabled');
+                    window.location.reload();
+                    return false;
+                }
+                mass();
+            }
+        });
+    }
+</script>
+{template 'web/common/footer'}

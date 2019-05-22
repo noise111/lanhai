@@ -1,0 +1,307 @@
+{template 'web/common/header-base'}
+<!--<ul class="nav nav-tabs">-->
+<!--<li>-->
+<!--<a href="{php echo $this->createWebUrl('adv', array('op' => 'list'));}">广告管理</a>-->
+<!--</li>-->
+<!--<li class="active">-->
+<!--<a href="{php echo $this->createWebUrl('adv', array('op'=>'add'));}">添加广告</a>-->
+<!--</li>-->
+<!--</ul>-->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('advertiser',array('op' => 'manage','p' =>'list'))}"></a>&nbsp;&nbsp;&nbsp;添加广告
+                    </h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('advertiser',array('op' => 'manage','p' =>'add'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data"
+                          onsubmit="return check(this);">
+
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">广告名称</label>
+                            <div class="col-xs-5">
+                                <input type='text' name='advtitle' id='advtitle' class="form-control"
+                                       value="{$item['advtitle']}"/>
+                                <span class="help-block">广告名称仅用于在广告管理中区别各条广告，不会对外展示</span>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="advtime" class="col-sm-2 control-label">投放日期</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_date('advtime');}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advday" class="col-sm-2 control-label">投放天数</label>
+                            <div class="col-xs-5">
+                                <!--<div class="input-group form-group">-->
+                                    <!--<input type='text' name='advday' id='advday' class="form-control"-->
+                                           <!--value="{if $item['advday']}{$item['advday']}{else}1{/if}"/>-->
+                                    <!--<span class="input-group-addon">天</span>-->
+                                <!--</div>-->
+                                <div class="input-group m-b">
+                                    <input type='number' name='advday' id='advday' value="{if $item['advday']}{$item['advday']}{else}1{/if}" class="form-control"> <span class="input-group-addon">天</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="area" class="col-sm-2 control-label">投放区域</label>
+                            <div class="col-xs-4">
+                                <!--<label class="radio-inline">-->
+                                    <!--<input type="radio" name="area" value="1" checked>微信开门-->
+                                <!--</label>-->
+                                <div class="radio radio-success">
+                                    <input type="radio" id="singleRadio2" name="area" value="1" checked aria-label="Single radio Two">
+                                    <label>微信开门</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="price" class="col-sm-2 control-label">广告出价</label>
+                            <div class="col-xs-5">
+                                <!--<div class="input-group form-group">-->
+                                    <!--<input type='text' name='price' id='price' class="form-control"-->
+                                           <!--value="{if $item['price']}{$item['price']}{else}1{/if}"/>-->
+                                    <!--<span class="input-group-addon">元</span>-->
+                                <!--</div>-->
+                                <div class="input-group m-b">
+                                    <input type='text' name='price' id='price' class="form-control"
+                                           value="{if $item['price']}{$item['price']}{else}1{/if}"/> <span class="input-group-addon">元</span>
+                                </div>
+                                <span class="help-block">随机1元以内领取</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">投放金额</label>
+                            <div class="col-xs-5">
+                                <!--<div class="input-group form-group">-->
+                                    <!--<input type='text' name='advprice' id='advprice' class="form-control"-->
+                                           <!--value="{if $item['advprice']}{$item['advprice']}{else}100{/if}"/>-->
+                                    <!--<span class="input-group-addon">元</span>-->
+                                <!--</div>-->
+                                <div class="input-group m-b">
+                                    <input type='text' name='advprice' id='advprice' class="form-control"
+                                           value="{if $item['advprice']}{$item['advprice']}{else}100{/if}" class="form-control"/> <span class="input-group-addon">元</span>
+                                </div>
+                                <span class="help-block">最低100元起投</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">间隔时间</label>
+                            <div class="col-xs-5">
+                                <!--<div class="input-group form-group">-->
+                                    <!--<input type='number' name='opentime' id='opentime' class="form-control"-->
+                                           <!--value="{if $item['opentime']}{$item['opentime']}{else}10{/if}"/>-->
+                                    <!--<span class="input-group-addon">分钟</span>-->
+                                <!--</div>-->
+                                <div class="input-group m-b">
+                                    <input type='number' name='opentime' id='opentime' class="form-control"
+                                           value="{if $item['opentime']}{$item['opentime']}{else}10{/if}"/>
+                                    <span class="input-group-addon">分钟</span>
+                                </div>
+                                <span class="help-block">领取红包间隔时间</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">领取数量</label>
+                            <div class="col-xs-5">
+                                <!--<div class="input-group form-group">-->
+                                <!--<input type='number' name='opentime' id='opentime' class="form-control"-->
+                                <!--value="{if $item['opentime']}{$item['opentime']}{else}10{/if}"/>-->
+                                <!--<span class="input-group-addon">分钟</span>-->
+                                <!--</div>-->
+                                <div class="input-group m-b">
+                                    <input type='number' name='num' id='num' class="form-control"
+                                           value="{if $item['num']}{$item['num']}{else}10{/if}"/>
+                                    <span class="input-group-addon">个</span>
+                                </div>
+                                <span class="help-block">每个业主领取红包的数量</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-xs-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">投放小区</label>
+                            <div class="col-xs-5">
+                                <!--<label class="checkbox-inline">-->
+                                <!--<input type="checkbox" id="checkAll" name="checkAll" data-group="regionid">全部-->
+
+                                <!--</label>-->
+                                <select class="form-control" name="regionid" id="regionid">
+                                    <option value="0">选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['regionid']}">{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: none" id="guard">
+                            <label for="advtitle" class="col-sm-2 control-label">门禁区域</label>
+                            <div class="col-xs-10" id="content">
+
+
+                            </div>
+                        </div>
+                        {if empty($_W['isfounder'])}
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-4">
+                                账户剩余可用金额 {if $user['balance']}{$user['balance']}{else}0{/if} 元 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="{php echo $this->createWebUrl('adv',array('op'=> 'finance'))}"><b>去充值</b></a>
+                            </div>
+                        </div>
+                        {/if}
+
+
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label">链接地址</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_link('link',"http://www.baidu.com");}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="advtitle" class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image('image');}
+                                <span class="help-block">图片比例4:3</span>
+                            </div>
+
+                        </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-4">
+                        <input type="submit" name="submit" value="保存并提交审核" class="btn btn-w-m btn-primary">
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <a href="javascript:history.go(-1);" class="btn btn-default min-width">返回</a>
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    function check(form) {
+        if (!form['advtitle'].value) {
+            alert('请输入广告名称。');
+            return false;
+        }
+        if (!form['advlink'].value) {
+            alert('请输入投放内容链接和图片。');
+            return false;
+        }
+    }
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.post("{php echo $this->createWebUrl('advertiser',array('op'=> 'guard'))}", {regionid: data.regionid}, function (data) {
+                        var content ='';
+                        content += "<div class='checkbox checkbox-success checkbox-inline' >";
+                        content += "<input type='checkbox' id='checkAll' name='checkAll' data-group='deviceid' />";
+                        content += "<label for='checkAll'> 全部 </label></div>";
+                        $.each(data.content, function (name, val) {
+                            var t = '';
+                            if (val.title) {
+                                t = val.title;
+                            }
+                            else {
+                                var area = '';
+                                if (val.area) {
+                                    area = val.area + '区';
+                                }
+                                var build = '';
+                                if (val.build) {
+                                    build = val.build + '栋';
+                                }
+                                var unit = '';
+                                if (val.unit) {
+                                    unit = val.unit + '单元';
+                                }
+                                t = area + build + unit;
+                            }
+                            content += "<div class='checkbox checkbox-success checkbox-inline' >";
+//                    content += "<input value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid' " + val.check + ">"+ t
+                            content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_"+val.id+"' >";
+                            content += "<label for='deviceid_"+val.id+"'> "+t+" </label>";
+                            content += "</div>";
+                        });
+                        $("#content").html(content);
+                        $("#guard").show();
+                        $("#checkAll").click(function () {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" +group + "']").each(function(){
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                    }, 'json')
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.post("{php echo $this->createWebUrl('advertiser',array('op'=> 'guard'))}", {regionid: regionid}, function (data) {
+                var content ='';
+                content += "<div class='checkbox checkbox-success checkbox-inline' >";
+                content += "<input type='checkbox' id='checkAll' name='checkAll' data-group='deviceid' />";
+                content += "<label for='checkAll'> 全部 </label></div>";
+                $.each(data.content, function (name, val) {
+                    var t = '';
+                    if (val.title) {
+                        t = val.title;
+                    }
+                    else {
+                        var area = '';
+                        if (val.area) {
+                            area = val.area + '区';
+                        }
+                        var build = '';
+                        if (val.build) {
+                            build = val.build + '栋';
+                        }
+                        var unit = '';
+                        if (val.unit) {
+                            unit = val.unit + '单元';
+                        }
+                        t = area + build + unit;
+                    }
+                    content += "<div class='checkbox checkbox-success checkbox-inline' >";
+//                    content += "<input value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid' " + val.check + ">"+ t
+                    content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_"+val.id+"' >";
+                    content += "<label for='deviceid_"+val.id+"'> "+t+" </label>";
+                    content += "</div>";
+                });
+                $("#content").html(content);
+                $("#guard").show();
+                $("#checkAll").click(function () {
+                    var checked = $(this).get(0).checked;
+                    var group = $(this).data('group');
+                    $("input:checkbox[data-group='" +group + "']").each(function(){
+                        $(this).get(0).checked = checked;
+                    })
+                });
+            }, 'json')
+        });
+    });
+</script>
+{template 'common/footer'}

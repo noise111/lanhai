@@ -1,0 +1,137 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>充电记录</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'order'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="charging"/>
+                        <input type="hidden" name="op" value="order"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="chargingid" class="form-control" id="chargingid">
+                                    <option value="0">全部充电桩</option>
+                                    {loop $station $sta}
+                                    <option value="{$sta['id']}" {if $sta['id']==$_GPC['chargingid']} selected{/if}>{$sta['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="type" class="form-control" id="type">
+                                    <option value="0">请选择类型</option>
+                                    <option value="1" {if $_GPC['type'] == 1} selected{/if}>按量计费</option>
+                                    <option value="2" {if $_GPC['type'] == 2} selected{/if}>按时计费</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>订单号</th>
+                            <th>小区</th>
+                            <th>姓名</th>
+                            <th>费用</th>
+                            <th>计费类型</th>
+                            <th>应充电</th>
+                            <th>实际充电</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>功率</th>
+                            <th>编号</th>
+                            <th>状态</th>
+                            <th>下单时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['ordersn']}</td>
+                            <td>{if $item['title']}{$item['title']}{else}游客xxx{/if}</td>
+                            <td>{if $item['realname']}{$item['realname']}{else}{$item['nickname']}{/if}</td>
+                            <td>{$item['price']}元</td>
+                            <td>{if $item['type'] == 1}按量计费{elseif $item['type'] == 2}按时计费{/if}</td>
+                            <td>{$item['cdtime']}分钟</td>
+                            <td>{if $item['stime']}{$item['stime']}分钟{/if}</td>
+                            <td>{if $item['starttime']}{php echo date('Y-m-d H:i:s',$item['starttime'])}{/if}</td>
+                            <td>{if $item['endtime']}{php echo date('Y-m-d H:i:s',$item['endtime'])}{/if}</td>
+                            <td>{if $item['power']}{$item['power']}W{else}0W{/if}</td>
+                            <td>{$item['code']}_{php echo $item['socket']+1}</td>
+                            <td>{if $item['status'] == 1}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未付款</span>{/if}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>
+                                {if $item['status'] == 0 && (empty($user) || $user['type'] == 1)}
+                                {if ($user && $menu_opss && @in_array('charging_orderDel', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'order','p' => 'del','id' => $item['id']))}" class="btn btn-default btn-sm" data-original-title="删除" onclick="return confirm('将删除该记录，确认吗？')">删除</a>
+                                {/if}
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="text-left">
+                                <span style="color:red">总计:{$total}次</span>
+                                <span style="color:red">总费用:{$totalprice}元</span>
+                            </td>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('charging',array('op'=>'order','p' => 'station'))}", {regionid: regionid}, function (lists) {
+            var content = "<option value='0'>全部充电桩</option>";
+            for (var o in lists) {
+                content += "<option value='"+lists[o].id+"'>"+lists[o].title+"</option>";
+            }
+            $("#chargingid").html(content);
+        })
+    })
+</script>
+{template 'web/common/footer'}

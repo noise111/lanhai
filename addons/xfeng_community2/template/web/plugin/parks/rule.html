@@ -1,0 +1,968 @@
+{template 'web/common/header-base'}
+<style>
+    .input-td {width: 80px;text-align: center}
+</style>
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $p=='list'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'rule','p'=>'list'));}">月租车</a></li>
+                        <li {if $p=='shortList'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'rule','p'=>'shortList'));}">临时车</a></li>
+                        {if $p=='add'}
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks', array('op' => 'rule','p'=>'add','id'=>$id));}">收费信息</a></li>
+                        {/if}
+                    </ul>
+
+{if $p == 'list'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="rule"/>
+                            <input type="hidden" name="p" value="{$p}"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('parks_ruleAdd', $menu_opss)) || empty($user)}
+                                    <a data-target="#myModal" data-toggle="modal" onclick="change(this)" class="btn btn-primary"><i class="fa fa-plus"></i>添加收费标准</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">ID</th>
+                                <th>收费标准名称</th>
+                                <th>收费金额</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{$item['price']}元/月</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_ruleEdit', $menu_opss)) || empty($user)}
+                                    <a data-target="#myModal" data-toggle="modal" data-id="{$item['id']}" data-pid="{$item['pid']}" data-title="{$item['title']}" data-price="{$item['price']}" onclick="change(this)" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_ruleDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'rule','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">收费标准</h4>
+                <small class="font-bold">月租车收费标准</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <input type='hidden' name='id' id='id' class="form-control" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">收费标准名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" id="title" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">月租收费</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="price" id="price" placeholder="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function change(obj) {
+        $("#id").val(obj.getAttribute("data-id"));
+        $("#pid").val(obj.getAttribute("data-pid"));
+        $("#title").val(obj.getAttribute("data-title"));
+        $("#price").val(obj.getAttribute("data-price"));
+    }
+    function check(form){
+        if (!form['title'].value) {
+            alert('请输入收费标准名称。');
+            return false;
+        }
+        if (!form['price'].value) {
+            alert('请输入价格。');
+            return false;
+        }
+        return true;
+    }
+</script>
+{/if}
+
+{if $p == 'shortList'}
+<div class="ibox-content">
+    <form action="./index.php" method="get" class="form-horizontal" role="form">
+        <input type="hidden" name="c" value="site"/>
+        <input type="hidden" name="a" value="entry"/>
+        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+        <input type="hidden" name="do" value="parks"/>
+        <input type="hidden" name="op" value="rule"/>
+        <input type="hidden" name="p" value="{$p}"/>
+        <div class="row">
+            <div class="col-sm-6 m-b-xs">
+                {if ($user && $menu_opss && @in_array('parks_ruleShortAdd', $menu_opss)) || empty($user)}
+                <a data-target="#myModal0" data-toggle="modal" class="btn btn-primary"><i class="fa fa-plus"></i>添加收费标准</a>
+                {/if}
+                <a data-target="#myModalTest" data-toggle="modal" class="btn btn-primary">收费标准测试</a>
+            </div>
+            <div class="col-sm-6 m-b-xs">
+
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered">
+        <thead class="navbar-inner">
+        <tr>
+            <th width="30px">ID</th>
+            <th>收费标准名称</th>
+            <th>收费类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {loop $list $item}
+        <tr>
+            <td>{$item['id']}</td>
+            <td>{$item['title']}</td>
+            <td>{if $item['type']==1}二段式{elseif $item['type']==2}二十四小时{elseif $item['type']==3}记次收费{/if}</td>
+            <td>
+                {if ($user && $menu_opss && @in_array('parks_ruleShortEdit', $menu_opss)) || empty($user)}
+                <a href="{php echo $this->createWebUrl('parks',array('op' => 'rule','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                {/if}
+                {if ($user && $menu_opss && @in_array('parks_ruleShortDel', $menu_opss)) || empty($user)}
+                <a href="{php echo $this->createWebUrl('parks',array('op' => 'rule','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                {/if}
+            </td>
+        </tr>
+        {/loop}
+        </tbody>
+    </table>
+    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+        <thead>
+        {if $list}
+        <tr>
+            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+        </tr>
+        {else}
+        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+        {/if}
+        </thead>
+    </table>
+</div>
+<div class="modal fade" id="myModal0" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">收费标准选择</h4>
+                <small class="font-bold">临时车收费标准</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="col-sm-2">
+                            <a class="btn btn-primary" title="二段式" data-target="#myModal1" data-toggle="modal" onclick="change(this)" style="border-radius:120px;height: 120px;width: 120px;display: block;text-align: center;line-height: 100px;">二段式</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-primary" title="二十四小时" data-target="#myModal2" data-toggle="modal" onclick="change(this)" style="border-radius:120px;height: 120px;width: 120px;display: block;text-align: center;line-height: 100px;">二十四小时</a>
+                        </div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-primary" title="记次收费" data-target="#myModal3" data-toggle="modal" onclick="change(this)" style="border-radius:120px;height: 120px;width: 120px;display: block;text-align: center;line-height: 100px;">记次收费</a>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <!--<input type="submit" class="btn btn-primary" name="submit" value="保存">-->
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">二段式收费标准</h4>
+                <small class="font-bold">二段式收费标准</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <input type='hidden' name='id' class="form-control" />
+                <input type='hidden' name='type' value='1' class="form-control" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">收费标准名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" placeholder="该收费的名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-1">
+
+                        </div>
+                        <div class="col-sm-5" style="border: solid 1px #009588">
+                            <small class="font-bold">时段一</small>
+                            <div class="form-group" style="margin-top: 20px">
+                                <label class="col-sm-3 control-label">开始时间</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_form_field_clock(start1, $value = '');}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">免费时间</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="freeTime1" placeholder="免费停车的时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">首停单位</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="firstPark1" placeholder="首进停车的时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">首停收费</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="firstPrice1" placeholder="首进停车的费用">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">停车单位</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="parkUnit1" placeholder="停车计算时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">停车收费</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="price1" placeholder="根据停车时间收费">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">封顶费用</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="maxPrice1" placeholder="该车停车的最大费用">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+
+                        </div>
+                        <div class="col-sm-5" style="border: solid 1px #009588">
+                            <small class="font-bold">时段二</small>
+                            <div class="form-group" style="margin-top: 20px">
+                                <label class="col-sm-3 control-label">开始时间</label>
+                                <div class="col-sm-9">
+                                    {php echo tpl_form_field_clock(start2, $value = '');}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">免费时间</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="freeTime2" placeholder="免费停车的时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">首停单位</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="firstPark2" placeholder="首进停车的时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">首停收费</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="firstPrice2" placeholder="首进停车的费用">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">停车单位</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="parkUnit2" placeholder="停车计算时间">
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">停车收费</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="price2" placeholder="根据停车时间收费">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">封顶费用</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="maxPrice2" placeholder="该车停车的最大费用">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">跨时段按时段一收费</label>
+                            <div class="col-sm-10">
+                                <label for="oneType1" class="radio-inline">
+                                    <input type="radio" name="oneType" value="1" id="oneType1" />是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </label>
+                                <label for="oneType2" class="radio-inline">
+                                    <input type="radio" name="oneType" value="0" id="oneType2" checked/>否
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">二十四小时收费标准</h4>
+                <small class="font-bold">二十四小时收费标准</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <input type='hidden' name='id' class="form-control" />
+                <input type='hidden' name='type' value='2' class="form-control" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <table class="table we7-table table-hover vertical-middle f12">
+                            <tbody>
+                            <tr>
+                                <th style="text-align: center">小时</th>
+                                {loop $hours $k $hour}
+                                {if $k <= 5}
+                                <th style="text-align: center">{$hour}</th>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                {loop $hours $k $hour}
+                                {if $k <= 5}
+                                <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$hour}" name="price{$hour}"></td>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <th style="text-align: center">小时</th>
+                                {loop $hours $k $hour}
+                                {if $k <= 11 && $k > 5}
+                                <th style="text-align: center">{$hour}</th>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                {loop $hours $k $hour}
+                                {if $k <= 11 && $k > 5}
+                                <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$hour}" name="price{$hour}"></td>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <th style="text-align: center">小时</th>
+                                {loop $hours $k $hour}
+                                {if $k <= 17 && $k > 11}
+                                <th style="text-align: center">{$hour}</th>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                {loop $hours $k $hour}
+                                {if $k <= 17 && $k > 11}
+                                <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$hour}" name="price{$hour}"></td>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <th style="text-align: center">小时</th>
+                                {loop $hours $k $hour}
+                                {if $k <= 23 && $k > 17}
+                                <th style="text-align: center">{$hour}</th>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            <tr>
+                                <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                {loop $hours $k $hour}
+                                {if $k <= 23 && $k > 17}
+                                <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$hour}" name="price{$hour}"></td>
+                                {/if}
+                                {/loop}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">收费标准名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" placeholder="该收费的名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">免费时间</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="freeTime" placeholder="免费停车时间">
+                                <span class="input-group-addon">分钟</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">封顶收费</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="maxPrice" placeholder="最大收取费用">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">首停单位</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="firstUnit" placeholder="首停的时间">
+                                <span class="input-group-addon">分钟</span>
+                            </div>
+                            <span class="help-block color-red">*首停单位为0时，不计算首停</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">首停收费</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="firstPrice" placeholder="首停收费">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">记次收费收费标准</h4>
+                <small class="font-bold">记次收费收费标准</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                <input type='hidden' name='id' class="form-control" />
+                <input type='hidden' name='type' value='3' class="form-control" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">收费标准名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="title" placeholder="该收费的名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">金额</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="price" placeholder="每次停车收取的费用">
+                                <span class="input-group-addon">元</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModalTest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">收费标准测试</h4>
+                <small class="font-bold">收费标准测试</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">进场时间</label>
+                        <div class="col-sm-10">
+                            {php echo _tpl_form_field_date('into', '', true);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">出场时间</label>
+                        <div class="col-sm-10">
+                            {php echo _tpl_form_field_date('out', '', true);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">收费标准</label>
+                        <div class="col-sm-10 ">
+                            <select class="form-control" name="ruleId" id="ruleId">
+                                <option value="0">请选择收费标准</option>
+                                {loop $rules $rule}
+                                <option value="{$rule['id']}" {if $rule['id'] == $item['ruleId']}selected{/if}>{$rule['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">收费金额</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="price" id="price" placeholder="" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <!--<input type="submit" class="btn btn-primary" name="submit" value="保存">-->
+                    <button type="button" class="btn btn-primary" name="test" id="test">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function check(form){
+        if (!form['title'].value) {
+            alert('请输入收费标准名称。');
+            return false;
+        }
+        return true;
+    }
+    $('#test').on('click', function () {
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'rule','p'=>'test'))}";
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+
+                if (res.status) {
+                    $('#price').val(res.price);
+                }else{
+                    alert(res.content)
+                }
+            }
+        });
+    })
+</script>
+{/if}
+
+{if $p=='add'}
+                    <div class="ibox-content">
+                        <form action="" method="post" class="form-horizontal form" onsubmit="return check(this);">
+                            <input type="hidden" name="id" value="{$id}"/>
+                            <input type="hidden" name="type" value="{$item['type']}"/>
+                            {if $item['type'] == 2}
+                            <div class="form-group">
+                                <table class="table we7-table table-hover vertical-middle f12">
+                                    <tbody>
+                                    <tr>
+                                        <th style="text-align: center">小时</th>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 5}
+                                        <th style="text-align: center">{$hour}</th>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 5}
+                                        <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$rules['price'][$k]}" name="price{$hour}"></td>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center">小时</th>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 11 && $k > 5}
+                                        <th style="text-align: center">{$hour}</th>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 11 && $k > 5}
+                                        <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$rules['price'][$k]}" name="price{$hour}"></td>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center">小时</th>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 17 && $k > 11}
+                                        <th style="text-align: center">{$hour}</th>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 17 && $k > 11}
+                                        <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$rules['price'][$k]}" name="price{$hour}"></td>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <th style="text-align: center">小时</th>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 23 && $k > 17}
+                                        <th style="text-align: center">{$hour}</th>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 120px;text-align: center">收费金额(元)</td>
+                                        {loop $hours $k $hour}
+                                        {if $k <= 23 && $k > 17}
+                                        <td class="input-td"><input type="text" class="form-comtrol input-td" value="{$rules['price'][$k]}" name="price{$hour}"></td>
+                                        {/if}
+                                        {/loop}
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">收费标准名称</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" name="title" placeholder="" value="{$item['title']}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <!--二段式-->
+                            {if $item['type'] == 1}
+                            <div class="form-group">
+                                <div class="col-sm-1">
+
+                                </div>
+                                <div class="col-sm-5" style="border: solid 1px #009588">
+                                    <small class="font-bold">时段一</small>
+                                    <div class="form-group" style="margin-top: 20px">
+                                        <label class="col-sm-2 control-label">开始时间</label>
+                                        <div class="col-sm-9">
+                                            {php echo tpl_form_field_clock(start1, $rules['start1']);}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">免费时间</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="freeTime1" id="freeTime1" placeholder="" value="{$rules['freeTime1']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">首停单位</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="firstPark1" id="firstPark1" placeholder="" value="{$rules['firstPark1']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">首停收费</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="firstPrice1" id="firstPrice1" placeholder="" value="{$rules['firstPrice1']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">停车单位</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="parkUnit1" id="parkUnit1" placeholder="" value="{$rules['parkUnit1']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">停车收费</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="price1" id="price1" placeholder="" value="{$rules['price1']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">封顶费用</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="maxPrice1" id="maxPrice1" placeholder="" value="{$rules['maxPrice1']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+
+                                </div>
+                                <div class="col-sm-5" style="border: solid 1px #009588">
+                                    <small class="font-bold">时段二</small>
+                                    <div class="form-group" style="margin-top: 20px">
+                                        <label class="col-sm-2 control-label">开始时间</label>
+                                        <div class="col-sm-9">
+                                            {php echo tpl_form_field_clock(start2, $rules['start2']);}
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">免费时间</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="freeTime2" id="freeTime2" placeholder="" value="{$rules['freeTime2']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">首停单位</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="firstPark2" id="firstPark2" placeholder="" value="{$rules['firstPark2']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">首停收费</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="firstPrice2" id="firstPrice2" placeholder="" value="{$rules['firstPrice2']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">停车单位</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="parkUnit2" id="parkUnit2" placeholder="" value="{$rules['parkUnit2']}">
+                                                <span class="input-group-addon">分钟</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">停车收费</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="price2" id="price2" placeholder="" value="{$rules['price2']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">封顶费用</label>
+                                        <div class="col-sm-9">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="maxPrice2" id="maxPrice2" placeholder="" value="{$rules['maxPrice2']}">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">跨时段按时段一收费</label>
+                                <div class="col-sm-10">
+                                    <label for="oneType1" class="radio-inline">
+                                        <input type="radio" name="oneType" value="1" id="oneType1" {if $rules['oneType'] == 1}checked{/if}/>是&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                    <label for="oneType2" class="radio-inline">
+                                        <input type="radio" name="oneType" value="0" id="oneType2" {if $rules['oneType'] == 0}checked{/if}/>否
+                                    </label>
+                                </div>
+                            </div>
+                            {/if}
+                            <!--二十四小时-->
+                            {if $item['type'] == 2}
+                            <div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">免费时间</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="freeTime" placeholder="" value="{$rules['freeTime']}">
+                                            <span class="input-group-addon">分钟</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">封顶收费</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="maxPrice" placeholder="" value="{$rules['maxPrice']}">
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">首停单位</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="firstUnit" placeholder="" value="{$rules['firstUnit']}">
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                        <span class="help-block color-red">*首停单位为0时，不计算首停</span>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">首停收费</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="firstPrice" placeholder="" value="{$rules['firstPrice']}">
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            <!--记次收费-->
+                            {if $item['type'] == 3}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">金额</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="price" placeholder="" value="{$rules['price']}">
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {/if}
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+<script>
+    function check(form){
+        if (!form['pid'].value) {
+            alert('请选择车场。');
+            return false;
+        }
+        if (!form['title'].value) {
+            alert('请输入收费标准名称。');
+            return false;
+        }
+        return true;
+    }
+</script>
+{/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

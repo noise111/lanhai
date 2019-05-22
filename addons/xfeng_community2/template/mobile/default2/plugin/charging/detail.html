@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title> {$_W['page']['title']} </title>
+
+    <script src="//res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+    <script src="../addons/xfeng_community/libs/js/vue/2.5.16/vue.min.js"></script>
+    <script src="../addons/xfeng_community/libs/js/axios/0.16.2/axios.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{php echo $this->createMobileUrl('style');}">
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        // window.settings = {php echo json_encode($this->settings, JSON_UNESCAPED_UNICODE);};
+        // jssdk config 对象
+        jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
+        // 是否启用调试
+        jssdkconfig.debug = false;
+        jssdkconfig.jsApiList = [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'translateVoice',
+            'startRecord',
+            'stopRecord',
+            'onRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard',
+            'openAddress'
+        ];
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            // var sharedata = window.settings.share || null;
+            var sharedata = {php echo json_encode($_share);};
+            wx.onMenuShareAppMessage(sharedata);
+            wx.onMenuShareTimeline(sharedata);
+            wx.onMenuShareQQ(sharedata);
+            wx.onMenuShareWeibo(sharedata);
+        });
+    </script>
+
+<link href="/addons/xfeng_community/template/mobile/default2/plugin/static/css/vendor.css?26317966ae924596e0b8" rel="stylesheet"><link href="/addons/xfeng_community/template/mobile/default2/plugin/static/css/mobile/charging/detail.css?26317966ae924596e0b8" rel="stylesheet"></head>
+<BODY>
+  <div id="app" style="height: 100%" v-cloak>
+      <router-view></router-view>
+  </div>
+  <!-- built files will be auto injected -->
+<script type="text/javascript" src="/addons/xfeng_community/template/mobile/default2/plugin/static/js/vendor.js?26317966ae924596e0b8"></script><script type="text/javascript" src="/addons/xfeng_community/template/mobile/default2/plugin/static/js/mobile/charging/detail.js?26317966ae924596e0b8"></script></BODY>
+</html>

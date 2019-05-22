@@ -1,0 +1,200 @@
+{template 'default2/header'}
+<style>
+    .weui-search-bar__form{
+        border-radius: 5px;
+    }
+    .weui-search-bar__label{
+        text-align: left;
+        padding-left: 10px;
+    }
+    .weui-icon-clear, .weui-icon-search{
+        font-size: 16px;
+    }
+    .weui-search-bar__label .weui-icon-search{
+        margin-right: 0;
+        position: relative;
+        top: -2px;
+    }
+    .weui-search-bar{
+        background: #ffffff;
+        padding-bottom: 0;
+    }
+    .weui-search-bar__label{
+        background: #E8E8E8;
+    }
+    .weui-search-bar__form:after{
+        background:#E8E8E8;
+    }
+    .weui-search-bar__cancel-btn{
+        color: #F7624B;
+    }
+    .weui-search-bar__label span{
+        position: relative;
+        top: -2px;
+    }
+    .weui-search-bar:before{
+        border-top: none;
+    }
+    .weui-search-bar:after{
+        border-bottom: none;
+    }
+    .weui-form-preview:before{
+        border-top: none;
+    }
+    .weui-form-preview:after{
+        border-bottom: none;
+    }
+    .weui-form-preview__hd{
+        font-size: 15px;
+        line-height: 1em;
+    }
+    .weui-form-preview__hd:after{
+        left: 0;
+    }
+    .weui-form-preview__label{
+        color: #F7624B;
+        text-align: left;
+    }
+    .news-list-label{
+        color: #000000;!important;
+        text-align:left;
+        text-align-last:auto;
+        margin-right: 0;
+        min-width: 2.5rem;
+        letter-spacing: 2px;
+    }
+    .weui-form-preview__bd{
+        position: relative;
+        text-align: left;
+        padding-right:45px;
+    }
+    .weui-form-preview__value{
+        font-size: 12px;
+        position: relative;
+        top: 3px;
+    }
+</style>
+
+<body ontouchstart>
+<div class="news-head">
+    <div class="weui-search-bar" id="searchBar">
+        <form class="weui-search-bar__form">
+            <div class="weui-search-bar__box">
+                <i class="weui-icon-search"></i>
+                <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="搜索" required="">
+                <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+            </div>
+            <label class="weui-search-bar__label" id="searchText" style="transform-origin: 0px 0px 0px; opacity: 1; transform: scale(1, 1);">
+                <i class="weui-icon-search"></i>
+                <span>搜索</span>
+            </label>
+        </form>
+        <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
+    </div>
+
+    <!-- 头部信息 begin -->
+    <div class="swiper-container swiper1 b-line swiper-container-horizontal swiper-container-free-mode">
+        <div class="swiper-wrapper" id="category">
+            <div class="swiper-slide{if intval($_GPC['cid'])==0} selected{/if}" data-cid="0" onclick="window.location.href='{php echo $this->createMobileUrl('phone',array('op'=> 'list'))}'">全部类型</div>
+        </div>
+    </div>
+    <!-- 头部信息 end -->
+</div>
+<div class="news-contain">
+    <!-- 内容信息 begin -->
+    <div class="swiper-container swiper2 swiper-container-horizontal swiper-container-autoheight">
+        <div class="swiper-wrapper" >
+            <div class="swiper-slide swiper-no-swiping" id="list"></div>
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+
+        </div>
+    </div>
+    <!-- 内容信息 end -->
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="news-list">
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">
+                        <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-yellow-pages.png"><span style="width: 100%;display: block;text-indent: 2em">{{ d.list[i].content }}<span></span></label>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label news-list-label">电话:</label>
+                    <span class="weui-form-preview__value">{{ d.list[i].phone }}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label news-list-label">地址:</label>
+                    <span class="weui-form-preview__value">{{ d.list[i].address }}</span>
+                </div>
+                <div class="weui-form-preview__item ">
+                    <label class="weui-form-preview__label news-list-label">简介:</label>
+                    <span class="weui-form-preview__value">{{ d.list[i].introduction }}</span>
+                </div>
+                <a class="news-list-phone" href="tel:{{ d.list[i].phone }}">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-news-phone.png">
+                </a>
+            </div>
+        </div>
+    </div>
+    {{# } }}
+</script>
+<script type="text/html" id="category_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="swiper-slide" data-cid="{{d.list[i].id}}" onclick="window.location.href='{php echo $this->createMobileUrl('phone',array('op'=> 'list'))}&cid={{d.list[i].id}}'">{{d.list[i].name}}</div>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        // 电话例表
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var cid = "{php echo intval($_GPC['cid'])}";
+        var url = "{php echo wxapp_url('phone/list')}&cid=" + cid+"&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+
+        // 分类
+        var link = "{php echo wxapp_url('category/list')}&type=8";
+        _loaddata(link, $("#category"), 'category_list', true, function (res) {
+
+            var swiper1 = new Swiper('.swiper1', {
+                slidesPerView:'auto',
+                paginationClickable:true,
+                spaceBetween:15,
+                freeMode:true,
+                loop:false,
+                loopedSlide:res.data.length,
+                observer:true,
+                observeParents:true,
+                onInit: function(swiper){
+                    swiper.slides.each(function (index, val) {
+                        var ele = $(val);
+                        var eleId = ele.data('cid');
+                        ele.removeClass("selected")
+                        if( cid == eleId ){
+                            ele.addClass("selected");
+                            swiper.slideTo(index, 500, false);
+                        }
+                    });
+                }
+            });
+
+        });
+    })
+</script>
+</body>
+</html>

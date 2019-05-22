@@ -1,0 +1,170 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基本设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('direct',array('op' => 'sets'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                                <thead>
+                                <tr>
+                                    <th class="col-sm-2">超市设置</th>
+                                    <th class="col-sm-3">说明</td>
+                                    <th class="col-sm-4"></th>
+                                    <th class="col-sm-3">是否启用</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="title">小区超市设置</td>
+                                    <td>默认一个小区一个超市，如一个小区多个超市，请开启</td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p125" class="js-switch_24" {if $set['p125']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">平台提成</td>
+                                    <td>
+                                        开启超市提成后，粉丝购买超市商品，平台将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p126" class="js-switch_2" {if $set['p126']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="title">小区提成</td>
+                                    <td>
+                                        开启小区提成后，粉丝购买超市商品，小区将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p127" class="js-switch_3" {if $set['p127']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市积分比例</td>
+                                    <td>
+                                        开启后，业主购买商品后，会返还对应的积分
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="text" name="set[p129]" class="form-control" value="{$set['p129']['value']}"/>
+                                            <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p128" class="js-switch_15" {if $set['p128']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市配送费</td>
+                                    <td>
+                                        开启后，购买超市商品设有配送费，可设置满多少元减配送费
+                                    </td>
+                                    <td>
+                                        <div class="input-group" style="width: 50%;float: left">
+                                            <input type="text" name="set[p132]" class="form-control" value="{$set['p132']['value']}" placeholder="包邮金额"/>
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                        <div class="input-group" style="width: 50%;float: left">
+                                            <input type="text" name="set[p131]" class="form-control" value="{$set['p131']['value']}" placeholder="配送费"/>
+                                            <span class="input-group-addon">配送费</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p130" class="js-switch_18" {if $set['p130']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市送货时间</td>
+                                    <td>请用|分割填写的时间</td>
+                                    <td>
+                                        <input type="text" name="set[p134]" class="form-control" value="{$set['p134']['value']}" placeholder="例如：9:00~10:00|11:00~12:00|14:00~15:00"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p133" class="js-switch_19" {if $set['p133']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市配送方式</td>
+                                    <td>请用|分割填写的配送方式,如需自取，请设置第一个名称为自取</td>
+                                    <td>
+                                        <input type="text" name="set[p136]" class="form-control" value="{$set['p136']['value']}" placeholder="例如：自取|送货上门"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p135" class="js-switch_20" {if $set['p135']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">超市独立支付</td>
+                                    <td>
+                                        开启后，启用独立支付，直接支付到超市账户，平台和小区将没有提成
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p137" class="js-switch_10" {if $set['p137']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+$(function () {
+    $(':checkbox').on('change', function (e, state) {
+        $this = $(this);
+        var xqkey = $this.attr('id');
+        var status = this.checked ? 1 : 0;
+        $this.val(status);
+        var regionid = '{$regionid}';
+        $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+        })
+    });
+    $('.btn').hover(function () {
+        $(this).tooltip('show');
+    }, function () {
+        $(this).tooltip('hide');
+    });
+});
+
+</script>
+

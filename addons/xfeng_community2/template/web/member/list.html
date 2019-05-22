@@ -1,0 +1,598 @@
+<!--{template 'web/common/header-base'}-->
+
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        border-top: 1px solid #f0f0f0;
+    }
+</style>
+<!--<div class="gohome"><a class="animated bounceInUp" href="{php echo $this->createWebUrl('home')}" title="返回首页"><i-->
+        <!--class="fa fa-home"></i></a></div>-->
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>住户管理</h5>
+                        <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('member')}"></a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="member"/>
+                            <input type="hidden" name="op" value="list"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <a href="{php echo $this->createWebUrl('member',array('op' => 'visit'))}" class="btn btn-primary">查看游客</a>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select class="form-control" name="regionid">
+                                    <option>全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <input type="text" placeholder="请输入业主姓名" class="form-control" name="realname"
+                                       value="{$_GPC['realname']}">
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <input type="text" placeholder="请输入业主手机" class="form-control" name="mobile"
+                                       value="{$_GPC['mobile']}">
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" placeholder="可查房号" class="form-control" name="homenumber" value="{$_GPC['idcard']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <form action="" class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids"
+                                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+                                    <th>小区</th>
+                                    <th>房号</th>
+                                    <th>住户身份</th>
+                                    <th>绑定时间</th>
+                                    <th>状态</th>
+                                    <th>开门</th>
+                                    <th>备注</th>
+                                    <th>操作</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                                   value="{$item['id']}">
+                                            <label for="ids_{$item['id']}"></label>
+                                        </div>
+
+                                    </td>
+                                    <td>{$item['realname']}</td>
+                                    <td>{php echo substr_replace($item['mobile'],'****',3,4)}</td>
+                                    <td>{$item['title']}</td>
+                                    <td>
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan">{$bind['address']}{if $bind['enable'] == 1}<span>(默认)</span>{/if}</div>
+                                        {/loop}
+                                    </td>
+                                    <td>
+                                        {if $item['bind']}
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan" style="color: red">{if $bind['bstatus'] == 1}户主 {elseif
+                                            $bind['bstatus'] == 2} 家属{elseif $bind['bstatus'] == 3}租户{/if}
+                                        </div>
+                                        {/loop}
+                                        {else}
+                                        <div class="rowspan" style="color: blue">游客</div>
+                                        {/if}
+                                    </td>
+
+                                    <td>
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan">
+                                            {php echo date('Y-m-d H:i:s',$bind['bcreatetime'])}
+                                        </div>
+                                        {/loop}
+                                    </td>
+                                    <td>
+                                        <label data="{$item['status']}" class='label  label-default {if $item['status']==1}label-info{/if}' onclick="status(this,'{$item['status']}')" data-id="{$item['id']}" data-toggle="modal" data-target="#myModal6" >{if $item['status']==1}通过{else}禁止{/if}</label>
+                                    </td>
+                                    <td>
+                                        <label data="{$item['open_status']}" class='label  label-default {if $item['open_status']==1}label-info{/if}'
+                                        onclick="verify(this,{$item['id']},'open_status')">{if
+                                        $item['open_status']==1}开启{else}关闭{/if}</label>
+                                    </td>
+                                    <td>{$item['remark']}</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal4" onclick="showopenid(this)" data-id="{$item['openid']}">粉丝编号</a>
+                                        <a class="btn btn-primary btn-sm" onclick="remark(this,'{$item['remark']}')" data-id="{$item['id']}" data-toggle="modal" data-target="#myModal">备注</a>
+                                        <a class="btn btn-primary btn-sm" data-id="{$item['uid']}" onclick="xqverify(this)" data-toggle="modal" data-target="#myModal1">授权开门</a>
+                                        <a href="{php echo $this->createWebUrl('member',array('op'=>'open','id' => $item['id']))}" class="btn btn-warning btn-sm">设置开门时间</a>
+                                        <a href="{php echo $this->createWebUrl('member',array('op'=>'post','id' => $item['id']))}" class="btn btn-success btn-sm">添加房号</a>
+                                        {if $item['idcard'] || $item['contract']}
+                                        <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal5" onclick="showmsg(this)" data-id="{$item['idcard']}" data-contract="{$item['contract']}">详情</a>
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan">
+
+                                            <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('member', array('op'=>'add', 'id' => $bind['id'],'uid' => $item['uid'],'regionid' => $item['regionid'],'memberid'=>$item['id']));}">修改</a>
+                                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('member', array('op'=>'del', 'id' => $bind['id']));}" onClick="return confirm('确定删除当前房号?');">删除房号</a>
+
+                                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('member', array('op'=>'change', 'id' => $bind['id'],'memberid'=>$item['id'],enable=>$bind['enable']));}" onClick="return confirm('确定切换为默认房号?');">切换默认</a>
+                                        </div>
+                                        {/loop}
+
+                                    </td>
+
+                                </tr>
+                                {/loop}
+
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td id="pager_list_1_left" align="left">
+                                        <a class="btn btn-primary btn-sm" href="javascript:;" data-toggle="modal"
+                                           data-target="#myModal2" id="wxsend">批量微信推送</a>
+                                        <input type="submit" name="del" class="btn btn-danger btn-sm" value="批量删除用户">
+                                        <input type="submit" name="plmember" class="btn btn-info btn-sm"
+                                               value="一键审核用户状态">
+                                        <input type="submit" name="plopen" class="btn btn-warning btn-sm"
+                                               value="一键开通门禁并绑定大门">
+                                        <input type="submit" name="pldoor" class="btn btn-info btn-sm"
+                                               value="一键开通门禁并绑定单元门">
+                                        <input type="submit" name="plcall" class="btn btn-info btn-sm"
+                                               value="一键下发呼叫手机号">
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                        <span style="color: red">总计:{$total}</span>
+                                    </td>
+                                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">发布通知</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="title" class="col-sm-2 control-label">标题</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="title" class="form-control" placeHolder="尽量简短，15个字以内"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">内容</label>
+                    <div class="col-sm-10">
+                        <textarea name="content" class="form-control" style="height: 200px;" ></textarea>
+                    </div>
+                </div>
+            </div>
+                <input type="hidden" name="ids" value="" id="ids">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <input type="submit" class="btn btn-primary" name="plwechat" value="保存" data-loading-text="正在发送中，请勿关闭和刷新浏览器......" autocomplete="off" id="myButton">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">粉丝编号</h4>
+
+            </div>
+
+                <div class="modal-body">
+                    <span id="openid"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='memberid' id='memberid' class="form-control"/>
+                    <textarea name="remark" class="form-control" rows="5" id="xqremark"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="add" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title"> 授权绑定开门</h4>
+                <small class="font-bold">1.如果需要绑定多个门,需要去选择多次小区绑定.</small>
+                <small class="font-bold">2.采用授权绑定开门，需要在《小区管理》->《小区设置》启用授权验证开门</small>
+                <small class="font-bold">3.如需要门禁套餐，需要在《智能门禁》->《门禁分组》中添加</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <input type='hidden' name='uid' id='uid' class="form-control"  />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">搜索</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择小区</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" name="regionid" id="xqregionid">
+                                <option value="0">全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none" id="group">
+                        <label for="deviceid" class="col-sm-2 control-label">选择套餐</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="groupid" id="groupid">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none" id="device">
+                        <label for="deviceid" class="col-sm-2 control-label">绑定门禁</label>
+                        <div class="col-xs-10" id="deviceid">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">详情</h4>
+
+            </div>
+
+            <div class="modal-body">
+                <p>身份证:<span id="idcard"></span></p>
+                <p>购房合同编号:</p><span id="contract"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">审核通知</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="status" class="col-sm-2 control-label">审核状态</label>
+                        <div class="col-sm-10">
+                            <select name="status" id="status" class="form-control">
+                                <option value="">选择审核状态</option>
+                                <option value="1">通过</option>
+                                <option value="2">不通过</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="content" class="col-sm-2 control-label">审核原因</label>
+                        <div class="col-sm-10">
+                            <textarea name="content" class="form-control" rows="5" id="content" placeholder="请输入审核的原因"></textarea>
+                        </div>
+                    </div>
+                    <input type='hidden' name='memberid' id='mid' class="form-control"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="send" value="提交">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+</script>
+<script type="text/javascript">
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('member',array('op' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'status') {
+                $(obj).html(d.data == '1' ? '通过' : '禁止');
+            }
+            if (type == 'open_status') {
+                $(obj).html(d.data == '1' ? '开启' : '关闭');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+    $(function () {
+        $("#checkAll").click(function () {
+
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("#regionid[data-group='" + group + "']").each(function () {
+                $(this).get(0).checked = checked;
+            })
+        });
+        // $("#xqh").click(function () {
+        //     $("#show").hide();
+        // })
+        // $("#xqh").click(function () {
+        //     $("#show").hide();
+        // })
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#xqregionid').val(data.regionid);
+                    var uid = $("#uid").val();
+                    if (data.regionid != '0') {
+                        $.post("{php echo $this->createWebUrl('member',array('op' => 'group'))}", {
+                            regionid: data.regionid,
+                            uid: uid
+                        }, function (data) {
+                            if (data.status == 1 || data.status == 3) {
+                                alert(data.content);
+                                $("#group").hide();
+                                return false;
+                            }
+                            if (data.status == 2) {
+                                var content = "<option value='0'>全部套餐</option>";
+                                $.each(data.content, function (name, val) {
+                                    content += "<option value='"+val.id+"' "+val.select+">"+val.title+"</option>";
+                                });
+                                $("#groupid").html(content);
+                                $("#group").show();
+                            }
+
+                        }, 'json');
+                        $.post("{php echo $this->createWebUrl('member',array('op' => 'binddoor'))}", {
+                            regionid: data.regionid,
+                            uid: uid
+                        }, function (data) {
+                            if (data.status == 1 || data.status == 3) {
+                                alert(data.content);
+                                $("#device").hide();
+                                return false;
+                            }
+                            if (data.status == 2) {
+                                var result = data.result;
+                                var content = "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'><input type='checkbox' id='xqcheckAll' name='xqcheckAll' data-group='deviceid'><label for='xqcheckAll'>全部</label> </div>";
+                                $.each(data.content, function (name, val) {
+                                    content += "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'>";
+                                    content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_" + val.id + "' " + val.check + ">";
+                                    content += "<label for='deviceid_" + val.id + "' " + val.check + ">" + val.title + val.unit + "</label> </div>";
+                                });
+
+
+                                $("#deviceid").html(content);
+                                $("#xqcheckAll").click(function () {
+                                    var checked = $(this).get(0).checked;
+                                    var group = $(this).data('group');
+                                    $("input:checkbox[data-group='" + group + "']").each(function () {
+                                        $(this).get(0).checked = checked;
+                                    })
+                                });
+                                $("#device").show();
+                            }
+
+                        }, 'json');
+                    }
+                }
+            },'json')
+        })
+        $("#xqregionid").change(function () {
+            var regionid = $("#xqregionid option:selected").val();
+            var uid = $("#uid").val();
+            if (regionid != '0') {
+                $.post("{php echo $this->createWebUrl('member',array('op' => 'group'))}", {
+                    regionid: regionid,
+                    uid: uid
+                }, function (data) {
+                    if (data.status == 1 || data.status == 3) {
+                        alert(data.content);
+                        $("#group").hide();
+                        return false;
+                    }
+                    if (data.status == 2) {
+                        var content = "<option value='0'>全部套餐</option>";
+                        $.each(data.content, function (name, val) {
+                            content += "<option value='"+val.id+"' "+val.select+">"+val.title+"</option>";
+                        });
+                        $("#groupid").html(content);
+                        $("#group").show();
+                    }
+
+                }, 'json');
+                $.post("{php echo $this->createWebUrl('member',array('op' => 'binddoor'))}", {
+                    regionid: regionid,
+                    uid: uid
+                }, function (data) {
+                    if (data.status == 1 || data.status == 3) {
+                        alert(data.content);
+                        $("#device").hide();
+                        return false;
+                    }
+                    if (data.status == 2) {
+                        var result = data.result;
+                        var content = "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'><input type='checkbox' id='xqcheckAll' name='xqcheckAll' data-group='deviceid'><label for='xqcheckAll'>全部</label> </div>";
+                        $.each(data.content, function (name, val) {
+                            content += "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'>";
+                            content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_" + val.id + "' " + val.check + ">";
+                            content += "<label for='deviceid_" + val.id + "' " + val.check + ">" + val.title + val.unit + "</label> </div>";
+                        });
+
+
+                        $("#deviceid").html(content);
+                        $("#xqcheckAll").click(function () {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" + group + "']").each(function () {
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                        $("#device").show();
+                    }
+
+                }, 'json');
+            }
+        })
+        $('#wxsend').click(function () {
+            var ids = '';
+            $("input:checkbox[name='ids[]']:checked").each(function(){
+                var t1 = $(this).val();
+                ids += t1+',';
+            });
+            $('#ids').val(ids);
+        })
+    });
+
+
+    function xqverify(obj) {
+        document.getElementById("xqregionid").selectedIndex=0
+        $("#device").hide()
+        $("#group").hide()
+        $("#uid").val(obj.getAttribute("data-id"));
+    }
+    function remark(obj, remark) {
+        $("#memberid").val(obj.getAttribute("data-id"));
+        var remark = remark;
+        $("#xqremark").html(remark);
+        $("#remark").show();
+    }
+    function status(obj, status) {
+        $("#mid").val(obj.getAttribute("data-id"));
+    }
+    function showopenid(obj) {
+        $("#openid").html(obj.getAttribute("data-id"));
+    }
+    $("#xqhh").click(function () {
+        $("#remark").hide();
+    })
+    function showmsg(obj) {
+        $("#idcard").html(obj.getAttribute("data-id"));
+        $("#contract").html(obj.getAttribute("data-contract"));
+    }
+</script>
+
+
+<!--{template 'web/common/footer'}-->

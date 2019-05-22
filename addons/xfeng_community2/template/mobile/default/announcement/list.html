@@ -1,0 +1,98 @@
+{template 'default/header'}
+<body class="max-width">
+    <header class="bar bar-nav bg-green" style="position: fixed">
+        <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+        <h1 class="title txt-fff">公告列表</h1>
+    </header>
+    <div class="content">
+        <ul class="notice-list" id="content-list">
+        </ul>
+        <div class="refesh"></div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: 'GET',
+                url: '{php echo $this->createMobileUrl('announcement',array('op' => 'list'))}&page=1',
+                dataType: 'json',
+                success: function(data){
+                    var result = '';
+                    for(var i = 0; i < data.list.length; i++){
+                        result += '<li onclick=\'window.location.href="' + data.list[i].url + '"\'><div class="list-item"><div class="list-item-time"><div class="day"><span class="day_b">' + data.list[i].da + '</span> <span class="day_s">日</span></div><div class="year">' + data.list[i].dat + '</div></div> <div class="list-item-title"><a href="#"><p>' + data.list[i].title + '</p></a></div></div><div class="list-item"><div class="list-item-bl"><span class="' + data.list[i].css + '">' + data.list[i].p + '</span><a href="' + data.list[i].url + '"> <span class="read_all">阅读详情</span></a></div><div class="list-item-br">' +
+                            '<span class="' + data.list[i].pcss + '"></span></div></div></li>';
+                    }
+                    $('#content-list').append(result);
+                }
+            });
+            //加载分页
+            load();
+        });
+        function load() {
+            var page = 2;
+
+            // dropload函数接口设置
+            $('.content').dropload({
+                scrollArea : window,
+                domDown : {
+                    domClass   : 'dropload-down',
+                    // 滑动到底部显示内容
+                    domRefresh : '<div class="dropload-refresh">↑上拉加载更多</div>',
+                    // 内容加载过程中显示内容
+                    domLoad    : '<div class="dropload-load"><span class="loading"></span>加载中...</div>',
+                    // 没有更多内容-显示提示
+                    domNoData  : '<div class="dropload-noData">暂无数据</div>'
+                },
+                autoLoad:true,
+                distance:2000,
+                // 2 . 上拉加载更多 回调函数
+
+                loadDownFn : function(me){
+                    $.ajax({
+                        type: 'GET',
+                        url: '{php echo $this->createMobileUrl('announcement',array('op' => 'list'))}&page='+page,
+                        dataType: 'json',
+                        success: function(data){
+                            if(data.list.length==0){
+                                me.lock();
+                                // 无数据
+                                me.noData();
+                            }
+                            var result = '';
+                            for(var i = 0; i < data.list.length; i++){
+                                result += '<li onclick=\'window.location.href="' + data.list[i].url + '"\'><div class="list-item"><div class="list-item-time"><div class="day"><span class="day_b">' + data.list[i].da + '</span> <span class="day_s">日</span></div><div class="year">' + data.list[i].dat + '</div></div> <div class="list-item-title"><a href="#"><p>' + data.list[i].title + '</p></a></div></div><div class="list-item"><div class="list-item-bl"><span class="' + data.list[i].css + '">' + data.list[i].p + '</span><a href="' + data.list[i].url + '"> <span class="read_all">阅读详情</span></a></div><div class="list-item-br">' +
+                                    '<span class="' + data.list[i].pcss + '"></span></div></div></li>';
+
+
+                            }
+
+
+                            // 为了测试，延迟1秒加载
+                            setTimeout(function(){
+                                // 加载 插入到原有 DOM 之后
+                                $('#content-list').append(result);
+                                if(data.list.length <20){
+                                    // 数据加载完
+                                    // 无数据
+                                    me.noData();
+
+                                }
+
+                                // 每次数据加载完，必须重置
+                                me.resetload();
+                            },1000);
+
+                        },
+                        // 加载出错
+                        error: function(xhr, type){
+                            // 即使加载出错，也得重置
+                            me.resetload();
+                        }
+                    });
+                    page++;
+
+                },
+                threshold : 50 //
+            });
+        }
+    </script>
+{template 'default/footer'}

@@ -1,0 +1,174 @@
+{template 'default2/header'}
+<style>
+    .weui-navbar {
+        background: #ffffff;
+        position: fixed;
+    }
+
+    .weui-navbar__item {
+        padding: 10px 0;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: #ffffff;
+        color: #F7624B;
+    }
+    .cube_grid_img > span{
+        top: auto;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-navbar">
+    <a class="weui-navbar__item">
+        分类<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        距离近<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        价格低<i></i>
+    </a>
+</div>
+<div class="nav-modal">
+    <div class="Category-eject">
+        <ul class="Category-w" id="category">
+
+
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list'))}'">全部</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','distance'=>1))}'">1km</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','distance'=>3))}'">3km</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','distance'=>5))}'">5km</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','distance'=>10))}'">10km</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','type'=>1))}'">由低到高</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list','type'=>2))}'">由高到低</li>
+        </ul>
+    </div>
+</div>
+<div class="group-contain">
+    <ul class="grpup-list" id="list">
+
+
+    </ul>
+    <div class="weui-loadmore" id="loading" style="display: none">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips loading"></span>
+    </div>
+    <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <li class="grpup-item" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'detail'))}&id={{ d.list[i].id }}'">
+        <div class="group-item-img cube_grid_img" data-ratio="3:1">
+            <img src="{{d.list[i].picurl }}">
+            <span>{{d.list[i].sjname }}</span>
+        </div>
+        <div class="group-item-foot">
+            <span>{{d.list[i].area}}</span>
+            <span>|</span>
+            <span class="mileage">{{d.list[i].juli }}km</span>
+            <span>|</span>
+            <span>人均:{{d.list[i].price}}元</span>
+            <a href="#">进店逛逛&gt;&gt;</a>
+        </div>
+    </li>
+    {{# } }}
+</script>
+<script type="text/html" id="category_list">
+    <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list'))}'">全部</li>
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <li onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'list'))}&cid={{d.list[i].id}}'">{{d.list[i].name}}</li>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if (localStorage.lng == undefined || localStorage.lat == undefined) {
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    var mk = new BMap.Marker(r.point);
+                    var lng = localStorage.lng = r.point.lng;
+                    var lat = localStorage.lat = r.point.lat;
+                    var cid = "{$_GPC['cid']}";
+                    var distance = "{$_GPC['distance']}";
+                    var type = "{$_GPC['type']}";
+                    var url = "{php echo wxapp_url('business/list')}"+"&lng="+lng+"&lat="+lat+"&cid="+cid+"&distance="+distance+"&type="+type;
+                    loaddata(url, $("#list"), 'xq_list', true);
+                }else {
+                    alert('获取当前位置失败,请确认是否开启定位服务');
+                }
+            },{enableHighAccuracy: true})
+
+
+        }
+        else{
+            var cid = "{$_GPC['cid']}";
+            var distance = "{$_GPC['distance']}";
+            var type = "{$_GPC['type']}";
+            var url = "{php echo wxapp_url('business/list')}"+"&lng="+localStorage.lng+"&lat="+localStorage.lat+"&cid="+cid+"&distance="+distance+"&type="+type;
+            loaddata(url, $("#list"), 'xq_list', true);
+        }
+        var _url = "{php echo wxapp_url('category/list')}" + "&type=6";
+        _loaddata(_url, $("#category"), 'category_list', true);
+    });
+
+</script>
+<script>
+    $.each($('.weui-navbar__item'), function (i) {
+        $(this).click(function () {
+            if ($(this).hasClass('weui-bar__item--on')) {
+                $.each($('.Category-eject'), function (j) {
+                    $(this).slideUp(250);
+                });
+                $(this).removeClass('weui-bar__item--on');
+            } else {
+                $.each($('.Category-eject'), function (j) {
+                    if (i == j) {
+                        $(this).slideDown(250);
+                        $(".Category-w li").each(function (index) {
+                            $(this).css({'animation-delay': (index / 10) + 's'});
+                        });
+                    } else {
+                        $(this).slideUp(250);
+                    }
+                });
+                $(this).addClass('weui-bar__item--on').siblings().removeClass('weui-bar__item--on');
+            }
+        })
+    })
+
+    $(".Category-eject").each(function (i) {
+        $(this).click(function () {
+            $(this).slideUp(250);
+            $('.weui-navbar__item').each(function (j) {
+                if (j == i) {
+                    $(this).removeClass('weui-bar__item--on');
+                }
+            })
+        })
+
+    });
+</script>
+</body>
+</html>

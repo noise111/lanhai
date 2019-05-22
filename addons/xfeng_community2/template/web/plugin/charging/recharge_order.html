@@ -1,0 +1,62 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>充值记录</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'credit'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>订单号</th>
+                            <th>小区</th>
+                            <th>姓名</th>
+                            <th>金额</th>
+                            <th>状态</th>
+                            <th>支付时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['ordersn']}</td>
+                            <td>{if $item['title']}{$item['title']}{else}游客xxx{/if}</td>
+                            <td>{if $item['realname']}{$item['realname']}{else}{$item['nickname']}{/if}</td>
+                            <td>{$item['price']}元</td>
+                            <td>{if $item['status'] == 1}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未付款</span>{/if}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>
+                                {if $item['status'] == 0 && (empty($user) || $user['type'] == 1)}
+                                {if ($user && $menu_opss && @in_array('charging_creditDel', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'creditdel','id' => $item['id']))}" class="btn btn-default btn-sm" data-original-title="删除" onclick="return confirm('将删除该记录，确认吗？')">删除</a>
+                                {/if}
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

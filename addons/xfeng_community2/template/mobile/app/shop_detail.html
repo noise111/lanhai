@@ -1,0 +1,152 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">订单详情</h1>
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">买家姓名：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['realname']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Date -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">买家电话</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['mobile']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Switch (Checkbox) -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">买家地址：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$region['title']}{$item['address']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">购买时间：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {php echo date('Y-m-d H:i:s', $item['createtime'])}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {if $item['paytype']}
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">付款方式：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {if $item['paytype'] == 1}余额支付{/if}
+                                {if $item['paytype'] == 2}在线支付{/if}
+                                {if $item['paytype'] == 3}货到付款{/if}
+                                {if $item['paytype'] == 4}后台支付{/if}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {/if}
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">订单状态：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {if $item['status'] == 0}<span class="label label-info">待付款</span>{/if}
+                                {if $item['status'] == 1}<span class="label label-info">待发货</span>{/if}
+                                {if $item['status'] == 2}<span class="label label-info">待收货</span>{/if}
+                                {if $item['status'] == 3}<span class="label label-success">已完成</span>{/if}
+                                {if $item['status'] == -1}<span class="label label-success">已关闭</span>{/if}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">总价：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$total} 元
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$good}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <input type="hidden" value="{$id}" name="id" id="orderid"/>
+        <div class="content-block">
+            {if empty($item['status'])}
+            <p><button type="submit"  name="confrimpay" class="button button-fill" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto">确认付款</button></p>
+            {elseif $item['status'] == 1}
+            <p><button type="submit" name="confirmsend" class="button button-fill button-success" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto" id="confirmsend">确认发货</button></p>
+            {elseif $item['status'] == 2}
+            <p><button type="submit" name="cancelsend" id="cancelsend" class="button button-fill button-danger" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto">取消发货</button></p>
+            {elseif $item['status'] == 3}
+            <p><button type="submit" name="finish" id="finish" class="button button-fill button-warning" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto">完成订单</button></p>
+            {/if}
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+
+    </div>
+</div>
+<script>
+    $("#confirmsend").click(function () {
+        var type = 1;
+        var orderid = $("#orderid").val();
+        $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'shop'))}",{type:type,orderid:orderid},function (data) {
+            if(data.status == 1){
+                $.toast("发货成功");
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+            }
+        },'json')
+    })
+    $("#cancelsend").click(function () {
+        var type = 2;
+        var orderid = $("#orderid").val();
+        $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'shop'))}",{type:type,orderid:orderid},function (data) {
+            if(data.status == 1){
+                $.toast("取消发货");
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+            }
+        },'json')
+    })
+    $("#finish").click(function () {
+        var type = 3;
+        var orderid = $("#orderid").val();
+        $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'shop'))}",{type:type,orderid:orderid},function (data) {
+            if(data.status == 1){
+                $.toast("完成订单");
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+            }
+        },'json')
+    })
+</script>
+{template 'app/footer'}

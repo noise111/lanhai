@@ -1,0 +1,160 @@
+{template 'web/common/header-base'}
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+
+<div class="wrapper wrapper-content animated ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('slide')}"></a>&nbsp;&nbsp;&nbsp;添加首页幻灯</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('slide',array('op' => 'add','id' => $id))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+	<form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form">
+		<input type="hidden" name="id" value="{$item[id]}">
+		<input type="hidden" name="regionids" value="" />
+
+				<div class="form-group">
+					<label class="col-sm-2 control-label">排序</label>
+					<div class="col-sm-5 col-xs-5">
+						<input type="text" class="form-control" placeholder="" name="displayorder" value="{$item['displayorder']}">
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">幻灯标题</label>
+					<div class="col-sm-5 col-xs-5">
+						<input type="text" class="form-control" placeholder="" name="title" id="title" value="{$item['title']}">
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">幻灯图片</label>
+					<div class="col-sm-5 col-xs-5">
+						{php echo tpl_form_field_image('thumb', $item['thumb'],'',$options)}
+						<span class="help-block">建议比例：16:9</span>
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">幻灯链接</label>
+					<div class="col-sm-5 col-xs-5">
+						{php echo tpl_form_field_link('url', $item['url'], array('css' => array('input' => ' input-sm', 'btn' => ' btn-sm')));}
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+		<div class="form-group">
+			<label for="" class="col-sm-2 control-label">展示时间</label>
+			<div class="col-sm-5 col-xs-5">
+				{php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+			</div>
+		</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-sm-2 control-label">状态</label>
+					<div class="col-sm-5 col-xs-5">
+						<div class="radio radio-success radio-inline">
+							<input type="radio" name="status" id="s2_2" value="1" {if $item['status']==1 || empty($item['type'])}checked="checked" {/if} />
+							<label for="s2_2">显示</label>
+						</div>
+						<div class="radio radio-success radio-inline">
+							<input type="radio" name="status" id="s2_1" value="2" {if $item['status']==2}checked="checked" {/if} />
+							<label for="s2_1">隐藏</label>
+						</div>
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+		<div class="form-group">
+			<label for="" class="col-sm-2 control-label">是否选择所有小区</label>
+			<div class="col-xs-5">
+				<div class="radio radio-success checkbox-inline">
+					<input type="radio" name="allregion" id="allregion1" value="1" {if $item['allregion'] == 1 || empty($item['allregion'])}checked{/if}/>
+					<label for="allregion1"> 是 </label>
+
+				</div>
+				<div class="radio radio-success radio-inline">
+					<input type="radio" name="allregion" id="allregion2" value="2" {if $item['allregion'] == 2}checked{/if} />
+					<label for="allregion2">否</label>
+				</div>
+			</div>
+		</div>
+		<div class="hr-line-dashed"></div>
+		<div id="showbirth" {if $item['allregion'] == 2}style='display:block'{else}style='display:none'{/if}>
+			<div class="form-group">
+				<label for="" class="col-sm-2 control-label">省市区</label>
+				<div class="col-sm-5 col-xs-5">
+					{php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'dist' => $item['dist']))}
+				</div>
+			</div>
+			<div class="hr-line-dashed"></div>
+			<div class="form-group region" {if !$regs}style="display: none"{/if}>
+			<label for="" class="col-sm-2 control-label">小区</label>
+			<div class="col-sm-10 content">
+
+
+			</div>
+		</div>
+		</div>
+	            <div class="form-group">
+					<label class="col-sm-2 control-label"></label>
+					<div class="col-sm-10 col-xs-10">
+						<button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+						<input type="hidden" name="token" value="{$_W['token']}" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='allregion']").click(function(){
+            var type = $("input[name='allregion']:checked").val();
+            if(type == 1){
+                $("#showbirth").hide();
+            }
+            if(type == 2){
+                $("#showbirth").show();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if (!$("#title").val()) {
+            alert('请输入幻灯标题。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        $("input[name='regionids']").val(regionids);
+        var url = "{php echo $this->createWebUrl('slide',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+
+{template 'web/common/footer'}

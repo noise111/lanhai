@@ -1,0 +1,19 @@
+{template 'default2/header'}
+<body>
+<div id="list" style="padding: 15px">
+
+</div>
+<script type="text/html" id="xq_list">
+    {{d.reason}}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var id = "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('announcement/detail')}"+"&id="+id;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

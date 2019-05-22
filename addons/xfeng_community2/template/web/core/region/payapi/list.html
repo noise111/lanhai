@@ -1,0 +1,119 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('region')}"></a>&nbsp;&nbsp;&nbsp;支付接口配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('region',array('op' => 'payapi','regionid' => $regionid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'list','regionid' => $regionid))}" title="支付配置" >支付配置</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'alipay','regionid' => $regionid))}" title="支付宝" >支付宝</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'wechat','regionid' => $regionid))}" title="微信支付" >微信支付</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'sub','regionid' => $regionid))}" title="服务商支付" >服务商支付</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'swiftpass','regionid' => $regionid))}" title="微信支付（兴业银行）" >微信支付(兴业银行/中信银行/农商银行）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'hsyunfu','regionid' => $regionid))}" title="微信支付（华商云付）" >微信支付（华商云付）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('region',array('op' => 'payapi','p' => 'chinaums','regionid' => $regionid))}" title="银联支付" >银联支付</a></li>
+                    </ul>
+                    <form action="" method="post" class="form-horizontal form">
+                        <input type="hidden" value="{$regionid}" name="regionid">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td class="col-md-2">支付设置</td>
+                                <td class="col-md-3">说明</td>
+                                <td class="col-md-2"></td>
+                                <td class="col-md-4">
+                                    是否启用
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">物业费独立支付</td>
+                                <td>
+                                    开启后，物业费将不在缴纳到平台，直接缴纳到小区账户
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="set[x44]" id="x44" class="js-switch_18" {if $set['x44']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">小区活动独立支付</td>
+                                <td>
+                                    开启后，小区活动将不在缴纳到平台，直接缴纳到小区账户
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="set[x45]" id="x45" class="js-switch_19" {if $set['x45']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">报修付款独立支付</td>
+                                <td>
+                                    开启后，报修后支付维修款将不在缴纳到平台，直接缴纳到小区账户
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="set[x79]" id="x79" class="js-switch_20" {if $set['x79']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">智能停车独立支付</td>
+                                <td>
+                                    开启后，智能停车支付将不在缴纳到平台，直接缴纳到小区账户
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="set[x83]" id="x83" class="js-switch_21" {if $set['x83']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <!--<div class="form-group">-->
+                            <!--<label for="" class="col-sm-2 control-label"></label>-->
+                            <!--<div class="col-sm-5">-->
+                                <!--<button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>-->
+                                <!--<input type="hidden" name="token" value="{$_W['token']}" />-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+{template 'web/common/footer'}

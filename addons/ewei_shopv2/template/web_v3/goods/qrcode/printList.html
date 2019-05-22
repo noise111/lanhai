@@ -1,0 +1,263 @@
+{template '_header'}
+<style>
+
+#print_area{
+    background: #f5f7f9;
+  }
+.qrcode-container {
+    margin-left: 0px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+    color: #000000;
+    font-size: 12px;
+    height: 169px;
+
+}
+#print_batch .qrcode-container:last-child{
+    height: 150px;
+}
+#print_area .qrcode-container:last-child{
+    height: 150px;
+}
+.qrcode-container .left {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    margin-right:7px;
+    margin-left:5px;
+    margin-top:5px;
+}
+.qrcode-container .left div {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+.qrcode-container .left .title {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom:3px;
+}
+.qrcode-container .left img {
+    width: 120px;
+    height: 120px;
+}
+.qrcode-container .right {
+    width: 180px;
+    height: 100%;
+    line-height:160%;
+    padding-left:3px;
+    padding-right:22px;
+    margin-top:5px;
+}
+.qrcode-container .right .batch{
+    margin-top: 0px;
+    margin-bottom:3px;
+}
+</style>
+<div class="page-header">
+	当前位置：<span class="text-primary">打印商品二维码</span>
+</div>
+
+<div class="page-content">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-lg control-label">商品名称</label>
+            <div class="col-sm-9 col-xs-12">
+                <input class="form-control" name="title" id="title" placeholder="{$item['title']}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg control-label must">打印范围</label>
+            <div class="col-sm-9 col-xs-12">              
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" placeholder="1" id="start"/>
+                </div>      
+                <label class="control-label" style="float:left;">-</label>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" placeholder="{$item['total']}" id="end"/>
+                </div>
+                <span class="help-block">该批次最大流水号为：{$item['total']}</span>
+            </div>       
+        </div>
+<!--        <div class="form-group">
+            <label class="col-lg control-label">二维码说明</label>
+            <div class="col-sm-9 col-xs-12">
+                <textarea class="form-control" style="width:400px; height:200px;" id="print_right"></textarea>
+            </div>
+        </div>-->
+        <div>
+            <label class="col-lg control-label"></label>          
+            <button class="btn btn-primary" type="button" id="print">打印预览</button>
+            <button class="btn btn-danger" type="button" id="batch_print">批量打印</button>
+        </div>
+    </form>
+</div>
+
+<div class="page-header">
+    打印样式预览
+</div>
+
+<!-- 模拟样式 -->
+<div class="qrcode_main">
+    <?php foreach($list as $key => $row):?>
+    <div class="qrcode-container clearfix" style="margin-bottom:10px;">
+        <div class="left" style="margin-left: 17px; padding-top: 5px;">
+            <div class="title print_title">{$row['title']}</div>
+            <div class="code">
+                <img src="{$row['qrcode']}" />
+            </div>
+            <div class="describe">
+
+            </div>
+        </div>
+        <div class="right" style="margin-right: 0px; width: 200px; padding-right: 10px; padding-top: 10px;">
+            <div class="batch">流水号：{$row['batch']}</div>
+            <div class="detail">
+                <span class="des">扫码说明：</span><br/>
+                1、导购扫码进入销售流程<br/>
+                2、用户扫描可了解商品信息<br/>
+                3、线上发货时发货员扫订单码<br/>
+            </div>
+        </div>
+    </div>
+<?php endforeach;?>
+</div>
+
+<div id="print_area" style="position:fixed; top:1000%; left:1000%;">
+    <?php foreach($list as $key => $row):?>
+        <div class="qrcode-container clearfix">
+            <div class="left">
+                <div class="title print_title">{$row['title']}</div>
+                <div class="code">
+                    <img src="{$row['qrcode']}" />
+                </div>
+                <div class="describe">
+                    
+                </div>
+            </div>
+            <div class="right">
+                <div class="batch">流水号：{$row['batch']}</div>
+                <div class="detail">
+                    <span class="des">扫码说明：</span><br/>
+                    1、导购扫码进入销售流程<br/>
+                    2、用户扫描可了解商品信息<br/>
+                    3、线上发货时发货员扫订单码<br/>
+                </div>
+            </div>
+        </div>
+    <?php endforeach;?>
+</div>
+
+
+<div>
+<div id="print_batch" style="position:fixed; top:1000%; left:1000%;">
+    
+</div>
+
+<div id="template" style="position:fixed; top:1000%; left:1000%;">
+    <div class="qrcode-container clearfix">
+        <div class="left">
+            <div class="title temp_title"></div>
+            <div class="code">
+                <img class="temp_img" src="" />
+            </div>
+            <div class="describe">
+            </div>
+        </div>
+        <div class="right">
+            <div class="batch temp_batch"></div>
+            <div class="detail">
+                <span class="des">扫码说明：</span><br/>
+                1、导购扫码进入销售流程<br/>
+                2、用户扫描可了解商品信息<br/>
+                3、线上发货时发货员扫订单码<br/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var print_style = "{php echo EWEI_SHOPV2_LOCAL}static/css/qrcode_print.css";
+    var item_path = "{$item['path']}";
+    var item_batch = "{$item['batch']}";
+    var item_total = "{$item['total']}";
+    /*数字前面自动补0*/
+    function PrefixInteger(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+    }
+    
+    /*获取数字位数*/
+    function getIntegerLength(num){
+        var length= parseInt(num).toString().length;
+        return length;
+    }
+    
+    myrequire(['printjs', 'layer'], function(){
+        $("#title").on("change", function(){
+            var title = $("#title");
+            if(title.val()){
+                $(".print_title").html(title.val());
+            } else {
+                $(".print_title").html(title.attr("placeholder"));
+            }
+        });       
+        $("#print").on("click", function(){            
+            printJS({
+                printable: "print_area",
+                type: "html",
+                css: print_style,
+                font_size: '12px'
+            });
+        });
+        
+        $("#batch_print").on("click", function(){
+            var start = parseInt($("#start").val());
+            var end = parseInt($("#end").val());
+            if(end > parseInt(item_total)){
+                alert("范围超出最大数量");
+            }
+            if(!start || !end){
+                alert("请输入批量打印的范围");
+            } else {
+                $("#print_batch").empty();
+                for(var i = start; i <= end; i++){
+                    batch_add(i);
+                }
+                var ly = layer.msg("正在加载，请稍候...");
+                setTimeout(function(){
+                    layer.close(ly);
+                    printJS({
+                        printable: "print_batch",
+                        type: "html",
+                        css: print_style,
+                        font_size: '12px'
+                    });
+                },"1500");            
+            }
+        });
+        
+        function batch_add(num){
+            var print = $("#print_batch");
+            var title = $("#title");
+            var print_title = '';
+            if(title.val()){
+                print_title = title.val();
+            } else {
+                print_title = title.attr("placeholder");
+            }           
+            var html = $("#template").html();
+            var template = $(html);
+            var img = item_path + num + ".png";
+            var batch = item_batch + "-" + PrefixInteger(num, getIntegerLength(item_total));
+            $(template).find(".temp_title").html(print_title);
+            $(template).find(".temp_img").attr('src', img);
+            $(template).find(".temp_batch").html(batch);
+            $(template).appendTo($(print));
+         
+        }
+    });
+    
+</script>
+
+{template '_footer'}

@@ -1,0 +1,99 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>配置独立支付接口方式</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('payapi')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+    <input type="hidden" value="{$settings['id']}" name="sid" />
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <td class="col-md-2">支付方式</td>
+                        <td class="col-md-4"></td>
+                        <td class="col-md-6">是否启用</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="title">
+                            支付宝支付
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" id="f2" class="js-switch_1" {if $set['f2']['value']}checked{/if}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">
+                            借用微信支付
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" id="f3" class="js-switch_2" {if $set['f3']['value']}checked{/if}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">
+                            微信支付(子商户版)
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" id="f4" class="js-switch_3" {if $set['f4']['value']}checked{/if}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">
+                            微信支付(威富通版)
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" id="f7" class="js-switch_4" {if $set['f7']['value']}checked{/if}/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title">
+                            微信支付(华商云付)
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" id="f8" class="js-switch_5" {if $set['f8']['value']}checked{/if}/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

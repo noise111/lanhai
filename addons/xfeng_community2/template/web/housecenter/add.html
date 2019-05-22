@@ -1,0 +1,107 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('housecenter')}"></a>&nbsp;&nbsp;&nbsp;添加导航
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('housecenter',array('op' => 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data"
+                          onsubmit="return check(this);">
+                        <input type="hidden" name="parentid" value="{$parentid}"/>
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionids" value=""/>
+
+                        <div class="form-group">
+                            <label for="displayorder" class="col-sm-2 control-label">排序</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="displayorder" id='displayorder' class="form-control"
+                                       value="{$item['displayorder']}" placeholder="排序"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">菜单名称</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="title" class="form-control" value="{$item['title']}" id='title'
+                                       placeholder="请输入菜单名称"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">菜单链接</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_link('url',$item['url'])}
+                            </div>
+                            <span class="help-block">默认链接请勿修改。</span>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">背景图片</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image(thumb,$item['thumb'])}(39px39px)
+                                <span class="help-block">导航的背景图标，图片优先。</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkAll" name="checkAll" data-group="regionid">
+                                    <label for="checkAll"> 全部 </label>
+                                </div>
+                                {loop $regions $region}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="regionid_{$region['id']}" name="regionid[]"
+                                           value="{$region['id']}" data-group="regionid" {if @strstr($regionid,$region['id'])}checked='checked' {/if}>
+                                    <label for="regionid_{$region['id']}"> {$region['dist']}{$region['title']} </label>
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-w-m btn-primary">
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function check(form) {
+
+            var regionids = [];
+            $("input[name='regionid[]']:checked").each(function () {
+                var lastid = $(this).val();
+                regionids.push(lastid);
+            })
+            regionids.join(",");
+            console.log(regionids);
+            $("input[name='regionids']").val(regionids);
+            return true;
+        }
+        $(function () {
+            $("#checkAll").click(function () {
+                var checked = $(this).get(0).checked;
+                var group = $(this).data('group');
+                $("input:checkbox[data-group='" + group + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                })
+            });
+
+        });
+    </script>
+
+    {template 'web/common/footer'}

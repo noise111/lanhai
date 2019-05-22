@@ -1,0 +1,98 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('cash',array('op' => 'member'))}" title="会员管理" >会员管理</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="cash"/>
+                        <input type="hidden" name="op" value="member"/>
+                        <div class="row">
+                            <div class="col-sm-4 m-b-xs">
+                                <span style="color: red">总计:{$total}</span>
+                                <span style="color: red">总积分:{$total1[0]}</span>
+                                <span style="color: red">总余额:{$total2[0]}</span>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                           <span class="input-group">
+                                <input class="form-control" name="keyword" type="text" value="{$_GPC['keyword']}" placeholder="可查姓名/手机号">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </span>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="form-horizontal form" method="post">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>UID</th>
+                                <th>姓名</th>
+                                <th>手机</th>
+                                <th>openid</th>
+                                <th>积分</th>
+                                <th>余额</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['uid']}</td>
+                                <td>{$item['realname']}</td>
+                                <td>{$item['mobile']}</td>
+                                <td>{$item['openid']}</td>
+                                <td>{$item['credit1']}</td>
+                                <td>{$item['credit2']}</td>
+                                <td>{$item['createtime']}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('cash_memberSet', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('cash', array('op' => 'member', 'p' => 'credit', 'uid'=>$item['uid']))}" title="管理设置" class="btn btn-primary btn-sm">管理设置</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+
+                                </td>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{template 'web/common/footer'}

@@ -1,0 +1,390 @@
+{template 'app2/header'}
+<style>
+    .weui-cells {
+        font-size: 0.9em;
+        margin-top: 0;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .repairs-detail-tit {
+        font-size: 15px;
+        color: #F7624B;
+    }
+
+    .weui-cells__title {
+        color: #000000;
+        line-height: 39px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+
+    .repairs-detail-tit p:last-child {
+        color: #C8C8C8;
+    }
+
+    .weui-form-preview__label {
+        color: #666666;
+    }
+
+    .weui-form-preview__bd {
+        color: #666666;
+    }
+
+    .weui-form-preview__value {
+        color: #666666;
+    }
+
+    .repairs-hd {
+        position: relative;
+        top: -33px;
+    }
+    .webuploader-element-invisible {
+        opacity:0;/*设置此控件透明度为零，即完全透明*/
+        filter:alpha(opacity=0);/*设置此控件透明度为零，即完全透明针对IE*/
+        font-size:100px;
+        position:absolute;/*绝对定位，相对于 .input */
+        top:0;
+        right:0;
+    }
+    .weui-form-preview__bd {
+        text-align: left;
+    }
+    #addPic div:nth-child(2){width:100%!important;height:100%!important;}
+</style>
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access open-popup" data-target="#full" href="javascript:;">
+        <div class="weui-cell__bd weui-cell_primary repairs-detail-tit">
+            <p>点击查看处理记录</p>
+            <p>温馨提示:你有新的处理信息</p>
+        </div>
+        <span class="weui-cell__ft"></span>
+    </a>
+</div>
+<div id="app" v-cloak>
+    <div class="weui-cells__title">建议信息</div>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">姓名:</label>
+                <span class="weui-form-preview__value" id="realname" v-html="item.realname"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">电话:</label>
+                <a class="weui-form-preview__value" href="tel:" id="tel" v-html="item.mobile"></a>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">时间:</label>
+                <span class="weui-form-preview__value" id="createtime" v-html="item.createtime"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">地址:</label>
+                <span class="weui-form-preview__value" id="address" v-html="item.address"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">内容:</label>
+                <span class="weui-form-preview__value" id="repair" v-html="item.content"></span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">图片:</label>
+                <span class="weui-form-preview__value">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="imgs">
+                        <li class="weui-uploader__file" :style="'background-image:url('+row+')'" v-for="(row,index) in item.images">
+                        </li>
+                    </ul>
+                    </div>
+            </span>
+            </div>
+        </div>
+    </div>
+    <div id="full" class='weui-popup__container'>
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal">
+            <div class="weui-form-preview" v-for="(log,index) in item.logs">
+                <div class="weui-form-preview__bd">
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">处&nbsp;&nbsp;理&nbsp;人</label>
+                        <span class="weui-form-preview__value">{{log.dealing}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">处理状态</label>
+                        <a class="weui-form-preview__value color_y" :href="'tel:'+log.mobile" v-if="log.status == 1">已完成</a>
+                        <a class="weui-form-preview__value color_y" :href="'tel:'+log.mobile" v-if="log.status == 3">处理中</a>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">更新时间</label>
+                        <span class="weui-form-preview__value">{{log.logtime}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">处理内容</label>
+                        <span class="weui-form-preview__value">{{log.content}}</span>
+                    </div>
+                    <div class="weui-form-preview__item">
+                        <label class="weui-form-preview__label">处理图片</label>
+                        <span class="weui-form-preview__value">
+                    <div class="weui-uploader__bd">
+                      <ul class="weui-uploader__files" id="pics" @click="show(log.id)">
+                        <li class="weui-uploader__file" :style="'background-image:url('+row+')'" v-for="(row,index) in log.img">
+                                </li>
+
+                      </ul>
+                     </div>
+                </span>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 100%;display: block;margin: 10px auto">
+                <a href="javascript:;" class="weui-btn register-guide-btn  close-popup">关闭</a>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__title">处理进程</div>
+    <div class="weui-cells">
+        <div class="vux-x-input weui-cell">
+            <div class="weui-cell__hd">
+                <label for="" class="weui-label">意见状态:</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="status">
+                    <option value="">请选择处理状态</option>
+                    <option value="1">已处理</option>
+                    <option value="3">处理中</option>
+                </select>
+                <!--<input id="repair-select" readonly="readonly" type="text" class="weui-input" placeholder="请选择报修状态">-->
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd repairs-hd">
+                <label for="" class="weui-label">处理内容:</label>
+            </div>
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入处理内容" rows="3" id="content"></textarea>
+                <div class="weui-textarea-counter"><span>0</span>/200</div>
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <div class="weui-uploader">
+                    <div class="weui-uploader__hd">
+                        <p class="weui-uploader__title">图片上传</p>
+                        <div class="weui-uploader__info">0/4</div>
+                    </div>
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files" id="uploaderFiles">
+                        </ul>
+                        <div class="weui-uploader__input-box" id="addPic">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 100%;display: block;margin: 20px auto" id="submit">
+            <a href="javascript:;" class="weui-btn register-guide-btn">提交</a>
+        </div>
+    </div>
+</div>
+
+<!--<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>-->
+<!--<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>-->
+<!--<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>-->
+<script>
+    $(document).on("open", ".weui-popup-modal", function () {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function () {
+        console.log("close popup");
+    });
+
+</script>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+        'previewImage'
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+    wx.ready(function () {
+
+        $("#addPic").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds;//本地图片id数组，下标从0开始
+//调用上传递归函数
+                    wxUploadImg(localIds);
+                }
+            });
+        });
+
+        function wxUploadImg(localIds) {
+
+            var localId = localIds[idx]
+            wx.uploadImage({//获取图片媒体ID
+                localId: localId,  // 需要上传的图片的本地ID
+                isShowProgressTips: 1, // 默认为1，显示进度提示
+                success: function (res) {//获取成功
+
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    getImg(serverId);
+// 上传序号，上传一张 累计 +1
+                    idx++
+//存储图片媒体ID，用，号分割
+// serverIds+=res.serverId+',';
+                    if (idx < localIds.length) {//本地图片ID 还没全部获取完图片媒体ID
+//调用上传递归函数
+                        wxUploadImg(localIds);
+                    }
+                    else {
+                        idx = 0;
+                        serverIds = '';
+                        return true;
+                    }
+                },
+                fail: function (res) {//获取多媒体id失败 返回错误代码
+                    alert("上传失败，msg：" + JSON.stringify(res));
+                }
+            });
+        }
+
+        function getImg(serverId) {
+            var url = "{php echo wxapp_url('getImg')}"
+            $.getJSON(url, {serverId: serverId}, function (ret) {
+                var imgUrl = ret.data.imgUrl
+                var content = '<li class="weui-uploader__file" style="background-image:url(' + imgUrl + ')" id="li_' + serverId + '"><input type="hidden" name="pic[]" value="' + imgUrl + '"><i class="iconfont icon-shanchu" style="color: #F7624B;position: relative;top:-6px;font-size:18px;left:70px;" onclick=\"del(\'' + serverId + '\')"></i></li>'
+                $("#uploaderFiles").append(content);
+            })
+        }
+
+    });
+
+    function del(id) {
+        var obj = $("#li_" + id);
+        console.log(id);
+        obj.hide();
+    }
+</script>
+<script type="text/javascript">
+    var id = "{$_GPC['id']}";
+    var app = new Vue({
+        el: '#app',
+        data: {
+            id: id,
+            item: [],
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('report/detail')}";
+            var data = {
+                id:id
+            }
+            $.post(url,data,function (data) {
+                self.item = data.data
+                if (data.data.code == 2) {
+                    $.alert("当前信息已有管理员在处理", function () {
+                        //点击确认后的回调函数
+                        window.location.href = "{php echo $this->createMobileUrl('home')}";
+                    });
+
+                }
+                if (data.data.code == 3) {
+                    $.confirm("是否确定处理信息", function () {
+                        //点击确认后的回调函数
+                        var url = "{php echo wxapp_url('report/verity')}";
+                        $.getJSON(url, {id: id}, function (data) {
+
+                        })
+                    }, function () {
+                        //点击取消后的回调函数
+                        window.location.href = "{php echo $this->createMobileUrl('home')}";
+                    });
+                }
+            },'json')
+        },
+        mounted: function () {
+            var self = this
+            wx.ready(function () {
+                $("#imgs").click(function () {
+                    wx.previewImage({
+                        current: self.item.images[0], // 当前显示图片的http链接
+                        urls: self.item.images // 需要预览的图片http链接列表
+                    });
+                });
+            });
+        },
+        methods: {
+            postdata: function () {
+                console.log(self.title)
+            },
+            show : function (id) {
+                var id = id
+                var imgs = this.item.logs[id].img
+//                console.log(imgs)
+                wx.previewImage({
+                    current: imgs[0], // 当前显示图片的http链接
+                    urls: imgs // 需要预览的图片http链接列表
+                });
+            }
+        }
+    })
+    $(function () {
+        var lock = false;
+        $("#submit").click(function () {
+            var status = $("#status").val()
+            var content = $("#content").val()
+            var pics ='';
+            $('input[name="pic[]"]').each(function(){
+                var t1 = $(this).val();
+                pics += t1+',';
+            });
+            var price = $("#price").val()
+            if (lock) return false;
+
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('report/grab')}", {
+                status: status,
+                content: content,
+                id: id,
+                pics: pics,
+                price:price
+            }, function (data) {
+                if (data.err_code == 0) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+
+//                    setTimeout(function () {
+                        $.toast(data.data.content, "text");
+                        //定时刷新
+                        window.location.reload();
+//                    }, 500);
+
+                }
+                lock = false;
+            }, 'json')
+        })
+    })
+</script>
+</body>
+</html>

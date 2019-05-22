@@ -1,0 +1,47 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('express', array('op' => 'type','p' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;寄件类型添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'type','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="priceId" value="{$editData['id']}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">寄件类型</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="type" id="type" value="{$type['type']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">类型说明</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="content" id="content" value="{$type['content']}" class="form-control" >
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['type'].value) {
+            alert('类型名称不可为空。');
+            return false;
+        }
+    }
+</script>

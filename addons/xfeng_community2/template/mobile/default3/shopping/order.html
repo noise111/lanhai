@@ -1,0 +1,145 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ffffff;
+    }
+
+    .weui-media-box:before {
+        border-top: none;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 72px;
+        height: 72px;
+        line-height: 72px;
+    }
+
+    .weui-media-box {
+        padding: 7px 10px 8px 0;
+    }
+</style>
+
+<body ontouchstart>
+<div id="J_Tab" class="m-tab" data-ydui-tab>
+    <ul class="tab-nav">
+        <li class="tab-nav-item {if empty($status)}tab-active{/if}" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'myorder','status'=>0))}'"><a href="javascript:;">待付款</a></li>
+        <li class="tab-nav-item {if $status == 1}tab-active{/if}" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'myorder','status'=>1))}'"><a href="javascript:;">待发货</a></li>
+        <li class="tab-nav-item {if $status == 2}tab-active{/if}" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'myorder','status'=>2))}'"><a href="javascript:;">待收货</a></li>
+        <li class="tab-nav-item {if $status == 3}tab-active{/if}" onclick="location.href='{php echo $this->createMobileUrl('shopping',array('op'=>'myorder','status'=>3))}'"><a href="javascript:;">已完成</a></li>
+    </ul>
+    <div class="tab-panel" >
+        <div class="tab-panel-item tab-active" id="list"></div>
+    </div>
+    <div class="weui-loadmore" id="loading" style="display: none">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips loading"></span>
+    </div>
+    <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+
+        <div class="shop-order-list">
+            <a href="#" class="aui-well ">
+                <div class="aui-well-bd">{{d.list[i].createtime}}</div>
+                <div class="aui-well-ft">
+                    {{# if(d.list[i].status == 3){ }}交易成功{{# } }}
+                    {{# if(d.list[i].status == 0){ }}待付款{{# } }}
+                    {{# if(d.list[i].status == 1){ }}待发货{{# } }}
+                    {{# if(d.list[i].status == 2){ }}待收货{{# } }}
+                </div>
+            </a>
+            {{# for(var j = 0, leng = d.list[i].goods.length; j < leng; j++){ }}
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb"
+                         src="{{d.list[i].goods[j].thumb}}" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h3 class="aui-list-product-fl-title">
+                        {{d.list[i].goods[j].title}}
+                    </h3>
+                    <div class="aui-list-product-fl-mes">
+                        <div>
+									<span class="aui-list-product-item-price">
+										<em>¥</em>
+										{{d.list[i].goods[j].marketprice}}
+									</span>
+                            <del class="aui-list-product-item-del-price">
+                                ¥{{d.list[i].goods[j].productprice}}
+                            </del>
+                        </div>
+                        <div class="aui-btn-purchase">
+                            x{{d.list[i].goods[j].total}}
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {{# } }}
+            <div class="aui-list-title-btn">
+                {{# if(d.list[i].status == 3){ }}
+                <a href="#">删除订单</a>
+                {{# } }}
+                {{# if(d.list[i].status == 0){ }}
+                <a href="#" onclick="del({{d.list[i].id}})">取消订单</a>
+                <a href="#" class="red-color" onclick="window.location.href='{php echo $this->createMobileUrl('paycenter')}&orderid={{d.list[i].id}}&type=1'">立即付款</a>
+                {{# } }}
+                {{# if(d.list[i].status == 1){ }}
+                <a href="#" onclick="del({{d.list[i].id}})">取消订单</a>
+                <a href="#">提醒发货</a>
+                {{# } }}
+                {{# if(d.list[i].status == 2){ }}
+                <a href="#">确认收货</a>
+                {{# } }}
+            </div>
+            <div class="aui-dri"></div>
+        </div>
+
+
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var status = "{$status}";
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('shopping/myorder')}&status="+status+"&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true,function () {
+
+        });
+    })
+    function del(orderid) {
+        var url = "{php echo wxapp_url('shopping/delete')}";
+        $.getJSON(url,{orderid:orderid},function (data) {
+//            if(data.err_code ==0){
+//                $.toast(data.data.content,'text');
+//                location.reload();
+//            }
+        })
+    }
+</script>
+<script>
+    var id = getUrlArgStr();
+    console.log('id=' + id);
+    $.each($('.tab-nav-item'), function (i) {
+        if (i == id) {
+            console.log('i=' + i);
+            $(this).addClass('tab-active').siblings().removeClass('tab-active');
+            $.each($('.tab-panel-item'), function (j) {
+                if (j == id) {
+                    console.log('j=' + j);
+                    $(this).addClass('tab-active').siblings().removeClass('tab-active');
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

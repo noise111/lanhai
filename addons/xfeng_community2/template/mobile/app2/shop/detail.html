@@ -1,0 +1,155 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>{{item.title}}</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell" v-if="item.thumb">
+            <img :src="item.thumb" alt="" style="width: 100%">
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
+            <div class="weui-cell__bd">
+                {{item.title}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">销&nbsp;&nbsp;售&nbsp;&nbsp;价</label></div>
+            <div class="weui-cell__bd">
+                {{item.marketprice}}元
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品原价</label></div>
+            <div class="weui-cell__bd">
+                {{item.productprice}}元
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品库存</label></div>
+            <div class="weui-cell__bd">
+                {{item.stock}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">已售数量</label></div>
+            <div class="weui-cell__bd">
+                {{item.sold}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品描述</label></div>
+            <div class="weui-cell__bd" v-html="item.content">
+
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="goUrl(id)">编辑</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn" @click="postdata()">删除</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{},
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appshopping/detail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('appshopping/del')}";
+                self.item.id=self.id
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('删除成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'shop'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == -1){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg);
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'shop'))}";
+                        }, 500);
+                    }
+                })
+            },
+            goUrl:function (id) {
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op'=>'shop','p' => 'add'))}&id="+id;
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

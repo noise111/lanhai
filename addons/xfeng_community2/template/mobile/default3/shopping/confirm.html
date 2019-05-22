@@ -1,0 +1,367 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ECECEC;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .weui-flex {
+        margin-right: 5px;
+    }
+
+    .weui-panel {
+        margin-top: 0.1rem;
+    }
+
+    .weui-form-preview {
+        margin-top: 0.1rem;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 72px;
+        height: 72px;
+        line-height: 72px;
+    }
+
+    .weui-media-box {
+        padding: 10px 15px;
+    }
+
+    .weui-media-box__desc {
+        color: #000;
+        font-size: 14px;
+        word-break: break-all;
+        line-height: 17px;
+        margin-bottom: 5px;
+        position: absolute;
+        top: 8px;
+        margin-right: 10px;
+    }
+
+    .weui-form-preview__value {
+        color: #fc6248;
+    }
+
+    .weui-form-preview__label {
+        margin-right: 0.5em;
+    }
+
+    .weui-switch-cp__input:checked ~ .weui-switch-cp__box, .weui-switch:checked {
+        border-color: #fc6248;
+        background: #fc6248;
+    }
+
+    .weui-select-modal .weui-cells {
+        font-size: 0.9em;
+    }
+</style>
+
+<body>
+<div style="margin-bottom: 46px">
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="{php echo $this->createMobileUrl('address',array('op'=> 'list'))}" id="address">
+
+        </a>
+    </div>
+<div id="list"></div>
+<script type="text/html" id="address_list">
+    <div class="weui-cell__bd">
+        <div class="weui-flex sm-order-head">
+            <input type="hidden" id="addressid" value="{{d.id}}" />
+        <div class="weui-flex__item">{{# if(d.realname){ }}{{d.realname}}{{# }else{ }}{{d.nickname}}{{# } }}</div>
+        <div class="weui-flex__item ">{{# if(d.mobile){ }}{{d.mobile}}{{# } }}</div>
+        <div class="weui-flex__item"><span class="sm-order-label">默认</span></div>
+    </div>
+    <div class="weui-flex">
+        <div class="weui-flex__item sm-order-adress">
+            {{# if(d.address){ }}{{d.city}}{{d.address}}{{# } }}
+        </div>
+        </div>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+</script>
+<script type="text/html" id="xq_list">
+
+        <div class="weui-panel weui-panel_access">
+            <a href="javascript:void(0);" class="weui-cell sm-order-cell">
+                <div class="weui-cell__bd">商品清单</div>
+                <span class="weui-cell__ft" style="color: #333;letter-spacing: 3px">共{{d.count}}件</span>
+            </a>
+            <div class="weui-panel__bd">
+                {{# for(var i = 0, len = d.list.length;i < len; i++){ }}
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{{d.list[i].thumb}}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <p class="weui-media-box__desc">
+                            {{d.list[i].title}}
+                        </p>
+                        <div class="pro-details-tips clearfix">
+                            <em>￥<span class="shopcart-price">{{d.list[i].marketprice}}</span></em>
+                        </div>
+                        <span class="sm-order-num">数量×<span>{{d.list[i].total}}</span></span>
+                    </div>
+                </a>
+                <input type="hidden" value="{{d.list[i].id}}" name="gid[]">
+                {{# } }}
+                <!--<a class="weui-cell weui-cell_access sm-order-list" href="javascript:;">-->
+                    <!--<div class="weui-cell__bd">-->
+                        <!--<p>支付方式</p>-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft">-->
+                        <!--<input class="weui-input" id="zhifu" type="text" value="" placeholder="在线支付"-->
+                               <!--style="text-align: right">-->
+                    <!--</div>-->
+                <!--</a>-->
+                <a class="weui-cell weui-cell_access sm-order-list" href="javascript:;">
+                    <div class="weui-cell__bd">
+                        <p>配送方式</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input class="weui-input" id="peisong" type="text" value="" placeholder="商家配送"
+                               style="text-align: right">
+                    </div>
+                </a>
+                <a class="weui-cell weui-cell_access sm-order-list" href="javascript:;">
+                    <div class="weui-cell__bd">
+                        <p>配送时间</p>
+                    </div>
+                    <div class="weui-cell__ft">
+                        <input class="weui-input" id="shdate" type="text" value="" placeholder="配送时间"
+                               style="text-align: right">
+                    </div>
+                </a>
+                <div class="weui-cell sm-order-list sm-order-message sm-no-top">
+                    <div class="weui-cell__hd"><label class="weui-form-preview__label">备注留言：</label></div>
+                    <div class="weui-cell__bd sm-order-bubble">
+                        <input class="weui-input" type="text" placeholder="还有什么要嘱咐商家的？" id="remark">
+                    </div>
+                </div>
+                <a class="weui-cell sm-order-list sm-no-top" href="javascript:;">
+                    <div class="weui-cell__bd">
+                        <p>可得积分</p>
+                    </div>
+                    <div class="weui-cell__ft sm-order-jfen ">
+                        {{d.credit}}
+                    </div>
+                </a>
+                <!--<a class="weui-cell sm-order-list " href="javascript:;">-->
+                    <!--<div class="weui-cell__bd">-->
+                        <!--<p>余额支付</p>-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft sm-order-jfen ">-->
+                        <!--<label for="switchCP" class="weui-switch-cp">-->
+                            <!--<input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked">-->
+                            <!--<div class="weui-switch-cp__box"></div>-->
+                        <!--</label>-->
+                    <!--</div>-->
+                <!--</a>-->
+            </div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">商品金额</label>
+                    <input type="hidden" id="price" value="{{d.totalprice}}">
+                    <span class="weui-form-preview__value" id="totalPrice">+￥<span>{{d.totalprice}}</span></span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">运费</label>
+                    <span class="weui-form-preview__value" id="freightPrice">+￥<span>{{d.exp}}</span></span>
+                </div>
+                <!--<div class="weui-form-preview__item">-->
+                    <!--<label class="weui-form-preview__label">余额支付</label>-->
+                    <!--<span class="weui-form-preview__value" id="balancePrice">-￥<span>0.00</span></span>-->
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    <div class="weui-tabbar">
+        <div class="supermarket-order-flex">
+            <div class="supermarket-order-item fl">
+                <p class="sm-price">应付款：<span id="duePrice">￥<span>{{d.totalprice}}</span></span></p>
+            </div>
+            <div class="supermarket-order-item fl" onclick="buy()">
+                <a href="#" class="supermarket-btn" >提交订单</a>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    var regionid = "{$_SESSION['community']['regionid']}";
+    var addressid = "{$_SESSION['community']['addressid']}";
+    var id = "{$_GPC['id']}";
+    $(function () {
+        var total = "{$_GPC['total']}";
+        var goodids = "{$_GPC['goodids']}";
+        var url = "{php echo wxapp_url('shopping/order')}&id="+id+"&total="+total+"&goodids="+goodids+"&regionid="+regionid;
+        _loaddata(url, $("#list"), 'xq_list', true);
+        var url = "{php echo wxapp_url('address/one')}";
+        _loaddata(url, $("#address"), 'address_list', true);
+
+    })
+</script>
+
+<script>
+    var lock = false;
+    function buy() {
+        var price = $("#price").val();
+        var remark = $("#remark").val();
+        var delivery = $("#shdate").val();
+        var gids ='';
+        $('input[name="gid[]"]').each(function(){
+            var t1 = $(this).val();
+            gids += t1+',';
+        });
+        if(lock) return false;
+        lock = true;
+        $.showLoading('正在提交');
+        $.post("{php echo wxapp_url('shopping/confirm')}",{price:price,remark:remark,delivery:delivery,addressid:addressid,regionid:regionid,id:id,gids:gids},function (data) {
+            if(data.err_code ==0){
+                window.location.href=data.data.url;
+            }
+            if(data.err_code ==-1){
+                $.toast(data.err_msg);
+            }
+            lock = false;
+        },'json')
+    }
+    $("#peisong").select({
+        title: "选择配送方式",
+        items: [
+            {
+                title: "商家配送",
+                value: "1",
+            },
+            {
+                title: "快递自费",
+                value: "2",
+            },
+            {
+                title: "快递免邮",
+                value: "3",
+            },
+            {
+                title: "自取",
+                value: "4",
+            },
+        ],
+        onChange: function (d) {
+            if (d.values == 3 || d.values == 4) {
+                $('#freightPrice').find('span').text('0.00');
+            } else if (d.values == 1) {
+                $('#freightPrice').find('span').text('10.00');
+            } else if (d.values == 2) {
+                $('#freightPrice').find('span').text('15.00');
+            }
+        },
+    });
+    $("#shdate").select({
+        title: "选择配送时间",
+        items: [
+            {
+                title: "立即配送",
+                value: "立即配送",
+            },
+            {
+                title: "9:00~10:00",
+                value: "9:00~10:00",
+            },
+            {
+                title: "10:00~11:00",
+                value: "10:00~11:00",
+            },
+            {
+                title: "11:00~12:00",
+                value: "11:00~12:00",
+            },
+            {
+                title: "自取",
+                value: "自取",
+            },
+        ],
+        onChange: function (d) {
+            if (d.values == 3 || d.values == 4) {
+                $('#freightPrice').find('span').text('0.00');
+            } else if (d.values == 1) {
+                $('#freightPrice').find('span').text('10.00');
+            } else if (d.values == 2) {
+                $('#freightPrice').find('span').text('15.00');
+            }
+        },
+    });
+    $("#zhifu").select({
+        title: "选择支付方式",
+        items: [
+            {
+                title: "在线支付",
+                value: "1",
+            },
+            {
+                title: "货到付款",
+                value: "2",
+            },
+        ],
+        onChange: function (d) {
+            if (d.values == 2) {
+                $('#switchCP').attr("checked", false).attr('disabled', 'disabled');
+                $('#balancePrice').find('span').text('0.00');
+            }
+        },
+    });
+    totalPrice();
+
+    function totalPrice() {
+        var totalPrice = 0;
+        $('.pro-details-tips').each(function () {
+            var price = $(this).find('.shopcart-price').text();
+            var num = $(this).next().find('span').text();
+            for (var i = 0; i < $(this).length; i++) {
+                var a = price * num;
+                totalPrice += parseInt(a);
+            }
+        })
+        $('#totalPrice').find('span').text(totalPrice.toFixed(2))
+    }
+
+    balance();
+
+    function balance() {
+//        商品价格
+        var totalPrice = $('#totalPrice').find('span').text();
+//        运费
+        var freightPrice = $('#freightPrice').find('span').text();
+        //余额付款
+        var balancePrices = Number(totalPrice) + Number(freightPrice);
+        $('#balancePrice').find('span').text(balancePrices.toFixed(2));
+        var balancePrice = $('#balancePrice').find('span').text();
+//        应付款
+        var dueCost = Number(totalPrice) + Number(freightPrice) - Number(balancePrice);
+        $('#duePrice').find('span').text(dueCost.toFixed(2));
+
+        $('#switchCP').click(function () {
+            var check = $("#switchCP").is(':checked');
+            if (check == false) {
+                $('#balancePrice').find('span').text('0.00');
+                $('#duePrice').find('span').text(balancePrices.toFixed(2));
+            } else {
+                $('#balancePrice').find('span').text(balancePrices.toFixed(2));
+                $('#duePrice').find('span').text(dueCost.toFixed(2));
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

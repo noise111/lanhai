@@ -1,0 +1,106 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>问卷调查</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('vote')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="vote"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('vote', array('op' => 'add'));}"><i class="fa fa-plus"></i> 添加问卷</a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入标题">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th class="col-lg-2">问卷标题</th>
+                                <th>投票时间</th>
+                                <th>添加时间</th>
+                                <th class="col-lg-5">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $k $item}
+
+                            <tr>
+                                <td>{$item['title']}</td>
+                                <td>{php echo date('Y-m-d', $item[starttime]);}至{php echo date('Y-m-d', $item[endtime]);}</td>
+                                <td>{php echo date('Y-m-d H:i:s', $item[createtime]);}</td>
+                                <td>
+                        <span>
+                            <a href="#" title="" class="btn btn-primary btn-sm" onclick="add({$item['id']})">{if $item['isadd'] == 0}添加{elseif $item['isadd'] == 1}修改{/if}问题</a>
+                            <a href="#" title="发布问卷" class="btn btn-primary btn-sm" onclick="show({$item['id']},{$item['enable']})">{if $item['enable'] == 0}发布问卷{elseif $item['enable'] == 1}停止问卷{/if}</a>
+                            <a href="{php echo $this->createWebUrl('vote',array('op' => 'add','id' => $item['id']))}" title="问卷设置" class="btn btn-primary btn-sm">问卷设置</a>
+                            <a href="{php echo $this->createWebUrl('vote',array('op' => 'show','voteid' => $item['id']))}" title="统计结果" class="btn btn-info btn-sm">统计结果</a>
+                            <a href="{php echo $this->createWebUrl('vote',array('op' => 'question','p' => 'list','voteid' => $item['id']))}" title="详细数据" class="btn btn-warning btn-sm">详细数据</a>
+                            <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('vote',array('op' => 'delete','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+						</span>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function show(id, enable) {
+        var id = id;
+        var enable = enable;
+        $.post("{php echo $this->createWebUrl('vote',array('op'=> 'change'))}", {
+            id: id,
+            enable: enable
+        }, function (data) {
+            if (data.status) {
+                window.location.reload();
+            }
+        }, 'json')
+    }
+    function add(id) {
+        var id = id;
+        $.post("{php echo $this->createWebUrl('vote',array('op' => 'question','p'=> 'isenable'))}", {
+            id: id,
+        }, function (data) {
+            if (data.status == 1) {
+                window.location.href = "{php echo $this->createWebUrl('vote',array('op' => 'question','p' => 'add'))}&id="+data.id;
+            }
+            if(data.status == 2){
+                alert(data.content);return false;
+            }
+        }, 'json')
+    }
+</script>

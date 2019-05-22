@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报修管理</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../wxq4/dist/css/weui.min.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/demos.css">
+</head>
+<style>
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .repairs-detail-tit{
+        font-size: 15px;
+        color: #F7624B;
+    }
+    .weui-cells__title{
+        color: #000000;
+        line-height: 39px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+    .repairs-detail-tit p:last-child{
+        color: #C8C8C8;
+    }
+    .weui-form-preview__label{
+        color: #666666;
+    }
+    .weui-form-preview__bd{
+        color: #666666;
+    }
+    .weui-form-preview__value{
+        color: #666666;
+    }
+    .repairs-hd{
+        position: relative;
+        top: -33px;
+    }
+</style>
+<body ontouchstart>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access open-popup" data-target="#full" href="javascript:;">
+        <div class="weui-cell__bd weui-cell_primary repairs-detail-tit">
+            <p>查看处理记录</p>
+            <p>温馨提示:你有新的评价信息</p>
+            <p>2016-08-15 15:44</p>
+        </div>
+        <span class="weui-cell__ft"></span>
+    </a>
+</div>
+<div class="weui-cells__title">报修信息</div>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__bd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">姓名</label>
+            <span class="weui-form-preview__value">张三</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">房号</label>
+            <span class="weui-form-preview__value">4栋203室</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">联系电话</label>
+            <a class="weui-form-preview__value" href="tel:1334567890">1334567890</a>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">报修内容</label>
+            <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的内容</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">报修图片</label>
+            <span class="weui-form-preview__value">
+                    <div class="weui-uploader__bd">
+                      <ul class="weui-uploader__files" id="uploaderFiles">
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                          <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                           <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                      </ul>
+                     </div>
+                </span>
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">报修进程</div>
+<div class="weui-cells">
+    <div class="vux-x-input weui-cell">
+        <div class="weui-cell__hd">
+            <label for="" class="weui-label">报修状态:</label>
+        </div>
+        <div class="weui-cell__bd weui-cell__primary">
+            <input id="repair-select"  readonly="readonly"   type="text" class="weui-input" placeholder="请选择报修状态">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd repairs-hd">
+            <label for="" class="weui-label">处理内容:</label>
+        </div>
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="请输入处理内容" rows="3"></textarea>
+            <div class="weui-textarea-counter"><span>0</span>/200</div>
+        </div>
+    </div>
+</div>
+<div class="weui-cells weui-cells_form">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <div class="weui-uploader">
+                <div class="weui-uploader__hd">
+                    <p class="weui-uploader__title">图片上传</p>
+                    <div class="weui-uploader__info">0/4</div>
+                </div>
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                    </ul>
+                    <div class="weui-uploader__input-box">
+                        <input id="uploaderInput" class="weui-uploader__input" type="file" accept="image/*" multiple="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 100%;display: block;margin: 20px auto">
+    <a href="javascript:;" class="weui-btn register-guide-btn">提交</a>
+</div>
+
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理人</label>
+                    <span class="weui-form-preview__value">张三</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理状态</label>
+                    <a class="weui-form-preview__value color_y" href="tel:1334567890">已完成</a>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">更新时间</label>
+                    <span class="weui-form-preview__value">2017-12-09&nbsp;09:00</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理内容</label>
+                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的内容</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理图片</label>
+                    <span class="weui-form-preview__value">
+                    <div class="weui-uploader__bd">
+                      <ul class="weui-uploader__files" id="uploaderFiles">
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                      </ul>
+                     </div>
+                </span>
+                </div>
+            </div>
+        </div>
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理人</label>
+                    <span class="weui-form-preview__value">张三</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理状态</label>
+                    <a class="weui-form-preview__value color_y" href="tel:1334567890">未完成</a>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">更新时间</label>
+                    <span class="weui-form-preview__value">2017-12-09&nbsp;09:00</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理内容</label>
+                    <span class="weui-form-preview__value">很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的内容</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">处理图片</label>
+                    <span class="weui-form-preview__value">
+                    <div class="weui-uploader__bd">
+                      <ul class="weui-uploader__files" id="uploaderFiles">
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                        <li class="weui-uploader__file" style="background-image:url(../../wxq4/dist/images/service/demo02.jpg)"></li>
+                      </ul>
+                     </div>
+                </span>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;display: block;margin: 10px auto">
+            <a href="javascript:;" class="weui-btn register-guide-btn  close-popup">关闭</a>
+        </div>
+    </div>
+</div>
+<script src="../../wxq4/dist/js/jquery-2.1.4.js"></script>
+<script src="../../wxq4/dist/js/fastclick.js"></script>
+<script src="../../wxq4/dist/js/common.js"></script>
+<script src="../../wxq4/dist/js/jquery-weui.js"></script>
+<script>
+    $(document).on("open", ".weui-popup-modal", function() {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function() {
+        console.log("close popup");
+    });
+
+    $("#repair-select").select({
+        title: "更新报修状态",
+        items: [
+            {
+                title: "001",
+                value: "001",
+            },
+            {
+                title: "002",
+                value: "002",
+            },
+            {
+                title: "003",
+                value: "003",
+            },
+        ]
+    });
+</script>
+</body>
+</html>

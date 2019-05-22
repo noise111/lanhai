@@ -1,0 +1,76 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('zhpark', array('op' => 'setting'))}"></a>&nbsp;&nbsp;&nbsp;参数配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('zhpark',array('op' => 'setting','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">物业公司</label>
+                <div class="col-xs-5">
+                    <input type='text' name='title' id='title' class="form-control" value="{$item['title']}" placeholder="请输入物业公司名称" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">物业ID</label>
+                <div class="col-xs-5">
+                    <input type='text' name='company_id' id='company_id' class="form-control" value="{$item['company_id']}" placeholder="请输入物业公司ID" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">签名秘钥</label>
+                <div class="col-xs-5">
+                    <input type='text' name='sign_key' id='sign_key' class="form-control" value="{$item['sign_key']}" placeholder="请输入签名秘钥" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">访问秘钥</label>
+                <div class="col-xs-5">
+                    <input type='text' name='access_secret' id='access_secret' class="form-control" value="{$item['access_secret']}" placeholder="请输入访问秘钥" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['title'].value) {
+            alert('请输入物业名称。');
+            return false;
+        }
+        if (!form['company_id'].value) {
+            alert('请输入物业ID。');
+            return false;
+        }
+        if (!form['sign_key'].value) {
+            alert('请输入签名秘钥。');
+            return false;
+        }
+        if (!form['access_secret'].value) {
+            alert('请输入访问秘钥。');
+            return false;
+        }
+    }
+</script>
+{template 'web/common/footer'}
+

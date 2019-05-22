@@ -1,0 +1,154 @@
+{template 'default2/header'}
+<style>
+    .weui-panel {
+        margin-top: 0;
+    }
+
+    .weui-panel__bd {
+        padding: 10px 15px 10px;
+    }
+
+    .weui-panel:before {
+        border-top: none;
+    }
+
+    .swiper-pagination-bullet {
+        width: 15px;
+        height: 3px;
+        border-radius: 0;
+    }
+
+    .weui-flex {
+        font-size: 0.7rem;
+        color: #888;
+        padding-top: 4px;
+    }
+
+    .weui-badge {
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        margin-left: 14.5px;
+    }
+</style>
+
+<body>
+<div id="list"></div>
+<script type="text/html" id="xq_list">
+    <div class="swiper-container" id="swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+            <!-- Slides -->
+            {{# if(d.piclist){ }}
+            {{# for(var i = 0, len = d.piclist.length;i < len; i++){ }}
+            <div class="swiper-slide home-swiper-slide" data-ratio="4:3"><img
+                    src="{{d.piclist[i]}}"/></div>
+            {{# } }}
+            {{# }else{ }}
+            <div class="swiper-slide home-swiper-slide" data-ratio="4:3"><img
+                    src="{{d.thumb}}"/></div>
+
+            {{# } }}
+        </div>
+        <!-- If we need pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="weui-panel">
+        <div class="weui-panel__bd">
+            <div class="aui-real-price clearfix">
+        <span>
+        <i>￥</i>{{d.marketprice}}
+        </span>
+                <del><span class="aui-font-num">￥{{d.productprice}}</span></del>
+                <div class="aui-settle-choice">
+                    <span>促销价</span>
+                </div>
+            </div>
+            <div class="aui-product-title">
+                <h2>
+                    {{d.title}}
+                </h2>
+                <div class="weui-flex">
+                    <div class="weui-flex__item">
+                        <div class="placeholder" id="stock">库存:{{d.stock}}</div>
+                    </div>
+                    <div class="weui-flex__item">
+                        <div class="placeholder">赠送积分:{{d.credit}}</div>
+                    </div>
+                    <div class="weui-flex__item">
+                        <div class="placeholder">已售:{{d.sold}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="aui-product-pages">
+        <div class="aui-product-pages-title">
+            <h2>图文详情</h2>
+        </div>
+        <div class="aui-product-pages-img">
+            {{d.content}}
+        </div>
+    </div>
+    <div class="weui-tabbar">
+        <div class="aui-car-ear">
+            <div class="aui-car-ear-cell" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'mycart'))}'">
+                <div class="aui-li">
+                    <a href="#" class="aui-icon-gw"></a>
+                </div>
+                <span class="weui-badge " id="shopBadge" >{{d.carttotal}}</span>
+            </div>
+            <div class="aui-car-ear-cell"><a href="#" class="aui-car-all" id="addShopBadge" onclick="addcart()">加入购物车</a></div>
+            <div class="aui-car-ear-cell"><a href="#" class="aui-car-lli" onclick='buy()'>立即购买</a></div>
+        </div>
+    </div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    var id = "{$_GPC['id']}";
+    var regionid = "{$_SESSION['community']['regionid']}";
+    $(function () {
+        var url = "{php echo wxapp_url('shopping/detail')}&id=" + id +"&regionid="+regionid;
+        _loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+<script>
+    //    轮播图
+    $("#swiper-container").swiper({
+        loop: true,
+        autoplay: 3000,
+        pagination: '.swiper-pagination',
+    });
+
+    //加入购物车
+    function addcart() {
+        var url = "{php echo wxapp_url('shopping/update')}&id="+id+"&regionid="+regionid;
+        $.getJSON(url, function (s) {
+            if (s.result == 0) {
+                $.toast("库存不足，无法购买。");
+                return false;
+            } else {
+                //数量加
+                var t = $('#shopBadge');
+                t.text(s.data.total);
+                $.toast("添加成功,在购物车等亲~", "text");
+            }
+        });
+    }
+    //购买
+    function buy() {
+        var stock = parseInt($('#stock').text());
+        if (stock == 0) {
+            $.toast("库存不足，无法购买。");return false;
+        }
+        var gid = "{$_GPC['id']}";
+        location.href = "{php echo $this->createMobileUrl('shopping',array('op' => 'confirm'),true)}" + "&total=1&id="+gid;
+    }
+</script>
+</body>
+</html>

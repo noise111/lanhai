@@ -1,0 +1,120 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <form action="./index.php" method="get" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site"/>
+            <input type="hidden" name="a" value="entry"/>
+            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+            <input type="hidden" name="do" value="advertiser"/>
+            <input type="hidden" name="op" value="manage"/>
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('advertiser', array('op' => 'manage','p'=> 'list'))}"></a>&nbsp;&nbsp;&nbsp;广告管理</h5>
+                        <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('advertiser', array('op' => 'manage','p'=> 'list'))}"></a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <a href="{php echo $this->createWebUrl('advertiser',array('op' => 'manage','p'=> 'add'))}" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>添加广告</a>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', $birth);}
+                            </div>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="请输入广告名称" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="editable_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>广告名称</th>
+                                    <th>消耗金额</th>
+                                    <th>状态</th>
+                                    <th>拒绝原因</th>
+                                    <th>创建时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['advtitle']}</td>
+                                    <td>{$item['advprice']}</td>
+                                    <td><span class="label {if $item['status'] == 1}label-success{else}label-primary{/if}">{if $item['status'] == 1}已审核{else}未审核{/if}</span></td>
+                                    <td>{$item['cotent']}</td>
+                                    <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+
+
+                                    <td>
+                                        {if $_W['isfounder']}
+                                        {if empty($item['status'])}
+                                        <a href="javascript:;" class="btn btn-primary btn-sm" id="verity" title="审核" data-id="{$item['id']}">审核</a>
+                                        {/if}
+                                        <a href="javascript:;" class="btn btn-default btn-sm" title="删除"  onclick="del({$item['id']})">删除</a>
+                                        {else}
+                                        {if empty($item['status'])}
+                                        <a href="javascript:;" class="btn btn-default btn-sm" title="删除" onclick="del({$item['id']})">删除</a>
+                                        {/if}
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                        </div>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#verity").bind("click",function(){
+            var id = $(this).attr('data-id');
+            var url = "{php echo $this->createWebUrl('advertiser',array('op' => 'verity'),true)}";
+            $.post(url,
+                {
+                    id:id
+                },
+                function(msg){
+                    if (msg.status == 1) {
+                        setTimeout(function(){
+                            window.location.reload();
+                        },100);
+                    };
+
+                },
+                'json');
+        });
+    });
+    function del(id) {
+        var id = id;
+        $.post("{php echo $this->createWebUrl('advertiser',array('op' => 'del'))}",{id:id},function (result) {
+            if(result.status == 1){
+                window.location.reload();
+            }
+        },'json')
+    }
+</script>

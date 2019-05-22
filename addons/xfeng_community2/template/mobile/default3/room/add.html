@@ -1,0 +1,235 @@
+{template 'default2/header'}
+<script type="text/javascript">
+    $(function () {
+        var regionid ="{$_GPC['regionid']}";
+        var url = "{php echo wxapp_url('setting/open')}&regionid="+regionid;
+        $.post(url,{},function (data) {
+            var result = data.data;
+            if(result.code){
+                $("#send").show();
+                $("#xqcode").show();
+            }
+            if(result.idcard){
+                $("#_idcard").show();
+            }
+            if(result.gender){
+                $("#_gender").show();
+            }
+            if(result.license){
+                $("#_license").show();
+            }
+            if(result.house){
+                $("#house_1").show();
+                $("#house_2").show();
+                $("#house_3").show();
+                $("#house_4").show();
+                //选择
+                $("#area").picker({
+                    title: "请选择所在区域",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['A区', 'B区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区']
+                        }
+                    ],
+                    onChange: function (p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+                $("#build").picker({
+                    title: "请选择楼栋",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['1栋', '2栋', '3栋', '4栋', '5栋', '6栋', '7栋', '8栋', '9栋', '10栋', '11栋', '12栋']
+                        }
+                    ],
+                    onChange: function (p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+                $("#unit").picker({
+                    title: "请选择单元",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['1单元', '2单元', '3单元', '4单元', '5单元', '6单元', '7单元', '8单元', '9单元', '10单元', '11单元', '12单元']
+                        }
+                    ],
+                    onChange: function (p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+                $("#room").picker({
+                    title: "请选择房号",
+                    cols: [
+                        {
+                            textAlign: 'center',
+                            values: ['101室', '102室', '103室', '104室', '105室', '106室', '107室', '108室', '109室', '110室', '120室', '130室']
+                        }
+                    ],
+                    onChange: function (p, v, dv) {
+                        console.log(p, v, dv);
+                    },
+                    onClose: function (p, v, d) {
+                        console.log("close");
+                    }
+                });
+            }
+            if(result.area){
+                $("#_area").show();
+                $("#zd_1").text(result.area_zd);
+            }
+            if(result.build){
+                $("#_build").show();
+                $("#zd_2").text(result.build_zd);
+            }
+            if(result.unit){
+                $("#_unit").show();
+                $("#zd_3").text(result.unit_zd);
+            }
+            if(result.room){
+                $("#_room").show();
+                $("#zd_4").text(result.room_zd);
+            }
+            if(result.xy){
+                $("#xy").show();
+                $("#xy_content").html(result.xy_content);
+            }
+        },'json')
+    })
+</script>
+<style>
+    .weui-cells {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+
+</style>
+
+<body ontouchstart>
+<div class="weui-cells__title">选择你的房屋信息</div>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access" id="_area">
+        <div class="weui-cell__hd"><label for="area" class="weui-label" id="zd_1">区域</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="area" type="text" placeholder="例如（A区）">
+        </div>
+        <div class="weui-cell__ft" id="house_1" style="display: none">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access" id="_build">
+        <div class="weui-cell__hd"><label for="build" class="weui-label" id="zd_2">楼栋</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="build" type="text" placeholder="例如（12栋）">
+        </div>
+        <div class="weui-cell__ft" id="house_2" style="display: none">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access" id="_unit">
+        <div class="weui-cell__hd"><label for="unit" class="weui-label" id="zd_3">单元</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="unit" type="text" placeholder="例如（3单元）">
+        </div>
+        <div class="weui-cell__ft" id="house_3" style="display: none">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access" id="_room">
+        <div class="weui-cell__hd"><label for="room" class="weui-label" id="zd_4">房号</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="room" type="text" placeholder="例如（102号）" id="room">
+        </div>
+        <div class="weui-cell__ft" id="house_4" style="display: none">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_switch">
+        <div class="weui-cell__bd">设置为默认</div>
+        <div class="weui-cell__ft">
+            <label for="switchCP" class="weui-switch-cp">
+                <input id="switchCP" class="weui-switch-cp__input" type="checkbox" checked="checked">
+                <div class="weui-switch-cp__box"></div>
+            </label>
+        </div>
+    </div>
+</div>
+
+<a href="javascript:;" class="weui-btn register-guide-btn">提交信息</a>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script>
+    $("#rSite01").picker({
+        title: "请选择所在区域",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['A区', 'B区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区', 'C区']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite02").picker({
+        title: "请选择楼栋",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['1栋', '2栋', '3栋', '4栋', '5栋', '6栋', '7栋', '8栋', '9栋', '10栋', '11栋', '12栋']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite03").picker({
+        title: "请选择单元",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['1单元', '2单元', '3单元', '4单元', '5单元', '6单元', '7单元', '8单元', '9单元', '10单元', '11单元', '12单元']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+    $("#rSite04").picker({
+        title: "请选择房号",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['101室', '102室', '103室', '104室', '105室', '106室', '107室', '108室', '109室', '110室', '120室', '130室']
+            }
+        ],
+        onChange: function (p, v, dv) {
+            console.log(p, v, dv);
+        },
+        onClose: function (p, v, d) {
+            console.log("close");
+        }
+    });
+</script>
+</body>
+</html>

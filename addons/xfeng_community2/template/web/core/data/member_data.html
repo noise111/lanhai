@@ -1,0 +1,154 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>住户统计</h5>
+                </div>
+                <div class="ibox-content">
+        <form action="./index.php" method="get" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site"/>
+            <input type="hidden" name="a" value="entry"/>
+            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+            <input type="hidden" name="do" value="data"/>
+            <input type="hidden" name="op" value="member"/>
+
+            <div class="form-group">
+                <label for="" class="col-sm-1 control-label">小区:</label>
+                <div class="col-sm-3">
+                    <select name="regionid" class="form-control">
+                        <option value="">全部</option>
+                        {loop $regions $region}
+                        <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']}selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+                        {/loop}
+                    </select>
+                </div>
+                <label for="" class="col-sm-2 control-label">周期选择:</label>
+                <div class="col-sm-3">
+                    <select name="xqday" class="form-control">
+                        <option value="7" {if $xqday == 7}selected="selected" {/if}>过去7天</option>
+                        <option value="8" {if $xqday == 8}selected="selected" {/if}>过去8天</option>
+                        <option value="9" {if $xqday == 9}selected="selected" {/if}>过去9天</option>
+                        <option value="10" {if $xqday == 10}selected="selected" {/if}>过去10天</option>
+                        <option value="11" {if $xqday == 11}selected="selected" {/if}>过去11天</option>
+                        <option value="12" {if $xqday == 12}selected="selected" {/if}>过去12天</option>
+                        <option value="13" {if $xqday == 13}selected="selected" {/if}>过去13天</option>
+                        <option value="14" {if $xqday == 14}selected="selected" {/if}>过去14天</option>
+                        <option value="15" {if $xqday == 15}selected="selected" {/if}>过去15天</option>
+                        <option value="16" {if $xqday == 16}selected="selected" {/if}>过去16天</option>
+                        <option value="17" {if $xqday == 17}selected="selected" {/if}>过去17天</option>
+                        <option value="18" {if $xqday == 18}selected="selected" {/if}>过去18天</option>
+                        <option value="19" {if $xqday == 19}selected="selected" {/if}>过去19天</option>
+                        <option value="20" {if $xqday == 20}selected="selected" {/if}>过去20天</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary ">查询</button>
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+            </div>
+        </form>
+
+    <div class="panel-body">
+        <div class="clearfix" id="clear" style="margin-left: 50px;">
+            <div class="panel-default" style="padding:1em;border-radius: 0px;">
+                <div class="row m-t-20">
+
+                    <div class="col-sm-12" id="member-2" style="height: 500px;" >
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                </div></div></div></div></div>
+</body>
+
+
+
+<script type="text/javascript">
+
+    var myChart2 = echarts.init(document.getElementById('member-2'), 'macarons');
+    var label = {php echo json_encode($day)};
+    var datasets =  {php echo json_encode($hit)};
+    var datasets1 =  {php echo json_encode($hit1)};
+    option2 = {
+        title : {
+            text: '最近'+ {php echo $xqday} +'天用户数据统计',
+            subtext: ''
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['游客','住户']
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                data : label
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value'
+            }
+        ],
+        series : [
+            {
+                name:'游客',
+                type:'bar',
+                data:datasets,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name: '平均值'}
+                    ]
+                }
+            },
+            {
+                name:'住户',
+                type:'bar',
+                data:datasets1,
+                markPoint : {
+                    data : [
+                        {type : 'max', name: '最大值'},
+                        {type : 'min', name: '最小值'}
+                    ]
+                },
+                markLine : {
+                    data : [
+                        {type : 'average', name: '平均值'}
+                    ]
+                }
+            }
+        ]
+    };
+
+    myChart2.setOption(option2);
+    setTimeout(function () {
+        window.onresize = function () {
+            myChart2.resize();
+        }
+    }, 200)
+
+</script>
+
+
+

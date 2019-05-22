@@ -1,0 +1,341 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        {if $_GPC['status'] == 1}
+                        <a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('fee', array('op' => 'center'))}"></a>
+                        {elseif $_GPC['status'] == 2}
+                        <a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('fee', array('op' => 'order'))}"></a>
+                        {/if}
+                        收银台</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'center','p' => 'display','roomid' => $_GPC['roomid'],'status' => $_GPC['status']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="center"/>
+                        <div class="row">
+                            <div class="col-sm-8 m-b-xs">
+
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                            <div class="input-group">
+                                <span id="total">当前选择金额小计：0元</span>&nbsp;&nbsp;
+                                <span id="printt"><a class="btn btn-primary btn-sm" href="javascript:;" id="print">收据打印</a></span>&nbsp;&nbsp;&nbsp;
+                                <span id="callt"><a class="btn btn-primary btn-sm" href="javascript:;" id="call">催缴打印</a></span>&nbsp;&nbsp;&nbsp;
+                                {if $_GPC['status'] == 1}
+                                <a class="btn btn-primary btn-sm" href="javascript:;" data-toggle="modal" data-target="#myModal1" id="pay">结算</a>
+                                {/if}
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th width="30px">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkids"
+                                           onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                    <label for="checkids"> </label>
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>收费项目</th>
+                            <th>所属小区</th>
+                            <th>楼宇</th>
+                            <th>单元</th>
+                            <th>房号</th>
+                            <th>账单日期</th>
+                            <th>状态</th>
+                            <th>费用</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}" value="{$item['id']}">
+                                    <label for="ids_{$item['id']}"></label>
+                                </div>
+                            </td>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                {$item['regiontitle']}
+                            </td>
+                            <td>{$item['build']}栋</td>
+                            <td>{$item['unit']}单元</td>
+                            <td>{$item['room']}室</td>
+                            <td>
+                                {if $item['type'] == 2}
+                                {php echo date('Y-m-d',$item['createtime'])}
+                                {elseif $item['type'] == 1}
+                                {php echo date('Y-m-d',$item['starttime'])}~{php echo date('Y-m-d',$item['endtime'])}
+                                {/if}
+                            </td>
+                            <td>
+                                {if $item['status'] == 2}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}
+                            </td>
+                            <td>{$item['price']}</td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">结算</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form" onsubmit="return check(this);">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">实际交费</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="" name="pay_price" value="" id="pay_price" disabled>
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳金</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳金" name="rate_price" value="">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳金率</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳金率" name="rate" value="">
+                                <span class="input-group-addon">千分之(‰)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳天数</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳起算天数" name="rate_day" value="">
+                                <span class="input-group-addon">天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">支付方式</label>
+                        <div class="col-sm-10">
+                            <select name="paytype" class="form-control" id="paytype">
+                                <option value="-1">请选择支付方式</option>
+                                <option value="1">余额</option>
+                                <option value="5">现金</option>
+                                <option value="2">微信支付</option>
+                                <option value="4">支付宝</option>
+                                <option value="6">银联刷卡</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea name="remark" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">操作人</label>
+                        <div class="col-sm-10">
+                            <input name="username" class="form-control" id="username" value="{if $user}{$user['realname']}{else}{$_W['user']['username']}{/if}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="ids" value="" id="ids">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="sub" id="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $("#checkids").on('change', function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var idss = $("#ids").val();
+
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'change'))}";
+        $.getJSON(url, {
+            ids: ids
+        }, function (data) {
+            var purl = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'print'))}&ids="+idss;
+            var curl = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'call'))}&ids="+idss;
+            var content = '<a class="btn btn-primary btn-sm" href="'+purl+'" target="_blank">收据打印</a>';
+            var con = '<a class="btn btn-primary btn-sm" href="javascript:;" id="print">收据打印</a>';
+            var contentCall = '<a class="btn btn-primary btn-sm" href="'+curl+'" target="_blank">催缴打印</a>';
+            var conCall = '<a class="btn btn-primary btn-sm" href="javascript:;" id="call">催缴打印</a>';
+            if (data.status == 1){
+                $('#printt').html(content);
+                $('#callt').html(contentCall);
+                var pcontent = '当前选择金额小计：'+data.price+'元';
+                $('#total').html(pcontent);
+                $('#pay_price').val(data.price);
+            }
+            if(data.status == 2){
+                $('#printt').html(con);
+                $('#callt').html(conCall);
+                var pcontent = '当前选择金额小计：'+data.price+'元';
+                $('#total').html(pcontent);
+                $('#pay_price').val(data.price);
+            }
+        })
+    })
+    $("input[name='ids[]']").on('change', function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var idss = $("#ids").val();
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'change'))}";
+        $.getJSON(url, {
+            ids: ids
+        }, function (data) {
+            var purl = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'print'))}&ids="+idss;
+            var curl = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'call'))}&ids="+idss;
+            var content = '<a class="btn btn-primary btn-sm" href="'+purl+'" target="_blank">收据打印</a>';
+            var con = '<a class="btn btn-primary btn-sm" href="javascript:;" id="print">收据打印</a>';
+            var contentCall = '<a class="btn btn-primary btn-sm" href="'+curl+'" target="_blank">催缴打印</a>';
+            var conCall = '<a class="btn btn-primary btn-sm" href="javascript:;" id="call">催缴打印</a>';
+            if (data.status == 1){
+                $('#printt').html(content);
+                $('#callt').html(contentCall);
+                var pcontent = '当前选择金额小计：'+data.price+'元';
+                $('#total').html(pcontent);
+                $('#pay_price').val(data.price);
+            }
+            if(data.status == 2){
+                $('#printt').html(con);
+                $('#callt').html(conCall);
+                var pcontent = '当前选择金额小计：'+data.price+'元';
+                $('#total').html(pcontent);
+                $('#pay_price').val(data.price);
+            }
+        })
+    })
+    $('#submit').on('click', function () {
+        if (!$("#ids").val()) {
+            alert('请先去选择账单。');
+            return false;
+        }
+        if (!$("#pay_price").val()) {
+            alert('请先选择账单。');
+            return false;
+        }
+        if ($('#paytype option:selected') .val() =='-1') {
+            alert('请选择支付方式。');
+            return false;
+        }
+//        if ($('#username').val() =='') {
+//            alert('请输入操作人姓名');
+//            return false;
+//        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'display'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+    $("#print").click(function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        if(ids.length ==''){
+            alert('请勾选账单')
+            return false
+        }
+    })
+    $("#call").click(function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        if(ids.length ==''){
+            alert('请勾选账单')
+            return false
+        }
+    })
+    $("#pay").click(function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        if(ids.length ==''){
+            alert('请勾选账单')
+            return false
+        }
+    })
+</script>

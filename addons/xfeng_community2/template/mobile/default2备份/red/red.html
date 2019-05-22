@@ -1,0 +1,92 @@
+{template 'default2/header'}
+    <style>
+        .swiper-container{
+            position: relative;
+            top: 40px;
+            margin-right: 10%;
+            margin-left: 10%;
+        }
+    </style>
+
+<body>
+<div class="defalut-header">
+    <div class="defalut-header-left" onClick="javascript :history.back(-1);">
+        <a class="defalut-header-back" ></a>
+        <div class="left-arrow">
+        </div>
+    </div>
+    <h1 class="defalut-header-tit">
+        <span>抢红包</span>
+    </h1>
+</div>
+<div class="red-content" style="display: none">
+    <div class="swiper-container" id="home-swiper-container">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper" id="list">
+            <!-- Slides -->
+
+        </div>
+    </div>
+    <div class="red-content-rob">
+        <img src="{MODULE_URL}template/mobile/default2/static/images/red/img1.jpg">
+    </div>
+
+    <a href="#" id="isread-text" class="orgBtn">抢红包</a>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="swiper-slide home-swiper-slide" data-ratio="16:9" onclick="window.location.href='{{d.list[i].link}}'">
+        <img src="{{d.list[i].image}}"/>
+    </div>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    var deviceid = "{$_GPC['deviceid']}";
+    $(function () {
+        var url = "{php echo wxapp_url('red/list')}&deviceid="+deviceid;
+        _loaddata(url, $("#list"), 'xq_list', true,function (data) {
+            if(data.data.code == 1){
+                $.alert("暂未开通抢红包功能", function () {
+                    //点击确认后的回调函数
+                    window.location.href = "{php echo $this->createMobileUrl('home')}";
+                });
+            }
+            else
+            {
+                $(".red-content").show();
+            }
+        });
+    })
+</script>
+<script>
+    //    轮播图
+    $("#home-swiper-container").swiper({
+        loop: true,
+        autoplay: 3000,
+        pagination: '.swiper-pagination',
+    });
+
+    $(document).on('click', '#isread-text', function() {
+
+        $.showLoading('正在领取');
+        $.post("{php echo wxapp_url('red/rush')}",{deviceid:deviceid}, function (data) {
+            $.hideLoading()
+            if (data.err_code == 0)
+            {
+                $.toptip(data.data.content, 'error');
+                setTimeout(function () {
+                    window.location.href = "{php echo $this->createMobileUrl('home')}";
+                }, 1000)
+            }
+
+        }, "json")
+    })
+</script>
+</body>
+</html>

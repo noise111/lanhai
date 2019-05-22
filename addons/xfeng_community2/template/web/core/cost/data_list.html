@@ -1,0 +1,89 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>数据统计</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cost',array('op' => 'data'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="cost"/>
+                            <input type="hidden" name="op" value="data"/>
+                            <div class="col-sm-3 m-b-xs">
+
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <select class="form-control" name="regionid">
+                                        <option value="">全部小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <form action="" method="post" class="form-horizontal" role="form">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>小区名称</th>
+                                <th>支付宝</th>
+                                <th>微信</th>
+                                <th>现金</th>
+                                <th>余额</th>
+                                <th>银联刷卡</th>
+                                <th>积分抵扣数量</th>
+                                <th>积分抵扣费用</th>
+                                <th>总计</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['title']}</td>
+                                <td>{$item['alipay_total']}</td>
+                                <td>{$item['wechat_total']}</td>
+                                <td>{$item['cash_total']}</td>
+                                <td>{$item['credit_total']}</td>
+                                <td>{$item['card_total']}</td>
+                                <td>{$item['credit1_total']}</td>
+                                <td>{$item['offset_total']}</td>
+                                <td>{$item['ztotal']}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

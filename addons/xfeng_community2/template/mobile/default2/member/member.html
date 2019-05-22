@@ -1,0 +1,167 @@
+{template 'default2/header'}
+<style>
+    .weui-grid__label {
+        color: #888;
+    }
+
+    @media screen and (max-width: 375px) {
+        .service_card_grid {
+            padding: 10px 5px;
+        }
+
+        .weui-footer, .weui-grid__label {
+            font-size: 0.7em;
+        }
+    }
+</style>
+<style>
+    .cd-bouncy-nav {
+        max-height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .weui-navbar {
+        background: transparent;
+        width: 95%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .weui-navbar__item {
+        color: #ffffff;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: transparent;
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff;
+
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+</style>
+<body ontouchstart>
+<div class="my-head">
+    <div class="user-name">
+        <div class="my-head-img">
+            <img src="{$_W['member']['avatar']}">
+        </div>
+        <div class="head-dsb">
+            <p class="dsb-name">{$_W['member']['realname']}</p>
+            <p class="dsb-id">手机号: {$_W['member']['mobile']}</p>
+        </div>
+    </div>
+    <div class="shouyi">
+        <dl>
+            <dt>余额{if set('p44')}<a href="{php echo url('entry', array('m' => 'recharge', 'do' => 'pay'));}">充值</a>{/if}</dt>
+            <dd>{$_W['member']['credit2']}</dd>
+        </dl>
+        <dl style="border: 0px;">
+            <dt>积分</dt>
+            <dd>{$_W['member']['credit1']}</dd>
+        </dl>
+    </div>
+</div>
+<div style="padding-bottom: 80px" >
+    <!--服务卡片-->
+    <div id="list"></div>
+    <div class="weui-panel">
+        <div class="weui-panel__bd">
+            <div class="weui-media-box weui-media-box_small-appmsg">
+                <div class="weui-cells">
+                    <a class="weui-cell weui-cell_access card_access" href="{php echo $this->createMobileUrl('member',array('op'=> 'my'))}">
+                        <div class="weui-cell__hd">
+                            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-set.png" alt=""
+                                 style="width:28px;margin-right:5px;display:block">
+                        </div>
+                        <div class="weui-cell__bd weui-cell_primary">
+                            <p>设置</p>
+                        </div>
+                        <span class="weui-cell__ft"></span>
+                    </a>
+                    <!--<a class="weui-cell weui-cell_access card_access" href="javascript:;">-->
+                    <!--<div class="weui-cell__hd">-->
+                    <!--<img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-call-center.png" alt=""-->
+                    <!--style="width:28px;margin-right:5px;display:block">-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__bd weui-cell_primary">-->
+                    <!--<p>客服中心</p>-->
+                    <!--</div>-->
+                    <!--<span class="weui-cell__ft"></span>-->
+                    <!--</a>-->
+                    <a href="javascript:;" class="weui-cell weui-cell_access card_access" onclick="location.href='{php echo $this->createMobileUrl('member',array('op'=> 'js'))}'">
+                        <div class="weui-cell__hd">
+                            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-about-us.png" alt=""
+                                 style="width:28px;margin-right:5px;display:block">
+                        </div>
+                        <div class="weui-cell__bd weui-cell_primary">
+                            <p>关于我们</p>
+                        </div>
+                        <span class="weui-cell__ft"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+    $tel = set('p1');
+    $copyright = set('p68');
+    $copright_url = set('p69');
+    ?>
+{if $copyright}
+<div class="weui-footer" style="margin-top: 5px" onclick="window.location.href='{$copright_url}'">
+    <p class="weui-footer__text">{$copyright}</p>
+</div>
+{/if}
+<script type="text/html" id="nav_list">
+
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-panel weui-panel_access service_card">
+        <div class="weui-panel__hd service_card_hd">{{ d.list[i].title }}</div>
+        <div class="weui-panel_bd">
+            <div class="weui-grids">
+                {{# if(d.list[i].children){ }}
+                {{# for(var j = 0, le = d.list[i].children.length; j < le; j++){ }}
+                <a href="javascript:" class="weui-grid js_grid service_card_grid" onclick="window.location.href='{{ d.list[i].children[j].url }}'">
+                    <div class="weui-grid__icon">
+                        <img src="{{ d.list[i].children[j].thumb }}" alt="">
+                    </div>
+                    <p class="weui-grid__label">
+                        {{ d.list[i].children[j].title }}
+                    </p>
+                </a>
+                {{# } }}
+                {{# } }}
+            </div>
+        </div>
+    </div>
+    {{# } }}
+</script>
+{template 'default2/footer'}
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('display/member')}&regionid="+regionid;
+        _loaddata(url, $("#list"), 'nav_list', true);
+    })
+</script>
+</body>
+</html>

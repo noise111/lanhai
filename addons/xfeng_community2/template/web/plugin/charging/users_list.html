@@ -1,0 +1,139 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'users'))}" title="用户管理" >用户管理</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="charging"/>
+                            <input type="hidden" name="op" value="users"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    <span style="color: red">总余额:{$creditTotal}</span>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="姓名">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                            <button type="submit" name="export" value="1" id="export" class="btn btn-primary" data-loading-text="正在导出中，请勿关闭和刷新浏览器......" autocomplete="off">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>UID</th>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+                                    <th>openid</th>
+                                    <th>充电桩余额</th>
+                                    <!--<th>操作</th>-->
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['uid']}</td>
+                                    <td>{$item['realname']}</td>
+                                    <td>{$item['mobile']}</td>
+                                    <td>{$item['openid']}</td>
+                                    <td>{$item['chargecredit']}</td>
+                                    <!--<td>-->
+                                        <!--{if !$user || $user['type'] == 1}-->
+                                        <!--<a data-id="{$item['id']}" data-type="4" onclick="change(this)" data-toggle="modal" data-target="#myModal1" title="修改余额" class="btn btn-primary btn-sm">修改余额</a>-->
+                                        <!--{/if}-->
+                                    <!--</td>-->
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title"> 用户账号余额操作</h4>
+                <small class="font-bold">输入500,则标识增加500;输入-500则表示减少500</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <input type='hidden' name='id' id='id' class="form-control" />
+                <input type='hidden' name='type' id='type' class="form-control" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">修改余额</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="credit" id="credit" placeholder="">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function change(obj) {
+        $("#id").val(obj.getAttribute("data-id"));
+        $("#type").val(obj.getAttribute("data-type"));
+    }
+</script>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+    $('#export').on('click',function () {
+        var $btn = $(this).button('loading');
+        setTimeout(function () {
+            $('#export').html("导出数据");
+            $('#export').prop('disabled', false);
+            $("#export").removeClass("disabled");
+        },3000)
+    })
+</script>
+{template 'web/common/footer'}

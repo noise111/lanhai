@@ -1,0 +1,408 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $p=='onlog'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'log','p'=>'onlog'));}">在场车辆</a></li>
+                        <li {if $p=='passlog'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'log','p'=>'passlog'));}">车辆进出记录</a></li>
+                        <li {if $p=='openlog'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'log','p'=>'openlog'));}">手动放行记录</a></li>
+                        <li {if $p=='moncarlog'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks', array('op' => 'log','p'=>'moncarlog'));}">月租开闸记录</a></li>
+                    </ul>
+{if $p == 'onlog'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="log"/>
+                            <input type="hidden" name="p" value="{$p}"/>
+                            <div class="row">
+                                <div class="col-sm-12 m-b-xs">
+                                    <span style="color: red">月租车剩余车位：{$over_month_num}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: red">临时车剩余车位：{$over_short_num}</span>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    <select name="pid" id="pid" class="form-control">
+                                        <option value="">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $_GPC['pid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    {php echo tpl_form_field_daterange('starttime', $starttime, $time = false)}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="按车牌号查找" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered" style="margin-top: 10px">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <!--<th>ID</th>-->
+                                <th>车牌号</th>
+                                <th>入场时间</th>
+                                <th>用户名称</th>
+                                <th>入场车道</th>
+                                <th>车辆类型</th>
+                                <th>收费标准</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <!--<td>{$item['id']}</td>-->
+                                <td>{$item['carno']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['starttime'])}</td>
+                                <td>
+                                    {if $item['type'] == 1}
+                                    {if $cars[$item['carno']]['realname']}
+                                    {$cars[$item['carno']]['realname']}
+                                    {else}
+                                    未注册用户
+                                    {/if}
+                                    {elseif $item['type'] == 2}
+                                    {if $members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {$members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {else}
+                                    未注册用户
+                                    {/if}
+                                    {/if}
+                                </td>
+                                <td>{$item['entery_title']}</td>
+                                <td>{if $item['type']==1}月租车{elseif $item['type']==2}临时车{elseif $item['type']==3}储值车{/if}</td>
+                                <td>{if $item['type'] == 1}{$parkRuls[$parks[$item['pid']]['rule_id']]['title']} {else}{$parkRuls[$parks[$item['pid']]['temrule_id']]['title']}{/if}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_onlogEdit', $menu_opss)) || empty($user)}
+                                    <a title="修改车牌号" class="btn btn-primary btn-sm" data-target="#myModal" data-toggle="modal" data-carno="{$item['carno']}" data-id="{$item['id']}" onclick="change(this)">修改车牌号</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_onlogDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'log','p' => 'del','id' => $item['id'],'type' => 'onlog'))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content" style="width:800px">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">修改车牌</h4>
+                                    <small class="font-bold">修改车牌</small>
+                                </div>
+                                <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                                    <input type='hidden' name='id' id='id' class="form-control" />
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">车牌号</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="carno" id="carno" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                                        <input type="submit" class="btn btn-primary" name="submit" value="保存">
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function change(obj) {
+                            $("#id").val(obj.getAttribute("data-id"));
+                            $("#carno").val(obj.getAttribute("data-carno"));
+                        }
+                    </script>
+{/if}
+{if $p == 'passlog'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="log"/>
+                            <input type="hidden" name="p" value="{$p}"/>
+                            <div class="row">
+                                <div class="col-sm-3 m-b-xs">
+                                    <select name="pid" id="pid" class="form-control">
+                                        <option value="">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $_GPC['pid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    {php echo tpl_form_field_daterange('starttime', $starttime, $time = false)}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="按车牌号查找" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered" style="margin-top: 10px">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <!--<th>ID</th>-->
+                                <th>车牌号</th>
+                                <th>车辆类型</th>
+                                <th>用户名称</th>
+                                <th>入场通道</th>
+                                <th>出场通道</th>
+                                <th>入场时间</th>
+                                <th>出场时间</th>
+                                <th>使用时间</th>
+                                <th>进场类型</th>
+                                <th>出场类型</th>
+                                <th>收费金额(元)</th>
+                                <th>实付金额(元)</th>
+                                <th>支付类型</th>
+                                <th>支付时间</th>
+                                <th>收费标准</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $rows $item}
+                            <tr>
+                                <!--<td>{$item['id']}</td>-->
+                                <td>{$item['carno']}</td>
+                                <td>{if $item['type']==1}月租车{elseif $item['type']==2}临时车{elseif $item['type']==3}储值车{/if}</td>
+                                <td>
+                                    {if $item['type'] == 1}
+                                    {if $cars[$item['carno']]['realname']}
+                                    {$cars[$item['carno']]['realname']}
+                                    {else}
+                                    未注册用户
+                                    {/if}
+                                    {elseif $item['type'] == 2}
+                                    {if $members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {$members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {else}
+                                    未注册用户
+                                    {/if}
+                                    {/if}
+                                </td>
+                                <td>{$item['entery_title']}</td>
+                                <td>{$item['out_title']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['starttime'])}</td>
+                                <td>{if $item['endtime']}{php echo date('Y-m-d H:i:s',$item['endtime'])}{/if}</td>
+                                {php $time = $item['endtime']-$item['starttime'];$time = sec2time($time); }
+                                <td>{if $item['endtime']}{$time}{/if}</td>
+                                <td>{if $item['open']==1}正常进场{else}异常进场{/if}</td>
+                                <td>
+                                    {if $item['status']==2}
+                                    {if $item['type'] ==1}
+                                    月租车出场
+                                    {elseif $item['type']==2}
+                                    {if $item['open_status']==1}
+                                    {if $item['price']>0}临时车付费出场{else}临时车免费出场{/if}
+                                    {else}
+                                    临时车出场
+                                    {/if}
+                                    {else}
+                                    储值车出场
+                                    {/if}
+                                    {/if}
+                                </td>
+                                <td>{$item['total_price']}</td>
+                                <td>{$item['price']}</td>
+                                <td>{if $item['type']==1}包月支付{else}{if $item['status']==2}{if $item['open_status']==1}{if $item['paytype']==1}余额{elseif $item['paytype']==7}用户余额代扣{elseif $item['paytype']==8}免费{elseif $item['paytype']==9}商家储值支付{elseif $item['paytype']==11}包月支付{else}移动支付{/if}{else}未支付{/if}{/if}{/if}</td>
+                                <td>{if $item['paytime']}{php echo date('Y-m-d H:i',$item['paytime'])}{/if}</td>
+                                <td>{if $item['type'] == 1}{$parkRuls[$parks[$item['pid']]['rule_id']]['title']} {else}{$parkRuls[$parks[$item['pid']]['temrule_id']]['title']}{/if}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_passlogDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'log','p' => 'del','id' => $item['id'],'type' => 'passlog'))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $rows}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+{/if}
+{if $p == 'openlog'}
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <!--<th>ID</th>-->
+                                <th>车牌号</th>
+                                <th>用户名称</th>
+                                <th>操作员</th>
+                                <th>操作时间</th>
+                                <th>操作ip</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $open_logs $item}
+                            <tr>
+                                <!--<td>{$item['id']}</td>-->
+                                <td>{$item['carno']}</td>
+                                <td>
+                                    {if $cars[$item['carno']]['realname']}
+                                    {$cars[$item['carno']]['realname']}
+                                    {elseif $members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {$members[$userCars[$cars[$item['carno']]['id']]['uid']]['nickname']}
+                                    {else}
+                                    未注册用户
+                                    {/if}
+                                </td>
+                                <td>{$item['username']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>{$item['ip']}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_openlogDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'log','p' => 'del','id' => $item['id'],'type' => 'openlog'))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $open_logs}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+{/if}
+{if $p == 'moncarlog'}
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <!--<th>ID</th>-->
+                                <th>车牌号</th>
+                                <th>开闸时间</th>
+                                <!--<th>车道编号</th>-->
+                                <th>车道名称</th>
+                                <th>车场名称</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $mon_logs $item}
+                            <tr>
+                                <!--<td>{$item['id']}</td>-->
+                                <td>{$item['carno']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['endtime'])}</td>
+                                <!--<td></td>-->
+                                <td>{$item['out_title']}</td>
+                                <td>{$parks[$item['pid']]['title']}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_moncarlogDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'log','p' => 'del','id' => $item['id'],'type' => 'moncarlog'))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $mon_logs}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+{/if}
+{if $p == 'list'}
+                    <div class="ibox-content">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>id</th>
+                                <th>昵称</th>
+                                <th>余额变化</th>
+                                <th>时间</th>
+                                <th>用途</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['nickname']}</td>
+                                <td>{if $item['creditstatus'] == 1}增加{elseif $item['creditstatus'] == 2}减少{/if}{$item['credit']}元</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>{$item['content']}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+{/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

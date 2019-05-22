@@ -1,0 +1,121 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('guard', array('op' => 'comb'))}"></a>&nbsp;&nbsp;&nbsp;发卡管理
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh"
+                           href="{php echo $this->createWebUrl('guard',array('op' => 'comb','p' => 'add'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal form" method="post" role="form" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-5">
+                                <select name='regionid' class="form-control" id="regionid">
+                                    <option>请选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id'] == $item['regionid']}selected {/if} >
+                                    {$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择门禁</label>
+                            <div class="col-sm-5">
+                                <select name='deviceid' class="form-control" id="deviceid">
+                                    <option>请选择门禁</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">卡片号码</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='cardno' id='carno' class="form-control"
+                                       value="{$item['cardno']}" placeHolder="输入卡号"/>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">卡片状态</label>
+                            <div class="col-sm-5">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" value="1" id="c1_1" {if $item['category'] == 1 || empty($item['category'])}checked{/if}>
+                                    <label for="c1_1">白名单</a></label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" value="2" id="c1_2" {if $item['category'] == 2 }checked{/if}>
+                                    <label for="c1_2">黑名单</a></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                $.getJSON("{php echo $this->createWebUrl('guard',array('op'=>'device'))}",{regionid:data.regionid},function(data){
+                    var content ="<option>请选择门禁</option>";
+                    for (var o in data) {
+                        content +="<option value='"+data[o].id+"'>"+data[o].title+data[o].unit+"</option>";
+                    }
+                    $('#deviceid').html(content);
+
+                })
+            }
+        },'json')
+    })
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('guard',array('op'=>'device'))}",{regionid:regionid},function(data){
+            var content ="<option>请选择门禁</option>";
+            for (var o in data) {
+                content +="<option value='"+data[o].id+"'>"+data[o].title+data[o].unit+"</option>";
+            }
+            $('#deviceid').html(content);
+
+        })
+    })
+</script>

@@ -1,0 +1,103 @@
+{template 'default/header'}
+<style>
+    .button{
+        height:40px;
+        line-height: 40px;
+    }
+</style>
+<body class="max-width">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+    <h1 class="title txt-fff">访客二维码</h1>
+</header>
+
+<div class="content page">
+
+
+
+            <form role="form" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <div class="list-block">
+                    <ul>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label width80">
+                                        位置
+                                    </div>
+                                    <div class="item-input">
+                                        <select name="door" id="door">
+                                            {loop $devices $item}
+                                            <option value="{$item['id']}">{$item['title']}{$item['unit']}</option>
+                                            {/loop}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="item-content">
+                                <div class="item-inner">
+                                    <div class="item-title label width80">时间</div>
+                                    <div class="item-input">
+                                        <input type="text" placeholder="如果10分钟，就填写10" type="number" pattern="[0-9]*" id="opentime">
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+            <div class="content-block">
+                <p><a href="javascript:;" class="button button-success button-fill" id="showToast" style="line-height: 40px;">生成二维码</a></p>
+            </div>
+
+
+
+<script>
+    function xqdoor(id){
+        var id = id;
+        window.location.href = "{php echo $this->createMobileUrl('lock')}&id="+id+"&type=1";
+    }
+    $(function () {
+        $("#showToast").click(function(event) {
+            var opentime = $("#opentime").val();
+            if (opentime == '') {
+                alert('使用时间不能为空！');
+                return false;
+            };
+            if(opentime > 2000){
+                alert('临时二维码最高只能设置2000分钟！');
+                return false;
+            }
+            var door = $("#door option:selected").val();
+            $.ajax({
+                url: "{php echo $this->createMobileUrl('opendoor',array('op' => 'visit'))}",
+                dataType: 'json',
+                data: {
+
+                    opentime: opentime,
+                    door : door
+                },
+                success: function(s) {
+                    if (s.status == 1) {
+                        $.toast('成功生成');
+                        setTimeout(function() {
+                            window.location.href=s.url;
+                        }, 2000);
+                    };
+                }
+            })
+
+
+        });
+    })
+</script>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+</body>
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+<!--<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>-->
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/swiper.min.js" charset="utf-8"></script>
+</html>

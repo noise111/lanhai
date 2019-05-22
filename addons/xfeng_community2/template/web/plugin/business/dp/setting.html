@@ -1,0 +1,154 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}"
+                               title="店铺管理">店铺管理</a></li>
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理">二维码管理</a>
+                        </li>
+                        <li class="active"><a
+                                href="{php echo $this->createWebUrl('business',array('op' => 'setting','dpid'=>$dpid))}"
+                                title="基本设置">基本设置</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data"
+                              id="form">
+                            <div class="form-group">
+                                <label for="paystatus" class="col-sm-2 control-label">页面买单</label>
+                                <div class="col-sm-5">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="setting[paystatus]" id="paystatus" value="1" {if
+                                               intval($setting['paystatus'])==1}checked='checked' {/if}>
+                                        <label for="paystatus"> 开启(开启后，将在店铺页面显示优惠买单入口) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">用户线上消费获得积分比例</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="setting[online]" class="form-control"
+                                               value="{$setting['online']}"/>
+                                        <span class="input-group-addon">积分/元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">用户线下消费获得积分比例</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="setting[offline]" class="form-control"
+                                               value="{$setting['offline']}"/>
+                                        <span class="input-group-addon">积分/元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="credit_swith" class="col-sm-2 control-label">积分抵扣</label>
+                                <div class="col-sm-5">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="setting[credit_swith]" id="credit_swith" value="1" {if
+                                               intval($setting['credit_swith'])==1}checked='checked' {/if}>
+                                        <label for="credit_swith"> 开启(开启后，将在页面显示积分抵扣) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">用户消费最高抵扣积分</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="setting[credit2]" class="form-control"
+                                               value="{$setting['credit2']}"/>
+                                        <span class="input-group-addon">积分</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">用户消费积分抵扣比例</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group">
+                                        <input type="text" name="setting[credit_rat]" class="form-control"
+                                               value="{$setting['credit_rat']}" placeholder=""/>
+                                        <span class="input-group-addon">积分/元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="rand_swith" class="col-sm-2 control-label">优惠减免</label>
+                                <div class="col-sm-5">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="setting[rand_swith]" id="rand_swith" value="1" {if
+                                               intval($setting['rand_swith'])==1}checked='checked' {/if}>
+                                        <label for="rand_swith"> 开启(开启后，将在页面显示优惠减免) </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">用户线下随机减免</label>
+                                <div class="col-sm-5">
+                                    <div class="input-group" style="width: 50%;float: left">
+                                        <input type="text" name="setting[minprice]" class="form-control"
+                                               value="{$setting['minprice']}" placeholder="最低金额"/>
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                    <div class="input-group" style="width: 50%;float: left">
+                                        <input type="text" name="setting[maxprice]" class="form-control"
+                                               value="{$setting['maxprice']}" placeholder="最高金额"/>
+                                        <span class="input-group-addon">元</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-5">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                    </button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}", {
+                xqkey: xqkey,
+                status: status,
+                regionid: regionid
+            }, function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

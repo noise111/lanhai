@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        .weui-cells__title{
+            background: #fff;
+            padding-left: 10px;
+            margin-top: 0.3em;
+            margin-bottom: 0.5em;
+        }
+        .weui-navbar{
+            background: #fff;
+        }
+        .weui-navbar__item{
+            font-size: 14px;
+            padding: 6px 0;
+        }
+        .weui-navbar:after{
+            border-bottom: none;
+        }
+        .weui-navbar__item.weui-bar__item--on{
+            background: #fff;
+            color: #F7624B;
+            border-bottom: 2px solid #F7624B;
+        }
+        .weui-navbar__item:after{
+            height: 24px;
+            border-right: 2px solid #ccc;
+            top: 50%;
+            margin-top: -12.5px;
+        }
+        .weui-tabbar{
+            position: fixed;
+        }
+        .weui-btn{
+            width: 100%;
+            background: #F7624B;
+            border-radius: 0;
+            font-size: 0.9em;
+            padding: 2px;
+        }
+    </style>
+</head>
+<body ontouchstart="">
+<div class="weui-cells__title">当前绑定手机号：<span style="color: #F7624B">{$linkman['phone']}</span></div>
+<div class="weui-tab">
+    <div class="weui-navbar">
+        <a class="weui-navbar__item weui-bar__item--on" href="#tab1">
+            <span style="position: relative">
+                未取包裹
+                <span class="weui-badge" style="position: absolute;top: -.6em;right: -1.5em;background-color: #F7624B;">{$total}</span>
+            </span>
+
+        </a>
+        <a class="weui-navbar__item" href="#tab2">
+            已取包裹
+        </a>
+    </div>
+    <div class="weui-tab__bd" style="padding-bottom: 40px">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            {loop $parcels $par}
+            <div class="default-panel-list">
+                <div class="default-panel-head">
+                    {$par['company']}速递：{$par['waybillcode']}
+                    <span class="default-panel-state">已代收</span>
+                </div>
+                <div class="default-media-box">
+                    <div class="default-media-box__hd">
+                        <img src="{php echo tomedia($par['logo'])}">
+                    </div>
+                    <div class="default-media-box__bd">
+                        <p>取货码：{$par['pick_code']}</p>
+                        <p>签收时间：{php echo date('Y-m-d H:i', $par['arrivetime'])}</p>
+                        <p>签收地点：{$par['collectAddress']}</p>
+                    </div>
+                    <div class="default-cell-ft">
+                        <a href="tel:{$par['collectTel']}"><i class="iconfont icon-dianhua"></i></a>
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+        <div id="tab2" class="weui-tab__bd-item">
+            {loop $parcels_over $paro}
+            <div class="default-panel-list">
+                <div class="default-panel-head">
+                    {$paro['company']}速递：{$paro['waybillcode']}
+                    <span class="default-panel-state">已取件</span>
+                </div>
+                <div class="default-media-box">
+                    <div class="default-media-box__hd">
+                        <img src="{php echo tomedia($paro['logo'])}">
+                    </div>
+                    <div class="default-media-box__bd">
+                        <p>取货码：{$paro['pick_code']}</p>
+                        <p>签收时间：{php echo date('Y-m-d H:i', $paro['overtime'])}</p>
+                        <p>签收地点：{$paro['collectAddress']}</p>
+                    </div>
+                    <div class="default-cell-ft">
+                        <a href="tel:{$paro['collectTel']}"><i class="iconfont icon-dianhua"></i></a>
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+    </div>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+
+</body>
+</html>

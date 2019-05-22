@@ -1,0 +1,153 @@
+{template 'web/common/header-base'}
+<style>
+    img{
+        width:60px;
+        height: 60px;
+        display: block;
+        float: right;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>底部菜单</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('footmenu')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                <form action="" method="post" >
+                    <table class="table table-bordered">
+                                    <thead>
+                                    <th>底部图片</th>
+                                    <th>底部外链</th>
+                                    <th>底部名称</th>
+                                    <th>是否启用</th>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>
+                                             {php echo tpl_form_field_image("set[b1]",$set['b1']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b2]', $set['b2']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b3]" type="text" class="form-control param_value" value="{if $set['b3']['value']}{$set['b3']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="set[b4]" id="b4" class="js-switch_1" {if $set['b4']['value']}checked='checked'{/if}/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                             {php echo tpl_form_field_image("set[b5]",$set['b5']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b6]', $set['b6']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b7]" type="text" class="form-control param_value" value="{if $set['b7']['value']}{$set['b7']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="" id="b8" class="js-switch_2" {if $set['b8']['value']}checked='checked'{/if}/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            {php echo tpl_form_field_image("set[b9]",$set['b9']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b10]', $set['b10']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b11]" type="text" class="form-control param_value" value="{if $set['b11']['value']}{$set['b11']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="" id="b12" class="js-switch_3" {if $set['b12']['value']}checked='checked'{/if}/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            {php echo tpl_form_field_image("set[b21]",$set['b21']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b22]', $set['b22']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b23]" type="text" class="form-control param_value" value="{if $set['b23']['value']}{$set['b23']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="" id="b24" class="js-switch_6" {if $set['b24']['value']}checked='checked'{/if} />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {php echo tpl_form_field_image("set[b13]",$set['b13']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b14]', $set['b14']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b15]" type="text" class="form-control param_value" value="{if $set['b15']['value']}{$set['b15']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="" id="b16" class="js-switch_4" {if $set['b16']['value']}checked='checked'{/if}/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+
+                                        <td>
+                                            {php echo tpl_form_field_image("set[b17]",$set['b17']['value']);}
+                                        </td>
+                                        <td>
+                                            {php echo tpl_form_field_link('set[b18]', $set['b18']['value']);}
+                                        </td>
+                                        <td>
+                                            <input name="set[b19]" type="text" class="form-control param_value" value="{if $set['b19']['value']}{$set['b19']['value']}{/if}" placeholder="名称"/>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" name="" id="b20" class="js-switch_5" {if $set['b20']['value']}checked='checked'{/if} />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="8">
+                                            <input type="submit" name="submit" value="保存" class="btn btn-primary col-lg-1 min-width" />
+                                            <input type="hidden" name="token" value="{$_W['token']}" />
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

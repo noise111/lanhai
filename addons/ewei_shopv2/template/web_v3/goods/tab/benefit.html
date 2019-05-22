@@ -1,0 +1,86 @@
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">门店</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label" style="padding-left:0px;">线上支付门店购买或核销</label>
+            <div class="col-sm-9">
+                <input type='text' class="form-control" name='onlinestoreget' value='{$item['onlinestoreget']}' disabled="true" />
+                <span  class='help-block'>用户线上购物支付，然后到门店核销或者用户到门店购买，使用线上支付</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">线上购买总店发货</label>
+            <div class="col-sm-9">
+                <input type='text' class="form-control" name='onlinehomeget' value='{$item['onlinehomeget']}' />
+                <span  class='help-block'>用户线上购买，然后总店发货，用户首次购买或首次领券对应的门店可获得的分润，券链寻</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">门店购买门店支付</label>
+            <div class="col-sm-9">
+                <input type='text' class="form-control" name='storeget' value='{$item['storeget']}' />
+                <span  class='help-block'>用户到店购买，然后在门店支付</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">店员</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">首次</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="salerfirst" class="form-control" value="{$item['salerfirst']}" />
+                <span class='help-block'>第一次购买</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">复购</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="salermore" class="form-control" value="{$item['salermore']}" />
+                <span class='help-block'>多次购买</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">运营中心</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">线上购买总部发货</label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="agentonline" class="form-control" value="{$item['agentonline']}" />
+                <span class='help-block'></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">社交券返</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="share_title" id="share_title" class="form-control" value="{$item['share_title']}" />
+                <span class='help-block'></span>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">团队分红</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="text" name="teambenefit" class="form-control" value="{$item['teambenefit']}" />
+                <span class='help-block'></span>
+            </div>
+        </div>
+    </div>
+</div>

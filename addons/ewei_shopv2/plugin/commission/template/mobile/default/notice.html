@@ -1,0 +1,93 @@
+{template '_header'}
+<script>document.title = "消息"; </script>
+<style>
+    .fui-list-group {
+        background: transparent;
+    }
+
+    .fui-list {
+        background: #fff;
+    }
+
+    .fui-list:first-child {
+        margin-top: 0rem;
+    }
+
+    .fui-list.particulars {
+        height: 3rem;
+        padding: .4rem 0;
+    }
+
+    .fui-list.particulars div {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        text-align: center;
+        font-size: .55rem;
+        border-right: 1px solid #ededed;
+        color: #000;
+    }
+
+    .fui-list.particulars div:last-child {
+        border: 0
+    }
+    .fui-list-inner .title {
+        position: relative;
+        font-size: 0.75rem;
+        color: #333333;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 1rem;
+        line-height: 1rem;
+    }
+
+    .fui-list-inner .title div{
+        font-size:0.6rem
+    }
+
+    .fui-list-inner .text {
+        position: relative;
+        font-size: 0.65rem;
+        color: #666;
+        margin-top: 0.25rem;
+    }
+</style>
+<div class="fui-page fui-page-current page-commission-notice">
+    <div class="fui-content navbar">
+
+        <div class="content-empty" style="display:none;">
+            <i class="icon icon-searchlist"></i><br>暂时没有任何记录!
+        </div>
+        <div class="fui-list-group container" style="background: rgb(243, 243, 243);">
+            <div class="fui-list goods-item ">
+                <div class="fui-list-inner">
+                    <div class="title">
+                        佣金提醒
+                        <div style="color:#999999;float:right">2019-02-25 12:05</div>
+                    </div>
+                    <div class="text">您的业务佣金增加了32元，请查收</div>
+                </div>
+            </div>
+            <div class="fui-list goods-item ">
+                <div class="fui-list-inner">
+                    <div class="title">
+                        绩效提醒
+                        <div style="color:#999999;float:right">2019-02-25 12:05</div>
+                    </div>
+                    <div class="text">截止目前为止已完成1300条订单（65%）</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="infinite-loading" style="display: none;"><span class="fui-preloader"></span><span class="text">
+                正在加载...</span></div>
+
+    </div>
+
+    {php $this->footerMenus()}
+
+</div>
+
+{template '_footer'}

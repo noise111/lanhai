@@ -1,0 +1,90 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>公众平台模板消息所在行业选择为： IT科技/互联网|电子商务，房地产/物业</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'tpl'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+            <table class="table table-hover" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                <thead>
+                <tr>
+                    <td class="col-md-2">消息提醒设置</td>
+                    <td class="col-md-3">公众平台模板库编号</td>
+                    <td class="col-md-4">模板消息</td>
+                    <td class="col-md-3">是否启用</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="title">商品派单通知</td>
+                    <td>OPENTM207173450</td>
+                    <td>
+                        <input type="text" class="form-control" name="tpl[t28]" value="{$set['t28']['value']}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="t27" class="js-switch_1" {if $set['t27']['value']}checked='checked'{/if} />
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">订单发货通知</td>
+                    <td>OPENTM410090504</td>
+                    <td>
+                        <input type="text" class="form-control" name="tpl[t30]" value="{$set['t30']['value']}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="t29" class="js-switch_2" {if $set['t29']['value']}checked='checked'{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">快件到达通知</td>
+                    <td>OPENTM406278751</td>
+                    <td>
+                        <input type="text" class="form-control" name="tpl[t32]" value="{$set['t32']['value']}"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="t31" class="js-switch_3" {if $set['t31']['value']}checked='checked'{/if}/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label"></label>
+        <div class="col-sm-7">
+            <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

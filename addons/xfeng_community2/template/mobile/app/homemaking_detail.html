@@ -1,0 +1,88 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">家政详情</h1>
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">姓名：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['realname']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">电话：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['mobile']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">地址：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['title']}{$item['address']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">需求：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['content']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">状态：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <select name="status" id="status">
+                                    <option value="0" {if intval($item[ 'status'])==0} selected{/if}>未完成</option>
+                                    <option value="1" {if intval($item[ 'status'])==1} selected{/if}>已完成</option>
+                                    <option value="2" {if intval($item[ 'status'])==2} selected{/if}>已取消</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div class="content-block">
+                    <div class="row">
+                        <div class="col-100"><a href="#" class="button button-big button-fill button-success" id="fb">提交</a></div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#fb").click(function () {
+            var status = $("#status").val();
+            var id = "{$_GPC['id']}";
+            $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'homemaking_detail'))}",{status:status,id:id},function (data) {
+                if(data.status){
+                    $.toast('提交成功');
+                    window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+                }
+            },'json')
+        })
+    })
+</script>
+{template 'app/footer'}

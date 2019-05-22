@@ -1,0 +1,289 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('fee', array('op' => 'group'))}"></a>添加收费分组</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'group','p'=> 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">所属小区</label>
+                                <div class="col-sm-6 col-xs-6">
+                                    <select name="regionid" class="form-control" id="regionid">
+                                        <option value="0">全部小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">收费分组名称</label>
+                                <div class="col-sm-6 col-xs-6">
+                                    <input type="text" class="form-control" placeholder="请输入项目名称" name="title" id="title"
+                                           value="{$item['title']}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">绑定楼宇</label>
+                                <div class="col-sm-6 col-xs-6" id="build">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="build[]" id="build_0" data-group='builds' >
+                                        <label for="build_0">全部</label>
+                                    </div>
+                                    {if $builds}
+                                    {loop $builds $build}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="build[]" value="{$build['id']}" id="build_{$build['id']}" data-group='builds' {if @in_array($build['id'],$buildids)}checked{/if} class="builds">
+                                        <label for="build_{$build['id']}">{$build['buildtitle']}栋</label>
+                                    </div>
+                                    {/loop}
+                                    {/if}
+                                </div>
+                            </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">绑定收费项目</label>
+                            <div class="col-sm-6 col-xs-6" id="category">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group='categorys'>
+                                    <label for="categoryid_0">全部</label>
+                                </div>
+                                {if $categories}
+                                {loop $categories $category}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="categoryid[]" value="{$category['id']}" id="categoryid_{$category['id']}" data-group='categorys' {if @in_array($category['id'],$categoryids)}checked{/if} >
+                                    <label for="categoryid_{$category['id']}">{$category['title']}</label>
+                                </div>
+                                {/loop}
+                                {/if}
+                            </div>
+                        </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">备注</label>
+                                <div class="col-sm-6 col-xs-6">
+                                    <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">楼层计算规则</label>
+                                <div class="col-sm-10">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="status"  id="status_2" value="2" {if empty($item['status']) || $item['status'] == 2} checked{/if} />
+                                        <label for="status_2">禁用</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="status" id="status_1" value="1" {if  $item['status'] == 1} checked{/if} />
+                                        <label for="status_1">开启</label>
+                                    </div>
+                                    <a href="javascript:;" onclick="addStatusItem()" class="btn btn-primary btn-sm" id="rule" {if empty($item['status']) || $item['status'] == 2}style="display: none"{/if} > 添加规则</a>
+                                </div>
+                            </div>
+                            <div id="status-items">
+                                {loop $rules $rule}
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">楼层区间</label>
+                                    <div class="col-sm-8 col-xs-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">从</span>
+                                            <input type="number" class="form-control" placeholder="楼层" name="floorstart[]" value="{$rule['floorstart']}">
+                                            <span class="input-group-addon">到</span>
+                                            <input type="number" class="form-control" placeholder="楼层" name="floorend[]" value="{$rule['floorend']}">
+                                            <span class="input-group-addon">单价</span>
+                                            <input type="text" class="form-control" name="price[]" value="{$rule['price']}">
+                                            <span class="input-group-addon">元</span>
+                                        </div>
+                                    </div>
+                                    <button onclick="$(this).parent().parent().remove();" class="btn btn-sm btn-danger" title="删除此条目">删除</button>
+                                </div>
+                                {/loop}
+                            </div>
+                        <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10 col-xs-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交
+                                    </button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入项目名称。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'group','p' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    function addStatusItem() {
+        var html ='<div class="hr-line-dashed"></div>' +
+            '<div class="form-group">' +
+            '<label class="col-sm-2 control-label">楼层区间</label>' +
+            '<div class="col-sm-8 col-xs-8">' +
+            '<div class="input-group">' +
+            '<span class="input-group-addon">从</span>' +
+            '<input type="number" class="form-control" placeholder="楼层" name="floorstart[]">' +
+            '<span class="input-group-addon">到</span>' +
+            '<input type="number" class="form-control" placeholder="楼层" name="floorend[]">' +
+            '<span class="input-group-addon">单价</span>' +
+            '<input type="text" class="form-control" name="price[]">' +
+            '<span class="input-group-addon">元</span>' +
+            '</div>' +
+            '</div>' +
+            '<button onclick="$(this).parent().parent().remove();" class="btn btn-sm btn-danger" title="删除此条目">删除</button>' +
+            '</div>' ;
+        $('#status-items').append(html);
+    }
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.post("{php echo $this->createWebUrl('house',array('op'=> 'build'))}",{regionid:data.regionid},function (data) {
+                        var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="build[]" id="build_0" data-group="builds"><label for="build_0">全部</label></div>';
+                        for(var o in data){
+                            content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='build[]' id='build_"+data[o].id+"' data-group='builds'><label for='build_"+data[o].id+"'>"+data[o].buildtitle+"栋</label></div>";
+                        }
+                        $("#build").html(content);
+                        $("#build_0").click(function() {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" +group + "']").each(function(){
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                    },'json')
+                    $.post("{php echo $this->createWebUrl('fee',array('op'=> 'cat'))}",{regionid:data.regionid},function (data) {
+                        var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="categoryid[]" id="categoryid_0" data-group="categoryids"><label for="categoryid_0">全部</label></div>';
+                        for(var o in data){
+                            content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categoryids'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                        }
+                        $("#category").html(content);
+
+                        $("#categoryid_0").click(function() {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" +group + "']").each(function(){
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                    },'json')
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.post("{php echo $this->createWebUrl('house',array('op'=> 'build'))}",{regionid:regionid},function (data) {
+                var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="build[]" id="build_0" data-group="builds"><label for="build_0">全部</label></div>';
+                for(var o in data){
+                    content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='build[]' id='build_"+data[o].id+"' data-group='builds'><label for='build_"+data[o].id+"'>"+data[o].buildtitle+"栋</label></div>";
+                }
+                $("#build").html(content);
+                $("#build_0").click(function() {
+                    var checked = $(this).get(0).checked;
+                    var group = $(this).data('group');
+                    $("input:checkbox[data-group='" +group + "']").each(function(){
+                        $(this).get(0).checked = checked;
+                    })
+                });
+            },'json')
+            $.post("{php echo $this->createWebUrl('fee',array('op'=> 'cat'))}",{regionid:regionid},function (data) {
+                var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" value="0" name="categoryid[]" id="categoryid_0" data-group="categoryids" ><label for="categoryid_0">全部</label></div>';
+                for(var o in data){
+                    content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categoryids'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                }
+                $("#category").html(content);
+
+                $("#categoryid_0").click(function() {
+                    var checked = $(this).get(0).checked;
+                    var group = $(this).data('group');
+                    $("input:checkbox[data-group='" +group + "']").each(function(){
+                        $(this).get(0).checked = checked;
+                    })
+                });
+            },'json')
+        })
+        $('input[name="status"]').click(function () {
+            var status = $('input[name="status"]:checked').val();
+            if(status == 1){
+                $("#rule").show();
+                $("#status-items").show();
+            }
+            if(status == 2){
+                $("#rule").hide();
+                $("#status-items").hide();
+            }
+        })
+        $("#build_0").click(function() {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("input:checkbox[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            })
+        });
+        $("#categoryid_0").click(function() {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("input:checkbox[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            })
+        });
+    })
+
+</script>
+

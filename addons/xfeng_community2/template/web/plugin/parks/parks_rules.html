@@ -1,0 +1,104 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'list'))}" title="车场管理" >车场管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'rules','id' => $id))}" title="计费规则" >计费规则</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                            <input type="hidden" name="id" value="{$id}">
+                            <div class="form-group">
+                                <label for="monthprice" class="col-sm-2 control-label">月费标准（月租车）</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="number" name="monthprice" id='monthprice' value="{$item['monthprice']}" class="form-control" placeHolder="请输入月租车的月费标准" />
+                                        <span class="input-group-addon">元/月</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">是否收费（临时车）</label>
+                                <div class="col-sm-4">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type1" value="1" {if $item['type'] == 1 || empty($item['type'])}checked{/if} />
+                                        <label for="type1">是</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type2" value="2" {if $item['type'] == 2}checked{/if} />
+                                        <label for="type2">否</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="starttime" class="col-sm-2 control-label">缴费起始时间（临时车）</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" name="starttime" id='starttime' value="{$item['starttime']}" class="form-control" placeHolder="请输入设定的缴费时间"/>
+                                        <span class="input-group-addon">分钟</span>
+                                    </div>
+                                    <span class="help-block">超过设定时间开始计费</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="price" class="col-sm-2 control-label">收费标准（临时车）</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="number" name="price" id='price' value="{$item['price']}" class="form-control" placeHolder="请输入临时车的收费标准" />
+                                        <span class="input-group-addon">元/小时</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="maxprice" class="col-sm-2 control-label">封顶费用（临时车）</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="maxprice" id='maxprice' value="{$item['maxprice']}" class="form-control" placeHolder="请输入当天最高金额" />
+                                    <span class="help-block">当天最高收费</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'list','p'=>'rules'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

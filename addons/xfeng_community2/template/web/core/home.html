@@ -1,0 +1,536 @@
+{template 'web/common/header-base'}
+<style>
+    .dash-head ~ .row .card {
+        margin-bottom: 0px;
+        overflow: hidden;
+    }
+
+    .dash-fws, .dash-data {
+        padding: 20px;
+        border-radius: 4px;
+    }
+
+    .card {
+        position: relative;
+        background: #fff;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .15);
+        margin-bottom: 30px;
+    }
+
+    .dash-item-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #8f9297;
+        line-height: 1.1;
+    }
+
+    .dash-data-list {
+        margin-top: 20px;
+        list-style: none;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .dash-data-list > li {
+        float: left;
+        width: 20%;
+        padding: 5px 5px 0 0;
+    }
+
+    .dash-data-list > li .data-item {
+        display: block;
+        height: 93px;
+        padding: 20px;
+        font-size: 14px;
+        background: #F8F8F8;
+        overflow: hidden;
+    }
+
+    .dash-data-list > li:nth-of-type(5n+1) .data-icon {
+        background: #11cd6e;
+    }
+
+    .dash-data-list > li:nth-of-type(5n+2) .data-icon {
+        background: #009afe;
+    }
+
+    .dash-data-list > li:nth-of-type(5n+3) .data-icon {
+        background: #ff5d5d;
+    }
+
+    .dash-data-list > li:nth-of-type(5n+4) .data-icon {
+        background: #ff6600;
+    }
+
+    .dash-data-list > li:nth-of-type(5n+5) .data-icon {
+        background: #feb822;
+    }
+
+    .dash-data-list > li .data-icon {
+        float: left;
+        width: 50px;
+        height: 50px;
+        color: #fff;
+        border-radius: 4px;
+        text-align: center;
+        line-height: 50px;
+    }
+
+    .dash-data-list > li .data-icon i.fa {
+        font-size: 30px;
+        margin-top: 8px;
+    }
+
+    .dash-data-list > li .data-inner p.data-title {
+        margin-bottom: 0;
+    }
+
+    .dash-data-list > li .data-inner {
+        padding-left: 70px;
+    }
+
+    .dash-data-list > li p {
+        color: #74777c;
+
+    }
+
+    .dash-data-list > li p b {
+        font-size: 20px;
+        color: #2ecc71;
+        font-weight: 400;
+    }
+
+    .m-r-10 {
+        margin-right: 10px !important;
+    }
+</style>
+
+<div class="wrapper wrapper-content">
+    {if $user['type']==1 || $user['type']==3 || empty($user)}
+    <div class="row white-bg dashboard-header" style="margin: 0px 0px 15px 0px;">
+        <div class="col-sm-12">
+            <blockquote class="text-warning" style="font-size:14px">
+                <h4 class="text-danger">欢迎使用{php echo set('p74')}管理系统</h4>
+                <br>物业公司：{$count_property}个 , 小区数量：{$count_region}个
+
+            </blockquote>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">今天</span>
+                    <h5>访客</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{if $count_log}{$count_log}{else}0{/if}名</h1>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">今天</span>
+                    <h5>新注册</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{$count_user}名</h1>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">今天</span>
+                    <h5>已缴订单</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{if $count_cost}{$count_cost}{else}0{/if}单</h1>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-danger pull-right">今天</span>
+                    <h5>开门</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">{if $count_open}{$count_open}{else}0{/if}次</h1>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card dash-data">
+                <div class="dash-item-title">
+                    所有服务
+
+                </div>
+                <ul class="dash-data-list">
+                    {if in_array(36,$menus)  || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('build')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-building"></i></div>
+                        <div class="data-inner">
+                            <p class="data-title">
+                                楼宇
+                            </p>
+                            <p><b class="m-r-10">{if $count_build}{$count_build}{else}0{/if}</b><span>栋</span></p></div>
+                    </a></li>
+                    <li><a href="{php echo $this->createWebUrl('room')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-home"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            房屋
+                        </p>
+                            <p><b class="m-r-10">{if $count_room}{$count_room}{else}0{/if}</b><span>个</span></p></div>
+                    </a>
+                    </li>
+                    {/if}
+                    {if in_array(35,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('member')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-user"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            住户
+                        </p>
+                            <p><b class="m-r-10">{if $count_member}{$count_member}{else}0{/if}</b><span>个</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(317,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('parking')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-send"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            车位
+                        </p>
+                            <p><b class="m-r-10">{if $count_park}{$count_park}{else}0{/if}</b><span>个</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(293,$menus) || empty($user) || $user['type'] ==3}
+                    <li><a href="{php echo $this->createWebUrl('parks', array('op' => 'cars'))}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-car"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            车辆
+                        </p>
+                            <p><b class="m-r-10">{if $count_car}{$count_car}{else}0{/if}</b><span>辆</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(42,$menus) || empty($user) || $user['type'] ==6}
+                    <li>
+                        <div class="data-item">
+                            <div class="data-icon"><i class="fa fa-list"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                账单
+                            </p>
+                                <p class="m-t-10"><a href="{php echo $this->createWebUrl('cost',array('op' => 'detail','status'=>1))}" class="a-link">
+                                    已缴({if $count_cost_y}{$count_cost_y}{else}0{/if})
+                                </a><a href="{php echo $this->createWebUrl('cost',array('op' => 'detail','status'=>2))}" class="a-link m-l-10">
+                                    未缴({if $count_cost_w}{$count_cost_w}{else}0{/if})
+                                </a></p></div>
+                        </div>
+                    </li>
+                    {/if}
+                    {if in_array(38,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('repair')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-wrench"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            报修
+                        </p>
+                            <p><span><b class="m-r-10">{if $count_repair_total}{$count_repair_total}{else}0{/if}</b><span>条</span></span><span class="a-link"
+                                                                                       style="color:#2196f3;">
+                                                        未处理({if $count_repair_w}{$count_repair_w}{else}0{/if})
+                                                    </span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(37,$menus) || $_W['uid'] == 1 || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('announcement')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-bullhorn"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            公告
+                        </p>
+                            <p><b class="m-r-10">{if $count_notice}{$count_notice}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(40,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('homemaking')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-calendar-check-o"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            服务预定
+                        </p>
+                            <p><b class="m-r-10">{if $count_home}{$count_home}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(6,$menus) || empty($user) || $user['type'] ==6}
+                    <li>
+                        <div href="{php echo $this->createWebUrl('business')}" class="data-item" style="cursor: pointer">
+                            <div class="data-icon"
+                                 onclick="javascript:window.location.href = '{php echo $this->createWebUrl('business')}'"><i
+                                    class="fa fa-shopping-cart"></i></div>
+                            <div class="data-inner"><p class="data-title"
+                                                       onclick="javascript:window.location.href = '{php echo $this->createWebUrl('business')}'">
+                                小区商家
+                            </p>
+                                <p><b class="m-r-10">{if $count_business}{$count_business}{else}0{/if}</b><span>条</span></p>
+                                </div>
+                        </div>
+                    </li>
+                    {/if}
+                    {if in_array(49,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('guard')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-lock"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            门禁
+                        </p>
+                            <p><b class="m-r-10">{if $count_guard}{$count_guard}{else}0{/if}</b><span>个</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(46,$menus) || empty($user) || $user['type'] ==6}
+                    <li>
+                        <a href="{php echo $this->createWebUrl('market')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-cube"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                集市
+                            </p>
+                                <p><b class="m-r-10">{if $count_fled}{$count_fled}{else}0{/if}</b><span>条</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                    {if in_array(41,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('houselease')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-institution"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            房屋租赁
+                        </p>
+                            <p><b class="m-r-10">{if $count_houselease}{$count_houselease}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(48,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('adv')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-newspaper-o"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            广告
+                        </p>
+                            <p><b class="m-r-10">{if $count_adv}{$count_adv}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(43,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('activity')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-gift"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            小区活动
+                        </p>
+                            <p><b class="m-r-10">{if $count_activity}{$count_activity}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if $user['type']==2}
+    <div class="row white-bg dashboard-header" style="margin: 0px 0px 15px 0px;">
+        <div class="col-sm-12">
+            <blockquote class="text-warning" style="font-size:14px">
+                <h4 class="text-danger">欢迎使用{php echo set('p74')}管理系统</h4>
+                <br>
+
+            </blockquote>
+
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card dash-data">
+                <div class="dash-item-title">
+                    所有服务
+
+                </div>
+                <ul class="dash-data-list">
+
+                    {if in_array(37,$menus) || $_W['uid'] == 1 || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('announcement')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-bullhorn"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            公告
+                        </p>
+                            <p><b class="m-r-10">{if $count_notice}{$count_notice}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(40,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('homemaking')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-calendar-check-o"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            服务预定
+                        </p>
+                            <p><b class="m-r-10">{if $count_home}{$count_home}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(6,$menus) || empty($user) || $user['type'] ==6}
+                    <li>
+                        <div onclick="javascript:window.location.href = '{php echo $this->createWebUrl('business')}'" class="data-item" style="cursor: pointer">
+                            <div class="data-icon"><i
+                                    class="fa fa-shopping-cart"></i></div>
+                            <div class="data-inner">
+                                <p class="data-title">
+                                小区商家
+                                </p>
+                                <p><b class="m-r-10">{if $count_business}{$count_business}{else}0{/if}</b><span>条</span></p>
+                            </div>
+                        </div>
+                    </li>
+                    {/if}
+
+                    {if in_array(46,$menus) || empty($user) || $user['type'] ==6}
+                    <li>
+                        <a href="{php echo $this->createWebUrl('market')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-cube"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                集市
+                            </p>
+                                <p><b class="m-r-10">{if $count_fled}{$count_fled}{else}0{/if}</b><span>条</span></p>
+                            </div>
+                        </a>
+                    </li>
+                    {/if}
+                    {if in_array(41,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('houselease')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-institution"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            房屋租赁
+                        </p>
+                            <p><b class="m-r-10">{if $count_houselease}{$count_houselease}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                    {if in_array(43,$menus) || empty($user) || $user['type'] ==6}
+                    <li><a href="{php echo $this->createWebUrl('activity')}" class="data-item">
+                        <div class="data-icon"><i class="fa fa-gift"></i></div>
+                        <div class="data-inner"><p class="data-title">
+                            小区活动
+                        </p>
+                            <p><b class="m-r-10">{if $count_activity}{$count_activity}{else}0{/if}</b><span>条</span></p></div>
+                    </a></li>
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if $user['type']==4}
+    <div class="row white-bg dashboard-header" style="margin: 0px 0px 15px 0px;">
+        <div class="col-sm-12">
+            <blockquote class="text-warning" style="font-size:14px">
+                <h4 class="text-danger">欢迎使用{php echo set('p74')}管理系统</h4>
+                <br>
+
+            </blockquote>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card dash-data">
+                    <div class="dash-item-title">
+                        所有服务
+
+                    </div>
+                    <ul class="dash-data-list">
+
+
+                        <li><a href="{php echo $this->createWebUrl('announcement')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-bullhorn"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                商品
+                            </p>
+                                <p><b class="m-r-10">{if $count_goods}{$count_goods}{else}0{/if}</b><span>条</span></p></div>
+                        </a></li>
+
+
+                        <li><a href="{php echo $this->createWebUrl('homemaking')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-calendar-check-o"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                订单
+                            </p>
+                                <p><b class="m-r-10">{if $count_orders}{$count_orders}{else}0{/if}</b><span>条</span></p></div>
+                        </a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+    {if $user['type']==5}
+    <div class="row white-bg dashboard-header" style="margin: 0px 0px 15px 0px;">
+        <div class="col-sm-12">
+            <blockquote class="text-warning" style="font-size:14px">
+                <h4 class="text-danger">欢迎使用{php echo set('p74')}管理系统</h4>
+                <br>
+
+            </blockquote>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card dash-data">
+                    <div class="dash-item-title">
+                        所有服务
+
+                    </div>
+                    <ul class="dash-data-list">
+
+
+                        <li><a href="{php echo $this->createWebUrl('announcement')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-bullhorn"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                商品
+                            </p>
+                                <p><b class="m-r-10">{if $count_goods}{$count_goods}{else}0{/if}</b><span>条</span></p></div>
+                        </a></li>
+
+
+                        <li><a href="{php echo $this->createWebUrl('homemaking')}" class="data-item">
+                            <div class="data-icon"><i class="fa fa-calendar-check-o"></i></div>
+                            <div class="data-inner"><p class="data-title">
+                                订单
+                            </p>
+                                <p><b class="m-r-10">{if $count_orders}{$count_orders}{else}0{/if}</b><span>条</span></p></div>
+                        </a></li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/if}
+</div>
+<div id="ti" style="display: none;"></div>
+{if $set['p99']['value'] && $set['p98']['value']}
+
+<script>
+
+    var ptime = "{$set['p98']['value']}" * 60 * 1000;
+    setInterval(function () {
+        console.log(11);
+//        setTimeout(function () {
+            var url = "{php echo $this->createWebUrl(home)}";
+            $.getJSON(url,function (data) {
+                if(data.err_code ==0){
+                    var content = '<audio src="{MODULE_URL}static/tishi.mp3" controls autoplay id="tishi"></audio>';
+                    $('#ti').html(content);
+                }
+            })
+//        }, 3000);
+    }, ptime);
+
+</script>
+{/if}

@@ -1,0 +1,165 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'list'))}" title="月租车" >月租车</a></li>
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'shortList'))}" title="临时车" >临时车</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <div class="alert alert-info" role="alert">
+                            <p>注意:</p>
+                            <p>1.删除终端车牌号：只删除设备终端上面的车辆信息</p>
+                            <p>2.强制删除车牌号：可以删除小区系统下的车辆信息及设备终端上面的车辆信息</p>
+                        </div>
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="cars"/>
+                            <input type="hidden" name="p" value="{$p}"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('parks_carsAdd', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加车辆</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsImport', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'import'))}" class="btn btn-primary"><i class="fa fa-plus"></i>导入车辆</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsCloud', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'cloud'))}" class="btn btn-primary"><i class="fa fa-plus"></i>同步车辆</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    <select name="parkid" id="parkid" class="form-control">
+                                        <option value="">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $_GPC['parkid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="输入姓名" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form action="" method="post" class="form-horizontal" role="form">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th style="width:5%;">id</th>
+                                <th>姓名</th>
+                                <th>手机</th>
+                                <th>车牌号</th>
+                                <th>车场</th>
+                                <th>状态</th>
+                                <th>审核状态</th>
+                                <th>车辆类型</th>
+                                <th>到期时间</th>
+                                <th>创建时间</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}" value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+
+                                </td>
+                                <td>{$item['id']}</td>
+                                <td>{if $item['realname']}{$item['realname']}{else}xxxxx{/if}</td>
+                                <td>{if $item['mobile']}{$item['mobile']}{else}xxxxx{/if}</td>
+                                <td>{$item['carno']}</td>
+                                <td>{$parkss[$item['parkid']]['title']}</td>
+                                <td><label class='label {if $item['enable']==0}label-warning{else if $item['enable']==1}label-success{else} label-default{/if}'>{if $item['enable']==1}已同步{else}未同步{/if}</label></td>
+                                <td>
+                                    {if $item['verity']==1}
+                                    <label class='label label-success'>已审核</label>
+                                    {else}
+                                    <label class='label label-warning' onclick="return confirm('将该车辆变更为审核通过，确认吗？')"><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'verity','id' => $item['id']))}">未审核</a></label>
+                                    {/if}
+                                </td>
+                                <td>{if $item['type'] == 1}月租车{elseif $item['type'] == 2}临时车{/if}</td>
+                                <td>{php echo date('Y-m-d', $item['endtime'])}</td>
+                                <td>{php echo date('Y-m-d H:i', $item['createtime'])}</td>
+                                <td>{$item['remark']}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_carsEdit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsUpdate', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'update','id' => $item['id']))}" title="手动延期" class="btn btn-success btn-sm">手动延期</a>
+                                    {/if}
+                                    {if $item['enable'] == 2 || $item['enable'] == 0}
+                                    {if ($user && $menu_opss && @in_array('parks_carsChange', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'change','id' => $item['id']))}" title="手动同步" class="btn btn-primary btn-sm">手动同步</a>
+                                    {/if}
+                                    {/if}
+                                    {if $item['status'] == 1}
+                                    {if ($user && $menu_opss && @in_array('parks_carsBlack', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'use','id' => $item['id'],'use' => 2))}" title="加入黑名单" class="btn btn-danger btn-sm">加入黑名单</a>
+                                    {/if}
+                                    {elseif $item['status'] == 2}
+                                    {if ($user && $menu_opss && @in_array('parks_carsWhite', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'use','id' => $item['id'],'use' => 1))}" title="加入白名单" class="btn btn-success btn-sm">加入白名单</a>
+                                    {/if}
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'del','id' => $item['id']))}" class="btn btn-default btn-sm" title="删除终端的车牌号" onclick="return confirm('将删除设备终端车辆信息，确认吗？')">删除终端车牌号</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsDelete', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'delete','id' => $item['id']))}" class="btn btn-danger btn-sm" title="强制删除车牌号" onclick="return confirm('将删除小区系统的车辆，确认吗？')">强制删除车牌号</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+                                    <!--<input type="submit" name="del" class="btn btn-danger" value="批量删除车辆">-->
+                                    {if ($user && $menu_opss && @in_array('parks_carsWechat', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="wxmovecar" class="btn btn-primary" value="一键微信挪车">
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_carsSms', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="smsmovecar" class="btn btn-primary" value="一键短信挪车">
+                                    {/if}
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

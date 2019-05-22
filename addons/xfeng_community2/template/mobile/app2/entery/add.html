@@ -1,0 +1,347 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加抄表</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择小区</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="regionValue">
+                        <option value="">选择小区</option>
+                        <option v-for="(region, index) in regions" :value="region.id">{{region.title}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right" v-if="status == 1">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择区域</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="areaValue">
+                        <option value="">选择区域</option>
+                        <option v-for="(area, index) in areas" :value="area.id">{{area.title}}{{arr.a1}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right" v-if="regionValue">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择楼栋</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="buildValue">
+                        <option value="">选择楼栋</option>
+                        <option v-for="(build, index) in builds" :value="build.id">{{build.buildtitle}}{{arr.b1}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right" v-if="buildValue">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择单元</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="unitValue">
+                        <option value="">选择单元</option>
+                        <option v-for="(unit, index) in units" :value="unit.id">{{unit.unit}}{{arr.c1}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right" v-if="unitValue">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择房号</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="roomValue">
+                        <option value="">选择房号</option>
+                        <option v-for="(room, index) in rooms" :value="room.id">{{room.room}}{{arr.d1}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择类型</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="item.category">
+                        <option value="">选择类型</option>
+                        <option v-for="(cate, index) in category" :value="cate.id">{{cate.name}}</option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">用户姓名</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入用户姓名" v-model="item.realname" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">用户手机</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入用户手机" v-model="item.mobile" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">上期度数</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入上期度数" v-model="item.old_num">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">本期度数</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入本期度数" v-model="item.number">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">抄表人员</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="" v-model="user.realname" readonly>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            category: [],
+            item:{
+                realname:'',
+                mobile:'',
+                address:'',
+                old_num:'',
+                regionid:'',
+                category:'',
+                number:''
+            },
+            id:id,
+            status:'',
+            groupList: [],
+            regions:[],
+            areas:[],
+            builds:[],
+            units:[],
+            rooms:[],
+            members:[],
+            regionValue:'',
+            areaValue: '',
+            buildValue:'',
+            unitValue:'',
+            roomValue:'',
+            arr:[],
+            user:{
+                realname:''
+            }
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('house/rooms')}";
+            $.getJSON(url, function (ret) {
+                self.status = ret.data.area
+                self.groupList = ret.data
+                self.regions = ret.data.regions
+                self.areas = ret.data.areas
+                self.builds = ret.data.builds
+                self.units = ret.data.units
+                self.rooms = ret.data.rooms
+                self.arr = ret.data.arr
+                self.members = ret.data.members
+            })
+            var url = "{php echo wxapp_url('appentery/category')}";
+            $.getJSON(url, function (ret) {
+                self.category = ret.data
+            })
+            if(!id){
+                var url = "{php echo wxapp_url('appentery/user')}";
+                $.getJSON(url, function (ret) {
+                    self.user = ret.data
+                })
+            }
+            if(id){
+                var url = "{php echo wxapp_url('appentery/detail')}";
+                var data = {
+                    id:id
+                }
+                $.getJSON(url,data, function (ret) {
+                    self.item = ret.data
+                    self.regionValue = self.item.regionid
+                    self.areaValue = self.item.areaid
+                    self.buildValue = self.item.buildid
+                    self.unitValue = self.item.unitid
+                    self.roomValue = self.item.address
+                    self.user.realname = self.item.urealname
+                })
+            }
+        },
+        mounted: function () {
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                var url = "{php echo wxapp_url('appentery/add')}";
+                self.item.id=self.id
+                self.item.regionid = self.regionValue
+                self.item.address = self.roomValue
+                console.log(self.item)
+                if(self.item.realname == '' || self.item.mobile == '' || self.item.address == '' || self.item.regionid == '' || self.item.category == '' || self.item.old_num == '' || self.item.number == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('添加成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'entery'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == 2){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg,'cancel');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                },'json')
+            },
+        },
+        watch: {
+            // 监听 areasValue 变化
+            regionValue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                if(that.status){
+                    that.areas = that.groupList.areas[val]
+                    that.areaValue = ''
+                    that.builds = []
+                    that.buildValue = ''
+                }else{
+                    that.builds = that.groupList.builds[val]
+                    that.buildValue = ''
+                }
+                that.units = []
+                that.unitValue = ''
+
+                that.rooms = []
+                that.roomValue = ''
+                that.item.realname = ''
+                that.item.mobile = ''
+            },
+            areaValue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                if(that.status) {
+                    that.builds = that.groupList.builds[val]
+                    that.buildValue = ''
+                    that.units = []
+                    that.unitValue = ''
+
+                    that.rooms = []
+                    that.roomValue = ''
+                    that.item.realname = ''
+                    that.item.mobile = ''
+                }
+            },
+            buildValue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                that.units = that.groupList.units[val]
+                that.unitValue = ''
+
+                that.rooms = []
+                that.roomValue = ''
+                that.item.realname = ''
+                that.item.mobile = ''
+            },
+            unitValue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                that.rooms = that.groupList.rooms[val]
+                that.roomValue = ''
+                that.item.realname = ''
+                that.item.mobile = ''
+            },
+            roomValue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                that.item.realname = that.groupList.members[val].realname
+                that.item.mobile = that.groupList.members[val].mobile
+
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
+

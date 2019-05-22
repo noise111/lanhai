@@ -1,0 +1,50 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('market', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;
+                        商品详情</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('market',array('op' => 'detail','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <p>{$item['description']}</p>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">商品标题：{$item['title']}</li>
+                        <li class="list-group-item">商品价格：{if empty($item['zprice'])}面议{else}{$item['zprice']}{/if}</li>
+                        <li class="list-group-item">联系人：{$item['realname']}</li>
+                        <li class="list-group-item">联系电话：{$item['mobile']}</li>
+                        <li class="list-group-item">发布时间：{php echo date('Y-m-d H:i:s', $item['createtime']);}</li>
+                    </ul>
+                    <!--<p>-->
+                        <!--{loop $images $value}-->
+                        <!--<a href="{$value}" target="_blank">-->
+                            <!--<img src="{php echo tomedia($value)}" style="width: 60px; height: 60px;border:1px solid white;float:left;"/>-->
+                        <!--</a>-->
+                        <!--{/loop}-->
+
+                    <!--</p>-->
+                </div>
+                <div class="ibox-content ">
+                    <div class="carousel slide" id="carousel2">
+
+                        <div class="carousel-inner">
+                            {loop $images $value}
+                            <div class="item active">
+                                <img alt="image" class="img-responsive" src="{php echo tomedia($value)}" style="width: 180px;height: 180px">
+
+                            </div>
+                            {/loop}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

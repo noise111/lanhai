@@ -1,0 +1,32 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">活动订单</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0 0 60px 0">
+            <ul>
+                {loop $list $item}
+                <li>
+                    <label class="label-checkbox item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['title']}</div>
+                                <div class="item-after">{php echo date('Y-m-d H:i',$item['createtime'])}</div>
+                            </div>
+                            <div class="item-subtitle">{$item['realname']},{$item['mobile']}</div>
+                            <div class="item-text">人数:{$item['num']}{if $item['price'] != '0.00'} {if $item['status']}<span class="label label-success">支付成功</span>{else} <span class="label label-default">未支付</span>{/if}{else}<span class="label label-info">无定金</span>{/if}</div>
+                        </div>
+                    </label>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{template 'app/footer'}

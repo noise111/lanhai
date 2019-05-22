@@ -1,0 +1,41 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}'"></a>
+        <h1 class="title">{if $xqtype == 1}报修列表{elseif $xqtype == 2}建议列表{/if}</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0 0 50px 0">
+            <ul>
+            {loop $list $item}
+                <li>
+                    <a href="#" class="item-link item-content" onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'detail','id' => $item['id'],'type' => $type))}'">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['category']}</div>
+                                <div class="item-after">{php echo date('Y-m-d H:i',$item['createtime'])}</div>
+                            </div>
+                            <div class="item-subtitle">
+                                {if $item['status'] == 1 }
+                                <span class="label-success">已处理</span>
+                                {/if}
+                                {if $item['status'] == 3 }
+                                <span class="label-info">受理中</span>
+                                {/if}
+                                {if $item['status'] == 2 }
+                                <span class="label-default">未处理</span>
+                                {/if}
+                            </div>
+                        </div>
+                    </a>
+                </li>
+
+            {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+
+
+{template 'app/footer'}

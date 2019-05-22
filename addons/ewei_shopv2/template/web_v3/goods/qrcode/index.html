@@ -1,0 +1,153 @@
+{template '_header'}
+
+<div class="page-header">
+    当前位置：<span class="text-primary">销售二维码</span>
+</div>
+<div class="page-content">
+    <form action="./index.php" method="get" class="form-horizontal form-search" role="form">
+        <div class="page-toolbar">
+            <div class="col-sm-6">
+                <span class="">
+                    <a href="{php echo webUrl('goods/qrcode/add');}" class="btn btn-primary"><i class="fa fa-plus"></i> 添加二维码</a>
+                </span>
+            </div>
+        </div>
+    </form>
+    <div class="row">   
+        <div class="col-md-12">
+            <div class="page-table-header">
+                <input type='checkbox' />
+                <div class="btn-group">
+<!--                    <button class="btn btn-default btn-sm  btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认要删除吗?" data-href="{php echo webUrl('goods/qrcode/delete')}">
+                        <i class='icow icow-shanchu1'></i> 删除
+                    </button>-->
+<!--                    <button class="btn btn-default btn-sm  btn-operation" type="button" data-toggle='batch-remove' data-href="{php echo webUrl('goods/qrcode/remake')}">
+                        重新生成二维码
+                    </button>-->
+                </div>
+            </div>
+            <table class="table table-responsive">
+                <thead class="navbar-inner">
+                    <tr>
+                        <th style="width:25px;"></th>
+                        <th style="width:80px">商品</th>
+                        <th class="flex1">&nbsp;</th>
+                        <th>价格</th>
+                        <th style="width:80px;">总数</th>
+                        <th style="width:80px;">批次</th>
+                        <th>是否已生成二维码</th>
+                        <th style="width:120px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td><input type='checkbox'  value="{$item['id']}"/></td>
+                        <td>
+                            <img src="{php echo tomedia($item['thumb'])}" style="width:72px;height:72px;padding:1px;border:1px solid #efefef;margin: 7px 0" onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'" />
+                        </td>
+                        <td>{$item['title']}</td>
+                        <td>&yen;{$item['marketprice']}</td>
+                        <td>{$item['total']}</td>
+                        <td>{$item['batch']}</td>
+                        <td>{if $item['finishmake'] == 1}是{else}否{/if}</td>
+                        <td>
+                            <a class='btn  btn-op btn-operation js-clip' href="{php echo webUrl('goods/qrcode/codeList', array('id' => $item['id']),true)}">
+                                <span data-toggle="tooltip" data-placement="top"  data-original-title="二维码列表">
+                                    <i class='icow icow-dingdan2'></i>
+                                </span>
+                            </a>
+                            <a class='btn  btn-op btn-operation js-clip make-qrcode' data-id="{$item['id']}" data-total="{$item['total']}">
+                                <span data-toggle="tooltip" data-placement="top"  data-original-title="点击生成二维码">
+                                    <i class='icow icow-erweima2'></i>
+                                </span>
+                            </a>
+                            <a  class='btn  btn-op btn-operation' href="{php echo webUrl('goods/qrcode/edit', array('id' => $item['id']))}">
+                                <span data-toggle="tooltip" data-placement="top" title="" data-original-title="{ifp 'goods.edit'}编辑{else}查看{/if}">
+                                    {ifp 'goods.edit'}
+                                     <i class='icow icow-bianji2'></i>
+                                    {else}
+                                     <i class='icow icow-chakan-copy'></i>
+                                     {/if}
+                                </span>
+                            </a>         
+                            <a  class='btn  btn-op btn-operation js-clip' href="{php echo webUrl('goods/qrcode/printList', array('id' => $item['id']),true)}">
+                                <span data-toggle="tooltip" data-placement="top"  data-original-title="打印">
+                                    <i class='icow icow-baimingdan1'></i>
+                                </span>
+                            </a>  
+                        </td>
+                    </tr>
+                    {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div style="display: none;" id="qrcode_progress">
+    <div style="width:240px; height:180px; display:table-cell; vertical-align:middle; text-align:center;font-size: 14px;">
+        生成二维码进度：<span id="qrcode_now">0</span>/<span id="qrcode_total"></span>
+    </div>
+</div>
+<script type="text/javascript">
+    myrequire(['layer'], function(){
+        $(function(){
+            function makeQrcode(obj, start, layer_index){
+                var id = $(obj).attr('data-id');
+                var total = $(obj).attr('data-total');
+                var content = $("#qrcode_progress");
+                content.find("#qrcode_now").html(start);
+                content.find("#qrcode_total").html(total);
+                $.ajax({
+                    'dataType': 'json',
+                    'url':'<?php echo webUrl("goods/qrcode/qrcodeBatch");?>',
+                    'method': 'post',
+                    'data':{id:id, start:start},
+                    'success':function(json){                              
+                        if(json.status == 1){                                             
+                            start = json.result.next_start;
+                            content.find("#qrcode_now").html(start);
+                            makeQrcode(obj, start, layer_index);
+                        } else if(json.status == 2){
+                            start = total;
+                            layer.close(layer_index);
+                            tip.msgbox.suc('已完成');
+                            //layer.msg('已完成！');
+                        } else {
+                            //layer.alert(json.message);
+                            start = total;
+                            layer.close(layer_index);
+                            tip.alert(json.message);
+                        }
+                    },
+                    'error':function(){
+                        start = total;
+                        layer.close(layer_index);
+                        //layer.alert('请求失败');
+                        tip.alert(json.message);
+                    }
+                });
+            }
+            $(".make-qrcode").on('click', function(){
+                var _this = this;
+                var total = $(this).attr('data-total');
+                tip.confirm('批量生成二维码需要较长时间，确定现在生成吗？',function(){
+                    var content = $("#qrcode_progress");
+                    var start = 0;
+                    content.find("#qrcode_total").html(total);
+                    layer.open({
+                        type: 1,
+                        title: false,
+                        closeBtn: 0,
+                        shadeClose: false,
+                        content: $("#qrcode_progress"),
+                        success: function(layero, index){
+                            makeQrcode(_this, start, index);
+                        }
+                    });
+                });
+            });
+        });
+    });
+</script>
+{template '_footer'}

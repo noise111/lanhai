@@ -1,0 +1,38 @@
+{template 'default/zhpark/header'}
+<div class="page preview js_show">
+    <div class="weui-form-preview__ft">
+    <a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">充值记录</a>
+    </div>
+    <div class="page__bd">
+        {loop $list $item}
+        <div class="weui-form-preview">
+            <div class="weui-form-preview__hd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">付款金额</label>
+                    <em class="weui-form-preview__value">¥{$item['pay_fee']}</em>
+                </div>
+            </div>
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">商品</label>
+                    <span class="weui-form-preview__value">[充值延期]</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">订单号</label>
+                    <span class="weui-form-preview__value">{$item['park_serial']}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">时间</label>
+                    <span class="weui-form-preview__value">{php echo date('Y-m-d H:i:s',$item['toll_date'])}</span>
+                </div>
+            </div>
+            <!--<div class="weui-form-preview__ft">-->
+                <!--<a class="weui-form-preview__btn weui-form-preview__btn_primary" href="javascript:">操作</a>-->
+            <!--</div>-->
+        </div>
+        {/loop}
+    </div>
+
+</div>
+
+{template 'default/zhpark/footer'}

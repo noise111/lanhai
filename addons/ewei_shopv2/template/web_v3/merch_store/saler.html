@@ -1,0 +1,82 @@
+{template '_header'}
+
+<div class="page-header">当前位置：<span class="text-primary">店员管理</span></div>
+
+<div class="page-content">
+
+  <form action="./index.php" method="get">
+      <input type="hidden" name="c" value="site" />
+      <input type="hidden" name="a" value="entry"/>
+      <input type="hidden" name="m" value="ewei_shopv2"/>
+      <input type="hidden" name="do" value="web"/>
+      <input type="hidden" name="r" value="store.merch_store.saler"/>
+      <div class="page-toolbar">
+          <div class="col-md-6 pull-right">
+              <div class="input-group">
+                  <input type="text" class="form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="店员姓名/用户名/手机号/店员昵称">
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit"> 搜索</button>
+                  </span>
+              </div>
+          </div>
+      </div>
+  </form>
+
+    {if empty($list)}
+        <div class="panel panel-default">
+            <div class="panel-body empty-data">未查询到相关数据</div>
+        </div>
+    {else}
+        <form action="" method="post" onsubmit="return formcheck(this)">
+            <table class="table table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th>店员</th>
+			<th style="width: 150px;">姓名</th>
+                        <th style='width: 150px;'>特约零售商名称</th>
+                        <th style="width: 200px;">所属门店</th>
+                        <th>角色</th>
+                        <th>审核状态</th>
+                        <th style="width: 70px;">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loop $list $row}
+                        <tr>
+
+                            <td>
+                                <img class="radius50" src='{php echo tomedia($row['avatar'])}' style='width:30px;height:30px;padding1px;border:1px solid #ccc' onerror="this.src='../addons/ewei_shopv2/static/images/noface.png'" /> {php echo empty($row['nickname'])?'未更新':$row['nickname']}
+                            </td>
+                            <td>{$row['salername']}</td>
+                            <td>{$row['merchname']}</td>
+                            <td>{if empty($row['salername'])}全店核销{else}{$row['storename']}{/if}</td>
+                            <td>{$row['rolename']}</td>
+                            <td>
+                                <span class='label {if $row['pass']==1}label-primary{else}label-default{/if}'
+                                    data-toggle='ajaxSwitch'
+                                    data-switch-value='{$row['pass']}'
+                                    data-switch-value0='0|未审核|label label-default|{php echo webUrl('merch_store/pass',array('pass'=>1,'id'=>$row['id']))}'
+                                    data-switch-value1='1|通过|label label-success|{php echo webUrl('merch_store/pass',array('pass'=>0,'id'=>$row['id']))}'
+                                    >
+                                {if $row['pass']==1}通过{else}未审核{/if}</span>
+                            </td>
+                            <td>{if $row['status']==1}启用{else}禁用{/if}</span>
+                            </td>
+                        </tr>
+                    {/loop}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td colspan="2"></td>
+                        <td colspan="4" style="text-align: right">
+                            {$pager}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </form>
+    {/if}
+</div>
+
+{template '_footer'}

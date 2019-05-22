@@ -1,0 +1,170 @@
+{template 'web/common/header-base'}
+<style>
+    .title{
+        color:red
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>注册字段配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('set',array('op' => 'field'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <td class="col-md-3">标题</td>
+                    <td class="col-md-8">是否启用</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="title">
+                        独立接口(开启后，以平台设置为准)
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p55" class="js-switch_1" {if $set['p55']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <div class="hr-line-dashed"></div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <td class="col-md-1">字段</td>
+                    <td class="col-md-2">标题</td>
+                    <td class="col-md-8">是否启用</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="title">realname</td>
+                    <td>
+                        <span>姓名</span>
+                        <!--<input type="text" name="set[p154]" class="form-control" value="{$set['p154']['value']}" placeholder="例如姓名"/>-->
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p154" class="js-switch_9" {if $set['p154']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">mobile</td>
+                    <td>
+                        <span>手机号</span>
+                        <!--<input type="text" name="set[p155]" class="form-control" value="{$set['p156']['value']}" placeholder="例如手机"/>-->
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p155" class="js-switch_10" {if $set['p155']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">area</td>
+                    <td>
+                        <input type="text" name="set[p37]" class="form-control" value="{$set['p37']['value']}" placeholder="例如区"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p36" class="js-switch_2" {if $set['p36']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">build</td>
+                    <td>
+                        <input type="text" name="set[p39]" class="form-control" value="{$set['p39']['value']}" placeholder="例如栋"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p38" class="js-switch_3" {if $set['p38']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">unit</td>
+                    <td>
+                        <input type="text" name="set[p41]" class="form-control" value="{$set['p41']['value']}" placeholder="例如单元"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p40" class="js-switch_4" {if $set['p40']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">room</td>
+                    <td>
+                        <input type="text" name="set[p43]" class="form-control" value="{$set['p43']['value']}" placeholder="例如室"/>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p42" class="js-switch_5" {if $set['p42']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">license</td>
+                    <td>
+                        <span>车牌号</span>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p81" class="js-switch_6" {if $set['p81']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">idcard</td>
+                    <td>
+                        <span>身份证</span>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p83" class="js-switch_7" {if $set['p83']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="title">gender</td>
+                    <td>
+                        <span>性别</span>
+
+                    </td>
+                    <td>
+                        <input type="checkbox" id="p84" class="js-switch_8" {if $set['p84']['value']}checked{/if}/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label"></label>
+        <div class="col-sm-5">
+            <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+            <input type="hidden" name="token" value="{$_W['token']}" />
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

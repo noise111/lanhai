@@ -1,0 +1,50 @@
+{template 'default/header'}
+<body class="max-width bg-f2">
+<div class="page">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+        <h1 class="title txt-fff">用户地址</h1>
+
+        <a class="button button-link button-nav pull-right open-popup" data-popup=".popup-about" style="color:white" onclick="window.location.href='{php echo $this->createMobileUrl('shopping',array('op' => 'add_address','gid' => intval($_GPC['gid'])))}'">
+            新增地址
+        </a>
+
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin:0">
+            <ul>
+
+                {loop $list $item}
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            <input type="radio" class="weui_check" name="bindid"  value="{$item['id']}" id="address_{$item['id']}" {if $item['enable']}checked="checked"{/if}>
+                            <label for="address_{$item['id']}"> {$item['address']}</label>
+
+                        </div>
+                    </div>
+                </li>
+                {/loop}
+
+
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+    <script type="text/javascript">
+        $(function(){
+            $("input[name='bindid']").click(function(){
+                var bindid = $('input[name="bindid"]:checked').val();
+                var gid = "{$_GPC['gid']}";
+                $.post("{php echo $this->createMobileUrl('shopping',array('op'=> 'change'))}",{bindid:bindid,gid:gid},function(s){
+                    if(s.status == 1){
+                        window.location.href = "{php echo $this->createMobileUrl('shopping',array('op' => 'confirm'))}&id="+s.gid;
+                    }
+                },'json')
+            })
+        })
+
+    </script>
+
+</div>
+{template 'default/footer'}

@@ -1,0 +1,50 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ffffff;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-grids service_grids" id="list">
+
+
+</div>
+<div class="weui-loadmore" id="loading" style="display: none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips loading"></span>
+</div>
+<div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+    <span class="weui-loadmore__tips">暂无数据</span>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="{{ d.list[i].surl }}" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+            <img src="{{ d.list[i].icon }}" alt="">
+        </div>
+        <p class="weui-grid__label">
+            {{ d.list[i].sname }}
+        </p>
+    </a>
+    {{# } }}
+</script>
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        girdAdd('.weui-grids')
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('search/list')}&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

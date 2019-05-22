@@ -1,0 +1,388 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<body ontouchstart>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加商品</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">选择店铺</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="item.dpid">
+                        <option value="">选择店铺</option>
+                        <option v-for="(row, index) in items" :value="row.id">{{row.sjname}}
+                        </option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="商品名称" v-model="item.title" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">团购说明</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请用简短的一句话描述（15个字以内）" v-model="item.instruction" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品库存</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="商品库存" v-model="item.total" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商品原价</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="商品原价" v-model="item.productprice" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">团&nbsp;&nbsp;购&nbsp;&nbsp;价</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="商品团购价" v-model="item.marketprice" >
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">有&nbsp;&nbsp;效&nbsp;&nbsp;期</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" id='starttime' placeholder="请选择开始日期" value=""/>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">有&nbsp;&nbsp;效&nbsp;&nbsp;期</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" id='endtime' placeholder="请选择结束日期" value=""/>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">是否上架</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="status">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">店铺推荐</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="recommand">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入抢购详情 " rows="3" v-model="item.content">{{item.content}}</textarea>
+
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入购买须知 " rows="3" v-model="item.description">{{item.description}}</textarea>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p style="margin-bottom: 5px">可上传多张商品图片，第一张作为商品封面</p>
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files idx" v-if="morepic">
+                            <!--多图-->
+                            <li class="weui-uploader__file" :style="'background-image:url('+thumb+')'" v-for="(thumb, index) in morepic"></li>
+
+                        </ul>
+                        <div class="weui-uploader__input-box" id="addPic">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <p style="margin-bottom: 5px">商品详情图片，可上传多张商品图片</p>
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files idx" id="uploaderFiles" v-if="moreimg">
+                            <!--多图-->
+                            <li class="weui-uploader__file" :style="'background-image:url('+img+')'" v-for="(img, index) in moreimg"></li>
+
+                        </ul>
+                        <div class="weui-uploader__input-box" id="addimg">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+
+</script>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+
+</script>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: [],
+            item:{},
+            id:id,
+            morepic:[],
+            moreimg:[],
+            starttime:'',
+            endtime:'',
+            recommand:1,
+            status:1
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appbusiness/list')}";
+            $.getJSON(url, function (ret) {
+                self.items = ret.data
+            })
+            if(id){
+                var link = "{php echo wxapp_url('appbusiness/goods',array('p'=>'detail'))}";
+                var data = {
+                    id: self.id
+                }
+                $.getJSON(link, data, function (ret) {
+                    self.item = ret.data
+                    self.morepic = self.item.piclist
+                    self.moreimg = self.item.thumbs
+                    self.recommand = self.item.recommand
+                    self.status = self.item.status
+                    console.log(self.item)
+                })
+            }
+
+        },
+        mounted: function () {
+            var that = this
+            wx.ready(function () {
+                $("#addPic").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds,1);
+                        }
+                    })
+                });
+                $("#addimg").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds,2);
+                        }
+                    })
+                });
+            });
+            $("#starttime").datetimePicker({
+                title: '商品有效开始时间',
+                yearSplit: '年',
+                monthSplit: '月',
+                dateSplit: '日',
+                times: function () {
+                    return [  // 自定义的时间
+
+                    ];
+                },
+                onChange: function (picker, values, displayValues) {
+                    that.starttime = displayValues[0]+'-'+displayValues[1]+'-'+displayValues[2]
+                }
+            });
+            $("#endtime").datetimePicker({
+                title: '商品有效结束时间',
+                yearSplit: '年',
+                monthSplit: '月',
+                dateSplit: '日',
+                times: function () {
+                    return [  // 自定义的时间
+
+                    ];
+                },
+                onChange: function (picker, values, displayValues) {
+                    console.log(values);
+                    that.endtime = displayValues[0]+'-'+displayValues[1]+'-'+displayValues[2]
+                }
+            });
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                self.item.morepic = self.morepic.join(',');
+                self.item.moreimg = self.moreimg.join(',');
+                self.item.id = self.id
+                self.item.starttime = self.starttime
+                self.item.endtime = self.endtime
+                self.item.status = self.status
+                self.item.recommand = self.recommand
+                console.log(self.item)
+                var url = "{php echo wxapp_url('appbusiness/goods',array('p'=>'add'))}";
+                 $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                     $.hideLoading();
+                     if(ret.err_code ==0){
+                         //提交成功提示内容: data.data.content
+                         setTimeout(function () {
+                             $.toast('添加成功');
+                             //定时刷新
+                             window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business','p'=>'goods'))}";
+                         }, 500);
+                     }
+
+                },'json')
+            },
+            wxUploadImg: function (localIds,type) {
+                var localId = localIds[idx].toString()
+                var that = this
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        that.getImg(serverId,type);
+                        idx++ // 上传序号，上传一张 累计 +1
+                        // serverIds+=res.serverId+','; //存储图片媒体ID，用，号分割
+                        //本地图片ID 还没全部获取完图片媒体ID
+                        if (idx < localIds.length) {
+                            that.wxUploadImg(localIds,type); //调用上传递归函数
+                        }
+                        else {
+                            idx = 0;
+                            serverIds = '';
+                            return true;
+                        }
+                    },
+                    fail: function (res) {//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg：" + JSON.stringify(res));
+                    }
+                });
+            },
+            getImg: function (serverId,type) {
+                var that = this
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url, {serverId: serverId}, function (ret) {
+                    var imgUrl = ret.data.imgUrl
+                    console.log(type)
+                    if(type ==1){
+                        that.morepic.push(imgUrl) //多图
+                    }
+                    else
+                    {
+                        that.moreimg.push(imgUrl) //多图
+                    }
+
+                })
+            },
+        }
+    })
+
+</script>
+
+</body>
+</html>

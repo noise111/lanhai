@@ -1,0 +1,36 @@
+{template 'default/header'}
+<body class="max-width bg-f5">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+    <h1 class="title txt-fff">已缴费记录</h1>
+</header>
+<div class="list-block cost-list-block" id="data-list">
+
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="card" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('cost',array('op' => 'detail'))}&id={{ d.list[i].id }}'">
+        <div class="card-header" style="background-color: rgb(72, 181, 78);color:white">
+            <div><span style="font-size: 16px;font-weight: normal">{{ d.list[i].username }} &nbsp;&nbsp;{{ d.list[i].homenumber}}</span></div>
+            <div> <span class="cost-btn bg-primary" style="font-size: 12px;">已缴纳</span></div>
+        </div>
+        <div class="card-content">
+            <div class="card-content-inner">
+                <div>账单：{{ d.list[i].costtime }}</div>
+                <div style="height:40px">
+                    <div>费用：{{ d.list[i].price }}元</div>
+                    <div>缴费时间：{{ d.list[i].createtime }}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {{# } }}
+
+</script>
+<script>
+    $(document).ready(function() {
+        loaddata("{php echo $this->createMobileUrl('cost',array('op'=>'order'))}", $("#data-list"), 'xq_list', true);
+    });
+</script>
+{template 'default/footer'}

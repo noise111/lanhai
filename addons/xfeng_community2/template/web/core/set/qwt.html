@@ -1,0 +1,79 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>说明:
+                        1. 默认微信和WAP都可以访问，开启后，只能通过微信访问
+                        <!--2. 使用app,需要开启推送开关-->
+                        2. 请认真配置下面的参数</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('set',array('op' => 'qwt'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <td class="col-md-2">全网通</td>
+                    <td class="col-md-7">说明</td>
+                    <td class="col-md-3">是否启用</td>
+                    <td class="col-md-2">
+
+                    </td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="title">微信访问</td>
+                    <td>开启后，必须在微信中才能使用，默认是微信和WAP都可以使用</td>
+                    <td>
+                        <input type="checkbox" name="" id="p52" class="js-switch_1" {if $set['p52']['value']}checked{/if}/>
+                    </td>
+                    <td style="text-align: right;">
+                    </td>
+                </tr>
+                <!--<tr>-->
+                    <!--<td class="title">app推送</td>-->
+                    <!--<td>-->
+                        <!--使用app时，需要开启app推送开关-->
+                    <!--</td>-->
+                    <!--<td>-->
+                        <!--<input type="checkbox" name="" id="p53" class="js-switch_2" {if $set['p53']['value']}checked{/if}/>-->
+                    <!--</td>-->
+
+                <!--</tr>-->
+
+
+                </tbody>
+            </table>
+
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

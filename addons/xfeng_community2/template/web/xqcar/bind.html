@@ -1,0 +1,78 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('xqcar')}"></a>&nbsp;&nbsp;&nbsp;
+                        绑定用户
+                    </h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('xqcar',array('op' => 'bind','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form  action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="regionid" value="{$item['regionid']}"/>
+                        <input type="hidden" name="id" value="{$id}"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">楼宇</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="buildid" id="buildid">
+                                    <option>全部楼宇</option>
+                                    {loop $builds $build}
+                                    <option value="{$build['buildtitle']}" >{$build['title']}区{$build['buildtitle']}栋</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">房号:</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="addressid" id="addressid">
+                                    <option>全部房号</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="submit" class="btn btn-primary btn-w-m"  name="submit" value="保存">
+                                <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal" onclick="window.history.go(-1);">返回</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$("#buildid").change(function () {
+    var buildid = $("#buildid option:selected").val()
+    var regionid = $("#regionid").val();
+    var url = "{php echo wxapp_url('house',array('op'=>'room'))}"
+    $.post(url,{buildid:buildid,regionid:regionid},function (data) {
+        var content = '';
+        var rooms = data.data.rooms;
+        for (var o in rooms){
+            content +="<option value='"+rooms[o].id+"' >"+rooms[o].address+"</option>";
+        }
+        $("#addressid").html(content);
+    })
+})
+function check(form) {
+    if (!form['buildid'].value) {
+        alert('楼宇不可为空。');
+        return false;
+    }
+    if (!form['addressid'].value) {
+        alert('房号不可为空。');
+        return false;
+    }
+}
+</script>
+{template 'web/common/footer'}

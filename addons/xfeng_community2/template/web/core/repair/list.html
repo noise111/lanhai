@@ -1,0 +1,260 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>报修管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('repair')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="repair"/>
+                        <input type="hidden" name="op" value="list"/>
+                        <div class="row">
+
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="" >全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="category" class="form-control" id="category">
+                                    <option value="">全部类型</option>
+                                    {loop $categories $category}
+                                    <option value="{$category['id']}" {if $category['id']==$_GPC['category']} selected{/if}>{$category['name']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs" >
+                                <select name="status" class="form-control" id="status">
+                                    <option value="" {if empty($_GPC['status'])}selected{/if}>处理状态</option>
+                                    <option value="2" {if $_GPC['status'] == 2}selected{/if}>未处理</option>
+                                    <option value="3" {if $_GPC['status'] == 3}selected{/if}>处理中</option>
+                                     <option value="1" {if $_GPC['status'] == 1}selected{/if}>已处理</option>
+
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入名字 /电话 /地址" value="{$_GPC['keyword']}" id="keyword">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <button type="submit" name="export" value="1" id="export" class="btn btn-primary" data-loading-text="正在导出中，请勿关闭和刷新浏览器......" autocomplete="off">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+        <form class="form-horizontal form" method="post">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th width="3%">
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="checkids"
+                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                            <label for="checkids"> </label>
+                        </div>
+                    </th>
+                    <th style="width: 90px;">类型</th>
+                    <th style="width: 60px;">姓名</th>
+                    <th style="width: 110px;">手机</th>
+                    <th style="width: 190px;">地址</th>
+                    <th style="width: 130px;">日期</th>
+                    <th style="width: 40px">质保</th>
+                    <th style="width: 40px">状态</th>
+                    <th style="width: 40px">审核</th>
+                    <th style="width: 60px">评价</th>
+                    <th style="width: 60px">维修费用</th>
+                    <th style="width: 60px">回访</th>
+                    {if $codeStatus && (empty($user) || ($user && $user['type'] == 1))}
+                    <th style="width: 60px">闭单码</th>
+                    {/if}
+                    <th style="width: 250px">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr {if $item['overtime'] == 1 && $item['status'] == 2}style="background-color: #00b7ee;color:white"{/if}>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                   value="{$item['id']}">
+                            <label for="ids_{$item['id']}"></label>
+                        </div>
+                    </td>
+                    <td>{if $item['category']}{$item['category']}{else}{$item['cate']}{/if}</td>
+                    <td>{$item['realname']}</td>
+                    <td>{$item['mobile']}</td>
+                    <td>
+                        {$item['title']}{$item['address']}
+                    </td>
+                    <td>{php echo date('Y-m-d H:i', $item[createtime]);}</td>
+                    <td>{if $item['categoryid'] == 1}质保内{elseif $item['categoryid'] == 2}质保外{/if}</td>
+                    <td>
+                        {if $item['status'] ==1 }
+                        <span class="label label-success">已处理</span>
+                        {/if}
+                        {if $item['status'] == 3 }
+                        <span class="label label-info">处理中</span>
+                        {/if}
+                        {if $item['status'] == 2 }
+                        <span class="label label-default">未处理</span>{/if}
+                    </td>
+                    <td>
+                        <label data="{$item['enable']}" class="label label-default {if $item['enable']==0}label-info{/if}"
+                        onclick="verify(this,{$item['id']},'enable')">{if $item['enable']==0}通过{else}禁止{/if}</label>
+                    </td>
+                    <td><span class="label label-success">{if $item['rank'] == 1}满意{elseif $item['rank'] == 2}一般{elseif $item['rank']}不满意{/if}</span>
+                    </td>
+                    <td>{$item['price']}
+                    </td>
+                    <td>
+                        {if $item['visit'] ==1 }
+                        <span class="label label-success">满意</span>
+                        {/if}
+                        {if $item['visit'] == 2 }
+                        <span class="label label-default">不满意</span>
+                        {/if}
+                    </td>
+                {if $codeStatus && (empty($user) || ($user && $user['type'] == 1))}
+                <td>{$item['code']}</td>
+                {/if}
+                    <td>
+                        {if ($user && $menu_opss && @in_array('repair_add', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('repair',array('op'=>'add','id'=>$item['id']));}" class="btn btn-primary btn-sm">处理报修</a>
+                        {/if}
+                    {if $item['status']==2}
+                        {if ($user && $menu_opss && @in_array('repair_send', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('repair',array('op'=>'send','id'=>$item['id'],'overtime' => $item['overtime']));}" class="btn btn-warning btn-sm">推送</a>
+                        {/if}
+                    {/if}
+                        {if $item['status'] ==1 && $item['visit'] == 0}
+                        {if ($user && $menu_opss && @in_array('repair_rank', $menu_opss)) || empty($user)}
+                        <a  class="btn btn-primary btn-sm" onclick="visit(this,'{$item['visit']}')" data-id="{$item['id']}" data-toggle="modal" data-target="#myModal1">回访</a>
+                        {/if}
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('repair_sendlog', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('repair',array('op'=>'sendlog','id'=>$item['id']));}" class="btn btn-success btn-sm">推送记录</a>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('repair_del', $menu_opss)) || empty($user)}
+                        <a onclick="return confirm('删除操作不可恢复，确认吗？')" href="{php echo $this->createWebUrl('repair',array('op'=>'delete','id'=>$item['id']));}" class="btn btn-default btn-sm">删除</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+
+            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                <thead>
+                {if $list}
+                <tr>
+                    <td class="text-left">
+                        <input name="token" type="hidden" value="{$_W['token']}"/>
+                        {if ($user && $menu_opss && @in_array('repair_pldel', $menu_opss)) || empty($user)}
+                        <input type="submit" class="btn btn-danger btn-sm" name="delete" value="批量删除"/> &nbsp;
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('repair_plverity', $menu_opss)) || empty($user)}
+                        <button type="submit" name="plverity" value="1" class="btn btn-warning btn-sm">一键全部审核</button>
+                        {/if}
+                        <span style="color:red">总计:{$total}</span>
+                    </td>
+
+                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                </tr>
+                {else}
+                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                {/if}
+                </thead>
+            </table>
+        </form>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">回访</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">回访状态</label>
+                        <div class="col-sm-10">
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="visit" value="1" id="visit1" {if $item['visit'] == 1 || empty($item['visit'])}checked{/if}/>
+                                <label for="visit1">满意</label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="visit" value="2" id="visit2" {if $item['visit'] == 2}checked{/if}/>
+                                <label for="visit2">不满意</label>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="reportid" id="reportid" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="visitadd" value="保存" data-loading-text="正在发送中，请勿关闭和刷新浏览器......" autocomplete="off" id="myButton">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+    $('#export').on('click',function () {
+        var $btn = $(this).button('loading');
+        setTimeout(function () {
+            $('#export').html("导出数据");
+            $('#export').prop('disabled', false);
+            $("#export").removeClass("disabled");
+        },3000)
+    })
+    function visit(obj, visit) {
+        $("#reportid").val(obj.getAttribute("data-id"));
+    }
+</script>
+<script>
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('repair',array('op' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'enable') {
+                $(obj).html(d.data == '0' ? '通过' : '禁止');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+</script>
+{template 'web/common/footer'}

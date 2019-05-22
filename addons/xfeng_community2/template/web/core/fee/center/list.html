@@ -1,0 +1,498 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>收银台</h5>
+
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'center'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="alert alert-info" role="alert" style="color: red">
+                        <p>注：批量微信通知和批量短信通知，如果未勾选则默认全部（忽略头部的搜索条件）。</p>
+                        <p>注：时间搜索1、2为账单日期开始的范围，3、4为账单日期结束的范围(日期分别对应开始日期起、开始日期止、结束日期起、结束日期止)。</p>
+                    </div>
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="center"/>
+                        <div class="row">
+                            <div class="col-sm-12 m-b-xs">
+                                <span style="color: red">总计:{$total}</span>
+                                <span style="color: red;margin-left: 5px">应收金额:{$totalPrice}</span>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="buildid" class="form-control" id="build">
+                                    <option value="0">全部楼宇</option>
+                                    {loop $builds $build}
+                                    <option value="{$build['id']}" {if $build['id']==$_GPC['buildid']} selected{/if}>{$build['title']}</option>
+                                    {/loop}
+                                </select>
+
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="unitid" class="form-control" id="unit">
+                                    <option value="0">全部单元</option>
+                                    {loop $units $unit}
+                                    <option value="{$unit['id']}" {if $unit['id']==$_GPC['unitid']} selected{/if}>{$unit['unit']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="categoryid" class="form-control">
+                                    <option value="">选择收费项目</option>
+                                    {loop $categorys $category}
+                                    <option value="{$category['id']}" {if $category['id']==$_GPC['categoryid']} selected{/if}>{$category['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <span>是否开启账单时间筛选</span>
+                                <select name="feeStatus" class="form-control">
+                                    <option value="1" {if $_GPC['feeStatus'] ==1} selected{/if}>否</option>
+                                    <option value="2" {if $_GPC['feeStatus'] ==2} selected{/if}>是</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-2 m-b-xs">
+                                <span>账单起始时间</span>
+                                <span>{php echo tpl_form_field_date('starttime', $starttime);}</span>
+                            </div>
+                            <div  class="col-sm-2 m-b-xs">
+                                <span>账单截止时间</span>
+                                {php echo tpl_form_field_date('endtime',$endtime);}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <span>请输入搜索的房号</span>
+                                <input type="text" class="form-control" name="keyword" placeholder="请输入搜索的房号"
+                                       value="{$_GPC['keyword']}">
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <div class="input-group" style="margin-top: 18px">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form" >
+                        <input type="hidden" name="record">
+                        <input type="hidden" name="limit" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="ok" value="0">
+                        <input type="hidden" name="fail" value="0">
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th width="30px">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkids"
+                                           onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                    <label for="checkids"> </label>
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th class="col-md-1">收费项目</th>
+                            <th class="col-md-1">所属小区</th>
+                            <th class="col-md-1">楼宇</th>
+                            <th class="col-md-1">单元</th>
+                            <th class="col-md-1">房号</th>
+                            <th class="col-md-1">账单日期</th>
+                            <th class="col-md-1">状态</th>
+                            <th class="col-md-1">费用</th>
+                            <th class="col-md-3">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                           value="{$item['id']}">
+                                    <label for="ids_{$item['id']}"></label>
+                                </div>
+                            </td>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                {$item['regiontitle']}
+                            </td>
+                            <td>{$item['build']}栋</td>
+                            <td>{$item['unit']}单元</td>
+                            <td>{$item['room']}室</td>
+                            <td>{if $item['starttime'] && $item['endtime']}{php echo date('Y-m-d',$item['starttime'])}~{php echo date('Y-m-d',$item['endtime'])}{/if}</td>
+                            <td>
+                                {if $item['status'] == 2}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}
+                            </td>
+                            <td>{$item['price']}</td>
+
+                            <td>
+                                {if ($user && $menu_opss && @in_array('fee_centerAdd', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'center','p' => 'add','id' => $item['id']))}" title="单笔收款" class="btn btn-primary btn-sm">单笔收款</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_centerPladd', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'display','roomid' => $item['roomid'],'status' => 1))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="合并收款">合并收款</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="text-left">
+                                {if ($user && $menu_opss && @in_array('fee_centerWechat', $menu_opss)) || empty($user)}
+                                <button type="button" class="btn btn-success" id="submit">批量微信推送</button>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_centerSms', $menu_opss)) || empty($user)}
+                                <button type="button" class="btn btn-success" id="smssubmit">批量短信推送</button>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_centerPlpay', $menu_opss)) || empty($user)}
+                                <button type="button" class="btn btn-danger" id="plpay" data-toggle="modal" data-target="#myModal1">合并支付</button>
+                                {/if}
+                                <!--<button type="button" class="btn btn-success" id="del">批量删除</button>-->
+                            </td>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">结算</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form1" onsubmit="return check(this);">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">实际交费</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="" name="pay_price" value="" id="pay_price" disabled>
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳金</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳金" name="rate_price" value="">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳金率</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳金率" name="rate" value="">
+                                <span class="input-group-addon">千分之(‰)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">滞纳天数</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="输入滞纳起算天数" name="rate_day" value="">
+                                <span class="input-group-addon">天</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">支付方式</label>
+                        <div class="col-sm-10">
+                            <select name="paytype" class="form-control" id="paytype">
+                                <option value="-1">请选择支付方式</option>
+                                <option value="1">余额</option>
+                                <option value="5">现金</option>
+                                <option value="2">微信支付</option>
+                                <option value="4">支付宝</option>
+                                <option value="6">银联刷卡</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea name="remark" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">操作人</label>
+                        <div class="col-sm-10">
+                            <input name="username" class="form-control" id="username" value="{$_W['user']['username']}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="ids" value="" id="ids">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="button" class="btn btn-primary" name="submit1" id="submit1" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}", {regionid: regionid}, function (data) {
+                var content = '<option value="0">请选择楼宇</option>';
+                var builds = data.list
+                for (var o in builds) {
+                    content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + data.zd + "</option>";
+                }
+                $("#build").html(content);
+                var cont = '<option value="0">请选择单元</option>';
+                $("#unit").html(cont);
+            })
+        })
+        $("#build").change(function () {
+            var buildid = $("#build option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'unit'))}", {
+                buildid: buildid,
+                regionid: regionid
+            }, function (data) {
+                var units = data.list
+                var content = '<option value="0">请选择单元</option>';
+                for (var o in units) {
+                    content += "<option value='" + units[o].id + "'>" + units[o].unit + data.zd + "</option>";
+                }
+                $("#unit").html(content);
+            })
+        })
+    })
+    $("#plpay").click(function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        if(ids.length ==''){
+            alert('请勾选账单')
+            return false
+        }
+    })
+    $('#submit1').on('click', function () {
+        if (!$("#ids").val()) {
+            alert('请先去选择账单。');
+            return false;
+        }
+        if (!$("#pay_price").val()) {
+            alert('请先选择账单。');
+            return false;
+        }
+        if ($('#paytype option:selected') .val() =='-1') {
+            alert('请选择支付方式。');
+            return false;
+        }
+//        if ($('#username').val() =='') {
+//            alert('请输入操作人姓名');
+//            return false;
+//        }
+        $('#submit1').val("正提交中,请勿关闭页面。");
+        $('#submit1').prop('disabled', true);
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'plpay'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form1').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+    $("#checkids").on('change', function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var idss = $("#ids").val();
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'change'))}";
+        $.getJSON(url, {
+            ids: ids
+        }, function (data) {
+            if (data.status == 1){
+                $('#pay_price').val(data.price);
+            }
+            if(data.status == 2){
+                $('#pay_price').val(data.price);
+            }
+        })
+    })
+    $("input[name='ids[]']").on('change', function () {
+        var ids = [];
+        $("input[name='ids[]']:checked").each(function(){
+            var lastid = $(this).val();
+            ids.push(lastid);
+        })
+        ids.join(",");
+        $("input[name='ids']").val(ids);
+        var idss = $("#ids").val();
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'center','p' => 'change'))}";
+        $.getJSON(url, {
+            ids: ids
+        }, function (data) {
+            if (data.status == 1){
+                $('#pay_price').val(data.price);
+            }
+            if(data.status == 2){
+                $('#pay_price').val(data.price);
+            }
+        })
+    })
+</script>
+<script>
+    // $('#myButton').on('click',function () {
+    //     var $btn = $(this).button('loading');
+    // })
+    // 提交事件
+    var i=0;
+    var openid=[];
+    $('#submit').on('click',function() {
+        $('#submit').html("消息正在发送中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#submit').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'wxsend'))}";
+        var type = $("#submit")
+        mass(total, ok, fail,url,type);
+    });
+    function mass(total, ok, fail,url,type) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n+5);
+                total=data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                // ok += data.ok;//成功发送
+                // fail += data.fail;//发送失败
+                // $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                $("#total").html(data.total)
+                if(data.status == 'end'){
+                    // $("input[name='record']").attr('value','');
+                    $("input[name='limit']").val(0);
+                    // $('#msg1').html("任务完成!");
+                    type.html("处理完成");
+                    type.removeProp('disabled');
+                    return ;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page+1)
+                $("input[name='page']").val(page+1);
+                mass(total, ok, fail ,url,type);
+            }
+        });
+    }
+</script>
+<script>
+    var i=0;
+    var openid=[];
+    $('#smssubmit').on('click',function() {
+        $('#smssubmit').html("消息正在发送中,请勿关闭页面。");
+        $('#smssubmit').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        var url = "{php echo $this->createWebUrl('fee',array('op'=>'smssend'))}";
+        var type = $("#smssubmit")
+        mass(total, ok, fail,url,type);
+    });
+    function mass(total, ok, fail,url,type) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n+5);
+                total=data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                $("#total").html(data.total)
+                if(data.status == 'end'){
+                    $("input[name='limit']").val(0);
+                    type.html("处理完成");
+                    type.removeProp('disabled');
+                    return ;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page+1)
+                $("input[name='page']").val(page+1);
+                mass(total, ok, fail ,url,type);
+            }
+        });
+    }
+</script>

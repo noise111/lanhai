@@ -1,0 +1,375 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-conten">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('charging', array('op' => 'throw'))}"></a>&nbsp;&nbsp;&nbsp;计费规则设置
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'rules','tid'=>$tid))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" value="{$tid}" name="tid">
+                        <div class="form-body" style="padding-top: 0;">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="mt-checkbox-list">
+                                        <label class="mt-checkbox">
+                                            <input class="switchBox" name="quanbill" value="1" type="checkbox"
+                                                  {if $rules['quanbill']==1} checked=""{/if}> 启用按量计费 <span></span>
+                                        </label>
+                                    </div>
+                                    <label>按量计费</label>
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">功率</span>
+                                                <select class="form-control" name="quanrule[1][power]">
+                                                    <option value="">请选择功率</option>
+                                                    <option value="100" {if $quanrule[1]['power']==100}selected{/if}>100瓦以下</option>
+                                                    <option value="200" {if $quanrule[1]['power']==200}selected{/if}>200瓦以下</option>
+                                                    <option value="300" {if $quanrule[1]['power']==300}selected{/if}>300瓦以下</option>
+                                                    <option value="400" {if $quanrule[1]['power']==400}selected{/if}>400瓦以下</option>
+                                                    <option value="500" {if $quanrule[1]['power']==500}selected{/if}>500瓦以下</option>
+                                                    <option value="600" {if $quanrule[1]['power']==600}selected{/if}>600瓦以下</option>
+                                                    <option value="700" {if $quanrule[1]['power']==700}selected{/if}>700瓦以下</option>
+                                                    <option value="800" {if $quanrule[1]['power']==800}selected{/if}>800瓦以下</option>
+                                                    <option value="900" {if $quanrule[1]['power']==900}selected{/if}>900瓦以下</option>
+                                                    <option value="1000" {if $quanrule[1]['power']==1000}selected{/if}>1000瓦以下</option>
+                                                    <option value="1100" {if $quanrule[1]['power']==1100}selected{/if}>1100瓦以下</option>
+                                                    <option value="1200" {if $quanrule[1]['power']==1200}selected{/if}>1200瓦以下</option>
+                                                    <option value="1300" {if $quanrule[1]['power']==1300}selected{/if}>1300瓦以下</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <input class="form-control" name="quanrule[1][price]"
+                                                       value="{$quanrule[1]['price']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元/小时</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费</span>
+                                                <input class="form-control" name="quanrule[1][minprice]"
+                                                       value="{$quanrule[1]['minprice']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费时间</span>
+                                                <select class="form-control" name="quanrule[1][mintime]">
+                                                    <option value="1" {if $quanrule[1]['mintime']==1}selected{/if}>1</option>
+                                                    <option value="2" {if $quanrule[1]['mintime']==2}selected{/if}>2</option>
+                                                    <option value="3" {if $quanrule[1]['mintime']==3}selected{/if}>3</option>
+                                                    <option value="4" {if $quanrule[1]['mintime']==4}selected{/if}>4</option>
+                                                    <option value="5" {if $quanrule[1]['mintime']==5}selected{/if}>5</option>
+                                                    <option value="6" {if $quanrule[1]['mintime']==6}selected{/if}>6</option>
+                                                    <option value="7" {if $quanrule[1]['mintime']==7}selected{/if}>7</option>
+                                                    <option value="8" {if $quanrule[1]['mintime']==8}selected{/if}>8</option>
+                                                    <option value="9" {if $quanrule[1]['mintime']==9}selected{/if}>9</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">功率</span>
+                                                <select class="form-control" name="quanrule[2][power]">
+                                                    <option value="100" {if $quanrule[2]['power']==100}selected{/if}>100瓦以下</option>
+                                                    <option value="200" {if $quanrule[2]['power']==200}selected{/if}>200瓦以下</option>
+                                                    <option value="300" {if $quanrule[2]['power']==300}selected{/if}>300瓦以下</option>
+                                                    <option value="400" {if $quanrule[2]['power']==400}selected{/if}>400瓦以下</option>
+                                                    <option value="500" {if $quanrule[2]['power']==500}selected{/if}>500瓦以下</option>
+                                                    <option value="600" {if $quanrule[2]['power']==600}selected{/if}>600瓦以下</option>
+                                                    <option value="700" {if $quanrule[2]['power']==700}selected{/if}>700瓦以下</option>
+                                                    <option value="800" {if $quanrule[2]['power']==800}selected{/if}>800瓦以下</option>
+                                                    <option value="900" {if $quanrule[2]['power']==900}selected{/if}>900瓦以下</option>
+                                                    <option value="1000" {if $quanrule[2]['power']==1000}selected{/if}>1000瓦以下</option>
+                                                    <option value="1100" {if $quanrule[2]['power']==1100}selected{/if}>1100瓦以下</option>
+                                                    <option value="1200" {if $quanrule[2]['power']==1200}selected{/if}>1200瓦以下</option>
+                                                    <option value="1300" {if $quanrule[2]['power']==1300}selected{/if}>1300瓦以下</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <input class="form-control" name="quanrule[2][price]"
+                                                       value="{$quanrule[2]['price']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元/小时</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费</span>
+                                                <input class="form-control" name="quanrule[2][minprice]"
+                                                       value="{$quanrule[2]['minprice']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费时间</span>
+                                                <select class="form-control" name="quanrule[2][mintime]">
+                                                    <option value="1" {if $quanrule[2]['mintime']==1}selected{/if}>1</option>
+                                                    <option value="2" {if $quanrule[2]['mintime']==2}selected{/if}>2</option>
+                                                    <option value="3" {if $quanrule[2]['mintime']==3}selected{/if}>3</option>
+                                                    <option value="4" {if $quanrule[2]['mintime']==4}selected{/if}>4</option>
+                                                    <option value="5" {if $quanrule[2]['mintime']==5}selected{/if}>5</option>
+                                                    <option value="6" {if $quanrule[2]['mintime']==6}selected{/if}>6</option>
+                                                    <option value="7" {if $quanrule[2]['mintime']==7}selected{/if}>7</option>
+                                                    <option value="8" {if $quanrule[2]['mintime']==8}selected{/if}>8</option>
+                                                    <option value="9" {if $quanrule[2]['mintime']==9}selected{/if}>9</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">功率</span>
+                                                <select class="form-control" name="quanrule[3][power]">
+                                                    <option value="">请选择功率</option>
+                                                    <option value="100" {if $quanrule[3]['power']==100}selected{/if}>100瓦以下</option>
+                                                    <option value="200" {if $quanrule[3]['power']==200}selected{/if}>200瓦以下</option>
+                                                    <option value="300" {if $quanrule[3]['power']==300}selected{/if}>300瓦以下</option>
+                                                    <option value="400" {if $quanrule[3]['power']==400}selected{/if}>400瓦以下</option>
+                                                    <option value="500" {if $quanrule[3]['power']==500}selected{/if}>500瓦以下</option>
+                                                    <option value="600" {if $quanrule[3]['power']==600}selected{/if}>600瓦以下</option>
+                                                    <option value="700" {if $quanrule[3]['power']==700}selected{/if}>700瓦以下</option>
+                                                    <option value="800" {if $quanrule[3]['power']==800}selected{/if}>800瓦以下</option>
+                                                    <option value="900" {if $quanrule[3]['power']==900}selected{/if}>900瓦以下</option>
+                                                    <option value="1000" {if $quanrule[3]['power']==1000}selected{/if}>1000瓦以下</option>
+                                                    <option value="1100" {if $quanrule[3]['power']==1100}selected{/if}>1100瓦以下</option>
+                                                    <option value="1200" {if $quanrule[3]['power']==1200}selected{/if}>1200瓦以下</option>
+                                                    <option value="1300" {if $quanrule[3]['power']==1300}selected{/if}>1300瓦以下</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <input class="form-control" name="quanrule[3][price]"
+                                                       value="{$quanrule[3]['price']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元/小时</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费</span>
+                                                <input class="form-control" name="quanrule[3][minprice]"
+                                                       value="{$quanrule[3]['minprice']}"
+                                                       placeholder="" type="number" maxlength="8">
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">最低消费时间</span>
+                                                <select class="form-control" name="quanrule[3][mintime]">
+                                                    <option value="1" {if $quanrule[3]['mintime']==1}selected{/if}>1</option>
+                                                    <option value="2" {if $quanrule[3]['mintime']==2}selected{/if}>2</option>
+                                                    <option value="3" {if $quanrule[3]['mintime']==3}selected{/if}>3</option>
+                                                    <option value="4" {if $quanrule[3]['mintime']==4}selected{/if}>4</option>
+                                                    <option value="5" {if $quanrule[3]['mintime']==5}selected{/if}>5</option>
+                                                    <option value="6" {if $quanrule[3]['mintime']==6}selected{/if}>6</option>
+                                                    <option value="7" {if $quanrule[3]['mintime']==7}selected{/if}>7</option>
+                                                    <option value="8" {if $quanrule[3]['mintime']==8}selected{/if}>8</option>
+                                                    <option value="9" {if $quanrule[3]['mintime']==9}selected{/if}>9</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="help-block">设置1-3个功率阶梯</span></div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="mt-checkbox-list">
+                                        <label class="mt-checkbox">
+                                            <input class="switchBox" name="timebill" value="1" type="checkbox"  {if $rules['timebill']==1} checked=""{/if}>
+                                            启用按时计费 <span></span>
+                                        </label>
+                                    </div>
+                                    <label>按时计费</label>
+
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <select class="form-control" name="timerule[1][price]">
+                                                    <option value="">请选择价格</option>
+                                                    <option value="100" {if $timerule[1]['price']==100}selected{/if}>1</option>
+                                                    <option value="200" {if $timerule[1]['price']==200}selected{/if}>2</option>
+                                                    <option value="300" {if $timerule[1]['price']==300}selected{/if}>3</option>
+                                                    <option value="400" {if $timerule[1]['price']==400}selected{/if}>4</option>
+                                                    <option value="500" {if $timerule[1]['price']==500}selected{/if}>5</option>
+                                                    <option value="600" {if $timerule[1]['price']==600}selected{/if}>6</option>
+                                                    <option value="700" {if $timerule[1]['price']==700}selected{/if}>7</option>
+                                                    <option value="800" {if $timerule[1]['price']==800}selected{/if}>8</option>
+                                                    <option value="900" {if $timerule[1]['price']==900}selected{/if}>9</option>
+                                                    <option value="1000" {if $timerule[1]['price']==1000}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">时长</span>
+                                                <select class="form-control" name="timerule[1][time]">
+                                                    <option value="">请选择时长</option>
+                                                    <option value="60" {if $timerule[1]['time']==60}selected{/if}>1</option>
+                                                    <option value="120" {if $timerule[1]['time']==120}selected{/if}>2</option>
+                                                    <option value="180" {if $timerule[1]['time']==180}selected{/if}>3</option>
+                                                    <option value="240" {if $timerule[1]['time']==240}selected{/if}>4</option>
+                                                    <option value="300" {if $timerule[1]['time']==300}selected{/if}>5</option>
+                                                    <option value="360" {if $timerule[1]['time']==360}selected{/if}>6</option>
+                                                    <option value="420" {if $timerule[1]['time']==420}selected{/if}>7</option>
+                                                    <option value="480" {if $timerule[1]['time']==480}selected{/if}>8</option>
+                                                    <option value="540" {if $timerule[1]['time']==540}selected{/if}>9</option>
+                                                    <option value="600" {if $timerule[1]['time']==600}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <select class="form-control" name="timerule[2][price]">
+                                                    <option value="">请选择价格</option>
+                                                    <option value="100" {if $timerule[2]['price']==100}selected{/if}>1</option>
+                                                    <option value="200" {if $timerule[2]['price']==200}selected{/if}>2</option>
+                                                    <option value="300" {if $timerule[2]['price']==300}selected{/if}>3</option>
+                                                    <option value="400" {if $timerule[2]['price']==400}selected{/if}>4</option>
+                                                    <option value="500" {if $timerule[2]['price']==500}selected{/if}>5</option>
+                                                    <option value="600" {if $timerule[2]['price']==600}selected{/if}>6</option>
+                                                    <option value="700" {if $timerule[2]['price']==700}selected{/if}>7</option>
+                                                    <option value="800" {if $timerule[2]['price']==800}selected{/if}>8</option>
+                                                    <option value="900" {if $timerule[2]['price']==900}selected{/if}>9</option>
+                                                    <option value="1000" {if $timerule[2]['price']==1000}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">时长</span>
+                                                <select class="form-control" name="timerule[2][time]">
+                                                    <option value="">请选择时长</option>
+                                                    <option value="60" {if $timerule[2]['time']==60}selected{/if}>1</option>
+                                                    <option value="120" {if $timerule[2]['time']==120}selected{/if}>2</option>
+                                                    <option value="180" {if $timerule[2]['time']==180}selected{/if}>3</option>
+                                                    <option value="240" {if $timerule[2]['time']==240}selected{/if}>4</option>
+                                                    <option value="300" {if $timerule[2]['time']==300}selected{/if}>5</option>
+                                                    <option value="360" {if $timerule[2]['time']==360}selected{/if}>6</option>
+                                                    <option value="420" {if $timerule[2]['time']==420}selected{/if}>7</option>
+                                                    <option value="480" {if $timerule[2]['time']==480}selected{/if}>8</option>
+                                                    <option value="540" {if $timerule[2]['time']==540}selected{/if}>9</option>
+                                                    <option value="600" {if $timerule[2]['time']==600}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-top-10">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">价格</span>
+                                                <select class="form-control" name="timerule[3][price]">
+                                                    <option value="">请选择价格</option>
+                                                    <option value="100" {if $timerule[3]['price']==100}selected{/if}>1</option>
+                                                    <option value="200" {if $timerule[3]['price']==200}selected{/if}>2</option>
+                                                    <option value="300" {if $timerule[3]['price']==300}selected{/if}>3</option>
+                                                    <option value="400" {if $timerule[3]['price']==400}selected{/if}>4</option>
+                                                    <option value="500" {if $timerule[3]['price']==500}selected{/if}>5</option>
+                                                    <option value="600" {if $timerule[3]['price']==600}selected{/if}>6</option>
+                                                    <option value="700" {if $timerule[3]['price']==700}selected{/if}>7</option>
+                                                    <option value="800" {if $timerule[3]['price']==800}selected{/if}>8</option>
+                                                    <option value="900" {if $timerule[3]['price']==900}selected{/if}>9</option>
+                                                    <option value="1000" {if $timerule[3]['price']==1000}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">元</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">时长</span>
+                                                <select class="form-control" name="timerule[3][time]">
+                                                    <option value="">请选择时长</option>
+                                                    <option value="60" {if $timerule[3]['time']==60}selected{/if}>1</option>
+                                                    <option value="120" {if $timerule[3]['time']==120}selected{/if}>2</option>
+                                                    <option value="180" {if $timerule[3]['time']==180}selected{/if}>3</option>
+                                                    <option value="240" {if $timerule[3]['time']==240}selected{/if}>4</option>
+                                                    <option value="300" {if $timerule[3]['time']==300}selected{/if}>5</option>
+                                                    <option value="360" {if $timerule[3]['time']==360}selected{/if}>6</option>
+                                                    <option value="420" {if $timerule[3]['time']==420}selected{/if}>7</option>
+                                                    <option value="480" {if $timerule[3]['time']==480}selected{/if}>8</option>
+                                                    <option value="540" {if $timerule[3]['time']==540}selected{/if}>9</option>
+                                                    <option value="600" {if $timerule[3]['time']==600}selected{/if}>10</option>
+                                                </select>
+                                                <span class="input-group-addon">小时</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="help-block">设置1-3个金额阶梯</span></div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="form-actions">
+                            <div class="row text-center">
+                                <div class="col-md-offset-3 col-md-6">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('charging',array('op'=>'rules'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

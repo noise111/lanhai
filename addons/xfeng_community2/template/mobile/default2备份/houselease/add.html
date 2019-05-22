@@ -1,0 +1,596 @@
+{template 'default2/header'}
+<script src="{MODULE_URL}template/mobile/default2/static/js/webuploader.min.js"></script>
+    <style>
+        .weui-cells{
+            margin-top: 0px;
+            color: #A9A9A9;
+            font-size: 15px;
+        }
+        .weui-form-preview__label{
+            width: auto;
+            max-width: 4rem;
+            text-align: justify;
+            text-align-last:justify;
+        }
+        .toolbar .picker-button{
+            color: #f58611;
+            height: 1.8rem;
+            line-height: 1.8rem;
+        }
+        .toolbar .title{
+            height: 1.8rem;
+            line-height: 1.8rem;
+            font-size: 16px;
+        }
+        .toolbar .toolbar-inner{
+            height: 1.8rem;
+        }
+        .weui-cells_radio .weui-check:checked+.weui-icon-checked:before{
+            color: #f58611;
+        }
+        .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+            color: #f58611;
+        }
+        .picker-calendar-day.picker-calendar-day-selected span{
+            background: #f58611;
+        }
+        .weui-input{
+            text-align: right;
+        }
+        .weui-cell__ft{
+            padding-left: 5px;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #999; opacity:1;
+        }
+
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color: #999;opacity:1;
+        }
+
+        input:-ms-input-placeholder{
+            color: #999;opacity:1;
+        }
+
+        input::-webkit-input-placeholder{
+            color: #999;opacity:1;
+        }
+        .webuploader-element-invisible {
+            opacity:0;/*设置此控件透明度为零，即完全透明*/
+            filter:alpha(opacity=0);/*设置此控件透明度为零，即完全透明针对IE*/
+            font-size:100px;
+            position:absolute;/*绝对定位，相对于 .input */
+            top:0;
+            right:0;
+        }
+    </style>
+<style>
+    #addPic div:nth-child(2){width:100%!important;height:100%!important;}
+</style>
+<body>
+<div class="weui-cells">
+    <div class="weui-cell weui-cell_access" id="lease-item1">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label" id="_way">出租方式</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  id="way" value="" placeholder="请选择出租方式">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋户型</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  id="house-model" placeholder="请选择房屋户型" value="1室 0厅 0卫">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">楼层</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  id="house-floor" placeholder="请选择房屋楼层" value="1层 共1层">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">朝向</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text"  id="house-aspect" placeholder="请选择房屋朝向" value="">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋面积</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number"  placeholder="" id="model_area">
+        </div>
+        <div class="weui-cell__ft">
+            ㎡
+        </div>
+    </div>
+
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">装修情况</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="lease-decorate" type="text" value=""  placeholder="请选择装修情况">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">住宅类别</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="lease-house-form" value="" type="text" placeholder="请选择住宅类别">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋配置</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="in" type="text" value="" placeholder="请选择房屋配置">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    {if $_GPC['category'] == 1 || $_GPC['category'] == 2}
+    <div class="weui-cell weui-cell_access " id="lease-item2">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">押金方式</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input"  id="lease-pledge" type="text" placeholder="请选择押金方式" value="">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    {/if}
+
+    <div class="weui-cell " id="lease-item3">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">{if $_GPC['category'] == 3 || $_GPC['category'] == 4}房屋总价{else}房屋租金{/if}</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" pattern="" placeholder="" id="price">
+        </div>
+        <div class="weui-cell__ft">
+            {if $_GPC['category'] == 3 || $_GPC['category'] == 4}万元/套{else}元/月{/if}
+        </div>
+    </div>
+
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-form-preview__label">入住时间</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="date" type="text"  value="{php echo date('Y-m-d',TIMESTAMP)}">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="其他说明,长度5-200个字之间。" rows="3" id="content"></textarea>
+            <div class="weui-textarea-counter"><span>0</span>/200</div>
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <div class="weui-uploader">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        <!--<li class="weui-uploader__file" style="background-image:url()"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url()"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url()"></li>-->
+                    </ul>
+                    <div class="weui-uploader__input-box" id="addPic">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="address_form_ft" id="submit">
+    <a href="javascript:;" class="weui-btn address_form_btn" >保存</a>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+{if $_GPC['id']}
+<script>
+
+    $(function () {
+        var link = "{php echo wxapp_url('houselease/detail', array('id'=>$_GPC['id']))}";
+        $.getJSON(link, function (data) {
+            if(data.err_code==0){
+                $("#way").val(data.data.way);
+                $("#house-model").val(data.house_model);
+                $("#house-floor").val(data.data.house_floor);
+                $("#house-aspect").val(data.data.house_aspect);
+                $("#lease-decorate").val(data.data.fitment);
+                $("#lease-house-form").val(data.data.house);
+                $("#lease-pledge").val(data.data.price_way);
+                $("#price").val(data.data.price);
+                $("#date").val(data.data.checktime);
+                $("#content").val(data.data.content);
+                $("#model_area").val(data.data.model_area);
+                $("#house-model").val(data.data.house_model);
+                $("#in").val(data.data.spec);
+                $("#in").data('values',data.data.allocation);
+                var images = data.data.images;
+                if(images){
+                    var pics = '';
+                    for(var o in images){
+                        if(images[o]){
+                            pics +='<li class="weui-uploader__file" style="background-image:url('+images[o]+')"></li>'
+                        }
+                    }
+                    $("#uploaderFiles").html(pics);
+                }
+            }
+            else {
+                $.toast(data.err_msg, "cancel");
+            }
+        })
+    })
+</script>
+{/if}
+
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+        var localIds = null;
+        // 上传序号
+        var idx = 0;
+        var serverIds='';
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            $("#addPic").click(function () {
+                wx.chooseImage({
+                    count: 9, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType:  ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        var localIds = res.localIds;
+                        wxUploadImg(localIds);
+                    }
+                });
+                function wxUploadImg(localIds){
+
+                    var localId=localIds[idx]
+                    wx.uploadImage({//获取图片媒体ID
+                        localId: localId,  // 需要上传的图片的本地ID
+                        isShowProgressTips: 1, // 默认为1，显示进度提示
+                        success: function (res) {//获取成功
+
+                            var serverId = res.serverId; // 返回图片的服务器端ID
+                            getImg(serverId);
+                            // 上传序号，上传一张 累计 +1
+                            idx++
+                            //存储图片媒体ID，用，号分割
+                            // serverIds+=res.serverId+',';
+                            if(idx<localIds.length){//本地图片ID 还没全部获取完图片媒体ID
+                                //调用上传递归函数
+                                wxUploadImg(localIds);
+                            }
+                            else{
+                                idx=0;
+                                serverIds='';
+                                return true;
+                            }
+                        },
+                        fail: function(res){//获取多媒体id失败 返回错误代码
+                            alert("上传失败，msg："+JSON.stringify(res));
+                        }
+                    });
+                }
+                function getImg(serverId) {
+                    var url = "{php echo wxapp_url('getImg')}"
+                    $.getJSON(url,{serverId:serverId},function(ret){
+                        var imgUrl = ret.data.imgUrl
+                        var content = '<li class="weui-uploader__file" style="background-image:url('+imgUrl+')"></li><input type="hidden" name="pic[]" value="'+serverId+'">'
+                        $("#uploaderFiles").append(content);
+                    })
+                }
+            });
+        });
+
+
+</script>
+<script>
+    var category ="{$_GPC['category']}";
+    if(category == 1){
+        var title = '出租方式';
+        var t = '选择出租方式';
+        var items = new Array();
+        items[0]="整套出租";
+        items[1]="单间出租";
+        items[2]="床位出租";
+    }
+    if(category == 2){
+        var title = '求租方式';
+        var t = '选择求租方式';
+        var items = new Array();
+        items[0]="整套求租";
+        items[1]="单间求租";
+        items[2]="床位求租";
+    }
+    if(category == 3){
+        var title = '出售方式';
+        var t = '选择出售方式';
+        var items = new Array();
+        items[0]="整套出售";
+    }
+    if(category == 4){
+        var title = '整套求购';
+        var t = '选择整套求购';
+        var items = new Array();
+        items[0]="整套求购";
+    }
+    $("#_way").text(title);
+    $("#way").attr('placeholder',t);
+    $("#way").select({
+        title: title,
+        items: items,
+        onClose: function(d) {
+            var msg = d.data.values;
+            if(msg==''){
+                $.toast("至少选一项", "forbidden");
+            }
+        },
+    });
+    $("#lease-decorate").select({
+        title: "装修情况",
+        items: ["毛坯", "简单装修", "中等装修","精装修","豪华装修"],
+        onClose: function(d) {
+            var msg = d.data.values;
+            if(msg==''){
+                $.toast("至少选一项", "forbidden");
+            }
+        },
+    });
+    $("#lease-house-form").select({
+        title: "住宅类别",
+        items: ["普通住宅", "平房", "四合院","公寓","别墅","商住两用","其他"],
+        onClose: function(d) {
+            var msg = d.data.values;
+            if(msg==''){
+                $.toast("至少选一项", "forbidden");
+            }
+        },
+    });
+    $("#in").select({
+        title: "请选择房屋配置",
+        multi: true,
+        items: [
+            {
+                title: "床",
+                value: "iconfont icon-chuangdian|床",
+            },
+            {
+                title: "衣柜",
+                value: "iconfont icon-dpc|衣柜",
+            },
+            {
+                title: "沙发",
+                value: "iconfont icon-shafa|沙发",
+            },
+            {
+                title: "燃气",
+                value: "iconfont icon-7|燃气",
+            },
+            {
+                title: "洗衣机",
+                value: "iconfont icon-xiyiji|洗衣机",
+            },
+            {
+                title: "网络",
+                value: "iconfont icon-wifi|网络",
+            },
+            {
+                title: "冰箱",
+                value: "iconfont icon-bingxiang|冰箱",
+            },
+            {
+                title: "书桌",
+                value: "iconfont icon-bangongzhuo|书桌",
+            },
+            {
+                title: "空调",
+                value: "iconfont icon-kongdiao|空调",
+            },
+            {
+                title: "餐桌",
+                value: "iconfont icon-zhuozi|餐桌",
+            },
+            {
+                title: "椅子",
+                value: "iconfont icon-yizi|椅子",
+            },
+            {
+                title: "微波炉",
+                value: "iconfont icon-weibolu|微波炉",
+            },
+            {
+                title: "电视",
+                value: "iconfont icon-dianshi|电视",
+            },
+            {
+                title: "热水器",
+                value: "iconfont icon-reshui|热水器",
+            },
+            {
+                title: "橱柜",
+                value: "iconfont icon-chugui|橱柜",
+            },
+            {
+                title: "油烟机",
+                value: "iconfont icon-xiyouyanji|油烟机",
+            },
+            {
+                title: "电梯",
+                value: "iconfont icon-gsdt|电梯",
+            },
+            {
+                title: "供暖",
+                value: "iconfont icon-nuanqi|供暖",
+            },
+            {
+                title: "车位",
+                value: "iconfont icon-tingchewei|车位",
+            },
+            {
+                title: "门禁",
+                value: "iconfont icon-menjin|门禁",
+            },
+        ],
+        beforeClose: function(values, titles) {
+
+        },
+        onChange: function(d) {
+            console.log(this, d);
+        },
+        onClose: function (d) {
+            console.log('close')
+        }
+    });
+    $("#lease-pledge").select({
+        title: "请选择押金方式",
+        items: ["押一付一", "押一付二", "押一付三","押一付六","押二付一","押二付二","押二付三","面议"],
+        onClose: function(d) {
+            var msg = d.data.values;
+            if(msg==''){
+                $.toast("至少选一项", "forbidden");
+            }
+        },
+    });
+    $("#date").calendar({
+        onChange: function (p, values, displayValues) {
+        }
+    });
+
+    var id = getUrlArgStr();
+    if(id ==2){
+        $('#lease-item1 .weui-form-preview__label').text("出售方式");
+        $('#lease-way').attr('placeholder','请选择出售方式');
+        $("#lease-item2").remove();
+        $('#lease-item3 .weui-form-preview__label').text("总金额");
+        $('#lease-item3 .weui-cell__ft').text("万元/套");
+    }else if(id==3){
+        $('#lease-item1 .weui-form-preview__label').text("求购方式");
+        $('#lease-way').attr('placeholder','请选择求购方式');
+        $("#lease-item2").remove();
+        $('#lease-item3 .weui-form-preview__label').text("总金额");
+        $('#lease-item3 .weui-cell__ft').text("万元/套");
+    }else if(id==4){
+        $('#lease-item1 .weui-form-preview__label').text("求租方式");
+        $('#lease-way').attr('placeholder','请选择求租方式');
+    }
+
+    $("#house-model").picker({
+        title: "请选择房屋户型",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['1室', '2室','3室','4室','5室','6室','7室','8室','9室']
+            },
+            {
+                textAlign: 'center',
+                values: ['0厅','1厅', '2厅','3厅','4厅','5厅','6厅','7厅','8厅','9厅']
+            },
+            {
+                textAlign: 'center',
+                values: ['0卫','1卫', '2卫','3卫','4卫','5卫','6卫','7卫','8卫','9卫']
+            }
+        ]
+    })
+    var floor_items = new Array(100);
+    for (var i=0;i<floor_items.length;i++)
+    {
+        floor_items[i] = i+'层';
+    }
+    var total_floor_items = new Array(100);
+    for (var i=0;i<total_floor_items.length;i++)
+    {
+        total_floor_items[i] = '共'+i+'层';
+    }
+    $("#house-floor").picker({
+        title: "请选择楼层",
+        cols: [
+            {
+                textAlign: 'center',
+                values: floor_items
+            },
+            {
+                textAlign: 'center',
+                values: total_floor_items
+            }
+        ]
+    });
+    $("#house-aspect").picker({
+        title: "请选择朝向",
+        cols: [
+            {
+                textAlign: 'center',
+                values: ['东','南','西','北','南北','东西','东南','西南','东北','西北']
+            }
+        ]
+    });
+    $(function () {
+        //防止多次点击，
+        var lock = false;
+        $("#submit").click(function () {
+            var category = "{$_GPC['category']}";
+            var way = $("#way").attr('data-values');
+            var pics ='';
+            $('input[name="pic[]"]').each(function(){
+                var t1 = $(this).val();
+                pics += t1+',';
+            });
+            var model_room = $("#model_room").val();
+            var model_hall = $("#model_hall").val();
+            var model_toilet = $("#model_toilet").val();
+            var model_area = $("#model_area").val();
+            var floor_layer = $("#floor_layer").val();
+            var floor_number = $("#floor_number").val();
+            var fitment = $("#lease-decorate").val();
+            var house = $("#lease-house-form").val();
+            var allocation = $("#in").data('values');
+            var price_way = $("#lease-pledge").val();
+            var price = $("#price").val();
+            var checktime = $("#date").val();
+            var content = $("#content").val();
+            var house_aspect = $("#house-aspect").val();
+            var house_model = $("#house-model").val();
+            var house_floor = $("#house-floor").val();
+            var regionid = "{$_SESSION['community']['regionid']}";
+            if(model_area =='' || price_way =='' || price=='' || house_model=='' || house_floor=='' || checktime=='' || house_aspect=='' ){
+                $.toast('您有信息未填写', "forbidden");return false;
+            }
+            var hid = "{$_GPC['id']}";
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('houselease/add')}",{category:category,way:way,pics:pics,model_room:model_room,model_hall:model_hall,model_toilet:model_toilet,model_area:model_area,floor_layer:floor_layer,floor_number:floor_number,fitment:fitment,house:house,allocation:allocation,price_way:price_way,price:price,checktime:checktime,content:content,house_aspect:house_aspect,house_model:house_model,house_floor:house_floor,regionid:regionid,hid:hid},function (data) {
+                if(data.err_code ==0){
+                    $.hideLoading();
+                    setTimeout(function () {
+                        //提交成功提示内容: data.data.content
+                        $.toast(data.data.content, "text");
+                        window.location.href="{php echo $this->createMobileUrl('houselease')}";
+                    }, 1000);
+                }
+                lock = false;
+            },'json')
+        })
+    })
+</script>
+</body>
+</html>

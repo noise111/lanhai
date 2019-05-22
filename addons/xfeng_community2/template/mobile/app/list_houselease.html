@@ -1,0 +1,32 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">租赁订单</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0 0 60px 0">
+            <ul>
+                {loop $list $item}
+                <li onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'houselease_detail','id'=> $item['id']))}'">
+                    <a href="#" class="item-link item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['title']}</div>
+                                <div class="item-after">{php echo date('Y-m-d H:i',$item['createtime'])}</div>
+                            </div>
+                            <div class="item-subtitle">{if $item['status'] ==1 }<span class="label label-success">已成交</span>{/if}{if $item['status'] == 0 }<span class="label label-info">未成交</span>{/if}{if $item['status'] == 2 }<span class="label label-danger">已取消</span>{/if}</div>
+                            <div class="item-text">{$item['realname']}-{$item['mobile']}</div>
+                        </div>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{template 'app/footer'}

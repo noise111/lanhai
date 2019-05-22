@@ -1,0 +1,392 @@
+{template 'web/common/header-base'}
+<!--<script src="{MODULE_URL}template/web/static/js/jquery.min.js?v=2.1.4"></script>-->
+<!--<script src="{MODULE_URL}template/web/static/js/bootstrap.min.js?v=3.3.6"></script>-->
+<script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<script>
+    $(function () {
+        $("#div_nestable").sortable();
+        $("#div_nestable").disableSelection();
+    });
+</script>
+<style>
+    .app {
+        min-height: 420px;
+        margin-top: 20px;
+        min-width: 970px;
+        position: relative;
+        padding-bottom: 20px;
+        margin-left: 100px;
+    }
+
+    .app .app-preview {
+        width: 320px;
+        border: 1px solid #e5e5e5;
+        border-radius: 18px 18px 0 0;
+    }
+
+    .app .app-preview .app-header {
+        height: 70px;
+        background: url({MODULE_URL}static/image/iphone_head.png) center center no-repeat;
+    }
+
+    .app .app-preview .app-content {
+        width: 300px;
+        margin: 0 auto;
+        padding-bottom: 0px;
+        border: 1px solid #c5c5c5;
+        min-height: 400px;
+        background: #fff;
+    }
+
+    .app .app-preview.wap-editor-footer {
+        border-radius: 18px;
+        padding-bottom: 100px;
+        position: relative;
+    }
+
+    .app .app-preview.wap-editor-footer:after {
+        content: "";
+        position: absolute;
+        bottom: 20px;
+        left: 130px;
+        width: 60px;
+        height: 60px;
+        border: 1px solid #ddd;
+        border-radius: 100%;
+    }
+
+    .app .app-side {
+        margin: 71px 0 0 0;
+    }
+
+    .app .app-side > div {
+        position: relative;
+        padding-bottom: 20px;
+        width: 600px;
+        margin-left: 20px;
+    }
+
+    .dd {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 0;
+        max-width: 600px;
+        list-style: none;
+        font-size: 13px;
+        line-height: 20px;
+        margin-left: -73px;
+        margin-top: -2px;
+    }
+
+    .dd-list {
+        display: block;
+        position: relative;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        padding-top: 6px;
+    }
+
+    .dd-handle {
+        height: 40px;
+        line-height: 30px
+    }
+
+    .dd-list {
+        width: 500px;
+    }
+
+    .dd-handle, .dd-handle:hover {
+        height: inherit;
+        width: 100%;
+        background: #f01;
+        padding: 0;
+        margin: 0;
+        border: 0;
+        background: none;
+        font-weight: 100;
+    }
+
+    .dd-itemm {
+        background: url({MODULE_URL}static/image/index-sort.jpg) no-repeat;
+        position: relative;
+        border: 2px solid rgba(0, 0, 0, 0);
+    }
+
+    .dd-itemm:hover {
+        border: 2px dashed #f90;
+    }
+
+    .dd-itemm-search {
+        height: 35px;
+        background-position: 70px -3px;
+    }
+
+    .dd-itemm-adv {
+        height: 97px;
+        background-position: 70px -36px;
+    }
+
+    .dd-itemm-notice {
+        height: 35px;
+        background-position: 70px -131px;
+    }
+
+    .dd-itemm-nav {
+        height: 105px;
+        background-position: 70px -169px;
+    }
+
+    .dd-itemm-house {
+        height: 138px;
+        background-position: 70px -269px;
+    }
+
+    .dd-itemm-cube {
+        height: 135px;
+        background-position: 70px -408px;
+    }
+
+    .dd-itemm-banner {
+        height: 70px;
+        background-position: 70px -551px;
+    }
+
+    .dd-itemm-activity {
+        height: 78px;
+        background-position: 70px -621px;
+    }
+
+    .dd-itemm-bannerTwo {
+        height: 70px;
+        background-position: 70px -702px;
+    }
+
+    .dd-itemm-market {
+        height: 154px;
+        background-position: 70px -775px;
+    }
+
+    .dd-itemm-goods {
+        height: 361px;
+        background-position: 70px -929px;
+    }
+
+    .dd-itemm .pull-left {
+        font-size: 14px;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>首页组件排版(可通过上下拖拽实现组件的自定义位置以及是否开启，还原设置后需保存才能生效。)</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('xqsort')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal">
+                        <div style="padding-left: 50px;">
+                            <div class="app">
+                                <div class="app-preview wap-editor-footer">
+                                    <div class="app-header"></div>
+                                    <div class="app-content">
+                                        <div class="dd">
+                                            <ol class="dd-list" id="div_nestable">
+                                                {loop $page $k $item}
+                                                {php $key = $k+1 }
+                                                <li class="dd-itemm full  dd-itemm-{$item['sort']}">
+                                                    <div class="pull-left">{$item['name']}</div>
+                                                    <div class="dd-handle">
+                                            <span class="pull-right">
+                                                <input type="hidden" name="sort[]" value="{$item['sort']}"/>
+                                                <input type="checkbox" name="on[]" value="{$item['sort']}"
+                                                       class="js-switch_{$key}" {if $item['status'] == 1}checked{/if} />
+                                            </span>
+                                                    </div>
+                                                </li>
+                                                {/loop}
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">主页头部导航</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p97]" id="p97_0" value="1" {if $setting['p97']['value']== 1}checked{/if}/>
+                                    <label for="p97_0">一排导航</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p97]" id="p97_1" value="0" {if empty($setting['p97']['value'])}checked{/if}/>
+                                    <label for="p97_1">二排导航</label>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">页面返回头部</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p96]" id="p96_0" value="1" {if $setting['p96']['value']== 1}checked{/if}/>
+                                    <label for="p96_0">开启</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p96]" id="p96_1" value="0" {if empty($setting['p96']['value'])}checked{/if}/>
+                                    <label for="p96_1">关闭</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页广告区域一样式</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p110]" id="p110_0" value="1" {if $setting['p110']['value']== 1}checked{/if}/>
+                                    <label for="p110_0">图片轮播</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p110]" id="p110_1" value="0" {if empty($setting['p110']['value'])}checked{/if}/>
+                                    <label for="p110_1">图片列表</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页广告区域二样式</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p167]" id="p167_0" value="1" {if $setting['p167']['value']== 1}checked{/if}/>
+                                    <label for="p167_0">图片轮播</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p167]" id="p167_1" value="0" {if empty($setting['p167']['value'])}checked{/if}/>
+                                    <label for="p167_1">图片列表</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页头条广告</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p116]" id="p116_0" value="1" {if $setting['p116']['value']== 1}checked{/if}/>
+                                    <label for="p116_0">开启</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p116]" id="p116_1" value="0" {if empty($setting['p116']['value'])}checked{/if}/>
+                                    <label for="p116_1">关闭</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页定位</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p119]" id="p119_0" value="1" {if $setting['p119']['value']== 1}checked{/if}/>
+                                    <label for="p119_0">开启</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p119]" id="p119_1" value="0" {if empty($setting['p119']['value'])}checked{/if}/>
+                                    <label for="p119_1">关闭</label>
+                                </div>
+
+                            </div>
+                            <div style="text-align: left;padding-left: 200px;padding-top: 50px">
+                                需要先申请腾讯地图,申请后填写到基本设置下平台设置中<a href="http://lbs.qq.com/" style="color:green" target="_blank">(立即申请)</a>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页关注开关</label>
+                            <div class="col-sm-10">
+
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p113]" id="p113_1" value="1" {if $setting['p113']['value']==1} checked{/if} />
+                                    <label for="p113_1">开启</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="set[p113]"  id="p113_0" value="0" {if empty($setting['p113']['value']) } checked{/if} />
+                                    <label for="p113_0">关闭</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页关注标题</label>
+                            <div class="col-sm-6">
+                                <input name="set[p111]" class="form-control" value="{$setting['p111']['value']}"/>
+                                <span class="help-block">显示在手机首页关注标题</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">首页关注简述</label>
+                            <div class="col-sm-6">
+                                <input name="set[p112]" class="form-control" value="{$setting['p112']['value']}"/>
+                                <span class="help-block">显示在手机首页关注简述</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">页面主题色</label>
+                            <div class="col-sm-6">
+                                {php echo tpl_form_field_color('set[p121]',$setting['p121']['value'])}
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">住户中心头部图片</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('set[p123]', $setting['p123']['value'],'',$options)}
+                                <span class="help-block">高102px</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物业缴费头部图片</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_image('set[p124]', $setting['p124']['value'],'',$options)}
+                                <span class="help-block">高105px</span>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td colspan="8" style="padding-left: 150px;">
+                                    <input type="submit" name="submit" value="保存"
+                                           class="btn btn-primary col-lg-1 min-width"/>
+                                    <a href="#" class="btn btn-danger min-width js-batch js-delete"
+                                       style="margin-left: 55px;">还原设置</a>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

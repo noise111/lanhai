@@ -1,0 +1,120 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>参数设置</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+    <div class="weui-cells input-right">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">积分赠送开关</div>
+        <div class="weui-cell__bd">
+            <select class="weui-select" v-model="creditstatus">
+                <option value="1">开启</option>
+                <option value="0">关闭</option>
+            </select>
+        </div>
+        <div class="weui-cell__ft">
+            <!--<label class="weui-switch-cp">-->
+                <!--&lt;!&ndash;<input hidden="hidden" id="btn" name="btn1" type="radio" value="off" checked="checked" />&ndash;&gt;-->
+                <!--&lt;!&ndash;<input class="weui-switch-cp__input" id="item_status" name="item_status" value="1" checked="checked" type="checkbox">&ndash;&gt;-->
+                <!--<input class="weui-switch-cp__input" id="creditstatus" name="creditstatus"  type="checkbox" >-->
+                <!--<div class="weui-switch-cp__box"></div>-->
+            <!--</label>-->
+
+        </div>
+        </a>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">积分赠送比例</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" placeholder="输入赠送积分" id="integral" v-model="item.integral">
+        </div>
+        <div class="weui-cell__ft">
+            积分/元
+        </div>
+    </div>
+</div>
+<div style="margin: 20px 20px" >
+    <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+</div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item: [],
+            creditstatus:1
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('app/userinfo')}";
+            $.getJSON(url,function (ret) {
+                self.item = ret.data
+                self.creditstatus = self.item.creditstatus
+            })
+        },
+        mounted: function () {
+            var that = this
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                var url = "{php echo wxapp_url('appbusiness/setting')}";
+                self.item.creditstatus = self.creditstatus
+                $.showLoading('正在提交');
+                $.getJSON(url, self.item, function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code ==0){
+                        //提交成功提示内容: data.data.content
+                        setTimeout(function () {
+                            $.toast('添加成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+
+                })
+            },
+
+
+        }
+
+    })
+</script>
+{template 'app2/footer'}

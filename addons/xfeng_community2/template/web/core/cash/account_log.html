@@ -1,0 +1,97 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('cash',array('op' => 'account_log'))}" title="商家余额变更明细" >商家余额变更明细</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="cash"/>
+                            <input type="hidden" name="op" value="account_log"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="账号">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                            <button type="submit" name="export" value="1" id="export" class="btn btn-primary" data-loading-text="正在导出中，请勿关闭和刷新浏览器......" autocomplete="off">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>账户</th>
+                                    <th>收入/支出</th>
+                                    <th>操作人</th>
+                                    <th>操作时间</th>
+                                    <th>变更描述</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['id']}</td>
+                                    <td>{$item['realname']}</td>
+                                    <td>{if $item['creditstatus'] == 1}+{elseif $item['creditstatus'] == 2}-{/if}{$item['credit']}</td>
+                                    <td>{$item['usename']}</td>
+                                    <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                    <td>{$item['content']}</td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+    $('#export').on('click',function () {
+        var $btn = $(this).button('loading');
+        setTimeout(function () {
+            $('#export').html("导出数据");
+            $('#export').prop('disabled', false);
+            $("#export").removeClass("disabled");
+        },3000)
+    })
+</script>
+{template 'web/common/footer'}

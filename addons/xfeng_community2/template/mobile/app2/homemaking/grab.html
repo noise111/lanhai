@@ -1,0 +1,117 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id='app' v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>家政处理</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.status">
+                    <option value="0">选择处理状态</option>
+                    <option value="1">已完成</option>
+                    <option value="2">已取消</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="输入备注..." rows="3" id="remark" v-model="item.remark"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin: 20px 20px" id="submit">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            regions: [],
+            item:{
+                status:'',
+                remark:''
+            },
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appregion/list')}";
+            $.getJSON(url, function (ret) {
+                self.regions = ret.data.list
+            })
+            var url = "{php echo wxapp_url('apphomemaking/detail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('apphomemaking/grab')}";
+                self.item.id=self.id
+                if(self.item.remark == '' || self.item.status == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('处理成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'homemaking'))}";
+                        }, 500);
+                    }
+                },'json')
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

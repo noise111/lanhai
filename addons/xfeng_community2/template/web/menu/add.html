@@ -1,0 +1,39 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('menu', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;编辑菜单</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('menu',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+
+                <div class="form-group">
+                    <label for="displayorder" class="col-sm-2 control-label">排序</label>
+                    <div class="col-xs-3">
+                        <input type="text" name="displayorder" id='displayorder' class="form-control" value="{$item['displayorder']}" placeholder="排序"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="title" class="col-sm-2 control-label">菜单名称</label>
+                    <div class="col-xs-3">
+                        <input type="text" name="title" class="form-control" value="{$item['title']}" id='title' placeholder="请输入菜单名称"/>
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m">
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+
+    </form>
+                </div></div></div></div></div>
+
+{template 'web/common/footer'}

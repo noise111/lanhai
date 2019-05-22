@@ -1,0 +1,169 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <!--<div class="ibox-title">-->
+                    <!--<h5>小程序上传配置<a href="{MODULE_URL}data/wxapp/小程序打包流程.docx" target="_blank" style="font-size:16px;color:red">(下载小程序打包流程说明)</a></h5>-->
+                    <!--<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('wxapp')}"></a></h5>-->
+                <!--</div>-->
+                <ul class="nav nav-tabs">
+                    <li {if $op =='list'}class="active"{/if}><a href="{php echo $this->createWebUrl('wxapp',array('op' => 'list'))}" title="小程序列表">小程序列表</a></li>
+                    {if ($user && $menu_opss && @in_array('wxapp_add', $menu_opss)) || empty($user)}
+                    <li {if $op =='add'}class="active"{/if}><a href="{php echo $this->createWebUrl('wxapp',array('op' => 'add','id' => $id))}" title="添加小程序">添加小程序配置</a></li>
+                    {/if}
+                    <li><a href="{MODULE_URL}data/wxapp/wxapp.docx" target="_blank" style="font-size:14px;color:red">(下载小程序打包流程说明)</a></li>
+                </ul>
+                <div class="ibox-content">
+                    {if $op == 'list'}
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>小程序标题</th>
+                            <th>打包的标题</th>
+                            <th>生成压缩包的时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{$item['packtitle']}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>
+                                {if ($user && $menu_opss && @in_array('wxapp_edit', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('wxapp',array('op' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('wxapp_download', $menu_opss)) || empty($user)}
+                                <a href="#" title="下载" onclick="wxappdownload('{$item['id']}')" class="btn btn-primary btn-sm">下载</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('wxapp_del', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('wxapp',array('op' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm" data-original-title="删除" onclick="return confirm('即将删除，确认吗？')">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    {elseif $op == 'add'}
+                    <form action="" method="post" class="form-horizontal form" id="form">
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">应用APPID</label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="appid" id="appid" value="{$item['appid']}" placeholder="请输入appid">
+                                <span class="help-block">小程序的APPID.</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">应用APPSECRET</label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="appsecret" id="appsecret" value="{$item['appsecret']}" placeholder="请输入appsecret">
+                                <span class="help-block">小程序的APPSECRET.</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 小程序标题
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="title" id="title" value="{$item['title']}" placeholder="输入小程序标题">
+                                <div class="help-block">用于打包小程序进入页面的标题</div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 小程序URL
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="url" value="{$item['url']}" placeholder="输入入口url">
+                                <div class="help-block">必须支持https，且已通过域名验证，输入时请包含https，且以/结尾，打包下载后请用微信WEB开发工具上传.支持多个功能打包，例如超市：{php echo app_url('shopping')}</div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label" style="padding-top: 0"> 打包功能标题
+                            </label>
+                            <div class="col-sm-5 col-md-5">
+                                <input class="form-control" name="packtitle" id="packtitle" value="{$item['packtitle']}" placeholder="输入打包功能标题（比如小区超市）">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="id" value="{$id}">
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+    $('#submit').on('click', function () {
+        if(!$("#appid").val()){
+            alert('请填写应用APPID。');
+            return false;
+        }
+        if(!$("#appsecret").val()){
+            alert('请输入应用AppSecret。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入小程序标题。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('wxapp',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    function wxappdownload(id) {
+
+        window.location.href="{php echo $this->createWebUrl('wxapp',array('op'=>'download'))}&id="+id
+    }
+</script>

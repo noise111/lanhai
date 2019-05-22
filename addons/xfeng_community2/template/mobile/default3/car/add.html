@@ -1,0 +1,234 @@
+{template 'default2/header'}
+<style>
+    .car-detail-cells {
+        top: 0;
+    }
+
+    :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    ::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    input:-ms-input-placeholder {
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    input::-webkit-input-placeholder {
+        color: #D9D9D9;
+        opacity: 1;
+    }
+
+    .car-issue-selector {
+        color: #D9D9D9;
+    }
+    .car-detail-contain{
+        top: 0;
+    }
+</style>
+<body ontouchstart>
+<div class="car-detail-contain">
+    <div class="weui-cells car-detail-cells">
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">联系人</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入姓名" id="contact">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">手机号</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入手机号" id="mobile">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">标题</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="例如(长途/短途/上班/下班)" id="title">
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">身份选择</label>
+            </div>
+            <div class="weui-cell__bd car-issue-selector">
+                <div class="check-box fl">
+                    <label>
+                        <input type="radio" name="car-issue-name" id="car-issue-0" class="newslist" value="1"
+                               checked="checked">
+                    </label>
+                </div>
+                乘客
+            </div>
+            <div class="weui-cell__bd car-issue-selector">
+                <div class="check-box fl">
+                    <label>
+                        <input type="radio" name="car-issue-name" id="car-issue-1" class="newslist" value="2">
+                    </label>
+                </div>
+                司机
+            </div>
+        </div>
+        <div class="weui-cell" id="carIssueAdress01">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">起点</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入起点" id="start_position" >
+            </div>
+        </div>
+        <div class="weui-cell" id="carIssueAdress02">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">终点</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入终点" id="end_position" >
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd" id="carItem02">
+                <label class="weui-form-preview__label">需要座位</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="(位)" id="seat">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label" for="time1">出发时间</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="time1" type="text" value="" placeholder="2017-08-21&nbsp;18:40">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label" for="time2">返回时间</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="time2" type="text" value="" placeholder="2017-08-21&nbsp;18:40">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label">单价</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="(元/位)" id="sprice">
+            </div>
+        </div>
+    </div>
+    <div class="car-detail-btn" id="carbtn">
+        <a href="#" >
+            发布
+        </a>
+    </div>
+</div>
+
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script>
+    $("#time1").datetimePicker({
+        title: '出发时间',
+        min: "1990-12-12",
+        onChange: function (picker, values, displayValues) {
+            console.log(values);
+        }
+    });
+    $("#time2").datetimePicker({
+        title: '返回时间',
+        min: "1990-12-12",
+        onChange: function (picker, values, displayValues) {
+            console.log(values);
+        }
+    });
+</script>
+<script>
+    $("input[name='car-issue-name']").each(function () {
+        if ($(this).val() == 1) {
+            $(this).parent().parent().parent().css('color', 'red')
+        }
+        $(this).click(function (i) {
+            if ($(this).val() == 2) {
+                $(this).parent().parent().parent().css('color', '#F7624B').siblings().css('color', '#d9d9d9');
+                $("#carIssueAdress02").after(' ' +
+                    '<div class="weui-cell" id="carItem01">' +
+                    '<div class="weui-cell__hd">' +
+                    '<label class="weui-form-preview__label">途经</label>' +
+                    '</div><div class="weui-cell__bd">' +
+                    ' <input class="weui-input" type="text"  placeholder="途径地点" id="tj_position"> ' +
+                    '</div>' +
+                    '</div>');
+                $('#carItem02 .weui-form-preview__label').text('剩余座位');
+            } else if ($(this).val() == 1) {
+                $(this).parent().parent().parent().css('color', '#F7624B').siblings().css('color', '#d9d9d9');
+                $('#carItem01').remove();
+                $('#carItem02 .weui-form-preview__label').text('需要座位');
+            }
+        })
+    })
+    $(function () {
+        var lock = false;
+        $("#carbtn").click(function () {
+            var title = $("#title").val();
+            if (title == '') {
+                $.toast('标题不能为空！');
+                return false
+            };
+            var end_position = $("#end_position").val();
+            if (end_position == '') {
+                $.toast('目的地必填！');
+                return false
+            };
+            var sprice = $("#sprice").val();
+            if (sprice == '') {
+                $.toast('单价必填！');
+                return false
+            };
+            var seat = $("#seat").val();
+            if (seat == '') {
+                $.toast('座位必填！');
+                return false
+            };
+            var start_position = $("#start_position").val();
+            var type =  $('input[name="car-issue-name"]:checked').val();
+            var gotime = $("#time1").val();
+            var backtime = $("#time2").val();
+            var contact = $("#contact").val();
+            var mobile = $("#mobile").val();
+            var regionid = "{$_SESSION['community']['regionid']}";
+            if(lock) return false;
+
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('car/add')}",{title:title,end_position:end_position,sprice:sprice,seat:seat,start_position:start_position,type:type,gotime:gotime,backtime:backtime,contact:contact,mobile:mobile,regionid:regionid},function (data) {
+                if(data.err_code ==0){
+                    $.hideLoading();
+                    setTimeout(function() {
+                        //提交成功提示内容: data.data.content
+                        $.toast(data.data.content, "text");
+                        window.location.href="{php echo $this->createMobileUrl('car',array('op' => 'list'))}";
+                    }, 1000);
+                }
+                if(data.err_code ==-1){
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.err_msg, "text");
+                }
+                lock = false;
+            })
+        })
+    })
+</script>
+</body>
+</html>

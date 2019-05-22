@@ -1,0 +1,64 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('counter',array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;支付接口配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'alipay','tid' => $tid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active">
+                            <a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'alipay','tid' => $tid))}" title="支付宝" >支付宝</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'wechat','tid' => $tid))}" title="微信支付" >微信支付</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'sub','tid' => $tid))}" title="服务商支付" >服务商支付</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'swiftpass','tid' => $tid))}" title="微信支付（兴业银行）" >微信支付（兴业银行）</a></li>
+                        <li>
+                            <a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'hsyunfu','tid' => $tid))}" title="微信支付（华商云付）" >微信支付（华商云付）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('counter',array('op' => 'payapi','p' => 'chinaums','tid' => $tid))}" title="微信支付（银联）" >微信支付（银联）</a></li>
+                    </ul>
+                    <div style="margin-top: 30px">
+                    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" value="{$item['id']}" name="id" />
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付宝账号</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="account" class="form-control" value="{$item['account']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">合作者身份</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="partner" class="form-control" value="{$item['partner']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">校验密钥</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="secret" class="form-control" value="{$item['secret']}" autocomplete="off"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

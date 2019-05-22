@@ -1,0 +1,177 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('guard', array('op' => 'comb'))}"></a>&nbsp;&nbsp;&nbsp;发卡管理
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh"
+                           href="{php echo $this->createWebUrl('guard',array('op' => 'comb','p' => 'pladd'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="alert alert-info" role="alert">
+                        默认导入格式:小区/姓名/卡号/手机号/房号地址。具体请下载模板格式。
+                        <p>(<a href="{MODULE_URL}data/files/excel/guardcard.xlsx" target="_blank" style="font-size:16px;color:red">点击下载上传发卡格式示例</a>)</p>
+                    </div>
+                    <form class="form-horizontal form" id="form" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-5">
+                                <select name='regionid' class="form-control" id="regionid">
+                                    <option>请选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id'] == $item['regionid']}selected {/if} >
+                                    {$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: none" id="device">
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">选择门禁</label>
+                                <div class="col-sm-6 col-xs-6" id="category">
+                                    {if $categories}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" id="categoryid_00" data-group='categoryss'>
+                                        <label for="categoryid_00">全部</label>
+                                    </div>
+                                    {loop $categories $category}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" value="{$category['id']}" id="categoryid_{$category['id']}" data-group='categoryss' {if @in_array($category['id'],$categoryids)}checked{/if} >
+                                        <label for="categoryid_{$category['id']}">{$category['title']}</label>
+                                    </div>
+                                    {/loop}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">门禁截止时间</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_date('enddate',$enddate,true);}
+                                <span class="help-block">默认有效时间1年</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">发卡数据</label>
+                            <div class="col-sm-4">
+                                <input type="file" name="guard" class="form-control" id="guard">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" id="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                var regionid = data.regionid;
+                $.post("{php echo $this->createWebUrl('guard',array('op'=> 'device'))}",{regionid:regionid},function (data) {
+                    var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+                    for(var o in data){
+                        content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categorys'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                    }
+                    $("#category").html(content);
+                    $("#categoryid_0").click(function() {
+                        var checked = $(this).get(0).checked;
+                        var group = $(this).data('group');
+                        $("input:checkbox[data-group='" +group + "']").each(function(){
+                            $(this).get(0).checked = checked;
+                        })
+                    });
+                    $("#device").show();
+                },'json')
+            }
+        },'json')
+    })
+
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.post("{php echo $this->createWebUrl('guard',array('op'=> 'device'))}",{regionid:regionid},function (data) {
+            var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+            for(var o in data){
+                content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='deviceids[]' id='categoryid_"+data[o].id+"' data-group='categorys'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+            }
+            $("#category").html(content);
+            $("#categoryid_0").click(function() {
+                var checked = $(this).get(0).checked;
+                var group = $(this).data('group');
+                $("input:checkbox[data-group='" +group + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                })
+            });
+            $("#device").show();
+        },'json')
+    })
+</script>
+<script>
+    $('#submit').on('click', function () {
+        $('#submit').html("正在提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var regionid = $("#regionid option:selected").val();
+        var ids = '';
+        $("input:checkbox[name='deviceids[]']:checked").each(function(){
+            var t1 = $(this).val();
+            ids += t1+',';
+        });
+        var formData = new FormData();
+        formData.append('guard', $('#guard')[0].files[0]);
+        formData.append('regionid', regionid);
+        formData.append('ids', ids);
+        formData.append('enddate', $("input[name='enddate']").val());
+        $.ajax({
+            url : "{php echo $this->createWebUrl('guard',array('op'=>'comb','p' => 'pladd'))}",
+            type : "POST",
+            cache: false,
+            data : formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success : function(data) {
+                alert(data.content);
+                $('#submit').html("提交");
+                $('#submit').removeAttr("disabled");
+                return ;
+            },
+            error : function(data) {
+
+            }
+        });
+    })
+</script>

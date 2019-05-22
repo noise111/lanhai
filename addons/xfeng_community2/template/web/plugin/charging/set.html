@@ -1,0 +1,301 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <!--<li {if $op =='cloud'}class="active"{/if}>-->
+                            <!--<a href="{php echo $this->createWebUrl('charging',array('op' => 'cloud'))}" title="云端参数">云端参数</a></li>-->
+                        <li {if $op =='setting'}class="active"{/if}><a href="{php echo $this->createWebUrl('charging',array('op' => 'setting'))}" title="基本设置">基本设置</a></li>
+                        <li {if $op =='slide' && $p == 'list'}class="active"{/if}><a href="{php echo $this->createWebUrl('charging',array('op' => 'slide'))}" title="幻灯设置">幻灯设置</a></li>
+                        {if $op =='slide' && $p == 'add'}<li {if $op =='slide' && $p == 'add'}class="active"{/if}><a href="{php echo $this->createWebUrl('charging',array('op' => 'slide','p' => 'add','id' => $id))}" title="添加幻灯">添加幻灯</a></li>{/if}
+                        <li {if $op =='set'}class="active"{/if}><a href="{php echo $this->createWebUrl('charging',array('op' => 'set'))}" title="充值说明">充值说明</a></li>
+                        <!--<li {if $op =='chongdian'}class="active"{/if}><a href="{php echo $this->createWebUrl('charging',array('op' => 'chongdian'))}" title="充电说明">充电说明</a></li>-->
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" method="post" class="form-horizontal form" id="form">
+                            {if $op =='cloud'}
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="AppId" class="col-sm-2 control-label">AppId</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p107]" id='AppId' class="form-control"
+                                           value="{$set['p107']['value']}"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="AppSecret" class="col-sm-2 control-label">AppSecret</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p108]" id='AppSecret' class="form-control"
+                                           value="{$set['p108']['value']}"/>
+                                </div>
+                            </div>
+                            {elseif $op =='setting'}
+                            <div class="form-group">
+                                <label for="AppId" class="col-sm-2 control-label">充电柱独立支付</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" name="set[x80]" id="x80" class="js-switch_18" {if $set['x80']['value']}checked{/if}/>
+                                    <span class="help-block">开启后，充电柱缴费将不在缴纳到平台，直接缴纳到投放的账户</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="AppId" class="col-sm-2 control-label">是否开启小区绑定</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" name="set[p146]" id="p146" class="js-switch_19" {if $set['p146']['value']}checked{/if}/>
+                                    <span class="help-block">默认不限制小区,所有用户可见，开启后需要先选择小区绑定</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p144" class="col-sm-2 control-label">充电开始通知模板消息ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p144]" id="p144" class="form-control"
+                                           value="{$set['p144']['value']}"/>
+                                    <span class="help-block">充电开始通知(OPENTM416619812)</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p145" class="col-sm-2 control-label">充电结束通知模板消息ID</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p145]" id="p145" class="form-control"
+                                           value="{$set['p145']['value']}"/>
+                                    <span class="help-block">充电结束通知(OPENTM411153708)</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p149" class="col-sm-2 control-label">充电余额提醒</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p149]" id="p149" class="form-control"
+                                           value="{$set['p149']['value']}"/>
+                                    <span class="help-block">低于该余额提醒用户充值</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p151" class="col-sm-2 control-label">积分抵扣开关</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" name="set[p151]" id="p151" class="js-switch_20" {if $set['p151']['value']}checked{/if}/>
+                                    <span class="help-block">开启后，充电柱缴费将不在缴纳到平台，直接缴纳到投放的账户</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p150" class="col-sm-2 control-label">最高抵扣积分</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="set[p150]" id="p150" class="form-control"
+                                           value="{$set['p150']['value']}"/>
+                                    <span class="help-block">抵扣积分的最高值</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="p152" class="col-sm-2 control-label">抵扣积分比例</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <input type="text" name="set[p152]" id="p152" class="form-control"
+                                               value="{$set['p152']['value']}"/>
+                                        <span class="input-group-addon">元/积分</span>
+                                    </div>
+                                    <span class="help-block">抵扣积分的比例</span>
+                                </div>
+                            </div>
+                            {elseif $op =='payapi'}
+
+                            {elseif $op == 'slide' && $p == 'list'}
+                            <div class="row">
+                                <div class="col-sm-12 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('charging_slideAdd', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('charging',array('op' => 'slide','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加幻灯</a>
+                                    {/if}
+                                </div>
+                            </div>
+                            <table class="table table-bordered table-striped">
+                                <thead class="navbar-inner">
+                                <tr>
+                                    <th class="col-md-1">图片</th>
+                                    <th class="col-md-3">标题</th>
+                                    <th class="col-md-2">状态</th>
+                                    <th style="width:60%">操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <a href="#" class="thumbnail" style="margin-bottom: 0px;">
+                                            <img src="{php echo tomedia($item['thumb'])}" alt="...">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {$item['title']}
+                                    </td>
+                                    <td>{if $item['status'] == 1}<span class="label label-success">启用</span> {else}<span class="label label-default">禁用</span> {/if}
+                                    </td>
+                                    <td>
+                                        {if ($user && $menu_opss && @in_array('charging_slideEdit', $menu_opss)) || empty($user)}
+                                        <a href="{php echo $this->createWebUrl('charging',array('op' => 'slide','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('charging_slideDel', $menu_opss)) || empty($user)}
+                                        <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('charging',array('op' => 'slide','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                                {/if}
+                                </thead>
+                            </table>
+                            {elseif $op == 'slide' && $p == 'add'}
+                            <input type="hidden" name="id" value="{$item[id]}">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">排序</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    <input type="text" class="form-control" placeholder="" name="displayorder" value="{$item['displayorder']}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">幻灯标题</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    <input type="text" class="form-control" placeholder="" name="title" id="title" value="{$item['title']}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">幻灯图片</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    {php echo tpl_form_field_image('thumb', $item['thumb'])}
+                                    <span class="help-block">建议比例：320*180</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">幻灯链接</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    {php echo tpl_form_field_link('url', $item['url'], array('css' => array('input' => ' input-sm', 'btn' => ' btn-sm')));}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">展示时间</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    {php echo tpl_form_field_daterange('birthtime', array('starttime' => $starttime,'endtime' =>$endtime));}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">状态</label>
+                                <div class="col-sm-5 col-xs-5">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="status" id="s2_2" value="1" {if $item['status']==1 || empty($item['type'])}checked="checked" {/if} />
+                                        <label for="s2_2">显示</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="status" id="s2_1" value="2" {if $item['status']==2}checked="checked" {/if} />
+                                        <label for="s2_1">隐藏</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交
+                                    </button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                            {elseif $op == 'set'}
+                            <div class="form-group">
+                                <!--<label for="p153" class="col-sm-2 control-label">充电柱充值说明</label>-->
+                                <div class="col-sm-12">
+                                    {php echo tpl_ueditor('set[p153]', $set['p153']['value']);}
+                                </div>
+                            </div>
+                            {elseif $op == 'chongdian'}
+                            <!--<div class="form-group">-->
+                                <!--<label for="p153" class="col-sm-2 control-label">充电柱充值说明</label>-->
+                                <!--<div class="col-sm-12">-->
+                                    <!--<textarea class="form-control" name="set[p160]" style="height: 180px">{$set['p160']['value']}</textarea>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            {/if}
+                            {if $op =='cloud' || $op =='setting' || $op == 'set' || $op == 'chongdian'}
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                    </button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                            {/if}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            $.post("{php echo $this->createWebUrl('updatekey')}", {
+                xqkey: xqkey,
+                status: status,
+            }, function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+    $('#submit').on('click', function () {
+        if (!$("#title").val()) {
+            alert('请输入幻灯标题。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('charging',array('op'=>'slide','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+{template 'web/common/footer'}

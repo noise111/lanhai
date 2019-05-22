@@ -1,0 +1,91 @@
+{template 'default/header'}
+<body class="max-width bg-f2">
+<div class="page">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+        <h1 class="title txt-fff">我的订单</h1>
+    </header>
+    <div class="content">
+        <div class="buttons-tab">
+            <!--<a href="#tab1" class="tab-link button {if empty($enable)}active {/if}" onclick="xqcoupon(3)">全部</a>-->
+            <a href="#tab1" class="tab-link button {if $status == 3 || empty($status)}active {/if}" onclick="xqcoupon(3)">待付款</a>
+            <a href="#tab2" class="tab-link button {if $status == 1}active {/if}" onclick="xqcoupon(1)">待使用</a>
+            <a href="#tab3" class="tab-link button {if $status == 2}active {/if}" onclick="xqcoupon(2)">已使用</a>
+        </div>
+        <div class="tabs">
+            <div id="tab1" class="tab active" {if $status == 3 || empty($status)}style="display:block"{/if}>
+                <div class="coupons clearfloat box-s">
+                    {if $status == 3 || empty($status)}
+                    {loop $list $item}
+                    <div class="list clearfloat fl pull-left">
+                        <div class="left clearfloat fl pull-left" style="font-size: 24px;background-color:white">
+                            <img src="{php echo tomedia($item['thumb']);}" style='width: 2rem;height: 2rem;'>
+                        </div>
+                        <div class="right clearfloat fl box-s pull-left" style="padding:0 0 5% 3%;">
+                            <p class="tit" style="font-size: 18px;">
+                                {$item['title']}   {$item['marketprice']}元
+                            </p>
+                            <p class="time" style="width: 100px;">
+                                <a class="button button-danger" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'pay','orderid' => $item['id']))}'">立即支付</a>
+                            </p>
+                        </div>
+                    </div>
+                    {/loop}
+                    {/if}
+                </div>
+            </div>
+            <div id="tab2" class="tab" {if $status == 1}style="display:block"{/if}>
+                <div class="coupons clearfloat box-s">
+                    {if $status == 1}
+                    {loop $list $item}
+                    <div class="list clearfloat fl pull-left">
+                        <div class="left clearfloat fl pull-left" style="font-size: 24px;">
+                            <span>¥</span>{$item['price']}
+                        </div>
+                        <div class="right clearfloat fl box-s pull-left" style="padding: 3% 0 5% 3%;">
+                            <p class="tit">
+                                优惠码：{$item['couponsn']}
+                            </p>
+                            <p class="time" style="font-size: 14px;">
+                                有效时间：{php echo date('Y-m-d',$item['starttime'])}—{php echo date('Y-m-d',$item['endtime'])}
+                            </p>
+                        </div>
+                    </div>
+                    {/loop}
+                    {/if}
+                </div>
+            </div>
+            <div id="tab3" class="tab" {if $status == 2}style="display:block"{/if}>
+                <div class="coupons clearfloat box-s">
+                    {if $status == 2}
+                    {loop $list $item}
+                    <div class="list clearfloat fl pull-left  leftwo">
+                        <div class="left clearfloat fl pull-left" style="font-size: 24px;">
+                            <span>¥</span>{$item['price']}
+                        </div>
+                        <div class="right clearfloat fl box-s pull-left" style="padding: 3% 0 5% 3%;">
+                            <p class="tit">
+                                优惠码：{$item['couponsn']}
+                            </p>
+                            <p class="time" style="font-size: 14px;">
+                                有效时间：{php echo date('Y-m-d',$item['starttime'])}—{php echo date('Y-m-d',$item['endtime'])}
+                            </p>
+                        </div>
+                    </div>
+                    {/loop}
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+<script>
+    function xqcoupon(status) {
+        var status =status;
+        window.location.href="{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon'))}&status="+status;
+    }
+</script>
+</html>

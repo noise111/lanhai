@@ -1,0 +1,273 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $p=='list'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks',array('op' => 'camera','p' => 'list'))}" title="管理车道" >管理车道</a></li>
+                        {if $p=='add'}
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'camera','p' => 'add','id'=>$id))}" title="添加车道" >添加车道</a></li>
+                        {/if}
+                    </ul>
+<!-- 车道列表 -->
+{if $p == 'list'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="device"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('parks_cameraAdd', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'camera','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加车道</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th class="text-center">id</th>
+                                <th>车道名称</th>
+                                <th>进出类型</th>
+                                <th>所属车场</th>
+                                <th>安装时间</th>
+                                <th>使用年限</th>
+                                <th>维护次数</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td class="text-center color-gray">{$item['id']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{if $item['type']==1}入口{elseif $item['type']==2}出口{/if}</td>
+                                <td>{$item['parkTitle']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['installtime'])}</td>
+                                <td>{$item['service_life']}年</td>
+                                <td>{$item['service_num']}次</td>
+                                <td class="color-default">
+                                    {if ($user && $menu_opss && @in_array('parks_cameraEdit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'camera','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_cameraOpen', $menu_opss)) || empty($user)}
+                                    <a data-target="#myModal2" data-toggle="modal" onclick="change(this)" data-id="{$item['id']}" data-type="{$item['type']}" title="开闸键" class="btn btn-success btn-sm">开闸键</a>
+                                    {/if}
+                                    <!--<a title="查看参数" data-target="#myModal" data-toggle="modal" data-id="{$item['id']}" class="showinfo">查看参数</a>-->
+                                    {if ($user && $menu_opss && @in_array('parks_cameraDel', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'camera','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('此操作不可恢复，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 254px; height: 140px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">信息</h4>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <input type='hidden' name='id' id='id' class="form-control" />
+                <input type='hidden' name='type' id='type' class="form-control" />
+                <div class="modal-body">
+                    <div><i class="wi wi-data-synchro" style="color:yellow"></i>是否开闸</div>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class="btn btn-primary" name="open" value="确定">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
+
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">车道</h4>
+            </div>
+            <div class="modal-body" id="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function change(obj) {
+        $("#id").val(obj.getAttribute("data-id"));
+        $("#type").val(obj.getAttribute("data-type"));
+    }
+    $(document).ready(function(){
+        $(".showinfo").each(function(){
+            $(this).click(function(){
+                var id = $(this).attr('data-id');
+                $.ajax({
+                    url : "{php echo $this->createWebUrl('parks',array('op'=>'camera','op'=>'detail'))}",
+                    type:'post',
+                    data :{
+                        id : id
+                    },
+                    success:function(res)
+                    {
+                        var data = $.parseJSON(res);
+                        var html = "";
+                        html += '<p>'+data.content+'</p>';
+
+                        $("#modal-body").html(html);
+                    }
+                });
+            });
+        });
+    });
+</script>
+{/if}
+<!-- 摄像机添加编辑 -->
+{if $p == 'add'}
+                    <div class="ibox-content">
+                        <form action="" method="post" class="form-horizontal form" onsubmit="return check(this);">
+                            <input type="hidden" name="id" value="{$id}"/>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">车场</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="pid" id="pid">
+                                        <option value="0">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $item['pid'] == $park['id']}selected="selected"{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">设备</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="deviceid" id="deviceid">
+                                        <option value="0">请选择设备</option>
+                                        {loop $devices $k $device}
+                                        <option value="{$device['id']}" {if $item['deviceid'] == $device['id']}selected="selected"{/if}>{$device['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">车道名称</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="title" class="form-control" value="{$item['title']}" placeholder="请选输入车道名称"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">车道类型</label>
+                                <div class="col-sm-4">
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type_1" value="1" {if $item['type'] == 1 || empty($item['type'])}checked{/if} />
+                                        <label for="type_1">入口</label>
+                                    </div>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" name="type" id="type_2" value="2" {if $item['type'] == 2}checked{/if} />
+                                        <label for="type_2">出口</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">安装时间</label>
+                                <div class="col-sm-4">
+                                    {php echo tpl_form_field_date('installtime',$item['installtime'],true);}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">使用年限</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="service_life" class="form-control" value="{$item['service_life']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">维护次数</label>
+                                <div class="col-sm-4">
+                                    <input type="number" name="service_num" class="form-control" value="{$item['service_num']}" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">参数介绍</label>
+                                <div class="col-sm-10">
+                                    {php echo tpl_ueditor('content',$item['content']);}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+<script>
+    function check(form) {
+        if (form['pid'].value ==='0') {
+            alert('请选择车场。');
+            return false;
+        }
+        if (form['deviceid'].value ==='0') {
+            alert('请选择设备。');
+            return false;
+        }
+        if (!form['title'].value) {
+            alert('请选输入车道名称。');
+            return false;
+        }
+        return true;
+    }
+    $('#pid').change(function () {
+        var pid = $("#pid option:selected").val();
+        $.post("{php echo $this->createWebUrl('parks',array('op'=>'camera','p'=> 'deviceList'))}",{pid:pid},function (data) {
+            var content = '<option value="0">请选择设备</option>';
+            var devices = data;
+            for(var o in devices){
+                content +="<option value='"+devices[o].id+"'>"+devices[o].title+"</option>";
+            }
+            $("#deviceid").html(content);
+        },'json')
+    })
+</script>
+{/if}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

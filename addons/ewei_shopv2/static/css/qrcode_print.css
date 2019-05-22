@@ -1,0 +1,55 @@
+#print_area{
+    background: #f5f7f9;
+  }
+.qrcode-container {
+    margin-left: 0px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    background: #ffffff;
+    color: #000000;
+    font-size: 12px;
+    height: 169px;
+
+}
+#print_batch .qrcode-container:last-child{
+    height: 150px;
+}
+
+#print_area .qrcode-container:last-child{
+    height: 150px;
+}
+  
+.qrcode-container .left {
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    margin-right:7px;
+    margin-left:5px;
+    margin-top:5px;
+}
+.qrcode-container .left div {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+.qrcode-container .left .title {
+    font-size: 14px;
+    text-align: center;
+
+}
+.qrcode-container .left img {
+    width: 120px;
+    height: 120px;
+}
+.qrcode-container .right {
+    width: 180px;
+    height: 100%;
+    line-height:160%;
+    padding-left:3px;
+    padding-right:22px;
+    margin-top:5px;
+}
+.qrcode-container .right .batch{
+    margin-top: 0px;
+    margin-bottom:3px;
+}

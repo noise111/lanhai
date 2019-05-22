@@ -1,0 +1,235 @@
+{template 'default2/header'}
+<style>
+    .weui-panel {
+        margin-top: 0
+    }
+
+    .weui-panel__bd {
+        padding: 10px;
+    }
+
+    .weui-panel:before {
+        border-top: none;
+    }
+
+    .weui-form-preview {
+        margin-top: 10px;
+    }
+
+    .weui-form-preview__hd {
+        padding: 8px 15px;
+        line-height: 1.2;
+        font-size: 0.75rem;
+        border-left: 2px solid #F7624B;
+    }
+
+    .weui-form-preview__hd:after {
+        left: 0;
+    }
+
+    .weui-popup__modal {
+        background: #ffffff;
+        border-top: 1px solid #d9d9d9;
+    }
+
+    .address_form_ft {
+        margin-bottom: 10px;
+    }
+
+    .weui-btn {
+        font-size: 0.9em;
+    }
+    .address_tabbar{
+        margin: 20px auto;
+    }
+</style>
+
+<body>
+<div id="list"></div>
+<script type="text/html" id="xq_list">
+<div class="group_grid_img">
+    <img src="{{d.pic}}"/>
+</div>
+<div class="weui-panel">
+    <div class="weui-panel__bd">
+        <div class="g-detail-price">
+            <span class="fl money"><em>￥</em>{{d.marketprice}}</span>
+            <del class="fl delmoney">￥{{d.productprice}}</del>
+            <i class="fr num">已团{{d.sold}}件剩余{{d.total}}件</i>
+        </div>
+        <div class="g-detail-desc">
+            <h2>{{d.title}}</h2>
+            <p>{{d.instruction}}</p>
+        </div>
+    </div>
+</div>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">团购内容</label>
+        </div>
+    </div>
+    <div class="weui-form-preview__bd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">商品</label>
+            <span class="weui-form-preview__value">{{ d.title }}</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">数量</label>
+            <span class="weui-form-preview__value">1份</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">价格</label>
+            <span class="weui-form-preview__value">{{ d.marketprice }}元</span>
+        </div>
+    </div>
+    <a class="weui-cell weui-cell_access open-popup" data-target="#full" id="openFull">
+        <div class="weui-cell__bd">
+            <p class="image-text">查看图文详情</p>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+</div>
+<div class="weui-form-preview">
+    <div class="weui-form-preview__hd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">购买须知</label>
+        </div>
+    </div>
+    <div class="weui-form-preview__bd">
+        <div style="text-align: left;line-height: 1.2">
+            {{d.description}}
+        </div>
+    </div>
+</div>
+<div class="address_form_ft">
+    <a href="javascript:;" class="weui-btn register-guide-btn open-popup" data-target="#half" id="group-buy">立即购买</a>
+</div>
+<div id="full" class='weui-popup__container'>
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div class="close-popup close-popup1">
+            商品详情<i class="iconfont">&#xe60e;</i>
+        </div>
+        <div class="weui-form-preview" style="margin-top:0px;">
+            <div class="weui-form-preview__bd">
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">商品</label>
+                    <span class="weui-form-preview__value">{{ d.title }}</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">数量</label>
+                    <span class="weui-form-preview__value">1份</span>
+                </div>
+                <div class="weui-form-preview__item">
+                    <label class="weui-form-preview__label">价格</label>
+                    <span class="weui-form-preview__value">{{ d.marketprice }}元</span>
+                </div>
+                <div>
+                   {{d.content}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="half" class='weui-popup__container popup-bottom'>
+    <div class="weui-popup__modal">
+        <div class="close-popup close-popup1">
+            <i class="iconfont">&#xe60e;</i>
+        </div>
+        <div class="group-order-list">
+            <div class="group-order-img fl">
+                <img src="{{d.pic}}"/>
+            </div>
+            <div class="group-order-item fl">
+                <p>{{d.title}}</p>
+                <p class="group-order-item-price"><em>￥</em>{{d.marketprice}}</p>
+            </div>
+        </div>
+        <div class="group-order-cart">
+            <label>购买数量:</label>
+            <div class="shop-arithmetic">
+                <i class="shop-minus" onclick="shopminus()">-</i>
+                <span class="zi">1</span>
+
+                <input type="hidden" value="1"  readonly="value" name="total" id="total">
+
+                <i class="shop-add" onclick="shopadd()">+</i>
+
+            </div>
+        </div>
+        <div class="address_tabbar" id="submit" onclick="buy()">
+            <a href="javascript:;" class="weui-btn register-guide-btn">确认订单</a>
+        </div>
+    </div>
+</div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var gid = "{$_GPC['gid']}";
+        var url = "{php echo wxapp_url('coupon/detail')}"+"&gid="+gid;
+        _loaddata(url, $("#list"), 'xq_list', true);
+
+
+    })
+</script>
+<script>
+
+    $(document).on("open", ".weui-popup-modal", function () {
+
+    }).on("close", ".weui-popup-modal", function () {
+
+    });
+    $('#group-buy').click(function () {
+        $('.group-order-market').slideDown();
+        $("html,body").animate({scrollTop: 0}, 500);
+    });
+    var lock = false;
+    function buy() {
+        var total = $("#total").val();
+        var gid = "{$_GPC['gid']}";
+        var addressid = "{$_SESSION['community']['addressid']}";
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('coupon/confirm')}";
+        if(lock) return false;
+        lock = true;
+        $.showLoading('正在提交');
+        $.getJSON(url,{total:total,gid:gid,addressid:addressid,regionid:regionid},function (data) {
+            if(data.err_code ==0){
+                window.location.href=data.data.url;
+            }
+            if(data.err_code ==-1){
+                $.toast(data.err_msg);
+            }
+            lock = false;
+        })
+    }
+
+    //数量加减
+    function shopminus() {
+        var $tObj = $('.shop-arithmetic>.zi');
+        var num = parseInt($tObj.text())
+        if (num > 0 ) {
+            $tObj.text(num - 1);
+        }
+        $("#total").val(num - 1);
+        console.log('minus', num)
+    }
+
+    // 增加数量
+    function shopadd() {
+        var $tObj = $('.shop-arithmetic>.zi');
+        var num = parseInt($tObj.text())
+        $tObj.text(num + 1);
+        $("#total").val(num + 1);
+        console.log('add', num)
+    }
+
+</script>
+</body>
+</html>

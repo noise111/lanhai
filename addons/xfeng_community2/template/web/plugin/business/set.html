@@ -1,0 +1,205 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <!--<div class="ibox-title">-->
+                    <!--<h5>基本设置</h5>-->
+                    <!--<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('business',array('op' => 'set'))}"></a></h5>-->
+                <!--</div>-->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'set'))}" title="平台设置" >平台设置</a></li>
+                    <!--{if $user['type']==5 || empty($user) || $user['type']==1}-->
+                    <!--<li><a href="{php echo $this->createWebUrl('business',array('op' => 'dpset'))}" title="商家设置" >商家设置</a></li>-->
+                    <!--{/if}-->
+                </ul>
+                <div class="ibox-content">
+                <form action="" method="post" role="form">
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                                <thead>
+                                <tr>
+                                    <th class="col-sm-2">商家设置</th>
+                                    <th class="col-sm-3">说明</td>
+                                    <th class="col-sm-4"></th>
+                                    <th class="col-sm-3">是否启用</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="title">商家独立支付</td>
+                                    <td>
+                                        开启后，启用独立支付，直接支付到商家账户，平台和小区将没有提成
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p45" class="js-switch_9" {if $set['p45']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">平台提成</td>
+                                    <td>
+                                        开启商家提成后，粉丝购买商家商品，平台将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" class="js-switch_1" id="p2" {if $set['p2']['value']}checked{/if}/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">小区提成</td>
+                                    <td>
+                                        开启小区提成后，粉丝购买商家商品，小区将获取对应的提成。
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="" id="p147" class="js-switch_20" {if $set['p147']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="title">商家定位</td>
+                                    <td>
+                                        开启后，商家通过通过定位显示，默认不开定位
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                            <input type="tel" name="set[p11]" value="{$set['p11']['value']}" class="form-control"
+                                                   placeholder="输入定位范围"/>
+                                            <span class="input-group-addon">千米（KM）</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="checkbox" name="" id="p10" class="js-switch_13" {if $set['p10']['value']}checked{/if}/>
+
+                                    </td>
+                                </tr>
+                                <!--<tr>-->
+                                    <!--<td class="title">商家积分比例</td>-->
+                                    <!--<td>-->
+                                        <!--开启后，业主在线购买商品或者线下扫码支付会获得对应的积分-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="set[p15]" class="form-control" value="{$set['p15']['value']}"/>-->
+                                            <!--<span class="input-group-addon">积分/元</span>-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<input type="checkbox" name="" id="p14" class="js-switch_16" {if $set['p14']['value']}checked{/if}/>-->
+
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <tr>
+                                    <td class="title">商家充值赠送积分</td>
+                                    <td>
+                                        商家在线充值购买积分比例
+                                    </td>
+                                    <td>
+                                        <div class="input-group">
+                                        <input type="text" name="set[p100]" class="form-control" value="{$set['p100']['value']}" placeholder=""/>
+                                        <span class="input-group-addon">积分/元</span>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <!--<tr>-->
+                                    <!--<td class="title">用户消费积分抵扣比例</td>-->
+                                    <!--<td>-->
+                                        <!--用户在商家消费后，用积分抵扣金额比例，用户消费后，默认抵扣费用先结算到商家的余额，商家在进行提现。(该抵扣的费用，由平台结算给商家。)-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="set[p95]" class="form-control" value="{$set['p95']['value']}" placeholder=""/>-->
+                                            <!--<span class="input-group-addon">积分/元</span>-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td class="title">用户消费最高抵扣积分</td>-->
+                                    <!--<td>-->
+                                        <!--用户在商家消费后，用积分抵扣金额，只能消费设置的最高积分内进行积分抵扣-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<div class="input-group">-->
+                                            <!--<input type="text" name="set[p140]" class="form-control" value="{$set['p140']['value']}" placeholder=""/>-->
+                                            <!--<span class="input-group-addon">积分</span>-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<input type="checkbox" name="" id="p139" class="js-switch_18" {if $set['p139']['value']}checked{/if}/>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td class="title">用户消费随机减免</td>-->
+                                    <!--<td>-->
+                                        <!--用户在商家消费后，随机减免设置的金额-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<div class="input-group" style="width: 50%;float: left">-->
+                                            <!--<input type="text" name="set[p142]" class="form-control" value="{$set['p142']['value']}" placeholder="最低金额"/>-->
+                                            <!--<span class="input-group-addon">元</span>-->
+                                        <!--</div>-->
+                                        <!--<div class="input-group" style="width: 50%;float: left">-->
+                                            <!--<input type="text" name="set[p143]" class="form-control" value="{$set['p143']['value']}" placeholder="最高金额"/>-->
+                                            <!--<span class="input-group-addon">元</span>-->
+                                        <!--</div>-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<input type="checkbox" name="" id="p141" class="js-switch_19" {if $set['p141']['value']}checked{/if}/>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+
+                                </tbody>
+                            </table>
+                    <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+$(function () {
+    $(':checkbox').on('change', function (e, state) {
+        $this = $(this);
+        var xqkey = $this.attr('id');
+        var status = this.checked ? 1 : 0;
+        $this.val(status);
+        var regionid = '{$regionid}';
+        $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+        })
+    });
+    $('.btn').hover(function () {
+        $(this).tooltip('show');
+    }, function () {
+        $(this).tooltip('hide');
+    });
+});
+
+</script>
+

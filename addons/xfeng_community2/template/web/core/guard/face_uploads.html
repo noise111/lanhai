@@ -1,0 +1,88 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'face'))}" title="人脸授权" >人脸授权</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceUploads','uid' => $uid))}" title="上传记录" >上传记录</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="guard"/>
+                            <input type="hidden" name="op" value="faceUploads"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+
+                                </div>
+                                <!--<div class="col-sm-4 m-b-xs">-->
+                                    <!--<div class="input-group">-->
+                                        <!--<input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="姓名">-->
+                                        <!--<span class="input-group-btn">-->
+                                        <!--<button type="submit" class="btn btn-primary"> 搜索</button>-->
+                                        <!--<input type="hidden" name="token" value="{$_W['token']}"/>-->
+                                    <!--</span>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>姓名</th>
+                                    <th>图片</th>
+                                    <th>设备</th>
+                                    <th>时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['id']}</td>
+                                    <td>{$item['realname']}</td>
+                                    <td>
+                                        {loop $item['images'] $img}
+                                        {if $img}
+                                        <a href="{$img}" target="_blank"><img src="{$img}" alt="" style="height: 50px;"></a>
+                                        {/if}
+                                        {/loop}
+                                    </td>
+                                    <td>{$item['deviceTitle']}</td>
+                                    <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

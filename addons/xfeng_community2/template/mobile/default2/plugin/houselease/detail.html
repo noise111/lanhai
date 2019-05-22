@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>房屋详情</title>
+    <script src="//res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+    <script>
+        $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
+
+    <script src="../addons/xfeng_community/libs/js/axios/0.16.2/axios.min.js"></script> 
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/swiper4.min.js"></script>
+    <script src="../addons/xfeng_community/template/mobile/default2/static/js/jquery-weui.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/demos.css">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/swiper.css">
+    <link href="/addons/xfeng_community/template/mobile/default2/plugin/static/css/vendor.css?26317966ae924596e0b8" rel="stylesheet">
+    <link href="/addons/xfeng_community/template/mobile/default2/plugin/static/css/mobile/houselease/detail.css?26317966ae924596e0b8" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" type="text/css" href="../addons/xfeng_community/template/mobile/default2/static/css/main.css">
+
+    <script type="text/javascript">
+        var _hmt = _hmt || [];
+        // window.settings = {php echo json_encode($this->settings, JSON_UNESCAPED_UNICODE);};
+        // jssdk config 对象
+        jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} || {};
+        // 是否启用调试
+        jssdkconfig.debug = false;
+        jssdkconfig.jsApiList = [
+            'checkJsApi',
+            'onMenuShareTimeline',
+            'onMenuShareAppMessage',
+            'onMenuShareQQ',
+            'onMenuShareWeibo',
+            'hideMenuItems',
+            'showMenuItems',
+            'hideAllNonBaseMenuItem',
+            'showAllNonBaseMenuItem',
+            'translateVoice',
+            'startRecord',
+            'stopRecord',
+            'onRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'uploadVoice',
+            'downloadVoice',
+            'chooseImage',
+            'previewImage',
+            'uploadImage',
+            'downloadImage',
+            'getNetworkType',
+            'openLocation',
+            'getLocation',
+            'hideOptionMenu',
+            'showOptionMenu',
+            'closeWindow',
+            'scanQRCode',
+            'chooseWXPay',
+            'openProductSpecificView',
+            'addCard',
+            'chooseCard',
+            'openCard',
+            'openAddress'
+        ];
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            // var sharedata = window.settings.share || null;
+            var sharedata = {php echo json_encode($_share);};
+            wx.onMenuShareAppMessage(sharedata);
+            wx.onMenuShareTimeline(sharedata);
+            wx.onMenuShareQQ(sharedata);
+            wx.onMenuShareWeibo(sharedata);
+        });
+    </script>
+</head>
+<body style="background: #efeff4">
+    <div style="height:100%;">
+        <div class="weui-tab container">
+            <div class="weui-tab__panel vux-fix-safari-overflow-scrolling">
+                <!-- 幻灯片 -->
+                <div class="swiper-container">
+                        <div class="swiper-wrapper">
+
+                        </div>
+                        <div class="swiper-pagination"></div>
+                </div>
+                <!-- 标题 -->
+                <div class="detail_div01">
+                   <div class="detail_title">
+                      <span>
+                         整租
+                      </span>
+                      <font>
+                          房屋标题 <b></b> 1室1厅
+                      </font>
+                   </div>
+                   <div class="detail_price">
+                        ￥<span>1500</span>/月
+                   </div>
+                   <ul class="detail_label">
+                        <li>
+                                离公交近
+                        </li>
+                        <li>
+                                首次出租
+                        </li>
+                    </ul>
+                </div>
+
+                <div  class="detail_preview">
+                    <div  class="detail_preview_title">房屋信息</div>
+                        <ul  class="detail_preview_info">
+                            <li ><span>面积</span><font>30㎡</font></li>
+                            <li ><span>朝向</span><font>朝北</font></li>
+                            <li ><span>户型</span><font>1室1厅</font></li>
+                            <li ><span>楼层</span><font>4/8层</font></li>
+                            <li ><span>电梯</span><font>无</font></li>
+                            <li ><span>年代</span><font>2017年建成</font></li>
+                            <li ><span>门锁</span><font>普通门锁</font></li>
+                            <li ><span>绿化</span><font>46%</font></li>
+                        </ul>
+                </div>
+
+                <div  class="detail_preview ">
+                        <div  class="detail_preview_title">租约信息</div>
+                            <ul  class="detail_preview_info detail_preview_info2">
+                                <li ><span>可入住日期</span><font>随时入住</font></li>
+                                <li ><span>签约时长</span><font>可长租1年</font></li>
+                                <li ><span>注意事项</span><font>租房合同签订步骤</font></li>
+                            </ul>
+                </div>
+
+                <div  class="detail_preview ">
+                        <div  class="detail_preview_title">房屋配置</div>
+                            <div  class="detail_preview_info detail_preview_info3">
+                                <div  class="detail_preview_configure">
+                                        <div class="iconn"><span class="iconfont icon-chuangdian"></span><font>床铺</font></div>
+                                        <div class="iconn"><span class="iconfont icon-dpc"></span><font>衣柜</font></div>
+                                        <div class="iconn"><span class="iconfont icon-shafa"></span><font>沙发</font></div>
+                                        <div class="iconn"><span class="iconfont icon-7"></span><font>燃气</font></div>
+                                        <div ><font class="configure_all">全部</font></div>
+                                </div>
+                            </div>
+                </div>
+
+                <div  class="detail_preview ">
+                        <div  class="detail_preview_title">房源简介</div>
+                            <div  class="detail_preview_info">
+                                    每天清晨，被缕阳光唤醒，沉浸在对自己房间的喜欢与对生活的每天清晨，被缕阳光唤醒，沉浸在对自己房间的喜欢与对生活的每天清晨，被缕阳光唤醒，沉浸在对自己房间的喜欢与对生活的
+                        </div>
+                </div>
+
+            </div>        
+        </div>
+
+        <div  class="weui-tabbar" style="background: #ff9800;    position: fixed;">
+            <a id="call_phone" href="javascript:;" class="weui-tabbar__item vux-tabbar-simple">
+                <p class="weui-tabbar__label"><span  style="font-size: 16px; color: rgb(255, 255, 255);">我要看房</span></p>
+            </a>
+        </div>
+
+    </div>        
+
+<script>
+     $.showLoading("正在加载");
+$(document).ready(function(){
+    //幻灯片
+    axios.get("{php echo $this->createMobileUrl('houselease',array('a'=>'wxapp','op'=>'detail'))}",{
+        params:{
+            id:"{$_GPC['id']}"
+        }
+    })
+    .then(function(res){
+                $.hideLoading();
+                var err = res.data;
+                if(err.err_code==0){
+                        var html = '';
+                        if(err.data.images.length>0){
+                            $.each(err.data.images,function(i2,val2){  
+                                html += '<div class="swiper-slide"><img src="'+ val2 +'"></div>';
+                            })
+                            console.log(html)
+                            $('.swiper-wrapper').html(html);
+                            var swiper = new Swiper('.swiper-container', {
+                                autoHeight: true, //enable auto height
+                                spaceBetween: 20,
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                },
+                                autoplay: {
+                                    delay: 3000,
+                                    stopOnLastSlide: false,
+                                    disableOnInteraction: true,
+                                },
+                            });
+                        }else{
+                            $('.swiper-container').remove();
+                        }
+                }
+            })
+            .catch(function(e){
+                console.log('请求post失败')
+            });
+
+    //点击手机
+    $("#call_phone").on("click",function(){
+        $.modal({
+        title: "提示",
+        text: "联系方式：13630008888",
+        buttons: [
+            { text: "取消", className: "weui-dialog__btn_default"},
+            { text: "呼叫", onClick: function(){ 
+                window.location.href="tel:13630008888";
+            } },
+        ]
+        });
+    })
+
+    //点击房屋配置->全部
+    $(".configure_all").on("click",function(){
+        var _html = '';
+        _html += '<div class="detail_preview_configure2">';
+        _html += '<div><span class="iconfont icon-chuangdian"></span><font>床铺</font></div>';
+        _html += '<div><span class="iconfont icon-dpc"></span><font>衣柜</font></div>';
+        _html += '<div><span class="iconfont icon-shafa"></span><font>沙发</font></div>';
+        _html += '<div><span class="iconfont icon-7"></span><font>燃气</font></div>';
+        _html += '<div><span class="iconfont icon-xiyiji"></span><font>洗衣机</font></div>';
+        _html += '<div><span class="iconfont icon-wifi"></span><font>网络</font></div>';
+        _html += '<div><span class="iconfont icon-bingxiang"></span><font>冰箱</font></div>';
+        _html += '<div><span class="iconfont icon-bangongzhuo"></span><font>书桌</font></div>';
+        _html += '<div><span class="iconfont icon-kongdiao"></span><font>空调</font></div>';
+        _html += '<div><span class="iconfont icon-zhuozi"></span><font>餐桌</font></div>';
+        _html += '<div><span class="iconfont icon-yizi"></span><font>椅子</font></div>';
+        _html += '<div><span class="iconfont icon-weibolu"></span><font>微波炉</font></div>';
+        _html += '<div><span class="iconfont icon-dianshi"></span><font>电视</font></div>';
+        _html += '<div><span class="iconfont icon-reshui"></span><font>热水器</font></div>';
+        _html += '<div><span class="iconfont icon-chugui"></span><font>橱柜</font></div>';
+        _html += '<div><span class="iconfont icon-xiyouyanji"></span><font>油烟机</font></div>';
+        _html += '<div><span class="iconfont icon-gsdt"></span><font>电梯</font></div>';
+        _html += '<div><span class="iconfont icon-nuanqi"></span><font>供暖</font></div>';
+        _html += '<div><span class="iconfont icon-tingchewei"></span><font>车位</font></div>';
+        _html += '<div><span class="iconfont icon-menjin"></span><font>门禁</font></div>';
+                                                       
+
+        _html += '</div>';
+        $.modal({
+        title: "提供的基础设备",
+        text: _html,
+        buttons: [
+            { text: "关闭", className: "weui-dialog__btn_default"}
+        ]
+        });
+    })
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+
+{template 'default/zhpark/header'}
+
+
+    <div class="weui-cell" style="height: 50px">
+
+        <div class="weui-cell__hd"><label class="weui-label" style="color: #CCCCCC">充值延期</label></div>
+
+        <div class="weui-cell__bd">
+
+            <!--<input class="weui-input" type="number" name="scene" >-->
+
+        </div>
+
+    </div>
+
+    <div class="weui-cell"style="color: red">
+
+        <div class="weui-cell__hd"><label class="weui-label" >车牌号</label></div>
+
+        <div class="weui-cell__bd">
+
+            <input class="weui-input" type="text" name="car_no" value="{$car['car_no']}" >
+
+        </div>
+
+    </div>
+
+    <div class="weui-cell">
+
+        <div class="weui-cell__hd"><label class="weui-label">车类型</label></div>
+
+        <div class="weui-cell__bd">
+
+            <input class="weui-input" type="text" name="scene" value="{$car['card_name']}">
+        </div>
+    </div>
+
+    <!--<div class="weui-cell">-->
+
+        <!--<div class="weui-cell__hd"><label class="weui-label">车类别</label></div>-->
+
+        <!--<div class="weui-cell__bd">-->
+
+            <!--<input class="weui-input" type="text" name="scene"  value="sdwad">-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="weui-cell" style="color: red">
+        <div class="weui-cell__hd"><label class="weui-label" >到期时间</label></div>
+
+        <div class="weui-cell__bd">
+
+            <input class="weui-input" type="text" name="begin_date" id='begin_date' value="{$car['valid_date']}">
+        </div>
+    </div>
+
+
+    <div class="weui-cells" style="margin-top: 5px;">
+        <div class="weui-cell weui-cell_select weui-cell_select-after">
+            <div class="weui-cell__hd">
+                <label for="" class="weui-label">充值时长</label>
+            </div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="month">
+                    <option value="1">1月</option>
+                    <option value="2">2月</option>
+                    <option value="3">3月</option>
+                    <option value="4">4月</option>
+                    <option value="5">5月</option>
+                    <option value="6">6月</option>
+                    <option value="7">7月</option>
+                    <option value="8">8月</option>
+                    <option value="9">9月</option>
+                    <option value="10">10月</option>
+                    <option value="11">11月</option>
+                    <option value="12">12月</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label" >新到期时间</label></div>
+
+        <div class="weui-cell__bd">
+
+            <input class="weui-input" type="text" name="end_date" id="end_date" value="{$end_date}">
+        </div>
+    </div>
+
+    <div class="weui-cell">
+
+        <div class="weui-cell__hd"><label class="weui-label">预计费用</label></div>
+
+        <div class="weui-cell__bd" >
+
+            <input class="weui-input" type="text" name="pay_fee" id="pay_fee" style="font-size:25px" value="{$car['month_fee']}">
+
+        </div>
+    </div>
+    <div class="demos-content-padded" style="margin-top: 30px;">
+        <a href="javascript:;" class="weui-btn weui-btn_primary"style="width: 90%" id="submit">确认支付</a>
+    </div>
+
+</div>
+<script>
+    $(function () {
+        $("#month").change(function () {
+           var month = $("#month option:selected").val();
+           var month_fee = "{$car['month_fee']}";
+           var begin_date = (Date.parse(new Date($('#begin_date').val())))/1000;
+           var end_date = parseInt(begin_date)+parseInt(month)*86400*30;
+            var enddate = timetrans(end_date);
+            $("#end_date").val(enddate);
+            var pay_fee = month_fee*month;
+            $("#pay_fee").val(pay_fee);
+        })
+        $("#submit").click(function () {
+            var parkid = "{$member['park_id']}";
+            var carid = "{$member['id']}";
+            var park_id = "{$park['park_id']}";
+            var car_no = "{$member['car_no']}";
+            var begin_date = $("#begin_date").val();
+            var end_date = $("#end_date").val();
+            var pay_fee = $("#pay_fee").val();
+            var num = $("#month option:selected").val();
+            $.post("{php echo $this->createMobileUrl('zhparkconfirm')}",{parkid:parkid,carid:carid,park_id:park_id,car_no:car_no,begin_date:begin_date,end_date:end_date,pay_fee:pay_fee,num:num},function (result) {
+               if(result.status == 1){
+                   window.location.href="{php echo $this->createMobileUrl('zhparkpay')}&orderid="+result.orderid;
+               }
+            },'json')
+
+        })
+    })
+    function timetrans(date){
+        var date = new Date(date*1000);//如果date为10位不需要乘1000
+        var Y = date.getFullYear() + '-';
+        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        var D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        var m = (date.getMinutes() <10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+        var s = (date.getSeconds() <10 ? '0' + date.getSeconds() : date.getSeconds());
+        return Y+M+D;
+    }
+</script>
+{template 'default/zhpark/footer'}

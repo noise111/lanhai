@@ -1,0 +1,214 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<style>
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>{{item.sjname}}</span>
+        </h1>
+    </div>
+    <div class="header-padd"></div>
+    <div class="weui-loadmore" id="imgHtml" style="position: fixed;  width: 100%"></div>
+    <div id="ht">
+        <div class="weui-cells">
+
+            <div class="weui-cell" v-if="item.sjname">
+                <div class="weui-cell__hd"><label class="weui-label">商家名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="商家名称" :value="item.sjname" disabled >
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">联&nbsp;系&nbsp;&nbsp;人</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="联系人" :value="item.contactname"
+                           disabled v-if="item.contactname">
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.mobile" >
+                <div class="weui-cell__hd"><label class="weui-label">联系手机</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="联系手机" :value="item.mobile" disabled >
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.phone">
+                <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="联系电话" :value="item.phone" disabled >
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.qq !=0">
+                <div class="weui-cell__hd"><label class="weui-label">联系&nbsp;&nbsp;qq</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="联系qq" :value="item.qq" disabled v-if="item.qq">
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.price !=0">
+                <div class="weui-cell__hd"><label class="weui-label">人均价格</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="人均价格"  :value="item.price" disabled v-if="item.price">
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.area">
+                <div class="weui-cell__hd"><label class="weui-label">商圈名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="商圈名称" id="area" :value="item.area" disabled v-if="item.area">
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.businesstime != '-'">
+                <div class="weui-cell__hd"><label class="weui-label">营业时间</label></div>
+            <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="营业时间" id="businesstime" :value="item.businesstime" disabled>
+            </div>
+            </div>
+            <div class="weui-cell" v-if="item.address">
+                <div class="weui-cell__hd"><label class="weui-label">详细地址</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="详细地址" id="address" :value="item.address"
+                           disabled v-if="item.address">
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.businessurl">
+                <div class="weui-cell__hd"><label class="weui-label">商家外链</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="商家外链" :value="item.businessurl"
+                           disabled v-if="item.businessurl">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="商户简介，主要介绍商户信息等 " rows="3" id="shopdesc" v-if="item.shopdesc">{{item.shopdesc}}</textarea>
+                    <div class="weui-uploader">
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                                <li class="weui-uploader__file" :style="'background-image:url('+item.picurl+')'"></li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 20px 20px">
+            <a href="javascript:;" class="weui-btn weui-btn_default" @click="qr()">生成支付码</a>
+            <a href="javascript:;" class="weui-btn weui-btn_primary" @click="add()">修改店铺</a>
+            <a href="javascript:;" class="weui-btn weui-btn_warn" @click="del()">删除店铺</a>
+
+        </div>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            id: id,
+            item: [],
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appbusiness/dp',array('p'=>'detail'))}";
+            var data = {
+                id: self.id
+            }
+            $.getJSON(url, data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+            var self = this
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                console.log(self.title)
+            },
+            del : function () {
+                var data = {
+                    id: this.id
+                }
+                var url = "{php echo wxapp_url('appbusiness/dp',array('p'=>'del'))}";
+                $.showLoading('正在提交');
+                $.getJSON(url, data, function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if (ret.err_code == 0) {
+                        setTimeout(function () {
+                            $.toast('删除成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business','p'=>'dp'))}";
+                        }, 500);
+                    }
+                })
+            },
+            qr : function () {
+                var data = {
+                    id: this.id,
+                }
+                var url = "{php echo wxapp_url('appbusiness/qr')}";
+                $.showLoading('正在提交');
+                $.getJSON(url, data, function (result) {
+                    $.hideLoading();
+                    if (result.err_code == 0) {
+                        var imgHtml = '<div class="tips">请长按保存二维码或者截图发给被邀请人</div>';
+                        imgHtml += result.data.imgHtml;
+                        $("#imgHtml").html(imgHtml);
+                        $("#ht").hide()
+                    }
+                })
+            },
+            add : function () {
+                var url = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business','p'=>'add'))}&id="+this.id;
+                window.location.href = url;
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>

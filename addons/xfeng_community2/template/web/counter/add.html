@@ -1,0 +1,116 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('counter', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;添加主柜</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'list','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="title" id='title' value="{$item['title']}" class="form-control" placeHolder="请输入名称" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" id="region">
+                            <label for="" class="col-sm-2 control-label">选择小区<span style="color: red">*</span></label>
+                            <div class="col-xs-4">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option>选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected='selected'{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="build" {if $id}{else}style="display:none"{/if}>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">选择楼宇<span style="color: red">*</span></label>
+                                <div class="col-xs-4">
+                                    <select name="buildid" class="form-control" id="buildid">
+                                        <option>选择楼宇</option>
+                                        {loop $builds $build}
+                                        <option value="{$build['id']}" {if $item['buildid'] == $build['id']}selected='selected'{/if}>{$build['buildtitle']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">设备id</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="device" id='device' value="{$item['device']}" class="form-control" placeHolder="请输入设备id"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form){
+        if (!form['regionid'].value) {
+            alert('请选择小区。');
+            return false;
+        }
+        return true;
+    }
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.getJSON("{php echo $this->createWebUrl('counter',array('op'=>'list','p'=> 'build'))}",{regionid:data.regionid},function(data){
+                        var content = '<option>选择楼宇</option>';
+                        for (var o in data) {
+                            content += '<option value="'+data[o].id+'">'+data[o].buildtitle+'</option>'
+                        }
+                        $('#build').css('display','block');
+                        $('#buildid').html(content);
+                    })
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('counter',array('op'=>'list','p'=> 'build'))}",{regionid:regionid},function(data){
+                var content = '<option>选择楼宇</option>';
+                for (var o in data) {
+                    content += '<option value="'+data[o].id+'">'+data[o].buildtitle+'</option>'
+                }
+                $('#build').css('display','block');
+                $('#buildid').html(content);
+            })
+        })
+    })
+</script>

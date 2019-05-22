@@ -1,0 +1,128 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('xqcar')}"></a>&nbsp;&nbsp;&nbsp;
+                        添加车辆
+                    </h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('xqcar',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form  action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="id" value="{$item['id']}"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区:</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="regionid" id="regionid">
+                                    <option>全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$item['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车位号:</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="parkingid" id="parkingid">
+                                    <option>全部车位</option>
+                                    {loop $parks $park}
+                                    <option value="{$park['id']}" {if $park['id']==$item['parkingid']} selected{/if}>{$park['place_num']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车主姓名:</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="realname" class="form-control"  value="{$item['realname']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车主手机:</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="mobile" class="form-control" value="{$item['mobile']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车牌号码:</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="car_num" class="form-control" value="{$item['car_num']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="submit" class="btn btn-primary btn-w-m"  name="add" value="保存">
+                                <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal" onclick="window.history.go(-1);">返回</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    if (data.regionid != '0') {
+                        $.post("{php echo $this->createWebUrl('xqcar',array('op' => 'park'))}", {
+                            regionid: data.regionid,
+                        }, function (data) {
+                            if(data){
+                                var content;
+                                $.each(data, function (name, val) {
+                                    content += "<option value='"+val.id+"'>"+val.place_num+"</option>";
+                                });
+                                $("#parkingid").html(content);
+                            }
+
+                        }, 'json');
+                    }
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            if (regionid != '0') {
+                $.post("{php echo $this->createWebUrl('xqcar',array('op' => 'park'))}", {
+                    regionid: regionid,
+                }, function (data) {
+                    if(data){
+                        var content;
+                        $.each(data, function (name, val) {
+                            content += "<option value='"+val.id+"'>"+val.place_num+"</option>";
+                        });
+                        $("#parkingid").html(content);
+                    }
+
+                }, 'json');
+            }
+        })
+    })
+</script>
+{template 'web/common/footer'}

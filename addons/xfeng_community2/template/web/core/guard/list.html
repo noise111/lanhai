@@ -1,0 +1,169 @@
+<!--{template 'web/common/header-base'}-->
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>设备管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('guard')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="guard"/>
+                        <div class="row">
+                            <div class="col-sm-4 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('guard_add', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('guard', array('op' => 'add','regionid' => $regionid));}"><i class="fa fa-plus"></i> 添加设备</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('guard_qrpl', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('guard',array('op'=> 'qrpl'))}" ><i class="fa fa-plus"></i>批量生成二维码</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('guard_download', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('guard',array('op'=> 'download'))}" ><i class="fa fa-plus"></i>一键下载二维码</a>
+                                {/if}
+                                {if $_W['uid'] == 1}
+                                <!--<a class="btn btn-primary" href="{MODULE_URL}data/menjin.docx" >配置说明</a>-->
+                                {/if}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="type" class="form-control">
+                                    <option value="0">区域</option>
+                                    <option value="2" {if $_GPC['type']==2} selected{/if}>大门</option>
+                                    <option value="1" {if $_GPC['type']==1} selected{/if}>单元门</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="doorstatus" class="form-control">
+                                    <option value="">设备状态</option>
+                                    <option value="2" {if $_GPC['doorstatus']==2} selected{/if}>离线</option>
+                                    <option value="1" {if $_GPC['doorstatus']==1} selected{/if}>在线</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入设备编号/楼宇名称/单元号" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                             <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" method="post">
+                        <table class="table table-bordered table-condensed">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>ID</th>
+                                <th style="width:6%">排序</th>
+                                <th>小区名称</th>
+                                <th>位置</th>
+                                <th>门禁位置</th>
+                                <th>单元号（更新前）</th>
+                                <th class='col-md-1'>设备编号</th>
+                                <th>卡状态</th>
+                                <th>设备状态</th>
+                                <th>状态</th>
+                                <th class='col-md-5'>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td><input type="text" class="form-control" name="displayorder[{$item['id']}]"
+                                           value="{$item['displayorder']}"/></td>
+                                <td>{$item['rtitle']}</td>
+                                <td>{if $item['type'] == 1}单元门{else}大门{/if}</td>
+                                <td>{$item['title']}
+                                ({if $item['category'] == 1}LN-MJ101(1代/2代){elseif $item['category'] == 2}新中安{elseif $item['category'] == 3}NB-IOT门禁{elseif $item['category'] == 4}LN-MJ102{elseif $item['category'] == 5}LN-MJ100{elseif $item['category'] == 6}LN-MJ101{elseif $item['category'] == 7}LN-MJ103{elseif $item['category'] == 8}LN-LY100{elseif $item['category'] == 9}LN-FACE100{elseif $item['category'] == 10}LN-FACE301/LN-FACE302/LN-FACE303{/if})
+                                </td>
+                                <td>{if $item['unit']}{$item['unit']}单元{else}{/if}{if $item['unittitle']}（{$item['unittitle']}）{/if}</td>
+                                <td>{$item['device_code']}</td>
+                                <td><span class="label label-success">{$item['devicestatus']}</span></td>
+                                <td><span class="label label-primary">{if $item['doorstatus'] == 1}在线{else}离线{/if}</span></td>
+                                <td><label class="label {if $item['status'] == 1}label-primary{else}label-default {/if}" onclick="show({$item['id']},{$item['status']})">{if $item['status'] == 1}显示{else}隐藏{/if}</label></td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('guard_edit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('guard',array('op' => 'add','id' => $item['id'],'regionid' => $regionid))}"
+                                       title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_qr', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('guard',array('op' => 'qrcreate','id' => $item['id']))}"
+                                       title="生成二维码" data-toggle="tooltip" data-placement="top"
+                                       class="btn btn-info btn-sm" data-original-title="生成二维码">生成二维码</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_del', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('guard',array('op' => 'delete','id' => $item['id'],'regionid' => $regionid))}"
+                                       title="删除" data-toggle="tooltip" data-placement="top"
+                                       class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                    {/if}
+                                    <!--<a href=""-->
+                                       <!--title="查看开锁连接" data-toggle="tooltip" data-placement="top"-->
+                                       <!--class="btn btn-warning btn-sm" data-original-title="查看开锁连接" target="_blank">-->
+
+                                        <!--查看开锁连接-->
+                                    <!--</a>-->
+                                    <input type="text" value="{php echo app_url('lock',array('id'=>$item['id']))}" style="width: 400px"/>
+                                </td>
+                            </tr>
+                            {/loop}
+                            {if ($user && $menu_opss && @in_array('guard_sort', $menu_opss)) || empty($user)}
+                            <tr>
+                                <td></td>
+                                <td colspan="10">
+                                    <input name="submit" type="submit" class="btn btn-sm btn-primary" value="提交">
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible">
+                                <ul class="pagination pull-right">{$pager}</ul>
+                            </td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center">
+                            <td>没有找到对应的记录</td>
+                        </tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function show(id,status) {
+        var id=id;
+        var status=status;
+        $.post("{php echo $this->createWebUrl('guard',array('op'=> 'change'))}",{id:id,status:status},function (data) {
+            if(data.status){
+
+                window.location.reload();
+            }
+
+        },'json')
+    }
+</script>

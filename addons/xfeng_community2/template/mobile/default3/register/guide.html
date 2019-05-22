@@ -1,0 +1,24 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ffffff;
+    }
+</style>
+<?php
+$title = set('p74');
+?>
+<body>
+<div class="register-guide-head">
+    <div class="register-guide-head-img">
+    </div>
+    <h3>欢迎使用{$title}</h3>
+</div>
+<div class="register-guide-content">
+    <a href="{php echo $this->createMobileUrl('register',array('op'=> 'register','memberid'=> $memberid,'regionid'=>$regionid))}" class="weui-btn register-guide-btn">手机号注册</a>
+    <!--<a href="{php echo $this->createMobileUrl('register',array('op'=> 'login'))}" class="weui-btn register-guide-btn ">手机号登录</a>-->
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+</body>
+</html>

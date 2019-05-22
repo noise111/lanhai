@@ -1,0 +1,87 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('express', array('op' => 'price','p' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;价格添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'price','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="priceId" value="{$editData['id']}">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">寄件地址</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_district('mailaddress',array('province' => $price['mailaddress']));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">收件地址</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_district('receiveaddress',array('province' => $price['receiveaddress']));}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物流公司</label>
+                            <div class="col-xs-5">
+                                <select name="companyid" id="companyid" class="form-control">
+                                    <option value="">请选择快递</option>
+                                    {loop $companys $com}
+                                    <option value="{$com['id']}" {if $price['companyid'] == $com['id']}selected{/if}>{$com['company']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">基础价格</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="price" id="price" value="{$price['price']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">超重价格</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="overprice" id="overprice" value="{$price['overprice']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".tpl-city").hide();
+    $(".tpl-district").hide();
+    function check(form) {
+        if (!form['companyid'].value) {
+            alert('公司名称不可为空。');
+            return false;
+        }
+        if (!form['typeid'].value) {
+            alert('寄件类型不可为空。');
+            return false;
+        }
+        if (!form['price'].value) {
+            alert('价格不可为空。');
+            return false;
+        }
+        if (!form['overprice'].value) {
+            alert('价格不可为空。');
+            return false;
+        }
+    }
+</script>

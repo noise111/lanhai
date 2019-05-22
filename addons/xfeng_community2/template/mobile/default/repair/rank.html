@@ -1,0 +1,70 @@
+{template 'default/header'}
+
+<body class="max-width">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" href="#" onclick="window.location.href='{php echo $this->createMobileUrl('repair',array('op'=>'list'))}'"></a>
+    <h1 class="title txt-fff">我要评价</h1>
+</header>
+
+<div class="content repair-content page">
+    <div class="list-block ">
+        <form role="form" method="post" enctype="multipart/form-data" name="newthread" id="newthread" class="form-horizontal">
+            <ul style="margin-top: -30px;">
+                <li class="item-content item-link">
+                    <div class="item-inner">
+                        <div class="item-input">
+                            <select id="status">
+                                <option value="1" >满意</option>
+                                <option value="2" >一般</option>
+                                <option value="3" >不满意</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-input">
+                            <textarea  placeholder="长度5-200个字之间.写下评论内容,有助于我们的工作人员快速帮你解决问题." rows="3" name="content" id="content"></textarea>
+                            <div class="textarea-counter">
+                                <span>0</span>/200
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </form>
+        <div class="content-block">
+            <a href="#" class="button button-big button-fill button-success" id="showToast">提交信息</a>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#showToast").click(function(event) {
+            var content = $("#content").val();
+            var id="{$_GPC['id']}";
+            var status = $("#status").val();
+            $.ajax({
+                url: "{php echo $this->createMobileUrl('repair',array('op' => 'rank'))}",
+                dataType: 'json',
+                data: {
+                    status: status,
+                    content: content,
+                    id:id
+                },
+                success: function(s) {
+                    if (s.status == 1) {
+                        $.toast('评价成功');
+                        setTimeout(function() {
+
+                            window.location.href="{php echo $this->createMobileUrl('repair',array('op' => 'list'))}";
+                        }, 3000);
+                    };
+                }
+            })
+        });
+    })
+</script>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+{template 'default/footer'}

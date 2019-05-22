@@ -1,0 +1,83 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('shopping',array('op' => 'shop'))}" title="店铺管理" >超市管理</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="shopping"/>
+                        <input type="hidden" name="op" value="shop"/>
+                        <div class="row">
+                            <div class="col-sm-8 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('shopping_shopAdd', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('shopping', array('op' => 'shop','operation' => 'add'))}"><i class="fa fa-plus"></i> 添加超市</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入名称/电话" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th width="100">超市名</th>
+                            <th width="60">联系人</th>
+                            <th width="110">电话</th>
+                            <th width="300" >操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['title']}</td>
+                            <td>{$item['contactname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td >
+                                {if ($user && $menu_opss && @in_array('shopping_shopEdit', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('shopping',array('op' => 'shop','operation' => 'add','id' => $item['id']))}" class="btn btn-primary btn-sm" title="编辑">编辑</a>
+                                {/if}
+                                {if !$user || $user['type'] == 1}
+                                {if ($user && $menu_opss && @in_array('shopping_shopCommission', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('shopping',array('op' => 'commission','id' => $item['id']))}" class="btn btn-success btn-sm" title="分成设置">分成设置</a>
+                                {/if}
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('shopping_shopDel', $menu_opss)) || empty($user)}
+                                <a class="btn btn-default" href="{php echo $this->createWebUrl('shopping',array('op' => 'shop','operation' => 'del','id' => $item['id']))}" onclick="return confirm('确定删除该超市及该超市下的商品、支付方式、打印机、接收员吗?');" title="删除">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

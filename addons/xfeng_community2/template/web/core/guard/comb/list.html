@@ -1,0 +1,302 @@
+<!--{template 'web/common/header-base'}-->
+
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>发卡管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('guard',array('op'=>'comb'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="guard"/>
+                        <input type="hidden" name="op" value="comb"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('guard_combAdd', $menu_opss)) || empty($user)}
+                                <a class="btn  btn-primary"
+                                   href="{php echo $this->createWebUrl('guard', array('op' => 'comb','p' => 'add'));}"><i
+                                        class="fa fa-plus"></i> 添加卡</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('guard_combPladd', $menu_opss)) || empty($user)}
+                                <a class="btn  btn-primary" href="{php echo $this->createWebUrl('guard', array('op' => 'comb','p' => 'pladd'));}"><i class="fa fa-plus"></i> 批量发卡</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="" >选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                                <input type="text" class="form-control" name="cardno" placeholder="输入卡号" value="{$_GPC['cardno']}">
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="buildid" class="form-control" id="build">
+                                    <option value="0">全部楼宇</option>
+                                    {loop $builds $build}
+                                    <option value="{$build['id']}" {if $build['id']==$_GPC['buildid']} selected{/if}>{$build['title']}</option>
+                                    {/loop}
+                                </select>
+                                <select name="status" class="form-control" id="status">
+                                    <option value="">发卡状态</option>
+                                    <option value="1" {if $_GPC['status']==1} selected{/if}>发卡成功</option>
+                                    <option value="2" {if $_GPC['status']==2} selected{/if}>发卡失败</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="unitid" class="form-control" id="unit">
+                                    <option value="0">全部单元</option>
+                                    {loop $units $unit}
+                                    <option value="{$unit['id']}" {if $unit['id']==$_GPC['unitid']} selected{/if}>{$unit['unit']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入房号/手机号" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+                                        <button class="btn btn-success btn-sm" id="export" type="submit" name="export" value="1">批量导出</button>
+                             <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!--<div class="alert alert-info">-->
+                        <!--注意：-->
+                    <!--</div>-->
+                    <form class="form-horizontal form" action="" method="post" id="form" >
+                    <table class="table table-bordered table-condensed">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids"
+                                               onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>小区名称</th>
+                                <th>门禁名称</th>
+                                <th>卡号</th>
+                                <th>卡状态</th>
+                                <th>手机</th>
+                                <th>房号</th>
+                                <th>发卡状态</th>
+                                <th>截止时间</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                               value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+
+                                </td>
+                                <td>{$item['id']}</td>
+                                <td>{$item['region']}</td>
+                                <td>{$item['device']}</td>
+                                <td>{$item['cardno']}</td>
+                                <td>{if $item['use'] == 1}<span class="label label-success">白名单</span>{else}<span class="label label-default">黑名单</span>{/if}</td>
+                                <td>{$item['mobile']}</td>
+                                <td>{$item['address']}</td>
+                                <td>{if $item['status'] == 1}<span class="label label-warning">发卡成功</span>{elseif $item['status']==2}<span class="label label-primary">未下发卡</span>{/if}</td>
+                                <td>{$item['enddate']}</td>
+                                <td>{$item['createtime']}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('guard_combEdit', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'edit','id'=>$item['id']))}" >编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_combDel', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'del','id'=>$item['id']))}" onClick="return confirm('确定删除当前下发的卡号，删除后将不能使用刷卡功能?');">删除下发卡号</a>
+                                    {/if}
+                                    {if $item['use']==1}
+                                    {if ($user && $menu_opss && @in_array('guard_combBlack', $menu_opss)) || empty($user)}
+                                    <span class="btn btn-info btn-sm" onclick="black({$item['id']})">加入黑名单</span>
+                                    {/if}
+                                    {else}
+                                    {if ($user && $menu_opss && @in_array('guard_combWhite', $menu_opss)) || empty($user)}
+                                    <span class="btn btn-success btn-sm" onclick="update({$item['id']})">恢复白名单</span>
+                                    {/if}
+                                    {/if}
+                                    {if $item['status']==2}
+                                    {if ($user && $menu_opss && @in_array('guard_combCloud', $menu_opss)) || empty($user)}
+                                    <span class="btn btn-warning btn-sm" onclick="cloud({$item['id']})">手动同步</span>
+                                    {/if}
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_combDelete', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-danger btn-sm" href="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'delete','id'=>$item['id']))}" onClick="return confirm('确定删除当前下发的卡号和数据库的卡号，删除后将不能使用恢复?');">强制删除卡号</a>
+                                    {/if}
+                                    </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <div class="row">
+                            <td class="text-left">
+                                <div class="col-sm-2 m-b-xs">
+                                    {php echo tpl_form_field_date('enddate',$enddate,true);}
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('guard_combPltime', $menu_opss)) || empty($user)}
+                                    <button type="submit" class="btn btn-success btn-sm" id="pltime" onClick="return confirm('确定勾选的信息修改截止时间吗?');">修改到期时间</button>
+                                    {/if}
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    {if ($user && $menu_opss && @in_array('guard_combPldelete', $menu_opss)) || empty($user)}
+                                    <!--<button class="btn btn-danger btn-sm" id="delete" onClick="return confirm('确定选择小区并删除该小区下发卡的信息吗?');">批量删除</button>-->
+                                    <button type="submit" class="btn btn-danger btn-sm" name="pldel" id="pldel" value="批量删除" onClick="return confirm('未勾选则默认删除全部的卡号，确定吗?');">批量删除</button>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_combPldown', $menu_opss)) || empty($user)}
+                                    <button type="submit" class="btn btn-primary btn-sm" name="pldown" id="pldown" value="一键下发">一键下发</button>
+                                    {/if}
+                                    <span style="color: red">总计:{$total}</span>
+                                </div>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </div>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center">
+                            <td>没有找到对应的记录</td>
+                        </tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+//    $('#delete').on('click',function() {
+//        var regionid = $("#regionid option:selected").val()
+//        if(regionid==''){
+//            alert('请选择小区');
+//            return false
+//        }
+//        $('#delete').html("正在删除中,请勿关闭页面。");
+//        $('#delete').prop('disabled', true);
+//        // window.open("{php echo $this->createWebUrl('guard',array('op'=>'pldel'))}&regionid="+regionid)
+//        var url = "{php echo $this->createWebUrl('guard',array('op'=>'pldel'))}&regionid="+regionid
+//        $.post(url,function (res) {
+//            if(res.status==1){
+//                alert('删除成功');
+//                location.reload();
+//            }
+//            else{
+//                alert('暂无数据删除');
+//                location.reload();
+//            }
+//        },'json')
+//    });
+    function black(id) {
+        var url ="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'black'))}"
+        $.getJSON(url,{id:id},function (res) {
+            if(res.status){
+                alert('操作成功')
+                window.location.reload();
+            }else{
+                alert(res.content)
+                window.location.reload();
+            }
+        })
+    }
+    function update(id) {
+        var url ="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'update'))}"
+        $.getJSON(url,{id:id},function (res) {
+            if(res.status){
+                alert('操作成功')
+                window.location.reload();
+            }else{
+                alert(res.content)
+                window.location.reload();
+            }
+        })
+    }
+    function cloud(id) {
+        var url ="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'cloud'))}"
+        $.getJSON(url,{id:id},function (res) {
+            if(res.status){
+                alert('操作成功')
+                window.location.reload();
+            }else{
+                alert(res.content)
+                window.location.reload();
+            }
+        })
+    }
+    $('#pltime').on('click',function() {
+        $('#pltime').html("正在提交中,请勿关闭页面。");
+        $('#pltime').prop('disabled', true);
+        mass();
+    });
+    function mass() {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('guard',array('op'=>'pltime'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                if (data.status == 1){
+                    location.reload();
+                } else {
+                    alert(data.content);
+                    $('#pltime').html("修改到期时间");
+                    $('#pltime').removeAttr("disabled");
+                }
+                return ;
+
+            }
+        });
+    }
+    $(function () {
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}", {regionid: regionid}, function (data) {
+                var content = '<option value="0">请选择楼宇</option>';
+                var builds = data.list
+                for (var o in builds) {
+                    content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + data.zd + "</option>";
+                }
+                $("#build").html(content);
+                var cont = '<option value="0">请选择单元</option>';
+                $("#unit").html(cont);
+            })
+        })
+        $("#build").change(function () {
+            var buildid = $("#build option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'unit'))}", {
+                buildid: buildid,
+                regionid: regionid
+            }, function (data) {
+                var units = data.list
+                var content = '<option value="0">请选择单元</option>';
+                for (var o in units) {
+                    content += "<option value='" + units[o].id + "'>" + units[o].unit + data.zd + "</option>";
+                }
+                $("#unit").html(content);
+            })
+        })
+    })
+</script>
+

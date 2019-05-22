@@ -1,0 +1,178 @@
+{template 'default2/header'}
+<style>
+    .weui-navbar {
+        background: #ffffff;
+        position: fixed;
+    }
+
+    .weui-navbar__item {
+        padding: 10px 0;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: #ffffff;
+        color: #f58611;
+    }
+
+    .weui-panel {
+        margin-top: 40px;
+        margin-bottom: 55px;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+         width: 4.5rem;
+         height: 4.5rem;
+        line-height: 4.5rem;
+    }
+    .weui-icon-success {
+        font-size: 16px;
+    }
+
+    [class*=" weui-icon-"]:before, [class^=weui-icon-]:before {
+        margin-left: 0;
+    }
+    .fitmentlease-label{
+        font-size: 0.8em;
+    }
+    .fitmentlease-label span{
+        position: relative;
+        top: 2px;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-navbar">
+    <a class="weui-navbar__item">
+        分类<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        租金<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        排序<i></i>
+    </a>
+</div>
+<div class="nav-modal">
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease')}'">全部</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>1))}'">出租</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>3))}'">出售</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>2))}'">求租</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>4))}'">求购</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease')}'">全部</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('price'=>1000))}'">1000以下</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>2000))}'">1000-2000</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>4000))}'">2000-4000</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('category'=>6000))}'">4000以上</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul class="Category-w">
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease')}">全部</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('status'=>0))}'">未成交</li>
+            <li onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('status'=>1))}'">已成交</li>
+        </ul>
+    </div>
+</div>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd" id="list">
+
+
+    </div>
+    <div class="weui-loadmore" id="loading" style="display: none">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips loading"></span>
+    </div>
+    <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+<div class="weui-tabbar address_tabbar">
+    <a href="{php echo $this->createMobileUrl('houselease',array('op'=> 'post'))}" class="weui-btn address_tabbar_btn">我要发布</a>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="{php echo $this->createMobileUrl('houselease',array('op'=> 'detail'))}&id={{ d.list[i].id }}" class="weui-media-box weui-media-box_appmsg">
+        <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{{# if(d.list[i].image){ }}{{ d.list[i].image }} {{# }else{ }}{MODULE_URL}template/mobile/default2/static/images/xq.png {{# } }}" alt="">
+        </div>
+        <div class="weui-media-box__bd">
+            <div class="lease-tit"><p>{{ d.list[i].region }}&nbsp;{{ d.list[i].way }}&nbsp;{{ d.list[i].fitment}}</p><span>{{ d.list[i].price }}<samp>{{# if(d.list[i].category == 1 || d.list[i].category == 2){ }}元/月{{# }else{ }}万元/套{{# } }}</samp></span></div>
+            <p class="lease-jianjie">{{# if(d.list[i].house_model){ }}{{d.list[i].house_model}} | {{# }}}{{ d.list[i].model_area }}m² | {{ d.list[i].house }}</p>
+            <p class="fitmentlease-label">
+                <i class="weui-icon-success"></i><span>
+                {{# if(d.list[i].category == 1){ }}
+                出租
+                {{# } }}
+                {{# if(d.list[i].category == 2){ }}
+                求租
+                {{#} }}
+                {{# if(d.list[i].category == 3){ }}
+                出售
+                {{# } }}
+                {{# if(d.list[i].category == 4){ }}
+                求购
+                {{# } }}</span>
+                <i class="weui-icon-success"></i><span>{{ d.list[i].way }}</span>
+            </p>
+        </div>
+    </a>
+    {{# } }}
+</script>
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var category = "{$_GPC['category']}";
+        var price = "{$_GPC['price']}";
+        var status = "{$_GPC['status']}";
+        var url = "{php echo wxapp_url('houselease/list')}&regionid="+regionid+"&category="+category+"&price="+price+"&status="+status;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+<script>
+    $.each($('.weui-navbar__item'), function (i) {
+        $(this).click(function () {
+            if ($(this).hasClass('weui-bar__item--on')) {
+                $.each($('.Category-eject'), function (j) {
+                    $(this).slideUp(250);
+                });
+                $(this).removeClass('weui-bar__item--on');
+            } else {
+                $.each($('.Category-eject'), function (j) {
+                    if (i == j) {
+                        $(this).slideDown(250);
+                        $(".Category-w li").each(function (index) {
+                            $(this).css({'animation-delay': (index / 10) + 's'});
+                        });
+                    } else {
+                        $(this).slideUp(250);
+                    }
+                });
+                $(this).addClass('weui-bar__item--on').siblings().removeClass('weui-bar__item--on');
+            }
+        })
+    })
+
+    $(".Category-w li").each(function (index) {
+        $(this).click(function () {
+            $('.Category-eject').slideUp(250);
+        })
+    });
+</script>
+</body>
+</html>

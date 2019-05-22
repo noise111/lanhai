@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="Croaker" name="author">
+    <meta name="Description" content="欢迎参加幸运抢红包活动"/>
+    <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="0" http-equiv="expires">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          name="viewport">
+    <title>微信开门领红包活动开始了!</title>
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/red/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/red/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default/red/static/css/sty.css">
+    <link rel="stylesheet" type="text/css" href="{MODULE_URL}template/mobile/default/red/static/css/css.css">
+
+</head>
+<style>
+    body {
+        background: #fff9cd;
+        color: #FFFFFF;
+    }
+
+    .btnLink {
+        background: #ed3c19;
+        color: #FFFFFF;
+    }
+
+    a:link, a:visited, a:hover, a:active {
+        color: #FFFFFF;
+    }
+
+    .money .btnLink, .money1 .btnLink {
+        background: #ffe65b;
+        color: #73330d;
+    }
+
+    .wrap .helpLink {
+        background: #ffe65b;
+        color: #73330d;
+    }
+</style>
+<body>
+<div style="max-width:100%">
+    <img id="top_img" style="max-width: 100%;height: auto;width: auto;"
+         src="{MODULE_URL}template/mobile/default/red/static/image/banner_bg.png" width="100%" border="0">
+</div>
+<div class="prizeHis_2">
+    <div class="wrap">
+        <div class="money">
+            <a href="javascript:;" class="btnLink" id="getredenvelope">领取红包</a>
+        </div>
+        <p class="moneyTip">微信开门领红包活动</p>
+    </div>
+</div>
+{if $slides}
+<div class="banner" style="bottom:-10px;position:fixed">
+    <div class="swiper-container" >
+        <div class="swiper-wrapper">
+            {loop $slides $row}
+            <div class="swiper-slide" onclick="window.location.href='{$row['link']}'">
+                <img src="{$row['image']}??imageView2/1/w/320/h/160/q/100" style="max-height: 160px;"></div>
+            {/loop}
+        </div>            <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+{/if}
+<script src="{MODULE_URL}template/mobile/default/red/static/js/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/jquery-weui/0.8.0/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default/red/static/js/swiper.min.js"></script>
+<script>
+    $(function () {
+        var mySwiper = $('.banner .swiper-container').swiper({
+            pagination: '.banner .swiper-pagination',
+            observer: true,
+            //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+            autoplay: 3000
+        });
+        var swiper = new Swiper('.case .swiper-container', {
+            pagination: '.swiper-pagination',
+            observer: true,
+            //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper//
+            autoplay: 3000
+        });
+    })
+</script>
+<script type="text/javascript">
+    $("#getredenvelope").click(function () {
+        var deviceid = "{$deviceid}";
+        var redurl ="{$redurl}";
+        $("#getredenvelope").hide();
+        $.post("{php echo $this->createMobileUrl('red')}",{deviceid:deviceid}, function (data) {
+
+            if (data.success == 1)
+            {
+                 $.toast('恭喜领取了'+data.credit+'元，已发放到你的余额。');
+                setTimeout(function () {
+
+                    window.location.href=redurl;
+                }, 10)
+                return
+            }
+            if(data.success == 2)
+            {
+                 $.toast('你已领取红包,请过'+data.opentime+'分钟在领取');
+                setTimeout(function () {
+                    window.location.href=redurl;
+                }, 4000)
+                return
+            }
+            if(data.success == 3)
+            {
+                $.toast('你已领满'+data.num+'个红包');
+                setTimeout(function () {
+                    window.location.href=redurl;
+                }, 4000)
+                return
+            }
+        }, "json")
+    })
+
+</script>
+</body>
+</html>

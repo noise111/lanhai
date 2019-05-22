@@ -1,0 +1,72 @@
+{template 'default2/header'}
+<style>
+    .weui-form-preview {
+        margin-top: 10px;
+    }
+
+    .weui-form-preview:first-child {
+        margin-top: 0;
+    }
+</style>
+
+<body ontouchstart>
+<div style="margin-bottom: 50px" id="list">
+
+
+</div>
+<div class="weui-tabbar address_tabbar">
+    <a href="{php echo $this->createMobileUrl('address',array('op'=> 'add'))}" class="weui-btn address_tabbar_btn">添加新地址</a>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item address_item">
+                <label class="weui-form-preview__label">{{d.list[i].realname}}</label>
+                <span class="weui-form-preview__value">{{d.list[i].mobile}}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">{{d.list[i].city}}{{d.list[i].address}}</label>
+            </div>
+        </div>
+        <div class=" address_btn_ft">
+            <div class="address_btn_left">
+                <input class="magic-checkbox" type="radio" name="radio" id="r1" checked>
+                <label for="r1">默认地址</label>
+            </div>
+            <div class="address_btn_right">
+                <a href="{php echo $this->createMobileUrl('address',array('op'=> 'add'))}&id={{d.list[i].id}}" class="weui-btn address_edit_btn">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-edit.png">
+                    编辑
+                </a>
+                <a href="javascript:;" class="weui-btn address_edit_btn" onclick="del({{d.list[i].id}})">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-delete.png">
+                    删除
+                </a>
+            </div>
+
+        </div>
+    </div>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('address/list')}";
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+    function del(id) {
+        var url = "{php echo wxapp_url('address/del')}";
+        $.getJSON(url,{id:id},function (data) {
+            if(data.err_code ==0){
+                $.toast(data.data.content, "text");
+            }
+        })
+    }
+</script>
+</body>
+</html>

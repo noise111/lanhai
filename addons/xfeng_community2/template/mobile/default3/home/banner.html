@@ -1,0 +1,21 @@
+<!--广告-->
+<div class="left_title">
+    <a href="">热门活动</a>
+</div>
+<div class="weui-grids" id="list_banner">
+
+</div>
+<script type="text/html" id="xq_list_banner">
+    {{# for(var i = 0, len = d.banners.length; i < len; i++){ }}
+    <a href="javascript:;" class="weui-grid  cube_grid_img"  data-ratio="5:1" onclick="window.location.href='{{d.banners[i].url}}'" style="margin-top: 0.2em">
+        <img src="{{ d.banners[i].thumb }}">
+    </a>
+    {{# } }}
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/banners')}&regionid="+regionid;
+        _loaddata(url, $("#list_banner"), 'xq_list_banner', true);
+    })
+</script>

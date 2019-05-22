@@ -1,0 +1,109 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>地址管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'shopping','p' => 'address'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="counter"/>
+                        <input type="hidden" name="op" value="shopping"/>
+                        <input type="hidden" name="p" value="address"/>
+                        <div class="row">
+
+                            <div class="col-sm-7 m-b-xs">
+                           <span class="input-group">
+                                <input class="form-control" name="homenumber" type="text" value="{$_GPC['homenumber']}"
+                                       placeholder="可查姓名/手机号">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </span>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <form class="form-horizontal form" method="post">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids"
+                                               onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th class="col-sm-2">ID</th>
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>地址</th>
+                                <th class="col-sm-2">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                               value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+                                </td>
+                                <td>{$item['id']}</td>
+                                <td>{$item['realname']}</td>
+                                <td>
+                                    {$item['mobile']}
+                                </td>
+                                <td>
+                                    {$item['city']}{$item['address']}
+                                </td>
+                                <td>
+                                    <a href="{php echo $this->createWebUrl('counter',array('op' => 'shopping','p'=>'address','operation'=>'add','id'=>$item['id']))}" class="btn btn-primary btn-sm" title="编辑" >编辑</a>
+                                    <a href="{php echo $this->createWebUrl('counter',array('op' => 'shopping','p'=>'address','operation'=>'del','id'=>$item['id']))}" class="btn btn-default btn-sm" onClick="return confirm('确定删除当前地址吗?');" title="删除" >删除</a>
+
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="text-left">
+                                    <input name="token" type="hidden" value="{$_W['token']}"/>
+                                    <input type="submit" class="btn btn-danger btn-sm" name="delete" value="批量删除"/>
+                                    &nbsp;
+                                </td>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{template 'web/common/footer'}

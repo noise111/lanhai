@@ -1,0 +1,208 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>房屋详情</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">所属小区</label></div>
+            <div class="weui-cell__bd">
+                {{item.title}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联&nbsp;&nbsp;系&nbsp;&nbsp;人</label></div>
+            <div class="weui-cell__bd">
+                {{item.realname}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+            <div class="weui-cell__bd">
+                {{item.mobile}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋面积</label></div>
+            <div class="weui-cell__bd">
+                {{item.model_area}}&nbsp;&nbsp;m<sup>2</sup>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋楼层</label></div>
+            <div class="weui-cell__bd">
+                {{item.house_floor}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋租金</label></div>
+            <div class="weui-cell__bd">
+                {{item.price}}元
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋户型</label></div>
+            <div class="weui-cell__bd">
+                {{item.house_model}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">装修情况</label></div>
+            <div class="weui-cell__bd">
+                {{item.fitment}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">住宅类型</label></div>
+            <div class="weui-cell__bd">
+                {{item.house}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell" v-if="item.category==1 || item.category==2">
+            <div class="weui-cell__hd"><label class="weui-label">押金方式</label></div>
+            <div class="weui-cell__bd">
+                {{item.price_way}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">出租方式</label></div>
+            <div class="weui-cell__bd">
+                {{item.way}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋朝向</label></div>
+            <div class="weui-cell__bd">
+                {{item.house_aspect}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">房屋配置</label></div>
+            <div class="weui-cell__bd">
+                {{item.spec}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="goUrl(id)">编辑</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn" @click="postdata()">删除</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{},
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('apphouselease/detail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('apphouselease/del')}";
+                self.item.id=self.id
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('删除成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'houselease'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == -1){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg);
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'houselease'))}";
+                        }, 500);
+                    }
+                },'json')
+            },
+            goUrl:function (id) {
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op'=>'houselease','p' => 'add'))}&id="+id;
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>阿里云接口</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('sms',array('op' => 'aliyun_new'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+                        <input type="hidden" name="id" value="{$settings['id']}" />
+
+                        <div class="form-group">
+                            <label for="reportid" class="col-sm-2 control-label">意见报修模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s33]" id='reportid' class="form-control" value="{$set['s33']['value']}" />
+                                <span class='help-block'>
+                            注意：先去申请如下的模板：【小区秘书】意见报修信息${content},联系人电话${tel}。
+                        </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="resgisterid" class="col-sm-2 control-label">注册小区秘书模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s21]" id='resgisterid' class="form-control" value="{$set['s21']['value']}" />
+                                <span class='help-block'>
+                            注意：先去阿里云，申请如下的模板：【小区秘书】您的验证码是${code}。如非本人操作，请忽略本短信
+                          </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="shopping_id" class="col-sm-2 control-label">超市发货模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s22]" id='shopping_id' class="form-control" value="{$set['s22']['value']}" />
+                                <span class='help-block'>
+                          注意：先去申请如下的模板：【小区秘书】您的快递是${express_name},快递单号${express_code}。有任何问题请随时与我们联系，谢谢。
+                       </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="property_id" class="col-sm-2 control-label">物业费催缴模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s23]" id='property_id' class="form-control" value="{$set['s23']['value']}" />
+                                <span class='help-block'>
+                            注意：先去申请如下的模板：【小区秘书】物业服务中心已开始收取${costtime}物业费，您需交纳的物业费金额为${price}。请尽快缴纳，如有疑问，请咨询${tel}。
+                        </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room_id" class="col-sm-2 control-label">房号通知模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s24]" id='room_id' class="form-control" value="{$set['s24']['value']}" />
+                                <span class='help-block'>
+                            注意：先去申请如下的模板：【小区秘书】您好,您在本小区注册码${code}，请尽快到我们的公众号${account}上注册使用在线功能哦。
+                        </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room_id" class="col-sm-2 control-label">公告通知模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s25]" id='' class="form-control" value="{$set['s25']['value']}" />
+                                <span class='help-block'>
+                            注意：先去申请如下的模板：【小区秘书】小区最新通知${content}。
+                        </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room_id" class="col-sm-2 control-label">挪车通知模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s26]" class="form-control" value="{$set['s26']['value']}" />
+                                <span class='help-block'>
+                                        注意：先去申请如下的模板：【小区秘书】您的爱车${car_num}挡住路啦，麻烦您给挪一下呗。如有疑问，请咨询${linkway}。
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room_id" class="col-sm-2 control-label">商铺通知模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s27]" class="form-control" value="{$set['s27']['value']}" />
+                                <span class='help-block'>
+                                        注意：先去申请如下的模板：【小区秘书】有新团购订单通知:标题${title},数量${total},购买价格${price},订单号${ordersn},备注${remark}。
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room_id" class="col-sm-2 control-label">服务评价模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s28]" class="form-control" value="{$set['s28']['value']}" />
+                                <span class='help-block'>
+                                        注意：先去申请如下的模板：【小区秘书】有新物业评价通知:标题${title},人员姓名${realname},评价分#mark#。
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="resgisterid" class="col-sm-2 control-label">快递代收模板ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s29]" class="form-control" value="{$set['s29']['value']}" />
+                                <span class='help-block'>
+                            注意：先去阿里云，申请如下的模板：【小区秘书】您的取货码是${code}。如非本人操作，请忽略本短信
+                          </span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">Access Key</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s30]" class="form-control" value="{$set['s30']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">Access Key Secret</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s31]"  class="form-control" value="{$set['s31']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">短信签名</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s32]"  class="form-control" value="{$set['s32']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

@@ -1,0 +1,93 @@
+{template 'default2/header'}
+<style>
+    body {
+        background: #ffffff;
+    }
+
+    .tab-nav:after {
+        border-bottom: none;
+    }
+
+    .weui-article {
+        padding: 10px;
+    }
+
+    .car-detail-cells {
+        position: relative;
+        top: 0;
+        width: 95%;
+        margin: 20px auto;
+        left: 0;
+    }
+
+    .car-flex {
+        padding: 10px;
+    }
+
+    .weui-flex__item {
+        text-align: center;
+    }
+
+    .weui-flex__item img {
+        width: 32px;
+    }
+
+    .weui-flex__item p {
+        font-size: 0.9em;
+    }
+</style>
+
+<body>
+<div class="service_banner">
+    <img src="" id="pic">
+</div>
+<div id="J_Tab" class="m-tab" data-ydui-tab>
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><a href="javascript:;">物业介绍</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">小区客服</a></li>
+        <li class="tab-nav-item"><a href="javascript:;"></a></li>
+        <li class="tab-nav-item"><a href="javascript:;"></a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active">
+            <article class="weui-article" id="content">
+
+            </article>
+        </div>
+        <div class="tab-panel-item">
+            <div class="weui-cells car-detail-cells">
+                <div class="weui-flex car-flex" id="kf">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$member['regionid']}";
+        var url = "{php echo wxapp_url('region/one')}&regionid=" + regionid;
+        $.post(url,{},function (data) {
+            if(data.err_code ==0){
+                $("#content").html(data.data.content);
+                $("#pic").attr('src',data.data.thumb);
+                var result ='<a class="weui-flex__item" onclick="window.location.href=\'tel:'+data.data.linkway+'\'">\n' +
+                    '                        <img src="{MODULE_URL}template/mobile/default2/static/images/my/phone.png">\n' +
+                    '                        <p>小区电话</p>\n' +
+                    '                    </a>\n' +
+                    '                    <a class="weui-flex__item" onclick="window.location.href=\'tel:'+data.data.qq+'\'">\n' +
+                    '                        <img src="{MODULE_URL}template/mobile/default2/static/images/my/kefu.png">\n' +
+                    '                        <p>小区客服</p>\n' +
+                    '                    </a>';
+                $("#kf").html(result);
+            }
+        },'json')
+    })
+</script>
+</body>
+</html>

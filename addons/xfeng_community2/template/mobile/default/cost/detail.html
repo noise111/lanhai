@@ -1,0 +1,122 @@
+{template 'default/header'}
+<body class="max-width bg-f5">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+    <h1 class="title txt-fff">我的账单</h1>
+</header>
+<div class="content page" style="top: 10px">
+    <div class="list-block"style="font-size: 0.65rem">
+        <ul>
+            <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">住户姓名</div>
+                        <div class="item-after">{$item['username']}</div>
+                    </div>
+                </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">住户住址</div>
+                    <div class="item-after">{$item['homenumber']}</div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">住房面积</div>
+                    <div class="item-after">{$item['area']}平</div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">账单时间</div>
+                    <div class="item-after">{$item['costtime']}</div>
+                </div>
+            </li>
+            {loop $c $key $cc}
+
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">{$cc}</div>
+                    <div class="item-after">{$fee[$key]}</div>
+                </div>
+            </li>
+
+            {/loop}
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">合计</div>
+                    <div class="item-after">{$item['total']}元</div>
+                </div>
+            </li>
+        </ul>
+        <div style="height: 20px;"></div>
+        <ul>
+            {if $item['status'] == '否' || empty($item['status']) || $item['status'] == 2}
+            {if set('p16') && $_W['member']['credit1'] && $_W['member']['credit1'] !='0.00'}
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">总积分</div>
+                    <div class="item-after">{$_W['member']['credit1']}积分/可抵扣{$credit1}积分</div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-inner">
+                    <div class="item-title">积分</div>
+                    <div>
+                        <input type="number" placeholder="输入抵扣积分" id="credit" style="display:block;height:20px;line-height: 20px;width: 120px;"/>
+                    </div>
+                </div>
+            </li>
+            {/if}
+            {/if}
+        </ul>
+        {if $set || set('x44',$member['regionid'])}
+        {if $item['status'] == '否' || empty($item['status']) || $item['status'] == 2}
+        <div class="cost-btn-bottom" >
+
+                <span id="submit" value="yes" class="button button-success button-fill" style="margin: 0 auto;width: 40%;height: 40px;font-size: 16px;line-height: 40px;">确认支付</span>
+
+        </div>
+        {/if}
+        {/if}
+    </div>
+</div>
+<script>
+    $("#submit").click(function () {
+        var credit ='';
+        {if set('p16')}
+         credit = $("#credit").val();
+        var credit2 = "{$_W['member']['credit1']}";//用户积分
+        var credit1 = "{$credit1}";//物业费可抵扣积分
+        if(parseInt(credit2) > parseInt(credit1)){
+            if(parseInt(credit) > parseInt(credit1)){
+                $.toast('最多可输入'+credit1+'积分');return false;
+            }
+        }
+        else
+        {
+            if(parseInt(credit) > parseInt(credit2)){
+                $.toast('最多可输入'+credit2+'积分');return false;
+            }
+        }
+
+        {/if}
+        var id ="{$id}";
+        $.post("{php echo $this->createMobileUrl('cost',array('op' => 'detail'))}",{id:id,credit:credit},function (data) {
+            if(data.status == 1 ){
+                if(data.content){
+                    $.toast(data.content);return false;
+                }
+            }
+            if(data.status == 2){
+                if(data.content){
+                    $.toast(data.content);
+                }
+                window.location.href=data.url;
+            }
+
+
+        },'json');
+    })
+</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>
+{template 'default/footer'}

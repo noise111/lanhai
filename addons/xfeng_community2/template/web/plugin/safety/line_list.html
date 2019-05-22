@@ -1,0 +1,152 @@
+{template 'web/common/header-base'}
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        padding: 10px;
+        border-top: 1px solid #f0f0f0;
+        min-height: 41px;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>巡更路线</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('safety',array('op' => 'line','p' => 'list'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="safety"/>
+                        <input type="hidden" name="op" value="line"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('safety_lineAdd', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('safety',array('op' => 'line','p' => 'add'))}" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>添加巡更路线
+                                </a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <select class="form-control" name="regionid">
+                                    <option>全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" placeholder="请输入巡更路线名称" class="form-control" name="title" value="{$_GPC['title']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" method="post" class="form-horizontal" role="form">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="30px;">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th>ID</th>
+                                <th>巡更路线名称</th>
+                                <th>所属小区</th>
+                                <th>是否拍照</th>
+                                <th>备注</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}" value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+
+                                </td>
+                                <td>{$item['id']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{$item['rtitle']}</td>
+                                <td>{if $item['status']==1}必须拍照{else}不需拍照{/if}</td>
+                                <td>{$item['remark']}</td>
+                                <td><label data="{$item['enable']}" class='label  label-default {if $item['enable']==1}label-info{/if}' onclick="verify(this,{$item['id']},'enable_line')">{if $item['enable']==1}启用{else}禁用{/if}</label></td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('safety_lineEdit', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('safety',array('op' => 'line','p' => 'add','id' => $item['id']))}">编辑</a>
+                                    &nbsp;&nbsp;
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('safety_lineDel', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('safety',array('op' => 'line','p' => 'del','id' => $item['id']))}">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+                                    {if ($user && $menu_opss && @in_array('safety_linePldel', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="del" class="btn btn-danger" value="批量删除">
+                                    {/if}
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('safety',array('op' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'enable') {
+                $(obj).html(d.data == '1' ? '启用' : '禁用');
+            }
+            if (type == 'enable_line') {
+                $(obj).html(d.data == '1' ? '启用' : '禁用');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+</script>
+{template 'web/common/footer'}

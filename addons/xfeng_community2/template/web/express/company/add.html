@@ -1,0 +1,58 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('express', array('op' => 'company','p' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;物流公司添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'company','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="companyId" id="companyId" value="{$editData['id']}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物流公司名称</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="companyName" id="companyName" value="{$editData['company']}" class="form-control" placeholder="例如（顺丰）">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="companyTel" id="companyTel" value="{$editData['phone']}" class="form-control" placeholder="可输入商家电话">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物流Logo</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image('picture',$editData['logo']);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['companyName'].value) {
+            alert('公司名称不可为空。');
+            return false;
+        }
+        if (!form['companyTel'].value) {
+            alert('联系电话不可为空。');
+            return false;
+        }
+    }
+</script>

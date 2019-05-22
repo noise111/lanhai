@@ -1,0 +1,110 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>订单详情</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">订单编号</label></div>
+            <div class="weui-cell__bd">
+                {{item.ordersn}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联&nbsp;&nbsp;系&nbsp;&nbsp;人</label></div>
+            <div class="weui-cell__bd">
+                {{item.realname}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+            <div class="weui-cell__bd">
+                {{item.mobile}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">下单地址</label></div>
+            <div class="weui-cell__bd">
+                {{item.city}}{{item.address}}
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">订单状态</label></div>
+            <div class="weui-cell__bd" v-if="item.status == 0">未付款</div>
+            <div class="weui-cell__bd" v-if="item.status == 1">已付款</div>
+            <div class="weui-cell__ft"></div>
+        </div>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{},
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appbusiness/orderdetail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+        }
+    })
+
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!--{template 'web/common/header-base'}-->
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>卡片管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('guard',array('op'=>'comb'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="guard"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn  btn-primary"
+                                   href="{php echo $this->createWebUrl('guard', array('op' => 'comb','p' => 'add'));}"><i
+                                        class="fa fa-plus"></i> 添加卡</a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入卡号">
+                                    <span class="input-group-btn">
+                            <button type="submit" class="btn btn-primary">搜索</button>
+                             <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" method="post">
+                        <table class="table table-bordered table-condensed">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th style="width:6%">ID</th>
+                                <th class="col-md-1">小区名称</th>
+                                <th class="col-md-1">门禁名称</th>
+                                <th class='col-md-1'>卡号</th>
+                                <th class='col-md-1'>卡状态</th>
+                                <th class='col-md-1'>动作</th>
+                                <th class='col-md-1'>发卡状态</th>
+                                <th class='col-md-1'>添加时间</th>
+                                <th class='col-md-1'>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['regiontitle']}</td>
+                                <td>{$item['devicetitle']}{$item['unit']}</td>
+                                <td>{$item['cardno']}</td>
+                                <td>{if $item['type'] == 1}白名单{else}黑名单{/if}</td>
+                                <td>{if $item['oper'] == 1}添加{elseif $item['oper'] == 2}覆盖{else}删除{/if}</td>
+                                <td>{if $item['status'] == 1}发卡成功{else}发卡失败{/if}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td><span class="btn btn-default btn-sm" onclick="del({$item['id']})">删除</span></td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible">
+                                <ul class="pagination pull-right">{$pager}</ul>
+                            </td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center">
+                            <td>没有找到对应的记录</td>
+                        </tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function del(id) {
+        var url ="{php echo $this->createWebUrl('guard',array('op'=>'comb','p'=>'del'))}"
+        $.getJSON(url,{id:id},function (res) {
+            if(res.status){
+                alert('删除成功')
+                window.location.reload();
+            }
+        })
+    }
+</script>
+

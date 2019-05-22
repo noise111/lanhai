@@ -1,0 +1,115 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat'))}"></a>&nbsp;&nbsp;&nbsp;添加微信支付
+                    (支付授权目录与“支付选项”中的说明不同，应在 公众平台->微信支付->公众号支付 追加一条支付授权目录:
+        {$_W['siteroot']}app/)</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat','operation' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form">
+        <input type="hidden" value="{$item['id']}" name="id">
+        <div class="form-group" id="shopid" >
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">超市</label>
+            <div class="col-sm-9 col-xs-12">
+                <select name="shopid" class="form-control">
+                    {loop $shops $shop}
+                    <option value="{$shop['id']}" {if $shop['id'] == $item['userid']}selected = 'selected'{/if}>{$shop['title']}</option>
+                    {/loop}
+                </select>
+            </div>
+        </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppId)</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="appid" class="form-control" id="appid" value="{$item[appid]}" />
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">公众号(AppSecret)</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="appsecret" class="form-control" id="appsecret" value="{$item[appsecret]}" />
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付商户号</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="mchid" class="form-control" id="mchid" value="{$item[mchid]}" />
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付密钥</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="input-group">
+                            <input type="text" name="apikey" id="facilitator_signkey" class="form-control" maxlength="32" value="{if empty($item['apikey'])}{php echo random(32);}{else}{php echo substr($item['apikey'], 0 , 32)}{/if}" autocomplete="off"/>
+                            <span onclick="tokenGen('facilitator_signkey');" style="cursor:pointer" class="input-group-addon">生成新的</span>
+                        </div>
+                        <span class="help-block">此值需要手动在腾讯商户后台API密钥保持一致。{if $_W['isfounder']}<a href="http://bbs.we7.cc/thread-5788-1-1.html" target="_blank">查看设置教程</a>{/if}</span>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="submit" name="submit" value="提交" id="submit" class="btn btn-w-m btn-primary"  />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+
+    </form>
+</div>
+            </div></div></div>
+</div>
+<script>
+    function tokenGen(id) {
+        var letters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $('#'+id).val(token);
+    }
+    $('#submit').on('click', function () {
+        if(!$("#appid").val()){
+            alert('公众号(AppId)不可为空。');
+            return false;
+        }
+        if(!$("#appsecret").val()){
+            alert('公众号(AppSecret)不可为空。');
+            return false;
+        }
+        if(!$("#mchid").val()){
+            alert('微信支付商户号不可为空。');
+            return false;
+        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('shopping',array('op'=>'payapi','p' => 'wechat','operation' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>
+{template 'web/common/footer'}

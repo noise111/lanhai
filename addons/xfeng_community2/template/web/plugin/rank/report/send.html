@@ -1,0 +1,82 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('rank', array('op' => 'report'))}"></a>投诉推送</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('rank',array('op' => 'report','p'=> 'send','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物业接收员</label>
+                            <div class="col-sm-6 col-xs-6" id="pro">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="pro[]" id="pro_0" data-group='pros' >
+                                    <label for="pro_0">全部</label>
+                                </div>
+                                {if $pros}
+                                {loop $pros $pro}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="pro[]" value="{$pro['id']}" id="pro_{$pro['id']}" data-group='pros'>
+                                    <label for="pro_{$pro['id']}">{$pro['realname']}</label>
+                                </div>
+                                {/loop}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">房管接收员</label>
+                            <div class="col-sm-6 col-xs-6" id="notice">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="notice[]" id="notice_0" data-group='notices' >
+                                    <label for="notice_0">全部</label>
+                                </div>
+                                {if $notices}
+                                {loop $notices $notice}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="notice[]" value="{$notice['id']}" id="notice_{$notice['id']}" data-group='notices' >
+                                    <label for="notice_{$notice['id']}">{$notice['realname']}</label>
+                                </div>
+                                {/loop}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10 col-xs-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#pro_0").click(function() {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" +group + "']").each(function(){
+            $(this).get(0).checked = checked;
+        })
+    });
+    $("#notice_0").click(function() {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" +group + "']").each(function(){
+            $(this).get(0).checked = checked;
+        })
+    });
+</script>

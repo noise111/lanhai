@@ -1,0 +1,192 @@
+{template 'app2/header'}
+<style>
+    .weui-cells {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .weui-cells:before {
+        border-top: none;
+    }
+
+    .weui-cell:before {
+        left: 0;
+    }
+
+    .weui-textarea {
+        min-height: 100px;
+    }
+
+    .toolbar .picker-button {
+        color: #FF5500;
+    }
+
+    .weui-label {
+        width: 60px;
+    }
+
+    .opt {
+        float: left;
+    }
+
+    .opt:last-child {
+        margin-left: 10px;
+    }
+
+    .magic-radio + label, .magic-checkbox + label {
+        padding-left: 22px;
+    }
+
+    .magic-radio:checked + label:before {
+        border: 1px solid #FF9900;
+    }
+
+    .magic-radio + label:after {
+        top: 6px;
+        left: 6px;
+        background: #FF9900;
+    }
+
+    .webuploader-element-invisible {
+        opacity: 0; /*设置此控件透明度为零，即完全透明*/
+        filter: alpha(opacity=0); /*设置此控件透明度为零，即完全透明针对IE*/
+        font-size: 100px;
+        position: absolute; /*绝对定位，相对于 .input */
+        top: 0;
+        right: 0;
+    }
+
+    #thumb div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<body ontouchstart>
+<div id='app'>
+    <div class="weui-cells">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="regionid" >
+                    <option value="">选择小区</option>
+                    <option v-for="(row, index) in regions" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="areaid" >
+                    <option value="">选择区域</option>
+                    <option v-for="(row, index) in areas" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="buildid" >
+                    <option value="">选择楼宇</option>
+                    <option v-for="(row, index) in builds" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="unitid" >
+                    <option value="">选择单元</option>
+                    <option v-for="(row, index) in units" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="roomid" >
+                    <option value="">选择房号</option>
+                    <option v-for="(row, index) in rooms" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" id="realname" :value="item.realname">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" id="mobile" :value="item.mobile">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="status" >
+                    <option value="">选择身份</option>
+                    <option value="1" {if $item['status'] == 1}selected{/if}>户主</option>
+                    <option value="2" {if $item['status'] == 2}selected{/if}>家属</option>
+                    <option value="3" {if $item['status'] == 3}selected{/if}>租户</option>
+
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" id="remark" :value="item.remark" placeholder="输入备注">
+            </div>
+        </div>
+
+    </div>
+    <div style="margin: 20px 20px">
+        <a href="javascript:;" class="weui-btn weui-btn_primary">修改</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn">删除</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn">添加房号</a>
+        <a href="javascript:;" class="weui-btn weui-btn_warn">授权开门</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}";
+    var app = new Vue({
+        el: '#app',
+        data: {
+            id: id,
+            item: [],
+            regions: [],
+            builds:[],
+            units:[],
+            rooms:[],
+            areas:[]
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('user/add')}";
+            var data = {
+                id: self.id
+            }
+            $.getJSON(url, data, function (ret) {
+                self.item = ret.data
+            })
+            var link = "{php echo wxapp_url('region/list')}";
+            $.getJSON(link, function (ret) {
+                self.regions = ret.data.list
+            })
+        },
+        mounted: function () {
+            var self = this
+
+        },
+        methods: {
+            postdata: function () {
+                console.log(self.title)
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

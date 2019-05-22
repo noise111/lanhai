@@ -1,0 +1,71 @@
+<?php
+
+$b1 = tomedia(set('b1'));
+$b2 = set('b2');
+$b3 = set('b3');
+$b4 = set('b4');
+$b5 = tomedia(set('b5'));
+$b6 = set('b6');
+$b7 = set('b7');
+$b8 = set('b8');
+$b9 = tomedia(set('b9'));
+$b10 = set('b10');
+$b11 = set('b11');
+$b12 = set('b12');
+$b13 = tomedia(set('b13'));
+$b14 = set('b14');
+$b15 = set('b15');
+$b16 = set('b16');
+$b17 = tomedia(set('b17'));
+$b18 = set('b18');
+$b19 = set('b19');
+$b20 = set('b20');
+$carttotal = model_shop::getCartTotal($member['regionid']);
+$count = util::readnotice($member['regionid']);
+$tel1 = set('p1');
+$tel2 = util::tel($member['regionid']);
+$tel = $tel1 ? $tel1 : $tel2;
+?>
+<nav class="bar bar-tab" style="position: fixed">
+{if $b4}
+    <a class="tab-item {if empty($b2)}{if $_GPC['do']=='home' || empty($_GPC['do'])}active{/if}{/if}"  onclick="window.location.href='{if $b2}{$b2}{else}{php echo $this->createMobileUrl('home')}{/if}'">
+        {if $b1}<img src="{$b1}" class="icon icon-home">{else}<span class="icon icon-home"></span>{/if}
+        <span class="tab-label">{if $b3}{$b3}{else}首页{/if}</span>
+    </a>
+{/if}
+    {if $b8}
+    <a class="tab-item {if empty($b6)}{if $_GPC['do']=='announcement'}active{/if}{/if}" onclick="window.location.href='{if $b6}{$b6}{else}{php echo $this->createMobileUrl('announcement')}{/if}'">
+        {if $b5}<img src="{$b5}" class="icon icon-itoast">{else}<span class="icon icon-itoast"></span>{/if}
+        <span class="tab-label">{if $b7}{$b7}{else}通知{/if}</span>
+       {if empty($b7)} {if $count}<span class="badge">{$count}</span>{/if}{/if}
+    </a>
+    {/if}
+    {if $b12}
+    <a class="tab-item {if empty($b10)}{if $_GPC['do']=='shopping'}active{/if}{/if}"  onclick="window.location.href='{if $b10}{$b10}{else}{php echo $this->createMobileUrl('shopping',array('op' => 'mycart'))}{/if}'">
+        {if $b9}<img src="{$b9}" class="icon icon-home">{else}<span class="icon icon-cart"></span>{/if}
+        <span class="tab-label">{if $b11}{$b11}{else}购物车{/if}</span>
+        {if empty($b11)}{if $carttotal}<span class="badge badge1">{$carttotal}</span> {/if}{/if}
+    </a>
+    {/if}
+    {if $b16}
+    <a class="tab-item" onclick="window.location.href='{if $b14}{$b14}{else}tel:{$tel}{/if}'">
+        {if $b13}<img src="{$b13}" class="icon icon-home">{else}<span class="icon icon-phone"></span>{/if}
+
+        <span class="tab-label">{if $b15}{$b15}{else}平台客服{/if}</span>
+    </a>
+    {/if}
+    {if $b20}
+    <a class="tab-item {if empty($b18)}{if $_GPC['do']=='member'}active{/if}{/if}" onclick="window.location.href='{if $b18}{$b18}{else}{php echo $this->createMobileUrl('member')}{/if}'">
+        {if $b17}<img src="{$b17}" class="icon icon-home">{else}<span class="icon icon-me"></span>{/if}
+
+        <span class="tab-label">{if $b19}{$b19}{else}我{/if}</span>
+    </a>
+    {/if}
+</nav>
+</body>
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+<!--<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>-->
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/swiper.min.js" charset="utf-8"></script>
+<script type="text/javascript"  src="{MODULE_URL}template/mobile/default/static/js/myjs.js" charset="UTF-8"></script>
+</html>

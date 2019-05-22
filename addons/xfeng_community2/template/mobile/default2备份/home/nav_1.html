@@ -1,0 +1,51 @@
+<div id="homeNav01" class="swiper-container ">
+    <div class="swiper-wrapper" id="link">
+
+
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<script>
+    $(function () {
+        var url = "{php echo wxapp_url('display/links')}&regionid="+regionid;
+        $.getJSON(url,{},function (data) {
+            var item = '';
+            var d = data.data.links;
+            console.log(d);
+            item += '<a class="swiper-slide">';
+            for(var i=0;i<d.length;i++){
+                var val = d[i];
+                if(i%8 == 0 && i!=0){
+                    item += '</a><a class="swiper-slide">';
+                }
+                item +='<div class="default-swiper-slide" onclick=\'window.location.href="'+val['url']+'"\'><div class="home-nav-icon"><img src="'+val['thumb']+'"></div><p class="home-nav-label"><span>'+val['title']+'</span></p>\n' +
+                    '        </div>';
+            }
+            $('#link').html(item);
+        })
+        // $("#homeNav01").swiper({
+        //     initialSlide :1,
+        //     loop: true,
+        //     autoplay: 3000,
+        //     pagination: '.swiper-pagination',
+        // });
+        var swiper = new Swiper('#homeNav01',{
+            speed: 1000,
+            loop: false,
+            autoplay: false,
+            observer:true,
+            observeParents:true,
+            autoplayDisableOnInteraction : false,
+            // pagination: '.swiper-pagination',
+            onInit: function(swiper){
+
+            },
+            onSlideChangeStart:function(swiper)
+            {
+                console.log(swiper.activeIndex)
+            }
+        });
+    })
+
+</script>

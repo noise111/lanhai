@@ -1,0 +1,34 @@
+<div class="region-goods-details row">
+    <div class="region-goods-left col-sm-2">条码设置</div>
+    <div class="region-goods-right col-sm-10">
+        <div class="form-group">
+            <label class="col-sm-1 control-label">原价条码</label>
+            <div class="col-sm-3">
+                <input type='text' class="form-control" name='originbarcode' value='{$item['originbarcode']}' />
+                <span  class='help-block'>没有使用优惠券的条码</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">优惠券条码</label>
+            <div class="col-sm-3">
+                <input type='text' class="form-control" name='couponbarcode' value='{$item['couponbarcode']}' />
+                <span  class='help-block'>使用优惠券后的条码</span>
+            </div>
+            <label class="col-sm-1 control-label">指定优惠券</label>
+            <div class="col-sm-3">
+                <select class="form-control" style="background-color: white;" name="barcodecoupontype">
+                    <option value='0'>请选择...</option>
+                    <option value="5" {if $item['barcodecoupontype'] == 5}selected="selected"{/if}>社交优惠券</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-1 control-label">线上支付条码</label>
+            <div class="col-sm-3">
+                <input type='text' class="form-control" name='verifybarcode' value='{$item['verifybarcode']}' />
+                <span  class='help-block'>线上支付店铺核销商品时使用的条码</span>
+            </div>
+        </div>
+    </div>
+</div>
+

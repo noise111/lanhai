@@ -1,0 +1,191 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <!--<li><a href="{php echo $this->createWebUrl('category',array('op' => 'list','type' => 9))}" title="抄表分类" >抄表分类</a></li>-->
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'edit'))}" title="生成抄表费用" >生成抄表费用</a></li>
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'list'))}" title="抄表费用列表" >抄表费用列表</a></li>
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'qrlist'))}" title="抄表二维码列表" >抄表二维码列表</a></li>
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'wechat','p' => 'list'))}" title="抄表管理员" >抄表管理员</a></li>
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'add'))}" title="添加抄表" >添加抄表数据</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'import'))}" title="导入抄表数据" >导入抄表数据</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <div class="alert alert-info" role="alert">
+                        <p style="font-size: 18px;">默认导入格式:抄表ID/小区名称/地址/抄表类型/上期度数/本期度数/费用/抄表时间。具体请下载模板格式。</p>
+                        <p style="font-size: 18px;color:red">注意：如是从系统导出的数据，抄表ID，抄表类型，不可修改。</p>
+                        <p style="font-size: 18px;color:red">注意：如直接导入的抄表ID、抄表类型、小区名称、费用、抄表时间留空，系统会进行计算</p>
+                        <p>(<a href="{MODULE_URL}data/files/excel/entery.xlsx" target="_blank" style="font-size:16px;color:red">点击下载上传抄表格式示例</a>)</p>
+                    </div>
+                    <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-4">
+                                <select name='regionid' class="form-control" id="regionid">
+                                    <option value="" > 选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" > {$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择类型</label>
+                            <div class="col-sm-4">
+                                <select name="category" id="category" class="form-control">
+                                    <option value="">请选择类型</option>
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">账单名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="title" class="form-control" placeholder="例如：某某账单"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">截止日期</label>
+                            <div class="col-sm-4">
+                                {php echo tpl_form_field_date('enddate',$enddate);}
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-4">
+                                <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">抄表数据</label>
+                            <div class="col-sm-4">
+                                <input type="file" name="room" class="form-control" id="room">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="button" id="myButton" data-loading-text="正在导入中，请勿关闭和刷新浏览器......" class="btn btn-w-m btn-primary" autocomplete="off">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                </div></div></div></div>
+</div>
+</div>
+<script type="text/javascript">
+    function check(form){
+        if (!form['room'].value) {
+            alert('请上传抄表表格');
+            return false;
+        }
+        if (!form['category'].value) {
+            alert('请选择类型');
+            return false;
+        }
+        return true;
+    }
+</script>
+<script>
+    $('#myButton').on('click', function () {
+        console.log('xxx')
+        if($('#regionid option:selected') .val() === ''){
+            alert('请选择小区。');
+            return false;
+        }
+        var $btn = $(this).button('loading');
+        var regionid = $("#regionid option:selected").val();
+//        var type = $("input[name='type']:checked").val();
+        var category = $("#category option:selected").val();
+        var title = $("input[name='title']").val();
+        var remark = $("textarea[name='remark']").val();
+        var enddate = $("input[name='enddate']").val();
+        var formData = new FormData();
+        formData.append('room', $('#room')[0].files[0]);
+        formData.append('regionid', regionid);
+        formData.append('category', category);
+        formData.append('title', title);
+        formData.append('remark', remark);
+        formData.append('enddate', enddate);
+        $.ajax({
+            url : "{php echo $this->createWebUrl('fee',array('op'=> 'entery','p' => 'import'))}",
+            type : "POST",
+            cache: false,
+            data : formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success : function(data) {
+                if(data.result){
+                    alert(data.content);
+                    setTimeout(function(){
+                        window.location.href="{php echo $this->createWebUrl('fee',array('op' => 'entery'))}";
+                    },000);
+                }else{
+                    alert(data.content);
+                    setTimeout(function(){
+                        window.location.reload();
+                    },100);
+                }
+            },
+            error : function(data) {
+
+            }
+        });
+    })
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                $.getJSON("{php echo $this->createWebUrl('fee',array('op'=>'entery','p'=>'category'))}", {
+                    regionid: data.regionid
+                }, function (data) {
+                    var fees = data
+                    var content = '<option value="0">请选择项目</option>';
+                    for (var o in fees) {
+                        content += "<option value='" + fees[o].id + "'>" + fees[o].title + "</option>";
+                    }
+                    $("#category").html(content);
+                })
+            }
+        },'json')
+    })
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('fee',array('op'=>'entery','p'=>'category'))}", {
+            regionid: regionid
+        }, function (data) {
+            var fees = data
+            var content = '<option value="0">请选择项目</option>';
+            for (var o in fees) {
+                content += "<option value='" + fees[o].id + "'>" + fees[o].title + "</option>";
+            }
+            $("#category").html(content);
+        })
+    })
+</script>
+
+{template 'web/common/footer'}

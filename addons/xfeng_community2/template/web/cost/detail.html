@@ -1,0 +1,322 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('cost')}"></a>&nbsp;&nbsp;&nbsp;费用数据</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cost',array('op' => 'detail','id' => $id,'regionid' => $_GPC['regionid']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="cost"/>
+                        <input type="hidden" name="op" value="detail"/>
+                        <input type="hidden" name="id" value="{$id}"/>
+                        <input type="hidden" name="regionid" value="{$_GPC['regionid']}"/>
+                    <div class="row">
+
+                        <div class="col-sm-3 m-b-xs">
+                            <select name="status" class="form-control">
+                                <option value="0">支付状态</option>
+                                <option value="是" {if $_GPC['status'] == '是'} selected="selected" {/if}>是</option>
+                                <option value="否" {if $_GPC['status'] == '否'} selected="selected" {/if}>否</option>
+                            </select>
+                        </div>
+
+                        <div class="col-sm-3 m-b-xs">
+                            <select name="regionid" class="form-control" >
+                                <option value="" >选择小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP : $starttime),'endtime' => date('Y-m-d',empty($endtime) ? TIMESTAMP : $endtime)));}
+                            <span style="color: red">备注：支付时间导出需要选择时间</span>
+                        </div>
+                        <div class="col-sm-3 m-b-xs">
+                            <input class="form-control" name="username" type="text" value="{$_GPC['username']}" placeholder="请输入查询姓名">
+                        </div>
+                        <div class="col-sm-3 m-b-xs">
+                            <input class="form-control" name="mobile" type="text" value="{$_GPC['mobile']}" placeholder="请输入查询手机号码" >
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <span class="input-group">
+                                <input class="form-control" name="homenumber" type="text" value="{$_GPC['homenumber']}" placeholder="请输入查询房号" >
+                                <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary" >搜索</button>
+                                <button type="submit" name="export" value="1" class="btn btn-primary">普通导出数据</button>
+                                    <button type="submit" name="export" value="2" class="btn btn-primary">支付时间导出数据</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    </form>
+
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form" >
+    <input type="hidden" value="{$_GPC['regionid']}" name="regionid">
+    <input type="hidden" value="{$id}" name="costid">
+    <input type="hidden" name="record">
+    <input type="hidden" name="limit" value="0">
+    <input type="hidden" name="page" value="1">
+    <input type="hidden" name="ok" value="0">
+    <input type="hidden" name="fail" value="0">
+            <table class="table table-bordered" style="width:100%;z-index:-10;" cellspacing="0" cellpadding="0">
+                <thead >
+                <tr>
+                    <th style="width:3%;">
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="checkids"
+                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                            <label for="checkids"> </label>
+                        </div>
+                    </th>
+                    <th style="width:220px;">时间</th>
+                    <th style="width:150px;">手机号码</th>
+                    <th style="width:100px;">姓名</th>
+                    <th class="col-sm-2">地址</th>
+                    <th style="width:80px;">费用</th>
+                    <th class="col-sm-1">状态(点击变更)</th>
+                    <th class="col-sm-1">支付方式</th>
+                    <th class="col-sm-1">支付时间</th>
+                    <th style="width:280px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $row}
+                <tr>
+                    <td style="width:30px;">
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" type="checkbox" name="cid[]" id="cid_{$row['id']}"
+                                   value="{$row['id']}">
+                            <label for="cid_{$row['id']}"></label>
+                        </div>
+                    </td>
+                    <td>{$row['costtime']}</td>
+                    <td>{$row['mobile']}</td>
+                    <td>{$row['username']}</td>
+                    <td>{$row['title']}{$row['homenumber']}</td>
+                    <td>{$row['total']}元</td>
+                    <td>
+                        <label {if $row['status']=='是' || $row['status'] == 1}{else}data-toggle="modal"{/if} data-target="#myModal1" data-id="{$row['id']}" data='{$row['status']}' class='label label-default {if $row['status']=='是' || $row['status'] == 1}label-success{/if}' onclick="setProperty(this,{$row['id']},status)">{if $row['status']=='是' || $row['status'] ==1}已缴费{else}未缴费{/if}</label>
+                    </td>
+                    <td>{if $row['paytype']==1}线上{elseif $row['paytype']==2}现金{elseif $row['paytype']==3}刷卡{elseif $row['paytype']==4}转账{/if}</td>
+                    <td>{if $row['paytype']}{php echo date('Y-m-d H:i',$row['paytime'])}{/if}</td>
+                    <td>
+                        <a href="{php echo $this->createWebUrl('cost',array('op' => 'edit','id' => $row['id'],'regionid' => $_GPC['regionid'],'costid' => $id))}" title="详情" data-toggle="tooltip" data-placement="top" class="btn btn-primary btn-sm">编辑</a>
+                        <span class="btn btn-warning btn-sm" onclick="show($row['remark'])" data-toggle="modal" data-target="#myModal4">查看备注</span>
+                        <span class="btn btn-primary btn-sm" onclick="xqprint($row['id'])">打印</span>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+
+    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+        <thead>
+        {if $list}
+        <tr>
+            <td class="text-left">
+                <input name="token" type="hidden" value="{$_W['token']}"/>
+                <input type="submit" class="btn btn-danger btn-sm" name="delete" value="批量删除"/> &nbsp;
+                <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('确认短信通知用户吗？'); return false;" name="sms" value="yes">批量短信通知
+                </button>
+                <!--<button type="submit" name="plwechat" value="1" class="btn btn-primary btn-sm" data-loading-text="正在发送中，请勿关闭和刷新浏览器......" autocomplete="off" id="myButton">批量微信推送</button>-->
+
+
+                {if !empty($id)}
+                <button type="button" class="btn btn-success" id="submit">批量微信推送</button>
+                <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('cost',array('op' => 'edit','regionid'=> $_GPC['regionid'],'cid' => $id))}">添加用户</a>
+                <span>
+                    <p>已发送<span id="record">0</span>条，成功
+                            <span style="color: green" id="ok">0</span>条，
+                            失败
+                            <span style="color: red" id="fail">0</span>条</p>
+                </span>
+                <span style="color: red">可推送:{$ttotal}条</span>
+                {/if}
+                <span style="color: red">总费用:{$total}条</span>
+
+            </td>
+            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+        </tr>
+        {else}
+        <tr style="text-align: center">
+            <td>{if !empty($id)}
+                <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('cost',array('op' => 'edit','regionid'=> $_GPC['regionid'],'cid' => $id))}">添加用户</a>
+                {/if}</td>
+            <td >没有找到对应的记录</td>
+        </tr>
+        {/if}
+        </thead>
+    </table>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='costid' id='costid' class="form-control"/>
+                    <input type='hidden' name='status' id='status' class="form-control"/>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <select class="form-control" name="paytype" id="xqregionid">
+                                <option value="2">现金支付</option>
+                                <option value="3">刷卡支付</option>
+                                <option value="4">转账支付</option>
+                            </select>
+                        </div>
+                    </div>
+                    <textarea name="remark" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">查看备注</h4>
+
+            </div>
+
+            <div class="modal-body">
+                <span id="rcontent"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--<script>-->
+    <!--$('#myButton').on('click',function () {-->
+        <!--var $btn = $(this).button('loading');-->
+    <!--})-->
+<!--</script>-->
+<script type="text/javascript">
+    function setProperty(obj, id, type) {
+        $("#status").val(obj.getAttribute("data"));
+        $("#costid").val(obj.getAttribute("data-id"));
+
+    }
+    function show(remark) {
+        var remark = remark;
+        $("#rcontent").html(remark);
+
+    }
+
+    function xqprint(id) {
+        var id = id;
+        var regionid = "{$_GPC['regionid']}";
+        $.post("{php echo $this->createWebUrl('cost',array('op' => 'xqprint'))}", {
+            id: id,
+            regionid: regionid
+        }, function (result) {
+            if (result.status == 1) {
+                alert(result.content);
+                return false;
+            } else {
+                alert(result.msg);
+                return false;
+            }
+        }, 'json')
+    }
+</script>
+<script>
+    // $('#myButton').on('click',function () {
+    //     var $btn = $(this).button('loading');
+    // })
+    // 提交事件
+    var i=0;
+    var openid=[];
+    $('#submit').on('click',function() {
+        $('#submit').html("消息正在发送中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#submit').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        mass(total, ok, fail);
+        // if ($('input:radio[name="user"]:checked').val() == 'all') {
+        //
+        //
+        // }else{
+        //     var td = $('#div-search').next().next().find('td:odd');
+        //     console.log(td);
+        //     return false;
+        //     td.each(function(){
+        //         openid.push($(this).html())
+        //         total ++
+        //     });
+        //     $("input[name='total']").val(total);
+        //     $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+        //     send(total, ok, fail);
+        // }
+    });
+    function mass(total, ok, fail) {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('cost',array('op'=>'wxsend'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n+5);
+                total=data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                // ok += data.ok;//成功发送
+                // fail += data.fail;//发送失败
+                // $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                if(data.status == 'end'){
+                    // $("input[name='record']").attr('value','');
+                    $("input[name='limit']").val(0);
+                    // $('#msg1').html("任务完成!");
+                    $('#submit').html("发送完成");
+                    $('#submit').removeProp('disabled');
+                    return ;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page+1)
+                $("input[name='page']").val(page+1);
+                mass(total, ok, fail );
+            }
+        });
+    }
+</script>

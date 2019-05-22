@@ -1,0 +1,242 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+<div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <!--<li><a href="{php echo $this->createWebUrl('category',array('op' => 'list','type' => 9))}" title="抄表分类" >抄表分类</a></li>-->
+                        {if ($user && $menu_opss && @in_array('fee_enteryPrice', $menu_opss)) || empty($user)}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'edit'))}" title="生成抄表费用" >生成抄表费用</a></li>
+                        {/if}
+                        <li class="active"><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'list'))}" title="抄表费用列表" >抄表费用列表</a></li>
+                        {if ($user && $menu_opss && @in_array('fee_enteryQr', $menu_opss)) || empty($user)}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'qrlist'))}" title="抄表二维码列表" >抄表二维码列表</a></li>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('fee_enteryManage', $menu_opss)) || empty($user)}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'wechat','p' => 'list'))}" title="抄表管理员" >抄表管理员</a></li>
+                        {/if}
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="fee"/>
+                            <input type="hidden" name="op" value="entery"/>
+                            <div class="row">
+                                <div class="col-sm-2 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('fee_enteryAdd', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加抄表</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('fee_enteryImport', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'import'))}" class="btn btn-primary"><i class="fa fa-plus"></i>导入抄表</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <select name="regionid" class="form-control" id="regionid" >
+                                        <option value="0">全部小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <select name="category" class="form-control" id="category" >
+                                        <option value="">抄表类型</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <select name="status" class="form-control">
+                                        <option value="">请选择支付状态</option>
+                                        <option value="2" {if $_GPC['status'] == 2} selected{/if}>已支付</option>
+                                        <option value="1" {if $_GPC['status'] == 1} selected{/if}>未支付</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}" />
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <form action="" class="form-horizontal form" method="post">
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th width="30px">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkids"
+                                           onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                    <label for="checkids"> </label>
+                                </div>
+                            </th>
+                            <th>ID</th>
+                            <th>所属小区</th>
+                            <th>地址</th>
+                            <th>上期度数</th>
+                            <th>本期度数</th>
+                            <th>抄表类型</th>
+                            <th>日期</th>
+                            <th>抄表时间</th>
+                            <th>费用</th>
+                            <th>状态</th>
+                            <th>支付方式</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                           value="{$item['id']}">
+                                    <label for="ids_{$item['id']}"></label>
+                                </div>
+
+                            </td>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{if $item['raddress']}{$item['raddress']}{else}{$item['address']}{/if}</td>
+                            <td>{$item['old_num']}</td>
+                            <td>{$item['new_num']}</td>
+                            <td>{$item['ctitle']}</td>
+                            <td>{if $item['starttime'] && $item['endtime']}{php echo date('Y-m-d',$item['starttime'])}~{php echo date('Y-m-d',$item['endtime'])}{/if}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>{$item['price']}</td>
+                            <td>{if $item['status'] == 2}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}</td>
+                            <td>
+                                {if $item['paytype'] == 5}现金{elseif $item['paytype']== 2}微信支付{elseif $item['paytype']== 4}支付宝{elseif $item['paytype']== 6}银联刷卡{elseif $item['paytype']== 1}余额{/if}
+                            </td>
+                            <td>
+                                {if ($user && $menu_opss && @in_array('fee_enteryEdit', $menu_opss)) || empty($user)}
+                                {if $item['status'] != 2}<a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">录入</a>
+                                {/if}
+                                {if $item['status'] == 1}
+                                {if ($user && $menu_opss && @in_array('fee_enteryPay', $menu_opss)) || empty($user)}
+                                <span class="btn btn-warning btn-sm" onclick="show('{$item['id']}')" data-toggle="modal" data-target="#myModal1">支付</span>{/if}
+                                {/if}
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_enteryRemark', $menu_opss)) || empty($user)}
+                                <a data-toggle="modal" data-target="#myModal2" data-content="{$item['remark']}" title="备注" class="btn btn-success btn-sm" onclick="showremark(this)">备注</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_enteryDel', $menu_opss)) || empty($user)}
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'entery','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td id="pager_list_1_left" align="left">
+                                {if ($user && $menu_opss && @in_array('fee_enteryPldel', $menu_opss)) || empty($user)}
+                                <input type="submit" name="del" class="btn btn-danger btn-sm" value="批量删除">
+                                {/if}
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                                <span style="color: red">总计:{$total}</span>
+                            </td>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='enteryid' id='enteryid' class="form-control"/>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <select class="form-control" name="paytype" id="xqregionid">
+                                <option value="2">微信支付</option>
+                                <option value="4">支付宝支付</option>
+                                <option value="5">现金支付</option>
+                                <option value="6">刷卡支付</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注</h4>
+
+            </div>
+                <div class="modal-body">
+                    <span id="remark"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                </div>
+        </div>
+    </div>
+</div>
+<script>
+    function showremark(obj) {
+        $("#remark").html(obj.getAttribute("data-content"));
+    }
+</script>
+<script>
+    function show(id) {
+        var id = id;
+        $("#enteryid").val(id);
+
+    }
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('fee',array('op'=>'entery','p'=>'category'))}", {
+            regionid: regionid
+        }, function (data) {
+            var fees = data
+            var content = '<option value="0">请选择项目</option>';
+            for (var o in fees) {
+                content += "<option value='" + fees[o].id + "'>" + fees[o].title + "</option>";
+            }
+            $("#category").html(content);
+        })
+    })
+</script>

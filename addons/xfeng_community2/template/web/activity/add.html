@@ -1,0 +1,167 @@
+{template 'web/common/header-base'}
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('activity', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;活动添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('activity',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+    <input type="hidden" name="id" value="{$item['id']}">
+    <input type="hidden" name="regionids" value="" />
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">活动标题</label>
+                <div class="col-xs-5">
+                    <input type='text' name='title' id='title' class="form-control" value="{$item['title']}" placeholder="请输入活动标题" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">活动时间</label>
+                <div class="col-xs-5">
+                    {php echo tpl_form_field_daterange('birth', array('starttime' => $starttime,'endtime' => $endtime));}
+                    <span class="help-block" style="display:block;clear:both;">活动报名的时间</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">报名截止</label>
+                <div class="col-xs-5">
+                    {php echo tpl_form_field_date('enddate',$enddate,true);}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">封面</label>
+                <div class="col-xs-5">
+                    {php echo tpl_form_field_image('picurl', $item['picurl'])}
+                    <span class="help-block">图片比例4:3</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="number" class="col-sm-2 control-label">每人最多报名数量</label>
+                <div class="col-xs-5">
+                    <input type='number' name='number' class="form-control" value="{$item['number']}" placeHolder="1" id='number' />
+                    <span class="help-block" style="display:block;clear:both;">如果允许一人报多个名额，请设置每人最多可报名数量。</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="number" class="col-sm-2 control-label">最大报名人数</label>
+        <div class="col-xs-5">
+            <input type='number' name='num' class="form-control" value="{$item['num']}" placeHolder="1" id='num' />
+            <span class="help-block" style="display:block;clear:both;">当前活动最大报名人数</span>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="price" class="col-sm-2 control-label">预付定金</label>
+                <div class="col-xs-5">
+                    <input type='text' name='price' class="form-control" value="{$item['price']}" placeHolder="活动如需支付定金，请填写定金金额" id='price' />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="number" class="col-sm-2 control-label">活动描述</label>
+                <div class="col-xs-6">
+                    {php echo tpl_ueditor('content', $item['content']);}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="ipt_status" class="col-sm-2 control-label">发布状态</label>
+                <div class="col-xs-5">
+                    <div class="checkbox checkbox-success checkbox-inline">
+                        <input type="checkbox" name="status" id="status" value="1" {if intval($item['status'])==1}checked='checked' {/if}>
+                        <label for="status"> 推荐置顶 </label>
+                    </div>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label">是否选择所有小区</label>
+        <div class="col-xs-5">
+            <div class="radio radio-success checkbox-inline">
+                <input type="radio" name="allregion" id="allregion1" value="1" {if !$item['province']}checked{/if}/>
+                <label for="allregion1"> 是 </label>
+
+            </div>
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="allregion" id="allregion2" value="0" {if $item['province']}checked{/if} />
+                <label for="allregion2">否</label>
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div id="showbirth" {if $item['province']}style='display:block'{else}style='display:none'{/if}>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">省市区</label>
+            <div class="col-xs-5">
+                {php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'dist' => $item['dist']))}
+            </div>
+        </div>
+        <div class="form-group region" {if !$regs}style="display: none"{/if}>
+        <label for="" class="col-sm-2 control-label">小区</label>
+        <div class="col-xs-5 content">
+
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    </div>
+
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-xs-5">
+                    <input name="submit" type="submit" value="提交" class="btn btn-w-m btn-primary">
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+</form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='allregion']").click(function(){
+            var type = $("input[name='allregion']:checked").val();
+            if(type == 1){
+                $("#showbirth").hide();
+            }
+            if(type == 0){
+                $("#showbirth").show();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+function check(form) {
+    if (!form['title'].value) {
+        alert('请输入活动标题。');
+        return false;
+    }
+    if (!form['content'].value) {
+        alert('请输入活动描述。');
+        return false;
+    }
+    var regionids = [];
+    $("input[name='regionid']:checked").each(function(){
+        var lastid = $(this).val();
+        regionids.push(lastid);
+    })
+    regionids.join(",");
+    console.log(regionids);
+    $("input[name='regionids']").val(regionids);
+    return true;
+}
+</script>
+

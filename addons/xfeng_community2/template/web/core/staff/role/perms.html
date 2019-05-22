@@ -1,0 +1,213 @@
+<div class="form-group">
+
+    <label class="col-sm-1 control-label">可用权限</label>
+
+    <div class="col-sm-10 col-xs-12">
+        <div id="accordion" class="panel-group">
+            <div class='panel panel-default'>
+                {loop $menus $key $sections}
+                <div class='panel-heading' style='background:#f8f8f8'>
+                    <a class="btn btn-link btn-sm pull-right" data-toggle="collapse" data-parent="#accordion"
+                       href="#collapse{$key}"><i class='fa fa-angle-down'></i> 展开</a>
+                    <label class='checkbox-inline'>
+                        <input type="checkbox" name="menus[]" id="menu_{$sections['id']}_{$key}" class='perm-all'
+                               data-group="{$sections['id']}" value="{$sections['id']}" {if @in_array($sections['id'],$mmenus)}checked{/if}>{$sections[title]}
+                    </label>
+                </div>
+                <div id="collapse{$key}" class="panel-collapse {if $i==0}in{else}collapse{/if}">
+                    <div class='panel-body perm-group'>
+                        {php $i = 1;}
+                        {if $sections['items']}
+                        {loop $sections['items'] $k $menu}
+                            <span>
+                                <label class='checkbox-inline'>
+                                    <input type="checkbox" class="perm-item" value="{$menu['id']}" id="m_{$menu['id']}_{$k}" name="menus[]" data-group="{$menu['pcate']}" data-child="{$menu['id']}" data-childs="{$menu['id']}" value="{$menu['id']}" {if @in_array($menu['id'],$mmenus)}checked{/if}>
+                                    {$menu['title']}
+                                </label>
+                                {if empty($menu['m'])}
+                                <!--二级操作菜单的权限操作 开始-->
+                                    {loop $menuOps $i $mops}
+                                    {if $mops['pcate'] == $menu['id']}
+                                    <label class='checkbox-inline'>
+                                        <input type="checkbox" class="perm-childs" value="{$mops['method']}" id="mops_{$mops['id']}_{$key}" name="menuOps[]" data-child="{$mops['pcate']}" data-childs="{$mops['pcate']}" data-group="{$menu['pcate']}" value="{$mops['id']}" {if @in_array($mops['method'],$menu_ops)}checked{/if}>
+                                        <b>{$mops['title']}</b>
+                                    </label>
+                                    {/if}
+                                    {/loop}
+                                {/if}
+                            </span>
+                            <br>
+                            {if $menu['m']}
+                            <!--三级操作菜单 开始-->
+                            {loop $menu['m'] $key $m}
+                            <span>
+                                <label class='checkbox-inline' style="margin-left: 20px">
+                                    <input type="checkbox" class="perm-child" value="{$m['id']}" id="m_{$m['id']}_{$key}" name="menus[]" data-child="{$m['cate']}" data-childs="{$m['id']}" data-group="{$menu['pcate']}" value="{$m['id']}" {if @in_array($m['id'],$mmenus)}checked{/if}>{$m['title']}
+                                </label>
+
+                                {loop $menuOps $i $mops}
+                                    {if $mops['pcate'] == $m['id']}
+                                    <label class='checkbox-inline'>
+                                        <input type="checkbox" class="perm-childs" value="{$mops['method']}" id="mops_{$mops['id']}_{$key}" name="menuOps[]" data-child="{$mops['pcate']}" data-childs="{$mops['pcate']}" data-group="{$menu['pcate']}" value="{$mops['id']}" {if @in_array($mops['method'],$menu_ops)}checked{/if}>
+                                        <b>{$mops['title']}</b>
+                                    </label>
+                                    {/if}
+                                {/loop}
+                            </span>
+                            <br>
+
+                            {/loop}
+                            {/if}
+                        {/loop}
+                        {/if}
+                        {php $i++;}
+                    </div>
+                </div>
+                {/loop}
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    $(function () {
+        $('.perm-all').click(function () {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $(".perm-item[data-group='" + group + "'],.perm-all-item[data-group='" + group + "']").each(function () {
+                $(this).get(0).checked = checked;
+            })
+            $(".perm-child[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+            $(".perm-childs[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+        })
+        $('.perm-all-item').click(function () {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            var parent = $(this).data('parent');
+            var son = $(this).data('son');
+            var grandson = $(this).data('grandson');
+            $(this).parents("span").find(".perm-item").each(function () {
+                $(this).get(0).checked = checked;
+            });
+            group_check(this);
+
+        });
+        $('.perm-item').click(function () {
+            var group = $(this).data('group');
+            var parent = $(this).data('parent');
+            var child = $(this).data('child');
+            var son = $(this).data('son');
+            var grandson = $(this).data('grandson');
+            var check = false
+            var checked = $(this).get(0).checked;
+            $(".perm-child[data-child='" +child + "']").each(function(){
+                $(this).get(0).checked = checked;
+                var childs = $(this).data('childs');
+                $(".perm-childs[data-childs='" +childs + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                });
+            });
+            $(".perm-childs[data-childs='" +child + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+            $(this).closest('span').find(".perm-item").each(function () {
+                if ($(this).get(0).checked) {
+                    check = true;
+                    return false;
+                }
+            });
+            var allitem = $(this).parents("span").find(".perm-all-item");
+            if (allitem.length == 1) {
+                allitem.get(0).checked = check;
+            }
+            group_check(this);
+        });
+        $('.perm-child').click(function(){
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            var child = $(this).data('child');
+            var childs = $(this).data('childs');
+            if(checked) {
+                $(".perm-item[data-child='" + child + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                });
+                $(".perm-all[data-group='" + group + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                });
+            }
+            $(".perm-childs[data-child='" +childs + "']").each(function(){
+                $(this).get(0).checked = checked;
+            });
+            group_check(this);
+        })
+        $('.perm-childs').click(function(){
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            var child = $(this).data('child');
+            var childs = $(this).data('childs');
+            if(checked) {
+                $(".perm-child[data-childs='" +childs + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                    var child = $(this).data('child');
+                    $(".perm-item[data-child='" + child + "']").each(function () {
+                        $(this).get(0).checked = checked;
+                    });
+                });
+                $(".perm-item[data-child='" + child + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                });
+                $(".perm-all[data-group='" + group + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                });
+            }
+        })
+        $(".panel-body").find("span").each(function (index, item) {
+            if ($(this).find("label").length != 1) {
+                $($(this).find("label").get(0)).wrap("<div class='col-sm-2' style='white-space:nowrap;'></div>");
+                $($(this).find("label").not($(this).find("label").get(0))).wrapAll("<div class='col-sm-10'></div>");
+            }
+            else {
+                $($(this).find("label").get(0)).wrap("<div class='col-sm-12'></div>");
+            }
+        });
+        $("form").submit(function () {
+            $(this).attr('stop', 1);
+            var perms = [];
+            $(".perms:checked").each(function (index, e) {
+                perms[index] = $(this).val();
+            });
+            perms = perms.join(',')
+            $("input[name=permsarray]").val(perms);
+            $(this).attr('stop', 0);
+            return true;
+        });
+
+    });
+
+    function group_check(obj) {
+        var check = false;
+        $(obj).parents('.perm-group').find(":checkbox").each(function (index, item) {
+            if (item.checked) {
+                check = true;
+            }
+        });
+        var group = $(obj).eq(0).data('group');
+        $(".perm-all[data-group=" + group + "]").get(0).checked = check;
+    }
+</script>
+<style>
+    .checkbox-inline input[type=checkbox], .radio-inline input[type=radio] {
+        position: absolute;
+        margin-left: -24px;
+        top: 50%;
+        margin-top: -5px;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        border: 1px solid #e0e0e0;
+    }
+</style>
+<!--NDAwMDA5NzgyNw==-->

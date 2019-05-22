@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>出库</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        .weui-cells{
+            font-size: 15px;
+        }
+        .list {
+            padding: 0;
+            margin: 10px 0;
+        }
+        .default-panel-list {
+            margin: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-tab">
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" id="code">
+            <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/img/saoma.png" alt="" style="width:40px;margin-right:5px;display:block"></div>
+            <div class="weui-cell__bd">
+                <p>扫码出库</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+    </div>
+
+        {loop $stores $sto}
+        <a class="weui-cell weui-cell_access list" href="">
+
+            <div class="default-panel-list">
+                <div class="default-panel-head">
+                    单号：{$sto['waybillcode']}
+                    <span class="default-panel-state" style="color: {if $sto['status']==3}black{/if}">{if $sto['status']==3}未取件{else if $sto['status']==4}已取件{/if}</span>
+                </div>
+                <div class="default-media-box">
+                    <!--<div class="default-media-box__hd">-->
+                        <!--&lt;!&ndash;<img src="{php echo tomedia($par['logo'])}">&ndash;&gt;-->
+                    <!--</div>-->
+                    <div class="default-media-box__bd">
+                        <p>姓名：{$sto['name']}</p>
+                        <p>手机：{$sto['mobile']}</p>
+                        <p>取货码：{$sto['pick_code']}</p>
+                        <p>入库时间：{php echo date('Y-m-d H:i', $sto['createtime'])}</p>
+                        {if $sto['status']==4}
+                        <p>取件时间：{php echo date('Y-m-d H:i', $sto['overtime'])}</p>{/if}
+                    </div>
+                    <div class="default-cell-ft">
+                    </div>
+                </div>
+            </div>
+        </a>
+        {/loop}
+
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'scanQRCode'
+    ];
+
+    $(function () {
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            $('#code').click(function () {
+                wx.scanQRCode({
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: function (res) {
+                        var waybillcode = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                        // $('#waybillcode').val(res.resultStr);
+                        if(waybillcode ==''){
+                            $.alert('请扫码获取运单号');
+                            return false;
+                        }
+                        $.post("{php echo $this->createMobileUrl('express', array('op' => 'pick','p' => 'over'))}",
+                            {waybillcode:waybillcode},function (e) {
+                                if(e.data == '1'){
+                                    $.toast('出库成功！');
+                                    //window.location.href = "{php echo $this->createMobileUrl('device', array('op' => 'device_list'))}";
+                                }
+                                if(e.data == '2'){
+                                    $.toast('没有入库！');
+                                }
+                                if(e.data == '3'){
+                                    $.toast('已出库！');
+                                }
+
+                            },'json')
+                    }
+                });
+
+
+            });
+
+        });
+    });
+
+</script>
+</body>
+</html>

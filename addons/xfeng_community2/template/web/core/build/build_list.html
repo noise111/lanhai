@@ -1,0 +1,308 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>楼宇管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('build')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="build"/>
+                        <input type="hidden" name="op" value="list"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('build_add', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> 添加楼宇</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('build_import', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('build',array('op' => 'import'))}" ><i class="fa fa-plus"></i> 导入楼宇</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal form" method="post">
+                    <table class="table table-bordered table-striped">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids"
+                                               onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th class="col-md-1">所属小区</th>
+                                <th class="col-md-1">区域名称</th>
+                                <th class="col-md-1">楼宇名称</th>
+                                <th class="col-md-1">单元数量</th>
+                                <th class="col-md-1">楼宇楼层</th>
+                                <th class="col-md-2">楼宇类型</th>
+                                <th class="col-md-1">房屋数量</th>
+                                <th class="col-md-5">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                               value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+                                </td>
+                                <td>{$item['title']}</td>
+                                <td>
+                                    {$item['area']}
+                                </td>
+                                <td>
+                                    {$item['buildtitle']}
+                                </td>
+                                <td>
+                                    {$item['unit_num']}
+                                    &nbsp;
+                                    {if ($user && $menu_opss && @in_array('build_unit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('build',array('op' => 'unit_list','buildid' => $item['id']))}" style="color: #2196f3">管理</a>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {$item['floor_num']}
+                                </td>
+                                <td>
+                                    {$item['build_type']}
+                                </td>
+                                <td>
+                                    {$item['room_num']}
+                                </td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('build_edit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('build',array('op' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('build_rooms', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('room', array('op'=>'list', 'build' => $item['buildtitle'],'area' => $item['area'],'regionid' => $item['regionid']));}" class="btn btn-warning btn-sm" >查看房屋</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('build_del', $menu_opss)) || empty($user)}
+                                    <a onclick="return confirm('确认删除该楼宇及该楼宇下的房屋信息吗？'); return false;" href="{php echo $this->createWebUrl('build',array('op' => 'delete','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除该楼宇及该楼宇下的房屋信息">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            {if ($user && $menu_opss && @in_array('build_pldel', $menu_opss)) || empty($user)}
+                            <td class="text-left">
+                                <input name="token" type="hidden" value="{$_W['token']}"/>
+                                <button class="btn btn-danger btn-sm" type="submit" name="delete" value="1" onclick="return confirm('将删除楼宇和其关联的单元，确认吗？'); return false;">批量删除</button>
+                            </td>
+                            {/if}
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">添加楼宇</h4>
+
+            </div>
+            <form class="form-horizontal form" action="{php echo $this->createWebUrl('build',array('op'=> 'add'))}" method="post" enctype="multipart/form-data" id="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">搜索</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择小区</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <select name="regionid" class="form-control" id="regionid">
+                                <option value="0">全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择区域</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <select name="area" class="form-control" id="area">
+                                <option value="0">全部区域</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">楼宇名称</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="请输入楼宇名称" name="buildtitle" id="buildtitle"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">单元数量</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="number" class="form-control" placeholder="请输入单元数量" name="unit_num" id="unit_num"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">楼宇层数</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="number" class="form-control" placeholder="请输入楼宇层数" name="floor_num" id="floor_num"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">楼宇类型</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="例如：高层/多层/别墅" name="build_type"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">房屋数量</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="number" class="form-control" placeholder="请输入房屋数量" name="room_num" value="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" id="submit" name="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if (!$("#regionid").val()) {
+            alert('请选择小区。');
+            return false;
+        }
+        if (!$("#buildtitle").val()) {
+            alert('请输入楼宇名称。');
+            return false;
+        }
+        if (!$("#unit_num").val()) {
+            alert('请输入单元数量。');
+            return false;
+        }
+        if (!$("#floor_num").val()) {
+            alert('请输入楼宇层数。');
+            return false;
+        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('build',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("保存");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                if (data.regionid != '0') {
+                    $.post("{php echo $this->createWebUrl('build',array('op' => 'area'))}", {regionid: data.regionid}, function (data) {
+                        var content = '<option value="0">全部区域</option>';
+                        for(var o in data){
+                            content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                        }
+                        $("#area").html(content);
+
+
+                    }, 'json');
+                }
+            }
+        },'json')
+    })
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        if (regionid != '0') {
+            $.post("{php echo $this->createWebUrl('build',array('op' => 'area'))}", {regionid: regionid}, function (data) {
+                var content = '<option value="0">全部区域</option>';
+                for(var o in data){
+                    content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                }
+                $("#area").html(content);
+
+
+            }, 'json');
+        }
+    })
+
+</script>

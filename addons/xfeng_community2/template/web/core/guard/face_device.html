@@ -1,0 +1,102 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'face'))}" title="人脸授权" >人脸授权</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceDevice','id' => $id))}" title="设备授权" >设备授权</a></li>
+                        <li><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceUploads'))}" title="上传记录" >上传记录</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="guard"/>
+                            <input type="hidden" name="op" value="faceDevice"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="设备号">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-info">
+                            <div class="col-sm-6 m-b-xs">
+                                姓名：{$item['realname']}
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                GUID:{$item['guid']}
+                            </div>
+                            可以对该人员进行设备的追加授权
+                        </div>
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids"
+                                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>设备名称</th>
+                                    <th>设备号</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}" value="{$item['id']}" {if @in_array($item['id'],$deviceids)}checked{/if}>
+                                            <label for="ids_{$item['id']}"></label>
+                                        </div>
+                                    </td>
+                                    <td>{$item['title']}</td>
+                                    <td>{$item['device_code']}</td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td id="pager_list_1_left" align="left">
+                                        <input type="submit" name="submit" class="btn btn-primary btn-sm" value="确认授权" onClick="return confirm('确认给该人员授权勾选的设备吗，已授权的不会改变，此操作为追加授权?');">
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </td>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

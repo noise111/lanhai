@@ -1,0 +1,43 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}" title="店铺管理" >店铺管理</a></li>
+                        <li><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'commission','dpid'=>$dpid))}" title="分成设置" >分成设置</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">平台分成</label>
+                                <div class="col-sm-5">
+                                    <input type='text' name='commission' id='commission' class="form-control" value="{$setting[0]}"/>
+                                    <span class="help-block">(请输入0到1之间的数字,例如设置0.2 ,平台获取20%的提成)</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">小区分成</label>
+                                <div class="col-sm-5">
+                                    <input type="text" name="xqcommission" class="form-control" value="{$setting[1]}"/>
+                                    <span class="help-block">(请输入0到1之间的数字,例如设置0.1,业主所在的小区获得10%的提成)</span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-5">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,192 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'list'))}" title="车场管理" >车场管理</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="list"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('parks_add', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加车场</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="输入关键字" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th style="width:5%;">id</th>
+                                <th>名称</th>
+                                <th>小区</th>
+                                <th>管理人员</th>
+                                <th>进出口数</th>
+                                <th>车位总数</th>
+                                <th>月租车位数</th>
+                                <th>临时车位数</th>
+                                <th>收费标准</th>
+                                <th>允许离场时间</th>
+                                <th>包月状态</th>
+                                <th>动态二维码</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{$regions[$item['regionid']]['title']}</td>
+                                <td>{$item['management']}</td>
+                                <td>{$item['exitus']}</td>
+                                <td>{$item['cars_num']}</td>
+                                <td>{$item['month_num']}</td>
+                                {php $num = $item['cars_num'] - $item['month_num']}
+                                <td>{$num}</td>
+                                <td>{$rules[$item['rule_id']]['title']}</td>
+                                <td>{$item['leave_space']}</td>
+                                <td>{if $item['month_type'] == 1}支持{elseif $item['month_type'] == 0}不支持{/if}</td>
+                                <td>{if $item['qr_status'] == 1}支持{elseif $item['qr_status'] == 2}不支持{/if}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_edit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                    {/if}
+                                    <!--<a href="{php echo $this->createWebUrl('parks',array('op' => 'device','p' => 'list','parkid' => $item['id']))}" title="设备管理" class="btn btn-warning btn-sm">设备管理</a>-->
+                                    {if ($user && $menu_opss && @in_array('parks_set', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'set','id' => $item['id']))}" title="基本配置" class="btn btn-success btn-sm">基本配置</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('parks_qr', $menu_opss)) || empty($user)}
+                                    <a href="#" title="二维码管理" data-target="#myModal" data-toggle="modal" data-pid="{$item['id']}" onclick="qr(this)" class="btn btn-primary btn-sm">二维码管理</a>
+                                    {/if}
+                                    <!--<a href="{php echo $this->createWebUrl('parks',array('op' => 'payapi','p' => 'alipay','tid' => $item['id']))}" title="支付配置" class="btn btn-warning btn-sm">支付配置</a>-->
+                                    <!--<a href="{php echo $this->createWebUrl('parks',array('op' => 'passlog','p' => 'list','parkid' => $item['id']))}" title="车辆通行记录" class="btn btn-primary btn-sm">车辆通行记录</a>-->
+                                    {if ($user && $menu_opss && @in_array('parks_del', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm" title="删除" onclick="return confirm('将删除该信息，确认吗？')">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width:800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">二维码生成</h4>
+            </div>
+            <div class="form-horizontal form" method="post" enctype="multipart/form-data" >
+                <input type='hidden' name='pid' id='pid' class="form-control"  />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择系统</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="carModelId" id="carModelId">
+                                <option value="1">机动车</option>
+                                <!--<option value="2">非机动车</option>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">二维码类型</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="qrId" id="qrId">
+                                <option value="1">机动车进出二维码</option>
+                                <option value="2">预支付二维码</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" id="carmera">
+                        <label class="col-sm-2 control-label">通道名称</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="carmeraId" id="carmeraId">
+                                <option value="1">入口</option>
+                                <option value="2">出口</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <span class="btn btn-primary" id="submit">生成二维码</span>
+                </div>
+            </div>
+
+            <div  style="margin: 0 auto;text-align: center;">
+                <div id="txt" style="font-size: 20px"></div>
+                <div id="img"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#qrId").change(function () {
+        var qrId = $("#qrId option:selected").val()
+        if(qrId ==2){
+            $("#carmera").hide()
+        }else{
+            $("#carmera").show()
+        }
+    })
+    function qr(obj) {
+        $("#pid").val(obj.getAttribute("data-pid"));
+    }
+    $("#submit").click(function () {
+        var pid = $("#pid").val()
+        var carModelId = $("#carModelId option:selected").val()
+        var qrId = $("#qrId option:selected").val()
+        var carmeraId = $("#carmeraId option:selected").val()
+
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'list','p'=>'qr'))}"
+        var data = {
+            pid: pid,
+            carModelId: carModelId,
+            qrId: qrId,
+            carmeraId: carmeraId
+        }
+        $.getJSON(url, data, function (res) {
+            if(carmeraId ==1){
+                $("#txt").html('入口二维码')
+            }else{
+                $("#txt").html('出口二维码')
+            }
+            $("#img").html(res.qrImg)
+        })
+    })
+</script>
+{template 'web/common/footer'}

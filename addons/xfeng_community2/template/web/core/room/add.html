@@ -1,0 +1,418 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op' => 'list'))}" title="房屋管理" >房屋管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('room', array('op'=>'add','p'=>'list','addressid'=>$addressid))}" title="添加房号" >添加房号</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op'=>'import'))}" title="导入房号" >导入房号</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room', array('op'=>'show','p'=>'list','addressid'=>$addressid))}" title="预留信息管理" >预留信息管理</a></li>
+                    <li><a href="{php echo $this->createWebUrl('room',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" id="form">
+                        <input name="id" type="hidden" value="{$id}" class='form-control'/>
+                        <input name="addressid" type="hidden" value="{$_GPC['addressid']}" class='form-control'/>
+                        <input name="memberid" type="hidden" value="{$item['memberid']}" class='form-control'/>
+                        <input name="uid" type="hidden" value="{$item['uid']}" class='form-control'/>
+                        <input name="p91" type="hidden" id="p91" value="{$p91}" class='form-control'/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="xqregionid" class="col-sm-2 control-label">小区</label>
+                            <div class="col-sm-5">
+                                <select id="xqregionid" name="regionid" class='form-control'>
+                                    <option value="0">选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid']==$region['id']}selected='selected'{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        {if empty($addressid)}
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-xs-5">
+
+                                <input type="text" name="realname" value="{$item['realname']}"
+                                       class="form-control"
+                                />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">电话</label>
+                            <div class="col-xs-5">
+
+                                <input type="text" name="mobile" value="{$item['mobile']}"
+                                       class="form-control"
+                                />
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="square" class="col-sm-2 control-label">面积</label>
+                            <div class="col-xs-5">
+
+                                <input type="text" name="square" value="{$item['square']}"
+                                       class="form-control"
+                                />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        {if $p91 == 0}
+                        <div id="content" {if $item['id']} style='display:block'{/if}>
+                            {if $arr[a]}
+                            <div class="form-group">
+                                <label for="area" class="col-sm-2 control-label">{$arr[a1]}</label>
+                                <div class="col-xs-5">
+                                    <div class="input-group">
+                                        <input type="text" name="area" id="area" class="form-control" value="{$item['area']}"/>
+                                        <span class="input-group-addon">{$arr[a1]}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            {if $arr[b]}
+                            <div class="form-group">
+                                <label for="build" class="col-sm-2 control-label">{$arr[b1]}</label>
+                                <div class="col-xs-5">
+                                    <div class="input-group">
+                                        <input type="text" name="build" id="build" class="form-control" value="{$item['build']}"/>
+                                        <span class="input-group-addon">{$arr[b1]}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            {if $arr[c]}
+                            <div class="form-group">
+                                <label for="unit" class="col-sm-2 control-label">{$arr[c1]}</label>
+                                <div class="col-xs-5">
+                                    <div class="input-group">
+                                        <input type="text" name="unit" id="unit" class="form-control" value="{$item['unit']}"/>
+                                        <span class="input-group-addon">{$arr[c1]}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            {if $arr[d]}
+                            <div class="form-group">
+                                <label for="room" class="col-sm-2 control-label">{$arr[d1]}</label>
+                                <div class="col-xs-5">
+                                    <div class="input-group">
+                                        <input type="text" name="room" id="room" class="form-control" value="{$item['room']}"/>
+                                        <span class="input-group-addon">{$arr[d1]}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                        </div>
+                        {/if}
+                    {if $p91 == 1}
+                    <div id="_area" {if $arr[a]}style='display:block' {else}style='display:none'{/if}>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">区域</label>
+                        <div class="col-xs-5">
+                            <select name="areaid" class="form-control" id="areaid">
+                                <option value="0">请选择</option>
+                                {loop $areas $area}
+                                <option value="{$area['id']}" {if $item['areaid']==$area['id']}selected='selected'{/if}>{$area['title']}{$a[a1]}
+                                </option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+
+                <div id="_build" {if $arr[b]}style='display:block' {else}style='display:none'{/if}>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">楼宇</label>
+                    <div class="col-xs-5">
+                        <select name="buildid" class="form-control" id="buildid">
+                            <option value="0">请选择</option>
+                            {loop $builds $build}
+                            <option value="{$build['id']}" {if $item['buildid']==$build['id']}selected='selected'{/if}>{if $build['title']}{$build['title']}{$arr[a1]}{/if}{$build['buildtitle']}{$arr[b1]}
+                            </option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+            </div>
+            <div id="_unit" {if $arr[c]}style='display:block' {else}style='display:none'{/if}>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">单元</label>
+                <div class="col-xs-5">
+                    <select name="unitid" class="form-control" id="unitid">
+                        <option value="0">请选择</option>
+                        {loop $units $unit}
+                        <option value="{$unit['id']}" {if $item['unitid']==$unit['id']}selected='selected'{/if}>{$unit['unit']}{$arr[c1]}
+                        </option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+        </div>
+        <div id="_room" {if $arr[d]}style='display:block' {else}style='display:none'{/if}>
+
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">房号</label>
+            <div class="col-xs-5">
+                <div class="input-group">
+                    <input type="text" name="room" id="address" class="form-control" value="{$item['room']}"/>
+                    <span class="input-group-addon">{$arr[d1]}</span>
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+    </div>
+            {/if}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">楼层</label>
+                        <div class="col-xs-5">
+                            <input type="text" name="floor_num" value="{if $item['floor_num']}{$item['floor_num']}{/if}" class="form-control"/>
+                        </div>
+                    </div>
+        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="room" class="col-sm-2 control-label">地址</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="address" value="{if $item['address']}{$item['address']}{/if}" class="form-control"/>
+                                <span style="color: red">修改区，栋，单元，室时，请同步修改地址</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                                <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        var p91 = $('#p91').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#xqregionid').val(data.regionid);
+                if (data.regionid != '0') {
+                    if (p91 == 0) {
+                        $.post("{php echo $this->createWebUrl('room',array('op' => 'region'))}", {regionid: data.regionid}, function (data) {
+                            var content = '';
+                            if (data.a) {
+                                content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.a1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"area\" id=\"area\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.a1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                            }
+                            if (data.b) {
+                                content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.b1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"build\" id=\"build\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.b1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                            }
+                            if (data.c) {
+                                content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.c1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"unit\" id=\"unit\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.c1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                            }
+                            if (data.d) {
+                                content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.d1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"room\" id=\"room\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.d1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                            }
+                            $("#content").html(content);
+
+
+                        }, 'json');
+                    } else {
+                        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}", {regionid: data.regionid}, function (datat) {
+                            if (datat.kg) {
+                                var content = '<option value="0">请选择</option>';
+                                var areas = datat.list
+                                for (var o in areas) {
+                                    content += "<option value='" + areas[o].id + "'>" + areas[o].title + datat.zd + "</option>";
+                                }
+                                $("#areaid").html(content);
+                                $("#_area").show();
+                                var cont = '<option value="0">请选择</option>';
+                                $("#_room").show();
+                                $("#buildid").html(cont);
+                                $("#unitid").html(cont);
+                            }
+                            else {
+                                var content = '<option value="0">请选择</option>';
+                                var builds = datat.list
+                                for (var o in builds) {
+                                    content += "<option value='" + builds[o].id + "'>" + builds[o].title + builds[o].buildtitle + datat.zd + "</option>";
+                                }
+                                $("#buildid").html(content);
+                                $("#_build").show();
+                                var cont = '<option value="0">请选择</option>';
+                                $("#_room").show();
+                                $("#unitid").html(cont);
+                            }
+
+                        })
+                    }
+                }
+            }
+        },'json')
+    })
+    $("#xqregionid").change(function () {
+        var regionid = $("#xqregionid option:selected").val();
+        var p91 = $('#p91').val();
+        if (regionid != '0') {
+            if (p91 == 0) {
+                $.post("{php echo $this->createWebUrl('room',array('op' => 'region'))}", {regionid: regionid}, function (data) {
+                    var content = '';
+                    if (data.a) {
+                        content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.a1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"area\" id=\"area\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.a1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                    }
+                    if (data.b) {
+                        content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.b1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"build\" id=\"build\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.b1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                    }
+                    if (data.c) {
+                        content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.c1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"unit\" id=\"unit\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.c1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                    }
+                    if (data.d) {
+                        content += "<div class=\"form-group\"><label for=\"room\" class=\"col-sm-2 control-label\">" + data.d1 + "</label><div class=\"col-xs-5\"><div class=\"input-group\"><input type=\"text\" name=\"room\" id=\"room\" class=\"form-control\" /><span class=\"input-group-addon\">" + data.d1 + "</span></div> </div></div> <div class=\"hr-line-dashed\"></div>";
+
+                    }
+                    $("#content").html(content);
+
+
+                }, 'json');
+            } else {
+                $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}", {regionid: regionid}, function (data) {
+                    if (data.kg) {
+                        var content = '<option value="0">请选择</option>';
+                        var areas = data.list
+                        for (var o in areas) {
+                            content += "<option value='" + areas[o].id + "'>" + areas[o].title + data.zd + "</option>";
+                        }
+                        $("#areaid").html(content);
+                        $("#_area").show();
+                        var cont = '<option value="0">请选择</option>';
+                        $("#_room").show();
+                        $("#buildid").html(cont);
+                        $("#unitid").html(cont);
+                    }
+                    else {
+                        var content = '<option value="0">请选择</option>';
+                        var builds = data.list
+                        for (var o in builds) {
+                            content += "<option value='" + builds[o].id + "'>" + builds[o].title + builds[o].buildtitle + data.zd + "</option>";
+                        }
+                        $("#buildid").html(content);
+                        $("#_build").show();
+                        var cont = '<option value="0">请选择</option>';
+                        $("#_room").show();
+                        $("#unitid").html(cont);
+                    }
+
+                })
+            }
+        }
+    })
+    $('#submit').on('click', function () {
+        if(!$("#xqregionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if($("#p91").val() == 0){
+            if(!$("#room").val()){
+                alert('请输入房号。');
+                return false;
+            }
+        }
+        if($("#p91").val() == 1){
+            if(!$("#address").val()){
+                alert('请输入房号。');
+                return false;
+            }
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('room',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                } else {
+                    alert(res.content);
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $("#areaid").change(function () {
+        var areaid = $("#areaid option:selected").val();
+        var regionid = $("#xqregionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}",{areaid:areaid,regionid:regionid},function (data) {
+            var builds = data.list
+            var content='<option value="0">请选择</option>';
+            for(var o in builds){
+                content +="<option value='"+builds[o].id+"'>"+builds[o].title+builds[o].buildtitle+data.zd+"</option>";
+            }
+            $("#buildid").html(content);
+            $("#_build").show();
+            var cont='<option value="0">请选择</option>';
+//            $("#addressid").html(cont);
+            $("#unitid").html(cont);
+        })
+    })
+    $("#buildid").change(function () {
+        var buildid = $("#buildid option:selected").val();
+        var regionid = $("#xqregionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'unit'))}",{buildid:buildid,regionid:regionid},function (data) {
+            var units = data.list
+            var content='<option value="0">请选择</option>';
+            for(var o in units){
+                content +="<option value='"+units[o].id+"'>"+units[o].unit+data.zd+"</option>";
+            }
+            $("#unitid").html(content);
+            $("#_unit").show();
+            var cont='<option value="0">请选择</option>';
+//            $("#addressid").html(cont);
+        })
+    })
+</script>

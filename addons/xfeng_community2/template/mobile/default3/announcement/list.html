@@ -1,0 +1,68 @@
+{template 'default2/header'}
+    <style>
+        .weui-cells{
+            margin-top: 0;
+            font-size: 14px;
+            color: #A4A4A4;
+        }
+        .weui-cells:before{
+            border-top: none;
+        }
+        .weui-cells:after{
+            left: 15px;
+            right: 15px;
+        }
+        .weui-cell:before {
+            right: 15px;
+        }
+        .weui-cell__bd>p{
+            display:-webkit-box;
+            -webkit-box-orient:vertical;
+            -webkit-line-clamp:1;
+            overflow: hidden;
+            color: #A2A2A2;
+        }
+
+    </style>
+<body>
+<div class="notice-contain">
+    <div class="weui-cells" id="list">
+
+    </div>
+    <div class="weui-loadmore" id="loading" style="display: none">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips loading"></span>
+    </div>
+    <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a class="weui-cell" onclick="window.location.href='{{d.list[i].url}}'">
+        <div class="weui-cell__bd">
+            <p>{{ d.list[i].title }}</p>
+            <div class="notice-list">
+                <span class="notice-list-source">系统</span>
+                <span class="notice-list-time">{{d.list[i].createtime}}</span>
+            </div>
+        </div>
+    </a>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('announcement/list')}&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+
+</script>
+</body>
+</html>

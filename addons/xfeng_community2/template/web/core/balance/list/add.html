@@ -1,0 +1,329 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('balance',array('op' => 'list','p'=>'list'))}"></a>新增收支登记</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh"
+                           href="{php echo $this->createWebUrl('balance',array('op' => 'list','p'=>'add','id'=>$id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data"
+                          id="form">
+                        <input type="hidden" name =id value="{$id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">所属小区</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="">请选择</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$item['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="_area" {if $arr[a]}style='display:block' {else}style='display:none'{/if}>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">区域</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="area" class="form-control" id="area">
+                                    <option value="0">请选择</option>
+                                    {loop $areas $area}
+                                    <option value="{$area['id']}" {if $item['area']==$area['id']}selected='selected'{/if}>{$area['title']}{$a[a1]}
+                                    </option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                </div>
+
+                <div id="_build" {if $arr[b]}style='display:block' {else}style='display:none'{/if}>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">楼宇</label>
+                    <div class="col-sm-6 col-xs-6">
+                        <select name="build" class="form-control" id="build">
+                            <option value="0">请选择</option>
+                            {loop $builds $build}
+                            <option value="{$build['id']}" {if $item['build']==$build['id']}selected='selected'{/if}>{$build['buildtitle']}{$arr[b1]}
+                            </option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="_unit" {if $arr[c]}style='display:block' {else}style='display:none'{/if}>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">单元</label>
+                <div class="col-sm-6 col-xs-6">
+                    <select name="unit" class="form-control" id="unit">
+                        <option value="0">请选择</option>
+                        {loop $units $unit}
+                        <option value="{$build['id']}" {if $item['unit']==$unit['id']}selected='selected'{/if}>{$unit['unit']}{$arr[c1]}
+                        </option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div id="_room" {if $arr[d]}style='display:block' {else}style='display:none'{/if}>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group">
+            <label for="" class="col-sm-2 control-label">房号</label>
+            <div class="col-sm-6">
+                <select id="addressid" name="addressid" class='form-control'>
+                    <option value="0">请选择</option>
+                    {loop $rooms $room}
+                    <option value="{$room['id']}" {if $item['room']==$room['id']}selected='selected'{/if}>{$room['room']}{$arr[d1]}
+                    </option>
+                    {/loop}
+                </select>
+            </div>
+        </div>
+    </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">项目类别</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="type" class="form-control" id="type">
+                                    <option value="0">请选择</option>
+                                    <option value="1" {if $item['type'] == 1}selected{/if}>收入项目</option>
+                                    <option value="2" {if $item['type'] == 2}selected{/if}>支出项目</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">项目名称</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="category" class="form-control" id="category">
+                                    <option value="0">请选择</option>
+                                    {loop $categories $cate}
+                                    <option value="{$cate['category']}" {if $item['category'] == $cate['category']}selected{/if}>{$cate['category']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">金额</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="输入金额" name="price"
+                                       value="{$item['price']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">经手人</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="输入经手人" name="username"
+                                       value="{$item['username']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">经手日期</label>
+                            <div class="col-sm-6 col-xs-6">
+                                {php echo tpl_form_field_date('usertime',$item['usertime'],true);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="输入备注" name="remark"
+                                       value="{$item['remark']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10 col-xs-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('balance',array('op'=>'list','p' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}",{regionid:data.regionid},function (data) {
+                        if(data.kg){
+                            var content='<option value="0">请选择</option>';
+                            var areas = data.list
+                            for(var o in areas){
+                                content +="<option value='"+areas[o].id+"'>"+areas[o].title+data.zd+"</option>";
+                            }
+                            $("#area").html(content);
+                            $("#_area").show();
+                            var cont='<option value="0">请选择</option>';
+                            $("#addressid").html(cont);
+                            $("#build").html(cont);
+                            $("#unit").html(cont);
+                        }
+                        else
+                        {
+                            var content='<option value="0">请选择</option>';
+                            var builds = data.list
+                            for(var o in builds){
+                                content +="<option value='"+builds[o].id+"'>"+builds[o].buildtitle+data.zd+"</option>";
+                            }
+                            $("#build").html(content);
+                            $("#_build").show();
+                            var cont='<option value="0">请选择</option>';
+                            $("#addressid").html(cont);
+                            $("#unit").html(cont);
+                        }
+
+                    })
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}",{regionid:regionid},function (data) {
+                if(data.kg){
+                    var content='<option value="0">请选择</option>';
+                    var areas = data.list
+                    for(var o in areas){
+                        content +="<option value='"+areas[o].id+"'>"+areas[o].title+data.zd+"</option>";
+                    }
+                    $("#area").html(content);
+                    $("#_area").show();
+                    var cont='<option value="0">请选择</option>';
+                    $("#addressid").html(cont);
+                    $("#build").html(cont);
+                    $("#unit").html(cont);
+                }
+                else
+                {
+                    var content='<option value="0">请选择</option>';
+                    var builds = data.list
+                    for(var o in builds){
+                        content +="<option value='"+builds[o].id+"'>"+builds[o].buildtitle+data.zd+"</option>";
+                    }
+                    $("#build").html(content);
+                    $("#_build").show();
+                    var cont='<option value="0">请选择</option>';
+                    $("#addressid").html(cont);
+                    $("#unit").html(cont);
+                }
+
+            })
+        })
+        $("#area").change(function () {
+            var areaid = $("#area option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}",{areaid:areaid,regionid:regionid},function (data) {
+                var builds = data.list
+                var content='<option value="0">请选择</option>';
+                for(var o in builds){
+                    content +="<option value='"+builds[o].id+"'>"+builds[o].buildtitle+data.zd+"</option>";
+                }
+                $("#build").html(content);
+                $("#_build").show();
+                var cont='<option value="0">请选择</option>';
+                $("#addressid").html(cont);
+                $("#unit").html(cont);
+            })
+        })
+        $("#build").change(function () {
+            var buildid = $("#build option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'unit'))}",{buildid:buildid,regionid:regionid},function (data) {
+                var units = data.list
+                var content='<option value="0">请选择</option>';
+                for(var o in units){
+                    content +="<option value='"+units[o].id+"'>"+units[o].unit+data.zd+"</option>";
+                }
+                $("#unit").html(content);
+                $("#_unit").show();
+                var cont='<option value="0">请选择</option>';
+                $("#addressid").html(cont);
+            })
+        })
+        $("#unit").change(function () {
+            var unitid = $("#unit option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'room'))}",{unitid:unitid,regionid:regionid},function (data) {
+                var rooms = data.list
+                var content='<option value="0">请选择</option>';
+                for(var o in rooms){
+                    content +="<option value='"+rooms[o].id+"'>"+rooms[o].room+data.zd+"</option>";
+                }
+                $("#addressid").html(content);
+                $("#_room").show();
+            })
+        })
+        $("#type").change(function () {
+            var type = $("#type option:selected").val();
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('house',array('op'=>'category'))}",{type:type,regionid:regionid},function (data) {
+                var content='<option value="0">请选择</option>';
+                for(var o in data){
+                    content +="<option value='"+data[o].category+"'>"+data[o].category+"</option>";
+                }
+                $("#category").html(content);
+            })
+        })
+
+    })
+</script>
+

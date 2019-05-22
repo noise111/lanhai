@@ -1,0 +1,75 @@
+<div class="form-group">
+    <label class="col-lg control-label">优惠方式</label>
+    <div class="col-sm-9 col-xs-12">
+        <input type="hidden" name="coupontype" value="5"/>
+        {ife 'sale.coupon' $item}
+         <label class="radio-inline " ><input type="radio" name="backtype" onclick='showbacktype(0)' value="0" {if $item['backtype']==0}checked{/if}>立减</label>
+           {else}
+          <div class='form-control-static'>
+              {if $item['backtype']==0}
+              立减
+              {/if}
+          </div>
+        {/if}
+    </div>
+ </div>
+<div class="form-group">
+    <label class="col-lg control-label"></label>
+        {ife 'sale.coupon' $item}
+        <div class="col-sm-9 col-xs-12 backtype backtype0" {if $item['backtype']!=0}style='display:none'{/if}>
+            <div class='input-group fixsingle-input-group'>
+                <span class='input-group-addon'>立减</span>
+                <input type='text' class='form-control' name='deduct' value="{$item['deduct']}"/>
+                <span class='input-group-addon'>元</span>
+            </div>
+        </div>
+
+        {else}
+        <div class='form-control-static'>
+            {if $item['backtype']==0}
+            立减 {$item['deduct']} 元
+            {/if}
+       </div>
+     {/if}
+ </div>
+<div class="form-group">
+    <label class="col-lg control-label">返佣方式</label>
+    <div class="col-sm-9 col-xs-12">
+        {ife 'sale.coupon' $item}
+        <label class="radio-inline"><input type="radio" name="commissiontype" onclick='showcommissiontype(0)' value="0" {if $item['commissiontype']==0}checked{/if}>推广佣金</label>
+        <label class="radio-inline"><input type="radio" name="commissiontype" onclick='showcommissiontype(1)' value="1" {if $item['commissiontype']==1}checked{/if}>积分</label>
+        <label class="radio-inline"><input type="radio" name="commissiontype" onclick='showcommissiontype(2)' value="2" {if $item['commissiontype']==2}checked{/if}>余额</label>       
+        <label class="radio-inline"><input type="radio" name="commissiontype" onclick='showcommissiontype(3)' value="3" {if $item['commissiontype']==3}checked{/if}>微信红包</label>
+        <label class="radio-inline"><input type="radio" name="commissiontype" onclick='showcommissiontype(-1)' value="-1" {if $item['commissiontype']==-1}checked{/if}>不返</label>
+        {else}
+        <div class='form-control-static'>
+            {if $item['commissiontype']==0}
+            推广佣金
+            {elseif $item['commissiontype']==1}
+            余额
+            {elseif $item['commissiontype']==2}
+            积分
+            {else}
+            微信红包
+            {/if}
+          </div>
+        {/if}
+    </div>
+</div>
+<div class="form-group commissiontype" {if $item['commissiontype'] == -1}style="display:none;"{/if}>
+    <label class="col-lg control-label"></label>
+    {ife 'sale.coupon' $item}
+    <div class="col-sm-9 col-xs-12">
+        <div class='input-group fixsingle-input-group'>
+            <input type='text' class='form-control' name='backcommission' value="{$item['backcommission']}"/>
+            <span class='input-group-addon'>元（-1为券面等额）</span>
+         </div>
+    </div>
+
+    {else}
+    <div class='form-control-static'>
+        {$item['backcommission']}元
+    </div>
+    {/if}
+</div>
+

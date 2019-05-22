@@ -1,0 +1,204 @@
+{template 'default2/header'}
+<style>
+    .weui-navbar__item.weui-bar__item--on {
+        color: #FF9900;
+        background-color: #ffffff;
+        border-bottom: 1px solid #FF9900;
+    }
+
+    .weui-navbar__item {
+        background: #ffffff;
+        border-bottom: 1px solid #CCCCCC;
+        padding: 10px 0;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .repairs-hd {
+        position: relative;
+        top: -33px;
+    }
+
+    .toolbar .picker-button {
+        color: #FF9900;
+    }
+
+    .weui-cells_radio .weui-check:checked + .weui-icon-checked:before {
+        color: #FF9900;
+    }
+
+    .weui-navbar + .weui-tab__bd {
+        padding-top: 40px;
+    }
+
+    .cd-bouncy-nav-trigger {
+        box-shadow: none;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="weui-navbar vue-table">
+        <a class="weui-navbar__item vux-tab-item {if empty($_GPC['type']) || $_GPC['type'] == 1}weui-bar__item--on{/if}" href="#tab1" onclick="window.location.href='{php echo $this->createMobileUrl('market',array('type'=>1))}'">
+            二手
+        </a>
+        <a class="weui-navbar__item vux-tab-item {if $_GPC['type'] == 2}weui-bar__item--on{/if}" href="#tab2" onclick="window.location.href='{php echo $this->createMobileUrl('market',array('type'=>2))}'">
+            租借
+        </a>
+    </div>
+    <div class="weui-tab__bd" style="margin-bottom: 45px">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <ul class="market-list" id="list">
+
+
+            </ul>
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+        <div id="tab2" class="weui-tab__bd-item">
+            <ul class="market-list">
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="weui-tabbar address_tabbar">
+        <a href="javascript:;" class="weui-btn address_tabbar_btn cd-bouncy-nav-trigger">我要发布</a>
+    </div>
+    <div class="cd-bouncy-nav-modal">
+        <nav>
+            <ul class="cd-bouncy-nav">
+                <li>
+                    <a href="{php echo $this->createMobileUrl('market',array('op'=> 'add','type'=>1))}">
+                        <div class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-used.png"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title">二手</h4>
+                                <p class="weui-media-box__desc">还能用的不用丢，换点小钱</p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="{php echo $this->createMobileUrl('market',array('op'=> 'add','type'=>2))}">
+                        <div class="weui-media-box weui-media-box_appmsg">
+                            <div class="weui-media-box__hd">
+                                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-lease.png"
+                                     alt="">
+                            </div>
+                            <div class="weui-media-box__bd">
+                                <h4 class="weui-media-box__title">租借</h4>
+                                <p class="weui-media-box__desc">闲置物品租起来</p>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <li class="market-item">
+        <a href="{php echo $this->createMobileUrl('market',array('op'=> 'detail'))}&id={{d.list[i].id}}">
+            <div class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd market-item-hd">
+                    <img class="weui-media-box__thumb" src="{{# if(d.list[i].avatar){ }}{{d.list[i].avatar}}{{# }else{ }}{MODULE_URL}template/mobile/default2/static/images/my/personal.png{{# } }}" alt="">
+                </div>
+                <div class="weui-media-box__bd market-item-bd">
+                    <p>
+                        <span class="weui-media-box__title">{{# if(d.list[i].realname){ }}{{d.list[i].realname}}{{# }else{ }}L{{d.list[i].id}}{{# } }}</span>
+                        <span class="market-item-approve">认证住户</span>
+                        <span class="market-item-price">{{d.list[i].zprice}}</span>
+                    </p>
+                    <p class="weui-media-box__desc market-item-desc">来自{{d.list[i].regionname}}</p>
+                </div>
+            </div>
+            <div class="market-item-contain">
+                <p class="market-item-text weui-media-box__desc">
+                    {{d.list[i].title}}{{d.list[i].description}}
+                </p>
+                {{# if(d.list[i].images){ }}
+                {{# if(d.list[i].images.length>0){ }}
+                {{# for(var j = 0, le = d.list[i].images.length; j < le; j++){ }}
+                {{# if(d.list[i].images[j]){ }}
+                <div class="market-item-grid">
+                    <div class="cube_grid_img" data-ratio="1:1">
+                        <img src="{{d.list[i].images[j]}}">
+                    </div>
+                </div>
+                {{# } }}
+                {{# } }}
+                {{# } }}
+                {{# } }}
+            </div>
+            <p class="market-item-footer"><span class="market-item-time">{{d.list[i].datetime}}</span></p>
+        </a>
+    </li>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    // 弹出按钮
+    jQuery(document).ready(function($) {
+        var is_bouncy_nav_animating = false;
+        //弹出菜单
+        $('.cd-bouncy-nav-trigger').on('click', function() {
+            triggerBouncyNav(true);
+        });
+        //关闭菜单
+        $('.cd-bouncy-nav-modal .cd-close').on('click', function() {
+            triggerBouncyNav(false);
+        });
+        $('.cd-bouncy-nav-modal').on('click', function(event) {
+            if ($(event.target).is('.cd-bouncy-nav-modal')) {
+                triggerBouncyNav(false);
+            }
+        });
+        function triggerBouncyNav($bool) {
+            //点击若没有动画
+            if (!is_bouncy_nav_animating) {
+                is_bouncy_nav_animating = true;
+                //切换菜单动画
+                $('.cd-bouncy-nav-modal').toggleClass('fade-in', $bool).toggleClass('fade-out', !$bool).find('li:last-child').one('webkitAnimationEnd oanimationend msAnimationEnd animationend', function() {
+                    $('.cd-bouncy-nav-modal').toggleClass('is-visible', $bool);
+                    if (!$bool)
+                        $('.cd-bouncy-nav-modal').removeClass('fade-out');
+                    is_bouncy_nav_animating = false;
+                });
+                //判断css 动画是否开启..
+                if ($('.cd-bouncy-nav-trigger').parents('.no-csstransitions').length > 0) {
+                    $('.cd-bouncy-nav-modal').toggleClass('is-visible', $bool);
+                    is_bouncy_nav_animating = false;
+                }
+            }
+        }
+    });
+</script>
+<script type="text/javascript">
+    $(function () {
+        var type = "{$_GPC['type']}";
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('market/list')}&type="+type+"&regionid="+regionid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{template 'web/common/header-base'}
+<script type="text/javascript">
+    var u ={};
+    u.deny = function(uid){
+        var uid = parseInt(uid);
+        if(isNaN(uid)) {
+            return;
+        }
+        if(!confirm('确认要禁用/解禁此用户吗? ')) {
+            return;
+        }
+        $.post('{php echo url('user/permission');}', {'do': 'deny', uid: uid}, function(dat){
+            if(dat == 'success') {
+                location.href = location.href;
+            } else {
+                util.itoast('操作失败, 请稍后重试. ' + dat);
+            }
+        });
+    };
+    u.del = function(uid){
+        var uid = parseInt(uid);
+        if(isNaN(uid)) {
+            return;
+        }
+        if(!confirm('确认要删除此用户吗? ')) {
+            return;
+        }
+        $.post('{php echo url('user/edit');}', {'do': 'delete', uid: uid}, function(dat){
+            if(dat == 'success') {
+                location.href = location.href;
+            } else {
+                util.itoast('操作失败, 请稍后重试. ' + dat);
+            }
+        });
+    };
+</script>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>用户管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('group',array('op' => 'user'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="group"/>
+                        <input type="hidden" name="op" value="user"/>
+
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="username" placeholder="输入用户名">
+                                    <span class="input-group-btn">
+									<button type="submit" class="btn btn-primary">搜索</button>
+									<input type="hidden" name="token" value="{$_W['token']}"/>
+								</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:150px;">用户名</th>
+                            <th style="width:200px;">小区用户组</th>
+                            <th style="width:100px;">状态</th>
+                            <th style="min-width:180px;">注册时间</th>
+                            <th style="width:250px;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $users $user}
+                        <tr>
+                            <td>{if !$user['founder']}<a href="{php echo url('user/edit', array('uid' => $user['uid']))}">{$user['username']}</a>{else}{$user['username']}{/if}</td>
+                            <td>
+                                {if $user['title']}
+                                <span class="label label-success">{$user['title']}</span>
+                                {else}
+                                <span class="label label-primary">不限制</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if intval($user['status']) != 2}
+                                <span class="label label-danger">被禁止</span>
+                                {else}
+                                <span class="label label-success">正常状态</span>
+                                {/if}
+                            </td>
+                            <td>{php echo date('Y-m-d H:i:s', $user['joindate'])}</td>
+                            <td>
+                                <div>
+                                    <a href="{php echo $this->createWebUrl('group',array('op' => 'edit','uid' => $user['uid']))}" class="btn btn-primary btn-sm">设置小区用户组</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $users}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

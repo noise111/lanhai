@@ -1,0 +1,56 @@
+<!--快捷入口-->
+<div id="homeNav" class="swiper-container swiper-container-horizontal swiper-container-free-mode">
+    <div class="swiper-wrapper" id="list_link">
+
+
+    </div>
+</div>
+<script type="text/html" id="xq_list_link">
+    {{# for(var i = 0, len = d.links.length; i < len; i++){ }}
+    <a class="swiper-slide home-nav-box" href="{{ d.links[i].url }}">
+        <div class="home-nav-icon"><img src="{{ d.links[i].thumb }}"></div>
+        <p class="home-nav-label"><span>{{ d.links[i].title }}</span></p>
+    </a>
+    {{# } }}
+</script>
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/links')}&regionid="+regionid;
+        _loaddata(url, $("#list_link"), 'xq_list_link', true,function () {
+            //快捷入口轮播
+            var mySwiper = new Swiper('#homeNav', {
+                freeMode: true,
+                freeModeMomentumRatio: 0.5,
+                slidesPerView: 'auto',
+                observer:true,
+                observeParents:true,
+                autoplayDisableOnInteraction : false,
+            });
+            swiperWidth = mySwiper.container[0].clientWidth
+            maxTranslate = mySwiper.maxTranslate();
+            maxWidth = -maxTranslate + swiperWidth / 2
+
+            $("#homeNav").on('tap', function (swiper, e) {
+                //e.preventDefault()
+                slide = swiper.slides[swiper.clickedIndex]
+                slideLeft = slide.offsetLeft
+                slideWidth = slide.clientWidth
+                slideCenter = slideLeft + slideWidth / 2
+
+                // 被点击slide的中心点
+                mySwiper.setWrapperTransition(300)
+                if (slideCenter < slideWidth / 2) {
+                    mySwiper.setWrapperTransition(0)
+                } else if (slideCenter > maxWidth) {
+                    mySwiper.setWrapperTransition(maxTranslate)
+                } else {
+                    nowTlanslate = slideCenter - swiperWidth / 2
+                    mySwiper.setWrapperTransition(-nowTlanslate)
+                }
+                $("#homeNav .active").removeClass('active');
+                $("#topNav .swiper-slide").eq(swiper.clickedIndex).addClass('active')
+
+            })
+        });
+    })
+</script>

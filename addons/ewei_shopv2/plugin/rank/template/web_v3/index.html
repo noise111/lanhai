@@ -1,0 +1,140 @@
+{template '_header'}
+<div class='page-header'>
+	当前位置：<span class="text-primary">榜单列表 </span>
+</div>
+
+<div class="page-content">
+	<form action="./index.php" method="get" class="form-horizontal table-search" role="form" id="form1">
+		<input type="hidden" name="c" value="site" />
+		<input type="hidden" name="a" value="entry" />
+		<input type="hidden" name="m" value="ewei_shopv2" />
+		<input type="hidden" name="do" value="web" />
+		<input type="hidden" name="r" value="rank" />
+		<div class="page-toolbar">
+			<span class='col-sm-5'>
+                {ifp 'rank.index.add'}
+                    <a class='btn btn-success btn-sm' href="{php echo webUrl('rank/add')}"><i class='fa fa-plus'></i> 添加榜单</a>
+                {/if}
+			</span>
+			<div class="col-sm-7 pull-right">
+				<div class='input-group input-group-sm' style='float:left;'   >
+					{php echo tpl_daterange('time', array('placeholder'=>'创建时间'),true);}
+				</div>
+				<div class="input-group">
+					<span class="input-group-select">
+						<select name='gettype'  class='form-control  input-sm select-md'   style="width:100px;padding:0 5px;"  >
+							<option value=''>领券中心</option>
+							<option value='0' {if $_GPC['gettype']=='0'}selected{/if}>不显示</option>
+							<option value='1' {if $_GPC['gettype']=='1'}selected{/if}>显示</option>
+						</select>
+					</span>
+					<span class="input-group-select" style="display:none;">
+						<select name='type' class='form-control  input-sm select-md'   style="width:100px;"  >
+							<option value=''>类型</option>
+							<option value='0' {if $_GPC['type']=='0'}selected{/if}>购物</option>
+							<option value='1' {if $_GPC['type']=='1'}selected{/if}>充值</option>
+						</select>
+					</span>
+					<span class="input-group-select" style="display:none;">
+                        <select name='catid' class='form-control  input-sm select-md'   style="width:100px;"  >
+                            <option value=''>分类</option>
+                            {loop $category $k $c}
+                            <option value='{$k}' {if $_GPC['catid']==$k}selected{/if}>{$c['name']}</option>
+                            {/loop}
+                        </select>
+					</span>
+					<input type="text" class="form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="优惠券名称"> <span class="input-group-btn">
+                        <button class="btn btn-primary" type="submit"> 搜索</button> </span>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	{if count($list)>0}
+	<div class="page-table-header">
+		<input type="checkbox">
+			<span class="btn-group">
+				{ifp 'sale.coupon.delete'}
+				<button class="btn btn-default btn-sm dropdown-toggle btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认要删除?" data-href="{php echo webUrl('sale/coupon/delete')}">
+					<i class='icow icow-shanchu1'></i>删除
+				</button>
+				{/if}
+			</span>
+	</div>
+	<table class="table table-hover table-responsive">
+		<thead class="navbar-inner" >
+		<tr>
+			<th style="width:25px;"><input type='checkbox' /></th>
+			<th style="width:50px;">排序</th>
+			<th style="">榜单名称</th>
+			<th style="width:100px;" >状态</th>
+			<th style="width:100px;">是否显示</th>
+            <th >创建时间/有效时间</th>
+			<th style="width: 180px;">操作</th>
+		</tr>
+		</thead>
+		<tbody>
+		{loop $list $row}
+		<tr>
+			<td>
+				<input type='checkbox'   value="{$row['id']}"/>
+			</td>
+			<td>
+				{ifp 'rank.edit'}
+				<a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo webUrl('rank/edit',array('id'=>$row['id']))}" >{$row['displayorder']}</a>
+				{else}
+				{$row['displayorder']}
+				{/if}
+			</td>
+
+			<td>{$row['name']}</td>
+			<td>{if $row['status'] == 1}启用{else}停用{/if}</td>
+
+			<td>{if $row['is_show'] == 1}是{else}否{/if}</td>
+			<td>{php echo date('Y-m-d',$row['createtime'])}
+                {if $row['long_time'] == 1}/长期
+                {elseif $row['starttime'] || $row['endtime']}
+                /<br/>{php echo date('Y-m-d', $row['starttime'])} - {php echo date('Y-m-d', $row['endtime'])}
+                {/if}
+            </td>
+            <td>
+                <a class="btn btn-op btn-operation" href="{php echo webUrl('rank/edit', array('id' => $row['id']));}">
+                    <span data-toggle="tooltip" data-placement="top" title="" data-original-title="编辑">
+                       <i class="icow icow-bianji2"></i>
+                    </span>
+                </a>
+                <a class="btn  btn-op btn-operation" data-toggle="ajaxRemove" href="{php echo webUrl('rank/delete', array('ids' => $row['id']))}" data-confirm="确认彻底删除此榜单？">
+                    <span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">
+                         <i class="icow icow-shanchu1"></i>
+                    </span>
+                </a>
+            </td>
+		</tr>
+		{/loop}
+		</tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <input type="checkbox">
+                    <span class="btn-group">
+                        {ifp 'rank.delete'}
+                        <button class="btn btn-default btn-sm dropdown-toggle btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认要删除?" data-href="{php echo webUrl('rank/delete')}">
+                            <i class='icow icow-shanchu1'></i>删除
+                        </button>
+                        {/if}
+                    </span>
+                </td>
+                <td colspan="5" style="text-align: right">{$pager}</td>
+            </tr>
+        </tfoot>
+	</table>
+	{else}
+	<div class='panel panel-default'>
+        <div class='panel-body' style='text-align: center;padding:30px;'>
+            暂时没有任何榜单!
+        </div>
+	</div>
+	{/if}
+	</form>
+</div>
+{template '_footer'}

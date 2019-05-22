@@ -1,0 +1,117 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('parking')}"></a>&nbsp;&nbsp;&nbsp;
+                        添加车位
+                    </h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('parking',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form  action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}"/>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区:</label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="regionid" id="regionid">
+                                    <option>全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$item['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车位号:</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="place_num" class="form-control"  value="{$item['place_num']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">产权面积:</label>
+                            <div class="col-sm-5">
+                                <input type="text" name="area" class="form-control" value="{$item['area']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">车位状态:</label>
+
+                            <div class="col-sm-5">
+                                <select class="form-control" name="status" id="status">
+                                    <option>请选择车位状态</option>
+                                    <option value="已售" {if $item['status'] == '已售'}selected{/if}>已售</option>
+                                    <option value="已租" {if $item['status'] == '已租'}selected{/if}>已租</option>
+                                    <option value="空置" {if $item['status'] == '空置'}selected{/if}>空置</option>
+                                    <option value="自用" {if $item['status'] == '自用'}selected{/if}>自用</option>
+                                    <option value="暂停" {if $item['status'] == '暂停'}selected{/if}>暂停</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注:</label>
+
+                            <div class="col-sm-5">
+                                <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <input type="submit" class="btn btn-primary btn-w-m" id="submit" name="add" value="保存">
+                                <button type="button" class="btn btn-white btn-w-m" data-dismiss="modal" onclick="window.history.go(-1);">返回</button>
+
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+            }
+        },'json')
+    })
+    $('#submit').on('click', function () {
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('parking',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+{template 'web/common/footer'}

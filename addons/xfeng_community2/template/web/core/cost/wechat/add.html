@@ -1,0 +1,192 @@
+{template 'web/common/header-base'}
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('cost', array('op' => 'wechat'))}"></a>&nbsp;&nbsp;&nbsp;添加接收员</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('cost',array('op' => 'wechat','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionids" value="" />
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="realname" id='realname' value="{$item['realname']}" class="form-control" placeHolder="请输入联系人姓名" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">手机</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="mobile" id='mobile' value="{$item['mobile']}" class="form-control" placeHolder="请输入联系人手机" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入姓名/昵称/手机搜索粉丝openid">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="search">搜索</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="openid" class="col-sm-2 control-label">粉丝openid</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="请输入粉丝openid" name="openid" value="{$item['openid']}" id="openid" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">通知方式：</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" id="type1" value="1" {if empty($item['type']) || $item['type'] == 1}checked="true" {/if} />
+                                    <label for="type1">微信</label>
+                                </div>
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="type"  id="type2" value="2" {if $item['type']==2}checked="true" {/if} />-->
+                                    <!--<label for="type2">短信</label>-->
+                                <!--</div>-->
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="type"  id="type3" value="3" {if $item['type']==3}checked="true" {/if} />-->
+                                    <!--<label for="type3">全部通知</label>-->
+                                <!--</div>-->
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启：</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable" id="enable1" value="1" {if empty($item['enable']) || $item['enable'] == 1}checked="true" {/if} />
+                                    <label for="enable1">是</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable"  id="enable2" value="2" {if $item['enable']==2}checked="true" {/if} />
+                                    <label for="enable2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否选择所有小区</label>
+                            <div class="col-xs-5">
+                                <div class="radio radio-success checkbox-inline">
+                                    <input type="radio" name="allregion" id="allregion1" value="1" {if !$item['province']}checked{/if}/>
+                                    <label for="allregion1"> 是 </label>
+
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="allregion" id="allregion2" value="0" {if $item['province']}checked{/if} />
+                                    <label for="allregion2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="showbirth" {if $item['province']}style='display:block'{else}style='display:none'{/if}>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">省市区</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'dist' => $item['dist']))}
+                            </div>
+                        </div>
+                                <div class="form-group region" {if !$regs}style="display: none"{/if}>
+                                <label for="" class="col-sm-2 control-label">小区</label>
+                                <div class="col-xs-5 content">
+
+                                </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                    </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('address',array('op'=> 'search'))}",{words:words},function (data) {
+            if (data.err_code == 0){
+                $('#openid').val(data.openid);
+            }
+        },'json')
+    })
+</script>
+<script>
+    $(function () {
+        $("input[name='allregion']").click(function(){
+            var type = $("input[name='allregion']:checked").val();
+            if(type == 1){
+                $("#showbirth").hide();
+            }
+            if(type == 0){
+                $("#showbirth").show();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#realname").val()){
+            alert('请输入姓名。');
+            return false;
+        }
+        if(!$("#mobile").val()){
+            alert('请输入联系电话。');
+            return false;
+        }
+        if(!$("#openid").val()){
+            alert('请输入粉丝openid。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        $("input[name='regionids']").val(regionids);
+        var url = "{php echo $this->createWebUrl('cost',array('op'=>'wechat','p' => 'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

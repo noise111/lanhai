@@ -1,0 +1,295 @@
+{template 'default2/header'}
+<script src="{MODULE_URL}template/mobile/default2/static/js/webuploader.min.js"></script>
+<style>
+    .weui-cells {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .weui-cells:before {
+        border-top: none;
+    }
+
+    .weui-cell:before {
+        left: 0;
+    }
+
+    .weui-textarea {
+        min-height: 100px;
+    }
+
+    .toolbar .picker-button {
+        color: #FF5500;
+    }
+
+    .weui-label {
+        width: 60px;
+    }
+
+    .opt {
+        float: left;
+    }
+
+    .opt:last-child {
+        margin-left: 10px;
+    }
+
+    .magic-radio + label, .magic-checkbox + label {
+        padding-left: 22px;
+    }
+
+    .magic-radio:checked + label:before {
+        border: 1px solid #FF9900;
+    }
+
+    .magic-radio + label:after {
+        top: 6px;
+        left: 6px;
+        background: #FF9900;
+    }
+    .webuploader-element-invisible {
+        opacity:0;/*设置此控件透明度为零，即完全透明*/
+        filter:alpha(opacity=0);/*设置此控件透明度为零，即完全透明针对IE*/
+        font-size:100px;
+        position:absolute;/*绝对定位，相对于 .input */
+        top:0;
+        right:0;
+    }
+</style>
+<style>
+    #addPic div:nth-child(2){width:100%!important;height:100%!important;}
+</style>
+<body ontouchstart>
+<div class="weui-cells">
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="标题" id="title">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="描述你的宝贝..." rows="3" id="description"></textarea>
+            <div class="weui-uploader">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                        <!--<li class="weui-uploader__file" style="background-image:url(./images/pic_160.png)"></li>-->
+                    </ul>
+                    <div class="weui-uploader__input-box" id="addPic">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="weui-cells  input-right">
+    <div class="weui-cell " id="market-price1">
+        <div class="weui-cell__hd"><label class="weui-label">现价</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" placeholder="" id="zprice">
+        </div>
+        <div class="weui-cell__ft">
+            元
+        </div>
+    </div>
+    <div class="weui-cell" id="market-price2">
+        <div class="weui-cell__hd"><label class="weui-label">原价</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" placeholder="" id="yprice">
+        </div>
+        <div class="weui-cell__ft">
+            元
+        </div>
+    </div>
+</div>
+<div class="weui-cells input-right">
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__hd"><label for="category" class="weui-label">选择分类</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="category" type="text" readonly="readonly">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+</div>
+<div class="address_form_ft" id="submit">
+    <a href="javascript:;" class="weui-btn address_form_btn">提交</a>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        var id = "{$_GPC['id']}";
+        if(id){
+            var url = "{php echo wxapp_url('market/detail')}";
+            $.getJSON(url,{id:id},function (data) {
+                if(data.err_code==0){
+                    $("#title").val(data.data.title);
+                    $("#description").val(data.data.description);
+                    $("#zprice").val(data.data.zprice);
+                    $("#yprice").val(data.data.yprice);
+                    $("#category").val(data.data.name);
+                    $("#category").data('values',data.data.category);
+                    var images = data.data.images;
+                    var pics = '';
+                    for(var o in images){
+                        pics +='<li class="weui-uploader__file" style="background-image:url('+images[o]+')"></li>'
+                    }
+                    $("#uploaderFiles").html(pics);
+                }
+            })
+        }
+    })
+</script>
+
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds='';
+    wx.config(jssdkconfig);
+    wx.ready(function () {
+        $("#addPic").click(function () {
+            wx.chooseImage({
+                count: 9, // 默认9
+                sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                sourceType:  ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                success: function (res) {
+                    var localIds = res.localIds;
+                    //调用上传递归函数
+                    wxUploadImg(localIds);
+                }
+            });
+            function wxUploadImg(localIds){
+
+                var localId=localIds[idx]
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        getImg(serverId);
+                        // 上传序号，上传一张 累计 +1
+                        idx++
+                        //存储图片媒体ID，用，号分割
+                        // serverIds+=res.serverId+',';
+                        if(idx<localIds.length){//本地图片ID 还没全部获取完图片媒体ID
+                            //调用上传递归函数
+                            wxUploadImg(localIds);
+                        }
+                        else{
+                            idx=0;
+                            serverIds='';
+                            return true;
+                        }
+                    },
+                    fail: function(res){//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg："+JSON.stringify(res));
+                    }
+                });
+            }
+            function getImg(serverId) {
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url,{serverId:serverId},function(ret){
+                    var imgUrl = ret.data.imgUrl
+                    var content = '<li class="weui-uploader__file" style="background-image:url('+imgUrl+')"></li><input type="hidden" name="pic[]" value="'+serverId+'">'
+                    $("#uploaderFiles").append(content);
+                })
+            }
+        });
+    });
+
+</script>
+
+<script>
+    $(function () {
+        $.post("{php echo wxapp_url('category/list')}", {type: 4}, function (data) {
+            var json = new Array();
+            json = data.data;
+            $("#category").select({
+                title: "选择分类",
+                multi: false,
+                items: json,
+                onChange: function (d) {
+                    console.log(this, d);
+                },
+                onClose: function () {
+                    console.log("close");
+                },
+                onOpen: function () {
+                    console.log("open");
+                },
+            });
+
+        }, 'json')
+        var lock = false;
+        $("#submit").click(function () {
+            var cid = $("#category").attr('data-values');
+            var description = $("#description").val();
+            var title = $("#title").val();
+            var yprice = $("#yprice").val();
+            var zprice = $("#zprice").val();
+            var pics ='';
+            var type = "{$_GPC['type']}";
+            $('input[name="pic[]"]').each(function(){
+                var t1 = $(this).val();
+                if(t1){
+                    pics += t1+',';
+                }
+
+            });
+            var addressid = "{$_SESSION['community']['addressid']}";
+            var regionid = "{$_SESSION['community']['regionid']}";
+            var id = "{$_GPC['id']}";
+            if(lock) return false;
+
+            lock = true;
+            $.showLoading('正在提交');
+            $.post("{php echo wxapp_url('market/add')}",{cid:cid,description:description,pics:pics,title:title,yprice:yprice,zprice:zprice,type:type,addressid:addressid,regionid:regionid,id:id},function (data) {
+                if(data.err_code ==0){
+                    $.hideLoading();
+                    setTimeout(function() {
+                        //提交成功提示内容: data.data.content
+                        $.toast(data.data.content, "text");
+                        window.location.href="{php echo $this->createMobileUrl('market',array('op' => 'list'))}";
+                    }, 1000);
+                }
+                lock = false;
+            },'json')
+        })
+    })
+
+
+    var id = getUrlArgStr();
+
+    if (id == 2) {
+
+        $('#market-price1 .weui-label').text("租金");
+        $('#market-price2 .weui-label').text("押金");
+        $('#market-price1 .weui-cell__ft').text(" ");
+        $("#market-price1 .weui-cell__ft").prepend('<div class="opt"> <input class="magic-radio" type="radio" name="radio" id="r1" value="1" checked> <label for="r1">元/月</label> </div> <div class="opt"> <input class="magic-radio" type="radio" name="radio" id="r2" value="2" > <label for="r2">元/天</label> </div>');
+    }
+</script>
+</body>
+</html>

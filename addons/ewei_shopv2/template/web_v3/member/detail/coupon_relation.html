@@ -1,0 +1,60 @@
+<div class="form-group">
+	<label class="col-lg control-label">区域运营中心</label>
+	<div class="col-sm-9 col-xs-12">
+        {loop $agents $agent}
+        <div class='form-control-static'>
+            <img src="{$agent['avatar']}" style="width:40px; height: 40px;" />
+            <span style="">{$agent['nickname']}</span>
+        </div>
+        {/loop}
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">绑定零售商</label>
+	<div class="col-sm-9 col-xs-12">
+        <div class='form-control-static'>
+            {if $merch}
+                {$merch[0]['merchname']}
+            {else}
+                --
+            {/if}
+        </div>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">绑定门店</label>
+	<div class="col-sm-9 col-xs-12">
+        <div class='form-control-static'>
+            {if $bind_store}
+                {$bind_store}
+            {else}
+                --
+            {/if}
+        </div>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">绑定导购</label>
+	<div class="col-sm-9 col-xs-12">
+        <div class='form-control-static'>
+        {if $saler}
+            <img src="{$saler['avatar']}" style="width:40px; height: 40px;" />
+            <span style="">{$saler['salername']}</span>
+        {else}
+            --
+        {/if}
+        </div>
+	</div>
+</div>
+<div class="form-group">
+	<label class="col-lg control-label">来源关系</label>
+	<div class="col-sm-9 col-xs-12">
+        <div class='form-control-static'>
+            {if $from_str}
+                {$from_str}
+            {else}
+                --
+            {/if}
+        </div>
+	</div>
+</div>

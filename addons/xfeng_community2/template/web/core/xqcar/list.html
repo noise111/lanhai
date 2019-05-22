@@ -1,0 +1,289 @@
+{template 'web/common/header-base'}
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        padding: 10px;
+        border-top: 1px solid #f0f0f0;
+        min-height: 41px;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>车辆管理</h5>
+                        <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('xqcar')}"></a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="xqcar"/>
+                            <input type="hidden" name="op" value="list"/>
+                            <div class="row">
+                                <div class="col-sm-2 m-b-xs">
+                                    {if ($user && $menu_opss && @in_array('xqcar_add', $menu_opss)) || empty($user)}
+                                    <a data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                                        <i class="fa fa-plus"></i>添加车辆</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('xqcar_import', $menu_opss)) || empty($user)}
+                                    <a class="btn btn-warning" href="{php echo $this->createWebUrl('xqcar', array('op' => 'import'))}"> <i class="fa fa-plus"></i>导入车辆</a>
+                                    {/if}
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <select class="form-control" name="regionid">
+                                        <option>全部小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <input type="text" placeholder="请输入业主车牌" class="form-control" name="car_num"
+                                           value="{$_GPC['car_num']}">
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+                                    <input type="text" placeholder="请输入业主姓名" class="form-control" name="realname"
+                                           value="{$_GPC['realname']}">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" placeholder="请输入业主手机" class="form-control" name="mobile" value="{$_GPC['mobile']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form action="" method="post" class="form-horizontal" role="form">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px;">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>车辆编号</th>
+                                    <th>所属小区</th>
+                                    <th>车位号</th>
+                                    <th>车主姓名</th>
+                                    <th>车主手机</th>
+                                    <th>车牌号码</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    {loop $list $item}
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox checkbox-success checkbox-inline">
+                                                <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}" value="{$item['id']}">
+                                                <label for="ids_{$item['id']}"></label>
+                                            </div>
+
+                                        </td>
+                                        <td>{$item['id']}</td>
+                                        <td>{$item['title']}</td>
+                                        <td>{$item['place_num']}</td>
+                                        <td>{$item['realname']}</td>
+                                        <td>
+                                            {$item['mobile']}
+                                        </td>
+                                        <td>{$item['car_num']}</td>
+                                        <td>
+                                            {if ($user && $menu_opss && @in_array('xqcar_bind', $menu_opss)) || empty($user)}
+                                            <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('xqcar',array('op' => 'bind','id' => $item['id']))}">绑定住户</a>
+                                            &nbsp;&nbsp;
+                                            {/if}
+                                            {if ($user && $menu_opss && @in_array('xqcar_edit', $menu_opss)) || empty($user)}
+                                            <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('xqcar',array('op' => 'add','id' => $item['id']))}">修改信息</a>
+                                            &nbsp;&nbsp;
+                                            {/if}
+                                            {if ($user && $menu_opss && @in_array('xqcar_del', $menu_opss)) || empty($user)}
+                                            <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('xqcar',array('op' => 'del','id' => $item['id']))}">删除信息</a>
+                                            {/if}
+                                        </td>
+                                    </tr>
+                                    {/loop}
+                                </tbody>
+                            </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+                                    {if ($user && $menu_opss && @in_array('xqcar_pldel', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="del" class="btn btn-danger" value="批量删除车辆">
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('xqcar_wechat', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="wxmovecar" class="btn btn-primary" value="一键微信挪车">
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('xqcar_sms', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="smsmovecar" class="btn btn-primary" value="一键短信挪车">
+                                    {/if}
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+
+                <h4 class="modal-title">添加车辆</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">搜索</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">小区:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="regionid" id="regionid">
+                                <option>全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" >{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">车位号:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="parkingid" id="parkingid">
+                                <option>全部车位</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">车主姓名:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="realname" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">车主手机:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="mobile" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">车牌号码:</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="car_num" class="form-control"  />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" id="submit" name="add" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    if (data.regionid != '0') {
+                        $.post("{php echo $this->createWebUrl('xqcar',array('op' => 'park'))}", {
+                            regionid: data.regionid,
+                        }, function (data) {
+                            if(data){
+                                var content;
+                                $.each(data, function (name, val) {
+                                    content += "<option value='"+val.id+"'>"+val.place_num+"</option>";
+                                });
+                                $("#parkingid").html(content);
+                            }
+
+                        }, 'json');
+                    }
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            if (regionid != '0') {
+                $.post("{php echo $this->createWebUrl('xqcar',array('op' => 'park'))}", {
+                    regionid: regionid,
+                }, function (data) {
+                    if(data){
+                       var content;
+                        $.each(data, function (name, val) {
+                            content += "<option value='"+val.id+"'>"+val.place_num+"</option>";
+                        });
+                        $("#parkingid").html(content);
+                    }
+
+                }, 'json');
+            }
+        })
+    })
+    $('#submit').on('click', function () {
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('xqcar',array('op'=>'list'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+{template 'web/common/footer'}

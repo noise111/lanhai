@@ -1,0 +1,75 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>基础设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('address',array('op' => 'credit','p' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" role="form">
+
+
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">积分设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">开启独立积分系统</td>
+                                <td>
+                                    开启后，系统涉及到赠送积分会全部进入到小区独立积分，默认为微擎积分
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                    <input type="checkbox" name="" id="p138" class="js-switch_7" {if $set['p138']['value']}checked{/if}/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hr-line-dashed"></div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="" class="col-sm-2 control-label"></label>-->
+                            <!--<div class="col-sm-5">-->
+                                <!--<button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>-->
+                                <!--<input type="hidden" name="token" value="{$_W['token']}"/>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

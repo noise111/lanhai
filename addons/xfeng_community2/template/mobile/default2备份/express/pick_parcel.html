@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>寄件管理</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        .weui-cells{
+            font-size: 15px;
+        }
+        .list {
+            padding: 0;
+            margin: 0;
+        }
+        .default-panel-list {
+            margin: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd">
+        {loop $parcels $item}
+        <a href="{php echo $this->createMobileUrl('express', array('op' => 'ship','p' => 'detail', 'id' => $item['id']))}" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img src="{php echo tomedia($item['logo'])}" style="width: 45px;height: 40px">
+                <!--<img class="weui-media-box__thumb" src="{MODULE_URL}static/img/ZTO.jpg" alt="">-->
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title">{$item['realname']}</h4>
+                <h4 class="weui-media-box__title">{$item['sendphone']}</h4>
+                <p class="weui-media-box__desc">{$item['sendaddress']}->{$item['address']}</p>
+                <p class="weui-media-box__desc">{php echo date('Y-m-d H:i', $item['createtime'])}</p>
+            </div>
+            <span class="weui-cell__ft">{if $item['status']==1}未发货{else if $item['status']==2}已发货{else if $item['status']==3}已代收{else if $item['status']==4}已取件{/if}</span>
+        </a>
+        {/loop}
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+
+</body>
+</html>

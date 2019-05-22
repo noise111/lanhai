@@ -1,0 +1,95 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('vote')}"></a>&nbsp;&nbsp;&nbsp;统计结果</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('vote',array('op'=>'show','voteid'=>$_GPC['voteid']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    {loop $list $k $item}
+                    {php $i = $k+1}
+                    {if $item['type'] ==3}
+                    <div>
+
+                        <div>
+                            <p><span style="color: black">第{$i}题：</span> {$item['title']} <span>&nbsp;&nbsp;[填空题]</span></p>
+                        </div>
+                        <div>
+                            <!--<button   type="button"  data-toggle="modal" data-target="#myModal{$item['id']}" >查看详细信息</button>-->
+                            <a href="{php echo $this->createWebUrl('vote',array('op'=>'show_tk','questionid'=>$item['id'],'voteid'=>$voteid))}" class="btn btn-large btn-primary">查看详细信息</a>
+                            <!--<div class="modal inmodal" id="myModal{$item['id']}" tabindex="-1" role="dialog" aria-hidden="true">-->
+                                <!--<div class="modal-dialog">-->
+                                    <!--<div class="modal-content animated bounceInRight">-->
+                                        <!--<div class="modal-header">-->
+                                            <!--<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span-->
+                                                    <!--class="sr-only">关闭</span>-->
+                                            <!--</button>-->
+                                            <!--<i class="fa fa-laptop modal-icon"></i>-->
+                                            <!--<h4 class="modal-title">查看详细数据</h4>-->
+
+                                        <!--</div>-->
+
+                                        <!--<div class="modal-body">-->
+                                            <!--{loop $item['tk_answers'] $key $r}-->
+                                            <!--{php $j = $key+1}-->
+                                            <!--<p>({$j})<span>答案：</span>{$r['content']}</p>-->
+                                            <!--{/loop}-->
+                                        <!--</div>-->
+                                        <!--<div class="modal-footer">-->
+                                            <!--<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>-->
+
+                                        <!--</div>-->
+
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    {/if}
+                    {if $item['type'] == 1 || $item['type'] == 2}
+                    <div>
+
+                        <div>
+                            <p><span style="color: black">第{$i}题：</span> {$item['title']} <span>&nbsp;&nbsp;[{if $item['type']==1}单选题{else}多选题{/if}]</span></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr style="color: black">
+                                <th class="col-sm-2">选项</th>
+                                <th class="col-sm-1">小计</th>
+                                <th class="col-sm-9">比例</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $item['options'] $row}
+                            <tr>
+                                <td>{$row['title']}</td>
+                                <td>{$row['num']}</td>
+                                <td>{$row['scale']}%</td>
+                            </tr>
+                            {/loop}
+                            <tr style="color: black" class="active">
+                                <td>本题有效填写人次</td>
+                                <td colspan="2">{$item['total']}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    {/if}
+                    {/loop}
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+

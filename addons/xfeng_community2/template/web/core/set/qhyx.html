@@ -1,0 +1,42 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>企汇云信接口</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('sms',array('op' => 'wwt'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+                        <input type="hidden" name="id" value="{$settings['id']}" />
+
+                        <div class="form-group">
+                            <label for="account" class="col-sm-2 control-label">用户账户</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s35]" id='account' class="form-control" value="{$set['s35']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pwd" class="col-sm-2 control-label">用户密码</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="sms[s36]" id='pwd' class="form-control" value="{$set['s36']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结算</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/demos.css">
+    <script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+</head>
+<style>
+    body {
+        background: #FFFFff;
+    }
+
+    .weui-cells {
+        margin-top: 0;
+        font-size: 0.9em;
+    }
+
+    .weui-tabbar {
+        position: absolute;
+    }
+</style>
+<body>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div class="weui-tab" id="app" v-model="items" v-cloak>
+    <div class="weui-tab__bd">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="default-store-goods">
+                <div class="weui-cells">
+                    <div class="weui-cell" v-for="item in goods">
+                        <div class="weui-cell__bd">{{item[0]}}</div>
+                        <div class="weui-cell__ft">
+                            <span class="color_y">￥{{item[1]}}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="weui-tabbar">
+        <div class="shopcart-footer" id="shopcart-footer">
+            <div class="total">
+                <div id="total">
+                    <em>合计：￥<em id="shopcart-total-price">{{items.payfee}}</em></em>
+
+                </div>
+            </div>
+            <div class="closing">
+                <a href="#" class="btn-sub" id="shop-account" @click="buy(items.orderid)">去结算</a>
+                <a href="#" class="btn-sub" id="shop-del" style="display: none">删除</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            code: "{$_GPC['code']}",
+            items: [],
+            intervalid:'',
+            goods:[]
+        },
+        created :function(){
+            var self = this
+            var url = "{php echo wxapp_url('supermark/confirm')}";
+            var data = {
+                code: self.code
+            }
+            this.intervalid =setInterval(function(){
+                $.getJSON(url, data, function (ret) {
+                    if (ret.err_code == 0) {
+                        self.items = ret.data
+                        self.goods = ret.data.goods
+                    }
+                    if(ret.err_code == -1){
+                        self.items = []
+                        self.goods = []
+                    }
+                })
+            }, 500)
+
+
+        },
+        beforeMount: function () {
+
+        },
+        methods: {
+            buy: function (orderid) {
+                console.log(orderid);
+                window.location.href = "{php echo $this->createMobileUrl('paycenter',array('type' => 5))}&orderid=" + orderid
+            },
+
+        },
+        watch: {
+            items: function (val, oldVal) {
+                // if(val.orderid==oldVal.orderid){
+                //     this.num ++
+                //     if(this.num == 100){
+                //         clearInterval(this.intervalid)
+                //     }
+                // }
+                console.log(val);
+
+                this.items = val;
+                this.goods = val.goods
+
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

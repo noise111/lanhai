@@ -1,0 +1,100 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $op=='set'}class="active"{/if}><a href="{php echo $this->createWebUrl('car',array('op' => 'set'))}" title="基本设置" >基本设置</a></li>
+                        <li {if $op=='desc'}class="active"{/if}><a href="{php echo $this->createWebUrl('car',array('op' => 'desc'))}" title="免责条款" >免责条款</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="" method="post" role="form">
+
+                        {if $op=='set'}
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded phone breakpoint">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-2">拼车设置</th>
+                                <th class="col-sm-3">说明</td>
+                                <th class="col-sm-4"></th>
+                                <th class="col-sm-3">是否启用</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">拼车审核</td>
+                                <td>开启拼车审核后，粉丝发布的拼车信息，需要后台审核后，才可显示</td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" id="p29" class="js-switch_10" {if $set['p29']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">拼车全部小区显示</td>
+                                <td>
+                                    开启后，拼车信息会在所有小区显示
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                    <input type="checkbox" name="" id="p6" class="js-switch_6" {if $set['p6']['value']}checked{/if}/>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="hr-line-dashed"></div>
+                        {elseif $op=='desc'}
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                {php echo tpl_ueditor("set[p166]",$set['p166']['value']);}
+                            </div>
+                        </div>
+                        {/if}
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+

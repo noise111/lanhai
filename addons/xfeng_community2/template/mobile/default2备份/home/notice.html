@@ -1,0 +1,44 @@
+<!--通知信息-->
+<div class="weui-cells" style="margin-top: 10px;display: none" id="scrollNews">
+    <div class="weui-cell">
+        <div class="vux-cell-bd vux-cell-primary">
+            <p>
+                <label class="vux-label">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/notice.png"
+                         style="width: 25px;height: 25px;position: relative;top: 2.5px">
+                </label>
+            </p>
+        </div>
+        <div class="weui-cell__ft" style="text-align: left">
+            <div class="vux-marquee notice_active" style="height: 21px;">
+                <ul class="vux-marquee-box" id="yy"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="xq_list_notice">
+    {{# for(var i = 0, len = d.notice.length; i < len; i++){ }}
+    <li class="notice"
+        onclick="window.location.href='{php echo $this->createMobileUrl('announcement',array('op'=> 'detail'))}&id={{d.notice[i].id}}'">
+        {{ d.notice[i].title }}
+    </li>
+    {{# } }}
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/notice')}&regionid=" + regionid;
+        _loaddata(url, $("#yy"), 'xq_list_notice', true, function (ret) {
+            // 公告
+            var obj = $("#scrollNews").show();
+            var $self = obj.find('#yy');
+            var lineHeight = $self.find(".notice").eq(0).height();
+            setInterval(function () {
+                $self.animate({"marginTop": -lineHeight + "px"}, 600, function () {
+                    $self.css({marginTop: 0}).find(".notice").eq(0).appendTo($self);
+                })
+            }, 2500);
+        });
+    })
+</script>
+

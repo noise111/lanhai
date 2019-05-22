@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我要取件</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        .weui-navbar{
+            background-color:#fff;
+        }
+        .weui-navbar__item{
+            padding: 11px 0;
+            font-size: 14px;
+        }
+        .weui-navbar__item:after{
+            border-right: none;
+        }
+        .weui-navbar__item.weui-bar__item--on{
+            color: #F7624B;
+            border-bottom: 3px solid #F7624B;
+            background-color: #fff;
+        }
+        .weui-cells{
+            font-size: 15px;
+        }
+        #submit {
+
+        }
+    </style>
+</head>
+<body>
+<div class="weui-grids">
+    {if $collect}
+    <a href="{php echo $this->createMobileUrl('express', array('op' => 'pick','p' => 'in'))}" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/img/in.png" alt="">
+        </div>
+        <p class="weui-grid__label">
+            入库
+        </p>
+    </a>
+    <a href="{php echo $this->createMobileUrl('express', array('op' => 'pick','p' => 'out'))}" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/img/out.png" alt="">
+        </div>
+        <p class="weui-grid__label">
+            出库
+        </p>
+    </a>
+    <a href="{php echo $this->createMobileUrl('express', array('op' => 'pick','p' => 'parcel'))}" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/img/box.png" alt="">
+        </div>
+        <p class="weui-grid__label">
+            寄件
+        </p>
+    </a>
+    {/if}
+    <a href="" class="weui-grid js_grid">
+        <div class="weui-grid__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/img/box.png" alt="">
+        </div>
+        <p class="weui-grid__label">
+            取件
+        </p>
+    </a>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+</body>
+</html>

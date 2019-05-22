@@ -1,0 +1,106 @@
+{template 'web/common/header-base'}
+
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>充电设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'price'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="charging"/>
+                        <input type="hidden" name="op" value="price"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'price','p' => 'add'))}" class="btn btn-primary"><i class="fa fa-plus"></i>添加充电费用</a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <select name="tid" class="form-control">
+                                        <option value="0">全部投放</option>
+                                        {loop $throws $throw}
+                                        <option value="{$throw['id']}" {if $throw['id'] == $_GPC['tid']}selected='selected'{/if}>{$throw['title']}</option>
+                                        {/loop}
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>投放</th>
+                            <th>计费方式</th>
+                            <th>费用</th>
+                            <th>时间/功率</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['ttitle']}</td>
+                            <td>{if $item['type'] == 1}小时计费{elseif $item['type']==2}功率计费{/if}</td>
+                            <td>{$item['price']} {if $item['type'] == 1}元{elseif $item['type']==2}元/小时{/if}</td>
+                            <td>{if $item['type'] == 1}{$item['cdtime']} 小时{elseif $item['type']==2}{$item['power']} W{/if}</td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('charging',array('op' => 'price','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                <a href="JavaScript:;" data="{$item['id']}" class="btn btn-default btn-sm" data-original-title="删除" onclick="return confirm('将删除充电桩及下面的插座，确认吗？')">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $(".btn").bind("click", function () {
+            var id = $(this).attr('data');
+            var url = "{php echo $this->createWebUrl('charging',array('op' => 'price','p' => 'del'))}";
+            $.post(url,
+                {
+                    id: id
+                },
+                function (msg) {
+                    if (msg.status == 1) {
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100);
+                    }
+                    ;
+
+                },
+                'json');
+        });
+    });
+</script>
+{template 'web/common/footer'}

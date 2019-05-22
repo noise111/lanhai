@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入库</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        .weui-navbar{
+            background-color:#fff;
+        }
+        .weui-navbar__item{
+            padding: 11px 0;
+            font-size: 14px;
+        }
+        .weui-navbar__item:after{
+            border-right: none;
+        }
+        .weui-navbar__item.weui-bar__item--on{
+            color: #F7624B;
+            border-bottom: 3px solid #F7624B;
+            background-color: #fff;
+        }
+        .weui-cells{
+            font-size: 15px;
+        }
+        #submit {
+
+        }
+    </style>
+</head>
+<body>
+<div class="weui-tab">
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" id="code">
+            <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/img/saoma.png" alt="" style="width:40px;margin-right:5px;display:block"></div>
+            <div class="weui-cell__bd">
+                <p>扫码入库</p>
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+    </div>
+</div>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script type="text/javascript">
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'scanQRCode'
+    ];
+
+    $(function () {
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            $('#code').click(function () {
+                wx.scanQRCode({
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: function (res) {
+                        var waybillcode = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                        // $('#waybillcode').val(res.resultStr);
+                        if(waybillcode ==''){
+                            $.alert('请扫码获取运单号');
+                            return false;
+                        }
+                        $.post("{php echo $this->createMobileUrl('express', array('op' => 'pick','p' => 'arrive'))}",
+                            {waybillcode:waybillcode},function (e) {
+                                if(e.data == '1'){
+                                    $.toast('入库成功！', function () {
+                                        //发送取货码
+                                        $.post("{php echo $this->createMobileUrl('express', array('op' => 'sendsms'))}&mobile=" + e.phone,{waybillcode:waybillcode},function (data) {
+                                            if(data=='1'){
+                                                //alert('获取失败，请重新在试');return false;
+                                                $.toast('已发送短信');
+                                            }
+                                            else
+                                            {
+                                                $.toast('发送短信失败！', 'cancel');
+                                            }
+                                        }, 'json');
+                                    });
+                                    //window.location.href = "{php echo $this->createMobileUrl('device', array('op' => 'device_list'))}";
+                                }
+                                if(e.data == '2'){
+                                    $.toast('已入库！');
+                                }
+                                if(e.data == '3'){
+                                    $.confirm("查找不到运单信息，是否手动入库", function() {
+                                        //点击确认后的回调函数
+                                        window.location.href = "{php echo $this->createMobileUrl('express', array('op' => 'store','p' => 'list'))}";
+                                    }, function() {
+                                        //点击取消后的回调函数
+                                    });
+                                }
+                                //    $.toast(e);
+                            },'json')
+                    }
+                });
+
+
+            });
+
+        });
+    });
+
+</script>
+</body>
+</html>

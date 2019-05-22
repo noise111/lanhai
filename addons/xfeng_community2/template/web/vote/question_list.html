@@ -1,0 +1,72 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('vote', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;详细数据</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('vote',array('op' => 'question','p' => 'list','voteid' => $voteid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="vote"/>
+                        <input type="hidden" name="op" value="question"/>
+                        <input type="hidden" name="p" value="list"/>
+                        <input type="hidden" name="voteid" value="{$voteid}"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <!--<a class="btn btn-primary" href="{php echo $this->createWebUrl('vote', array('op' => 'add'));}"><i class="fa fa-plus"></i> 添加问卷</a>-->
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="输入标题">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th class="col-lg-2">问题标题</th>
+                                <th>用户昵称</th>
+                                <th>用户回答</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $k $item}
+
+                            <tr>
+                                <td>{$item['title']}</td>
+                                <td>{$item['nickname']}</td>
+                                <td>{if $item['type'] == 1 || $item['type'] == 2}{$item['otitle']}{else}{$item['content']}{/if}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>物业评分</title>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/rank/style.css">
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default2/static/js/rank/mcanvas.min.js"></script>
+    <style>
+        .g-flexview {
+            background: #F6F6F6;
+        }
+    </style>
+</head>
+<body>
+<section class="g-flexview">
+    <div class="g-scrollview">
+        <div class="approval-text-label">
+            <h1>恭喜，您的评分已经下来</h1>
+            <p>请长按以下证书缩略图下载图片自行打印</p>
+        </div>
+        <div class="approval-cate" id="img" style="text-align: center">
+            <img src="" id="thumb">
+        </div>
+    </div>
+</section>
+<script>
+    $(function () {
+        var url = "{php echo wxapp_url('rank/detail')}";
+        var id = "{$_GPC['id']}";
+        $.post("{php echo wxapp_url('rank/detail')}",{id: id},function (data) {
+            mc = new MCanvas(800, 1200);
+            var $result = $('#thumb');
+            mc.background(data.data.thumb, {
+                left: 0,
+                top: 0,
+                color: '#835024',
+                type: 'origin',
+            })
+                .text('<b>编号：'+data.data.id+"</b>", {
+                    width: '100px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'60%',
+                        y: "24%",
+                    },
+                })
+                .text('<b>企业名称：'+data.data.company+"</b>", {
+                    width: '900px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "32%",
+                    },
+                })
+                .text('<b>法定代表人：'+data.data.realname+"</b>", {
+                    width: '900px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "37%",
+                    },
+                })
+                .text('<b>注册地址：'+data.data.reg_address+"</b>", {
+                    width: '900px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "42%",
+                    },
+                })
+                .text('<b>信用评分：'+data.data.mark+"</b>", {
+                    width: '900px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "47%",
+                    },
+                })
+                .text("<b>有效期：30天</b>", {
+                    width: '900px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 19px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "52%",
+                    },
+                })
+                .text("<b>备注:  本授权书以正本为有效文本，不得影印、</b>", {
+                    width: '300px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 14px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "58%",
+                    },
+                })
+                .text("<b>          涂改、转让</b>", {
+                    width: '300px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 14px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'19%',
+                        y: "60%",
+                    },
+                })
+                .text("<b>单位：荆州市物业管理中心</b>", {
+                    width: '500px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 14px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'55%',
+                        y: "68%",
+                    },
+                })
+                .text('<b>日期：'+data.data.createtime+"</b>", {
+                    width: '500px',
+                    align: 'left',
+                    largeStyle:{
+                        font:'bold 14px Microsoft YaHei,sans-serif',
+                        color:'#835024',
+                        lineheight: 100,
+                    },
+                    pos: {
+                        x:'55%',
+                        y: "70%",
+                    },
+                })
+            // draw 最终绘制函数，用于最终的绘制；
+            mc.draw({
+                // 导出图片格式： png/jpg/jpeg/webp;
+                // default : png;
+                type: 'png',
+                //  图片质量，对 png 格式无效； 0~1；
+                // default: .9;
+                quality: 1,
+                callback(b64){
+                    $result.attr('src',b64);
+                }
+
+            })
+        },'json')
+    })
+</script>
+</body>
+</html>

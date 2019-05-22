@@ -1,0 +1,142 @@
+{template 'web/common/header-base'}
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('mien', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;风采添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('mien',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionids" value="" />
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-xs-5">
+                                <input type='text' name='realname' id='realname' class="form-control" value="{$item['realname']}" placeholder="请输入姓名" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">电话</label>
+                            <div class="col-xs-5">
+                                <input type='text' name='mobile' id='mobile' class="form-control" value="{$item['mobile']}" placeholder="请输入电话" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="position" class="col-sm-2 control-label">职位</label>
+                            <div class="col-xs-5">
+                                <input type='text' name='position' id='position' class="form-control" value="{$item['position']}" placeholder="请输入职位" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">员工照片</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image('image', $item['image'],'',$options)}
+                                <span class="help-block">图片比例4:3</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否选择所有小区</label>
+                            <div class="col-xs-5">
+                                <div class="radio radio-success checkbox-inline">
+                                    <input type="radio" name="allregion" id="allregion1" value="1" {if $item['allregion'] == 1 || empty($item['allregion'])}checked{/if}/>
+                                    <label for="allregion1"> 是 </label>
+
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="allregion" id="allregion2" value="2" {if $item['allregion'] == 2}checked{/if} />
+                                    <label for="allregion2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="showbirth" {if $item['allregion'] == 2}style='display:block'{else}style='display:none'{/if}>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">省市区</label>
+                                <div class="col-xs-5">
+                                    {php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'dist' => $item['dist']))}
+                                </div>
+                            </div>
+                            <div class="form-group region" {if !$regs}style="display: none"{/if}>
+                            <label for="" class="col-sm-2 control-label">小区</label>
+                            <div class="col-xs-5 content">
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="col-xs-5">
+                        <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交</button>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='allregion']").click(function(){
+            var type = $("input[name='allregion']:checked").val();
+            if(type == 1){
+                $("#showbirth").hide();
+            }
+            if(type == 2){
+                $("#showbirth").show();
+            }
+        })
+    })
+</script>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if (!$("#realname").val()) {
+            alert('请输入姓名。');
+            return false;
+        }
+        if (!$("#mobile").val()) {
+            alert('请输入电话。');
+            return false;
+        }
+        if (!$("#position").val()) {
+            alert('请输入职位。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        $("input[name='regionids']").val(regionids);
+        var url = "{php echo $this->createWebUrl('mien',array('op'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }
+            }
+        });
+    })
+</script>
+

@@ -1,0 +1,274 @@
+{template 'merch/manage/_header_base'}
+<style type="text/css">
+    body {
+        background: #fff;
+    }
+    .page-header {
+        height: 80px;
+        margin: 0;
+        padding: 0;
+    }
+    .page-header:before {
+        display: none;
+    }
+    .page-header .inner {
+        height: 80px;
+        width: 1080px;
+        margin: auto;
+        line-height: 80px;
+    }
+    .page-header .inner span{
+        height: 80px;
+        line-height: 80px;
+        font-size:28px;
+        color:#666666;
+        float:left;
+        position: relative;
+        padding-right:25px;
+    }
+    .page-header .inner span:after{
+        content: " ";
+    display: block;
+    right: 0;
+    height: 14px;
+    width: 1px;
+    background: #cccccc;
+    top: 50%;
+    margin-top: -6px;
+    position: absolute
+    }
+    .page-header .inner font{
+        height: 80px;
+        line-height: 82px;
+        font-size:18px;
+        color:#999999;
+        padding-left:25px;
+    }
+    .page-header .inner .logo {
+        height: 80px;
+        width: auto;
+        vertical-align: middle;
+    }
+    .page-header .inner .logo img {
+        max-height: 68px;
+        height:68px;
+        width: 200px;
+        margin-top: 11px;
+        vertical-align: middle;
+    }
+
+    .page-content {
+        display: block;
+        float: none;
+        width: 1080px;
+        margin: auto;
+        padding: 90px 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    .signup-adv {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        padding-right: 40px;
+    }
+    .signup-adv img {
+        max-height: 100%;
+        max-width: 100%;
+    }
+    .signup-main{
+        width: 440px;
+        height: auto;
+        padding: 0;
+    }
+    .signup-main .title {
+        color: #333;
+        font-size: 28px;
+        text-align: center;
+    }
+    .signup-main .title span {
+        font-size: 12px;
+        color: #666;
+        padding-left: 4px;
+    }
+    .signup-main .input {
+        height: 50px;
+        width: 100%;
+        margin-top: 40px;
+        display: flex;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+        align-items: center;
+        text-align: center;
+    }
+    .signup-main .input input {
+        height: 48px;
+        width: 100%;
+        outline: none;
+        border-radius: 3px;
+        padding: 0 10px 0 0;
+        font-size: 14px;
+        flex:1;
+    }
+    .signup-main .input img {
+        height: 20px;
+        width:auto;
+        text-align: center;
+    }
+    input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
+
+    .signup-main .button {
+        height: 48px;
+        width: 100%;
+        margin-top: 60px;
+    }
+    .signup-main .button input {
+        height: 48px;
+        width: 100%;
+        background:linear-gradient(to right, #ff6775, #ff4051);
+        border: 0;
+        color: #fff;
+        font-size: 16px;
+        outline: none;
+        border-radius: 100px;
+    }
+    .signup-main .button input:active {
+        opacity: 0.85;
+    }
+    .signup-main .option {
+        height: 40px;
+        line-height: 40px;
+        text-align: right;
+        margin-bottom: 5px;
+    }
+    .signup-main .option span {
+        cursor: pointer;
+    }
+    .signup-main .option span:hover {
+        border-bottom: 1px solid #666;
+    }
+    .signup-main .text {
+        width: 100%;
+        padding: 10px 0;
+        text-align: left
+        
+    }
+    .signup-main .text p.title {
+        font-size: 14px;
+        color: #444;
+        text-align: left;
+        margin-top:20px;
+    }
+    .signup-main .text p {
+        font-size: 12px;
+        margin-bottom: 8px;
+        color: #999;
+    }
+    .reglogo{
+        float:left;
+        height:80px;
+        width:auto;
+        margin-right:20px;
+    }
+    .input_img{
+        width:58px;
+    }
+    body{
+        overflow: hidden;
+    }
+</style>
+<body>
+
+<div class="page-header">
+    <div class="inner">
+        {if !empty($set['reglogo'])}
+         <img class="reglogo" src="{php echo $set['reglogo']}">
+         {/if}
+                <span>卡菲国际新零售特约零售商后台</span>
+                <font>欢迎登录</font>
+    </div>
+</div>
+
+<div class="page-content">
+    <div class="signup-adv">
+        <img src="{if empty($set['regpic'])}../addons/ewei_shopv2/plugin/merch/template/mobile/default/static/images/regbg.png{else}{php echo $set['regpic']}{/if}" />
+    </div>
+    <div class="signup-main">
+        <div class="title">特约零售商登录<span></span></div>
+        <div class="input"><div class="input_img"><img src="../addons/ewei_shopv2/static/images/merch_icon01.png"></div><input  autocomplete="off" type="text" name="username" placeholder="请输入登录账号" /></div>
+        <div class="input"><div class="input_img"><img src="../addons/ewei_shopv2/static/images/merch_icon02.png"></div><input  autocomplete="off" type="password" name="pwd" placeholder="请输入登录密码" /></div>
+        <div class="button"><input type="submit" value="登录" id="btn-login" /></div>
+        <div class="text">
+            <p class="title">温馨提示</p>
+            <p>请使用管理员分配的账号密码进行登录，管理自己的平台哦~有问题请联系系统管理员。</p>
+        </div>
+    </div>
+</div>
+
+
+<script language='javascript'>
+    $(".foget").click(function () {
+        tip.alert("忘记密码请联系系统管理员");
+    });
+    $(".signup-main .input input").keydown(function (e) {
+        if(e.keyCode==13){
+            var name = $(this).attr('name');
+            var value = $.trim($(this).val());
+            if(name=='username' && value!=''){
+                $("input[name='pwd']").focus();
+            }
+            if(name=='pwd' && value!=''){
+                $('#btn-login').click();
+            }
+        }
+    });
+    $('#btn-login').click(function () {
+        if ($(":input[name=username]").isEmpty()) {
+            tip.msgbox.err('请输入登录账号');
+            $(":input[name=username]").focus();
+            return;
+        }
+        if ($(":input[name=pwd]").isEmpty()) {
+            tip.msgbox.err('请输入登录密码');
+            $(":input[name=pwd]").focus();
+            return;
+        }
+        if ($(this).attr('stop')) {
+            return;
+        }
+        $('#btn-login').attr('stop', 1).val('正在登录...');
+        $.ajax({
+            url: "{$submitUrl}",
+            type: 'post',
+            data: {username: $(":input[name=username]").val(), pwd: $(":input[name=pwd]").val()},
+            dataType: 'json',
+            cache: false,
+            success: function (ret) {
+                if (ret.status == 1) {
+                    tip.msgbox.suc("登录成功");
+                    $('#btn-login').attr('stop', 1).val('跳转中...');
+                    setTimeout(function () {
+                        location.href = ret.result.url;
+                    }, 500);
+                    return;
+                }
+                $('#btn-login').removeAttr('stop').val('登录');
+                $(":input[name=pwd]").select();
+                tip.msgbox.err(ret.result.message);
+            }
+        })
+    })
+</script>
+<script language="javascript">myrequire(['web/init'],function(){});</script>
+{if !empty($_W['setting']['copyright']['statcode'])}{$_W['setting']['copyright']['statcode']}{/if}
+{if !empty($copyright) && !empty($copyright['copyright'])}
+<div class="signup-footer" style='width:750px;margin:auto;margin-top:10px;'>
+    <div>{$copyright['copyright']}</div>
+</div>
+{/if}
+</body>
+</html>

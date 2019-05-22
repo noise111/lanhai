@@ -1,0 +1,108 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('business', array('op' => 'wechat','dpid' => $dpid))}"></a>&nbsp;&nbsp;&nbsp;添加接收员</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('business',array('op' => 'wechat','operation' => 'add','dpid' => $dpid,'id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <div class="form-group">
+                            <label for="realname" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="realname" id='realname' value="{$item['realname']}" class="form-control" placeHolder="请输入联系人姓名" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">手机</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="mobile" id='mobile' value="{$item['mobile']}" class="form-control" placeHolder="请输入联系人手机" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="openid" class="col-sm-2 control-label">粉丝openid</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" placeholder="请输入粉丝openid" name="openid" value="{$item['openid']}" id="openid" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">通知方式：</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" id="type1" value="1" {if empty($item['type']) || $item['type'] == 1}checked="true" {/if} />
+                                    <label for="type1">微信</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type2" value="2" {if $item['type']==2}checked="true" {/if} />
+                                    <label for="type2">短信</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type3" value="3" {if $item['type']==3}checked="true" {/if} />
+                                    <label for="type3">全部通知</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启：</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable" id="enable1" value="1" {if empty($item['enable']) || $item['enable'] == 1}checked="true" {/if} />
+                                    <label for="enable1">是</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="enable"  id="enable2" value="2" {if $item['enable']==2}checked="true" {/if} />
+                                    <label for="enable2">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#checkAll").click(function() {
+
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("#regionid[data-group='" + group + "']").each(function() {
+                $(this).get(0).checked = checked;
+            })
+
+        });
+    });
+    function check(form){
+        if (!form['realname'].value) {
+            alert('请输入姓名。');
+            return false;
+        }
+        if (!form['mobile'].value) {
+            alert('请输入联系电话！');
+            return false;
+        }
+        if (!form['openid'].value) {
+            alert('请输入粉丝openid。');
+            return false;
+        }
+        return true;
+    }
+</script>

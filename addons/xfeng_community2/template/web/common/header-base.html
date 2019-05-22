@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>
+        {if set('p114')}{php echo set('p114')}{else}小区秘书-国内领先的新一代微信物业管理系统,轻松打造小区微信运营平台{/if}
+    </title>
+
+    <meta name="keywords" content="{if empty($_W['page']['copyright']['keywords'])}{if IMS_FAMILY != 'x'}微擎,微信,微信公众平台,we7.cc{/if}{else}{$_W['page']['copyright']['keywords']}{/if}">
+    <meta name="description" content="{if empty($_W['page']['copyright']['description'])}{if IMS_FAMILY != 'x'}公众平台自助引擎（www.we7.cc），简称微擎，微擎是一款免费开源的微信公众平台管理系统，是国内最完善移动网站及移动互联网技术解决方案。{/if}{else}{$_W['page']['copyright']['description']}{/if}">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    {php $icon = set('p115')}
+    {if $icon}
+    <link rel="shortcut icon" href="{$_W['attachurl']}{$icon}" />
+    {/if}
+    <link href="{COMMUNITY_PATH}static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{COMMUNITY_PATH}static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{COMMUNITY_PATH}static/css/animate.css" rel="stylesheet">
+    <link href="{COMMUNITY_PATH}static/css/style.css" rel="stylesheet">
+    <link href="{COMMUNITY_PATH}static/js/lib/switchery/switchery.css" rel="stylesheet">
+    <link href="{COMMUNITY_PATH}static/js/lib/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+    <script type="text/javascript">
+        if(navigator.appName == 'Microsoft Internet Explorer'){
+            if(navigator.userAgent.indexOf("MSIE 5.0")>0 || navigator.userAgent.indexOf("MSIE 6.0")>0 || navigator.userAgent.indexOf("MSIE 7.0")>0) {
+                alert('您使用的 IE 浏览器版本过低, 推荐使用 Chrome 浏览器或 IE8 及以上版本浏览器.');
+            }
+        }
+        window.sysinfo = {
+        {if !empty($_W['uniacid'])}'uniacid': '{$_W['uniacid']}',{/if}
+        {if !empty($_W['acid'])}'acid': '{$_W['acid']}',{/if}
+        {if !empty($_W['openid'])}'openid': '{$_W['openid']}',{/if}
+        {if !empty($_W['uid'])}'uid': '{$_W['uid']}',{/if}
+        'siteroot': '{$_W['siteroot']}',
+            'siteurl': '{$_W['siteurl']}',
+            'attachurl': '{$_W['attachurl']}',
+            'attachurl_local': '{$_W['attachurl_local']}',
+            'attachurl_remote': '{$_W['attachurl_remote']}',
+            {if defined('MODULE_URL')}'MODULE_URL': '{MODULE_URL}',{/if}
+        'cookie' : {'pre': '{$_W['config']['cookie']['pre']}'},
+        'account' : {php echo json_encode($_W['account'])}
+        };
+    </script>
+    <script src="{MODULE_URL}static/js/lib/jquery.min.js?v=2.1.4"></script>
+    <script src="{MODULE_URL}static/js/lib/bootstrap.min.js?v=3.3.6"></script>
+    <script src="{MODULE_URL}static/js/lib/metisMenu/jquery.metisMenu.js"></script>
+    <script src="{MODULE_URL}static/js/lib/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="{MODULE_URL}static/js/lib/layer/layer.min.js"></script>
+
+    <script src="{MODULE_URL}static/js/lib/hplus.js"></script>
+    <script src="{MODULE_URL}static/js/lib/contabs.js"></script>
+    <script src="{MODULE_URL}static/js/lib/datapicker/bootstrap-datepicker.js"></script>
+    <script src="{MODULE_URL}static/js/lib/switchery/switchery.js"></script>
+    <script src="{MODULE_URL}static/js/lib/clockpicker/clockpicker.js"></script>
+
+    <script src="{MODULE_URL}static/js/lib/cropper/cropper.min.js"></script>
+    <script src="{MODULE_URL}static/js/lib/form-advanced-demo.js"></script>
+
+    <script src="{MODULE_URL}static/js/lib/pace/pace.min.js"></script>
+    <script src="{MODULE_URL}static/js/lib/echarts/echarts.min.js"></script>
+    <script src="{MODULE_URL}static/js/lib/echarts/macarons.js"></script>
+
+    <script type="text/javascript" src="./resource/js/app/util.js"></script>
+    <script type="text/javascript" src="./resource/js/app/common.min.js"></script>
+    <script type="text/javascript" src="./resource/js/require.js"></script>
+    <link href="./resource/css/common.css" rel="stylesheet">
+
+
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" >

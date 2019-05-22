@@ -1,0 +1,386 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加商品</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="商品名称" id="title" v-model="item.title">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">商品单位</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="如: 个/件/包" id="unit" v-model="item.unit">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">商品库存</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="商品库存" id="total" v-model="item.total">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">销&nbsp;&nbsp;售&nbsp;&nbsp;价</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="销售价" id="marketprice" v-model="item.marketprice">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__hd"><label class="weui-label">市&nbsp;&nbsp;场&nbsp;&nbsp;价</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="市场价" id="productprice" v-model="item.productprice">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+
+    <div class="weui-cell weui-cell_select">
+        <div class="weui-cell__bd">
+            <select class="weui-select" v-model="parentvalue">
+                <option value="0">选择分类</option>
+                <option  v-for="(row,index) in parents" :value="row.id">{{row.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="weui-cell weui-cell_select">
+        <div class="weui-cell__bd">
+            <select class="weui-select" v-model="childvalue">
+                <option value="0">选择分类</option>
+                <option  v-for="(row,index) in childs" :value="row.id">{{row.name}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="weui-cells input-right">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__hd"><label for="" class="weui-label">是否上架</label></div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.status">
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__hd"><label class="weui-label">选择小区</label></div>
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="village" type="text" placeholder="请选择小区" v-model="item.region" :data-values="item.regionids">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p style="margin-bottom: 5px">可上传多张商品图片，第一张作为商品封面</p>
+            <div class="weui-uploader">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files idx" v-if="morepic">
+                        <!--多图-->
+                        <li class="weui-uploader__file" :style="'background-image:url('+thumb+')'" v-for="(thumb, index) in morepic"></li>
+
+                    </ul>
+                    <div class="weui-uploader__input-box" id="addPic">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="请输入商品简介" rows="3" id="content" v-model="item.content"></textarea>
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p style="margin-bottom: 5px">商品详情图片，可上传多张商品图片</p>
+            <div class="weui-uploader">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files idx" id="uploaderFiles" v-if="moreimg">
+                        <!--多图-->
+                        <li class="weui-uploader__file" :style="'background-image:url('+img+')'" v-for="(img, index) in moreimg"></li>
+
+                    </ul>
+                    <div class="weui-uploader__input-box" id="addimg">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin: 20px 20px" >
+    <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+</div>
+</div>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+</script>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{
+            },
+            parents:[],
+            childs:[],
+            parentvalue:'0',
+            childvalue:'0',
+            groupList:[],
+            id:id,
+            morepic:[],
+            moreimg:[],
+            status:1
+        },
+        beforeMount: function () {
+            var self = this
+            if(id){
+                var url = "{php echo wxapp_url('appshopping/detail')}";
+                var data = {
+                    id:id
+                }
+                $.getJSON(url,data, function (ret) {
+                    self.item = ret.data
+                    self.morepic = self.item.piclist
+                    self.moreimg = self.item.thumbs
+                    self.status = self.item.status
+                    if(ret.data.pcate){
+                        self.parentvalue = ret.data.pcate
+                    }
+                    if(ret.data.child){
+                        self.childvalue = ret.data.child
+                    }
+
+                })
+            }
+
+            var data = {
+                type:5
+            }
+            var link = "{php echo wxapp_url('category/app')}";
+            $.getJSON(link,data, function (ret) {
+                self.parents = ret.data.parents
+                self.childs = ret.data.childs
+                self.groupList  = {
+                    childs: ret.data.childs
+                }
+            })
+            // var _url = "{php echo wxapp_url('region/list')}";
+            // $.getJSON(_url, function (ret) {
+            //     self.regions = ret.data.list
+            //
+            // })
+        },
+        mounted: function () {
+            var that = this
+            wx.ready(function () {
+                $("#addPic").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds,1);
+                        }
+                    })
+                });
+                $("#addimg").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds,2);
+                        }
+                    })
+                });
+            });
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                var url = "{php echo wxapp_url('appshopping/add')}";
+                self.item.id=self.id
+                self.item.parentid = self.parentvalue
+                self.item.childid = self.childvalue
+                self.item.regionids = $("#village").data('values')
+                self.item.morepic = self.morepic.join(',');
+                self.item.moreimg = self.moreimg.join(',');
+                self.item.status = self.status
+//                var sIsDefault = 0;
+//                if ($("#item_status").prop("checked") == true) {
+//                    sIsDefault = 1;
+//                }
+//                self.item.status = sIsDefault
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if (ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('添加成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'shop'))}";
+                        }, 500);
+                    }
+                })
+            },
+            wxUploadImg:function (localIds,type) {
+                var localId = localIds[idx].toString()
+                var that = this
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        that.getImg(serverId,type);
+                        idx++ // 上传序号，上传一张 累计 +1
+                        // serverIds+=res.serverId+','; //存储图片媒体ID，用，号分割
+                        //本地图片ID 还没全部获取完图片媒体ID
+                        if (idx < localIds.length) {
+                            that.wxUploadImg(localIds,type); //调用上传递归函数
+                        }
+                        else {
+                            idx = 0;
+                            serverIds = '';
+                            return true;
+                        }
+                    },
+                    fail: function (res) {//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg：" + JSON.stringify(res));
+                    }
+                });
+            },
+            getImg: function (serverId,type) {
+                var that = this
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url, {serverId: serverId}, function (ret) {
+                    var imgUrl = ret.data.imgUrl
+                    console.log(type)
+                    if(type ==1){
+                        that.morepic.push(imgUrl) //多图
+                    }
+                    else
+                    {
+                        that.moreimg.push(imgUrl) //多图
+                    }
+
+
+
+                })
+            },
+        },
+        watch: {
+            // 监听 areasValue 变化
+            parentvalue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                // parentvalue 变化时根据其值，改变 builds 数组
+                if(oldVal){
+                    that.childs = that.groupList.childs[val]
+                    console.log(that.childs )
+                }
+
+
+            }
+        }
+    })
+</script>
+<script>
+
+    $.post("{php echo wxapp_url('appregion/list')}", function (data) {
+        var json = new Array();
+        json = data.data;
+        $("#village").select({
+            title: "选择小区",
+            multi: true,
+            items:json,
+            beforeClose: function(values, titles) {
+                if(values.indexOf("1") !== -1) {
+                }
+            },
+            onChange: function(d) {
+                console.log(this, d);
+            },
+            onClose: function (d) {
+                console.log('close')
+            }
+        });
+
+    }, 'json')
+</script>
+</body>
+</html>

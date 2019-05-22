@@ -1,0 +1,78 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('charging',array('op' => 'throw'))}"></a>&nbsp;&nbsp;&nbsp;支付接口配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','tid' => $tid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'list','tid' => $tid))}" title="支付配置" >支付配置</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'alipay','tid' => $tid))}" title="支付宝" >支付宝</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'wechat','tid' => $tid))}" title="微信支付" >微信支付</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'sub','tid' => $tid))}" title="服务商支付" >服务商支付</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'swiftpass','tid' => $tid))}" title="微信支付（兴业银行）" >微信支付(兴业银行/中信银行/农商银行）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'hsyunfu','tid' => $tid))}" title="微信支付（华商云付）" >微信支付（华商云付）</a></li>
+                        <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'payapi','p' => 'chinaums','tid' => $tid))}" title="微信支付（银联）" >微信支付（银联）</a></li>
+                    </ul>
+                    <form action="" method="post" class="form-horizontal form">
+                        <input type="hidden" value="{$tid}" name="tid">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <td class="col-md-2">支付设置</td>
+                                <td class="col-md-3">说明</td>
+                                <td class="col-md-2"></td>
+                                <td class="col-md-4">
+                                    是否启用
+                                </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="title">充电柱独立支付</td>
+                                <td>
+                                    开启后，充电柱缴费将不在缴纳到平台，直接缴纳到投放的账户
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="set[x80]" id="x80" class="js-switch_18" {if $set['x80']['value']}checked{/if}/>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var xqkey = $this.attr('id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            var regionid = '{$regionid}';
+            $.post("{php echo $this->createWebUrl('updatekey')}",{xqkey:xqkey,status:status,regionid:regionid},function () {
+
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>
+{template 'web/common/footer'}

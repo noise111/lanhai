@@ -1,0 +1,169 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('build', array('op' => 'list'))}"></a>单元管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('build',array('op'=> 'unit_list','buildid' => intval($_GPC['buildid'])))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="build"/>
+                        <input type="hidden" name="op" value="unit_list"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i> 添加单元</a>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">搜索</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal form" method="post">
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th width="30px">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkids"
+                                           onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                    <label for="checkids"> </label>
+                                </div>
+                            </th>
+                            <th class="col-md-2">单元名</th>
+                            <th class="col-md-2">所属小区</th>
+                            <th class="col-md-2">所属楼宇</th>
+                            <th class="col-md-2">房屋数量</th>
+                            <th class="col-md-5">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                           value="{$item['id']}">
+                                    <label for="ids_{$item['id']}"></label>
+                                </div>
+                            </td>
+                            <td>{$item['unit']}</td>
+                            <td>
+                                {$item['title']}
+                            </td>
+                            <td>
+                                {$item['buildtitle']}
+                            </td>
+                            <td>
+
+                            </td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('build',array('op' => 'unit_add','id' => $item['id'],'buildid' => intval($_GPC['buildid'])))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('build',array('op' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="text-left">
+                                <input name="token" type="hidden" value="{$_W['token']}"/>
+                                <button class="btn btn-danger btn-sm" type="submit" name="delete" value="1" onclick="return confirm('将删除单元，确认吗？'); return false;">批量删除</button>
+                            </td>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">添加单元</h4>
+
+            </div>
+            <form class="form-horizontal form" action="{php echo $this->createWebUrl('build',array('op'=> 'unit_add'))}" method="post" enctype="multipart/form-data" id="form">
+                <input type="hidden" value="{$_GPC['buildid']}" name="buildid">
+                <div class="modal-body">
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">单元名称</label>
+                        <div class="col-sm-6 col-xs-6">
+                            <input type="text" class="form-control" placeholder="请输入单元名称" name="unit" id="unit"
+                                   value="">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="submit" id="submit" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if (!$("#unit").val()) {
+            alert('请输入单元名称。');
+            return false;
+        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('build',array('op'=>'unit_add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("保存");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

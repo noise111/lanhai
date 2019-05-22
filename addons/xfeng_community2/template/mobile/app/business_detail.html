@@ -1,0 +1,36 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">兑换码列表</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0">
+            <ul>
+                {loop $list $item}
+                <li>
+                    <a href="#" class="item-link item-content" onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'business','orderid'=> $item['orderid'],'id'=>$item['id']))}'">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">兑换码：{$item['couponsn']}</div>
+                                <div class="item-after">
+                                    {if $item['enable'] == 1}
+                                    <span class="label label-default">未使用</span>
+                                    {elseif $item['enable'] == 2}
+                                    <span class="label label-info">已核销</span>
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{template 'app/footer'}

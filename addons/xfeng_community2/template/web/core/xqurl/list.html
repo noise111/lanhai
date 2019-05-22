@@ -1,0 +1,269 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>入口链接</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('xqurl')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form" id="form1">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区主页链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('home')}">
+                                        {php echo app_url('home')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区服务链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('service')}">
+                                        {php echo app_url('service')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区公告链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('announcement')}">
+                                        {php echo app_url('announcement')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区报修链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('repair')}">
+                                        {php echo app_url('repair')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区建议链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('report')}">
+                                        {php echo app_url('report')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区缴费链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('cost')}">
+                                        {php echo app_url('cost')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">便民号码链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('phone')}">
+                                        {php echo app_url('phone')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">便民查询链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('search')}">
+                                        {php echo app_url('search')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">手机开门链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('opendoor')}">
+                                        {php echo app_url('opendoor')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区活动链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('activity')}">
+                                        {php echo app_url('activity')}</a></p>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区家政链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('homemaking')}">
+                                        {php echo app_url('homemaking')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">房屋租赁链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('houselease')}">
+                                        {php echo app_url('houselease')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区拼车链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('car')}">
+                                        {php echo app_url('car')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">周边商家链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('business')}">
+                                        {php echo app_url('business')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">生活超市链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('shopping')}">
+                                        {php echo app_url('shopping')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">小区集市链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('market')}">
+                                        {php echo app_url('market')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">临时停车链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('stopcar')}">
+                                        {php echo app_url('stopcar')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">问卷调查链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('vote')}">
+                                        {php echo app_url('vote')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">物业风采链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('mien')}">
+                                        {php echo app_url('member',array('op'=>'region'))}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">便民号码入驻申请链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('phone')}">
+                                        {php echo app_url('phone',array('op'=>'add'))}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">快递代收链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('mien')}">
+                                        {php echo app_url('express',array('op'=>'list'))}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">智能充电链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('charging')}">
+                                        {php echo app_url('charging',array('op'=>'list'))}</a></p>
+                            </div>
+                        </div>
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label">智能货柜（生鲜超市）链接</label>-->
+                            <!--<div class="col-sm-9 col-xs-12">-->
+                                <!--<p class='form-control-static'>-->
+                                    <!--<a href='javascript:;' class="js-copy" title='点击复制链接'-->
+                                       <!--data-url="{php echo app_url('counter')}">-->
+                                        <!--{php echo app_url('counter',array('op'=>'list'))}</a></p>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">手机端管理入口链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('xqsys')}">
+                                        {php echo app_url('xqsys')}</a></p>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">个人中心链接</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <p class='form-control-static'>
+                                    <a href='javascript:;' class="js-copy" title='点击复制链接'
+                                       data-url="{php echo app_url('member')}">
+                                        {php echo app_url('member')}</a></p>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

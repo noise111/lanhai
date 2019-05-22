@@ -1,0 +1,55 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('report')}"></a>&nbsp;&nbsp;&nbsp;微信推送记录</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('report',array('op' => 'sendlog','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>姓名</th>
+                            <th>昵称</th>
+                            <th>手机</th>
+                            <th>推送日期</th>
+                            <th>处理日期</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['realname']}</td>
+                            <td>{$item['nickname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td>{php echo date('Y-m-d H:i', $item[sendtime]);}</td>
+                            <td>{if $item[grabtime]}{php echo date('Y-m-d H:i', $item[grabtime]);}{/if}</td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="text-left">
+                                <span style="color:red">总计:{$total}</span>
+                            </td>
+
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

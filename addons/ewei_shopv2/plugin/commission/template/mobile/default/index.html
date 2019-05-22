@@ -1,0 +1,200 @@
+{template '_header'}
+{template 'commission/common'}
+<script>document.title = "业务员中心"; </script>
+<div class="fui-page fui-page-current page-commission-index ">
+    <div class='fui-content navbar'>
+
+        <div class="headinfo">
+
+            <div class="userinfo" style="height: auto;">
+
+                <div class='fui-list'>
+
+                    <div class='fui-list-media'><img src="{$member['avatar']}" /></div>
+
+                    <div class='fui-list-info' style="width: 12rem">
+
+                        <div class='title'>{$member['nickname']} </div>
+
+                        <!-- +手机号码  -->
+                        <div class='text'>手机号码：136****1111</div>
+
+                        <div class='subtitle' {if $this->set['levelurl']!=''}onclick='location.href="{php echo $this->set['levelurl']}"'{/if}>
+
+                            {php echo empty($level) ? ( empty($this->set['levelname'])?'普通等级':$this->set['levelname'] )  : $level['levelname']}
+
+                            {if $this->set['levelurl']!=''}<i class='icon icon-question' style='font-size:8px;'></i>{/if}
+
+                        </div>
+
+                        <!-- +状态：启用或禁用  -->
+                        <div class='subtitle' style="margin-left:0.5rem;">
+                            启用
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {if empty($this->set['closemyshop'])}
+
+                <a class="setbtn external" style=" right:2rem;" href="{php echo mobileUrl('member/info')}"><i class="icon icon-shezhi"></i></a>
+
+                {/if}
+
+                <!-- +消息  -->
+                <a class="setbtn external" href="{php echo mobileUrl('commission/notice')}"><i class="icon icon-noticefill"></i></a>
+
+                <a class="setbtn external" style="top: 2.4rem; right: 0.6rem;" href="{php echo mobileUrl('commission/qrcode')}"><i
+                        style=" color: #ffffff;   font-size: 1rem;" class="icon icon-erweima1"></i></a>
+
+            </div>
+
+        </div>
+
+        <div class="fui-cell-group order_div">
+            <div class="order_li">
+                <div class="li_flex">
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            今日订单
+                        </div>
+                        <div class="flex_right">
+                            123
+                        </div>
+                    </div>
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            累计订单
+                        </div>
+                        <div class="flex_right">
+                            123
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order_li">
+                <div class="li_flex">
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            今日成交
+                        </div>
+                        <div class="flex_right">
+                            1000
+                        </div>
+                    </div>
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            累计成交
+                        </div>
+                        <div class="flex_right">
+                            2000
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="order_li">
+                <div class="li_flex">
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            今日收益
+                        </div>
+                        <div class="flex_right">
+                            3000
+                        </div>
+                    </div>
+                    <div class="li_flex2">
+                        <div class="flex_left">
+                            累计收益
+                        </div>
+                        <div class="flex_right">
+                            4000
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fui-cell-group">
+            <a class="fui-cell" href="{php echo mobileUrl('commission/order')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-qian " style="color:#ff8000"></i>
+                </div>
+                <div class="fui-cell-text">我的账户</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+
+        <div class='my_qianbao'>
+            <div class="my_qianbao_qq">
+                <div class='wenzi'>业务佣金</div>
+                <div class="wenzi2">{php echo number_format($member['commission_total'],2)}<span>元</span></div>
+                <a class="icon_wenzi external" href="{php echo mobileUrl('commission/order')}">
+                    <i class="icon icon-xiaofei" style="color: #ffffff; font-size: 0.65rem;"></i>
+                    <span>查看</span>
+                </a>
+            </div>
+            <div class="my_qianbao_qq">
+                <div class='wenzi'>可提现佣金</div>
+                <div class="wenzi2">{php echo number_format( $member['commission_ok'],2)}<span>元</span></div>
+                <a class="icon_wenzi external" href="{php echo mobileUrl('commission/withdraw')}">
+                    <i class="icon icon-tixian" style="color: #ffffff; font-size: 0.65rem; "></i>
+                    <span>提现</span>
+                </a>
+            </div>
+        </div>
+
+
+        <div class="fui-cell-group">
+            <a class="fui-cell" href="{php echo mobileUrl('commission/statistics')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-rankfill" style="color:#9ec9f4; font-size: 0.9rem;"></i>
+                </div>
+                <div class="fui-cell-text">本月业绩进度统计</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+        <div class="tongji">
+            <div class="tongji_text">
+                <div class="tongji_text_left">
+                    0
+                </div>
+                <div class="tongji_text_center">
+                    13000（65%）
+                </div>
+                <div class="tongji_text_right">
+                    20000
+                </div>
+            </div>
+            <div class="tongji_bfb">
+                <div class="tongji_progress">
+                    <div id="bfb" style="width: 65%;" class="tongji_progress_bar"></div>
+                </div>
+            </div>
+            <div class="tongji_text02">
+                <span>任务</span>
+                <font>每月完成1800元订单金额</font>
+            </div>
+            <div class="tongji_text02">
+                <span>已完成</span>
+                <font>截止今日已完成13000元订单金额</font>
+            </div>
+            <div class="tongji_text02">
+                <span>超额完成</span>
+                <font>超额完成200元订单金额</font>
+            </div>
+        </div>
+
+        <div class="fui-cell-group">
+            <a class="fui-cell" href="{php echo mobileUrl('article/list')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-favorfill text-yellow"></i>
+                </div>
+                <div class="fui-cell-text">推广素材</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+    </div>
+</div>
+{php $this->footerMenus()}
+{template '_footer'}

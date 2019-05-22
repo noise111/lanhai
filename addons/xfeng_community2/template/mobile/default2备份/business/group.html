@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>周边商家</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/demos.css">
+    <style>
+        .weui-navbar{
+            background: #ffffff;
+            position: fixed;
+        }
+        .weui-navbar__item{
+            padding: 10px 0;
+        }
+        .weui-navbar__item:after{
+            border-right: none;
+        }
+        .weui-navbar__item.weui-bar__item--on{
+            background: #ffffff;
+            color: #f58611;
+        }
+        #gradew{
+            background: #eee;
+            position: absolute;
+            z-index: 1;
+            top:0;
+            left: 30%;
+            display: none;
+        }
+        #gradew>li{
+            border-bottom: 1px solid #fff;
+        }
+        #grades{
+            background: #fff;
+            position: absolute;
+            z-index:2;
+            top:0;
+            left: 60%;
+            display: none;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="weui-navbar">
+    <a class="weui-navbar__item">
+        分类<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        距离近<i></i>
+    </a>
+    <a class="weui-navbar__item">
+        全城<i></i>
+    </a>
+</div>
+<div class="nav-modal">
+    <div class="Category-eject">
+        <ul>
+            <li>全部</li>
+            <li>出租</li>
+            <li>出售</li>
+            <li>求租</li>
+            <li>求购</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul>
+            <li>全部</li>
+            <li>100-200</li>
+            <li>300-400</li>
+            <li>500-600</li>
+        </ul>
+    </div>
+    <div class="Category-eject">
+        <ul  id="Categorytw">
+            <li onclick="grade1(this)">哈尔滨</li>
+            <li onclick="grade1(this)">全国</li>
+            <li onclick="grade1(this)">北京</li>
+            <li onclick="grade1(this)">天津</li>
+            <li onclick="grade1(this)">河北</li>
+            <li onclick="grade1(this)">山西</li>
+            <li onclick="grade1(this)">内蒙古</li>
+            <li onclick="grade1(this)">辽宁</li>
+            <li onclick="grade1(this)">吉林</li>
+            <li onclick="grade1(this)">黑龙江</li>
+            <li onclick="grade1(this)">上海</li>
+            <li onclick="grade1(this)">江苏</li>
+            <li onclick="grade1(this)">山东</li>
+            <li onclick="grade1(this)">河南</li>
+            <li onclick="grade1(this)">湖北</li>
+            <li onclick="grade1(this)">湖南</li>
+            <li onclick="grade1(this)">广东</li>
+            <li onclick="grade1(this)">广西</li>
+            <li onclick="grade1(this)">海南</li>
+        </ul>
+        <ul  id="gradew">
+            <li onclick="gradet(this)">全河北</li>
+            <li onclick="gradet(this)">石家庄</li>
+            <li onclick="gradet(this)">唐山</li>
+            <li onclick="gradet(this)">秦皇岛</li>
+            <li onclick="gradet(this)">邢台</li>
+            <li onclick="gradet(this)">保定</li>
+            <li onclick="gradet(this)">张家口</li>
+            <li onclick="gradet(this)">承德</li>
+            <li onclick="gradet(this)">沧州</li>
+            <li onclick="gradet(this)">廊坊</li>
+            <li onclick="gradet(this)">衡水</li>
+        </ul>
+        <ul id="grades">
+            <li>全秦皇岛</li>
+            <li>海港区</li>
+            <li>山海关区</li>
+            <li>北戴河区</li>
+            <li>青龙满族自治区</li>
+            <li>昌黎县</li>
+            <li>抚宁县</li>
+            <li>卢龙县</li>
+            <li>其他区</li>
+            <li>经济技术开发区</li>
+        </ul>
+    </div>
+</div>
+
+<div class="group-contain">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="http://p1.meituan.net/msmerchant/ce03d2e3c24a2cecd52e362c1ffdd4f781281.jpg@368w_208h_1e_1c" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">王异缤纷百果园</h4>
+                    <em class="group-location">5.2km</em>
+                    <p class="weui-media-box__desc">
+                        <span class="group-star">
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="half"></i>
+                            <i class="none"></i>
+                        </span>
+                        月售0单
+                    </p>
+                    <span class="group-mendian">门店自提</span>
+                </div>
+            </a>
+        </div>
+        <div class="weui-panel__ft">
+            <a href="javascript:void(0);" class="group-foot">
+                <p><span class=" group-label group-label-blue">外</span><span style="color: #bbb">店内全9折</span></p>
+                <p><span class=" group-label group-label-green">团</span><span style="color: #bbb">店内全9折店内全9折</span></p>
+            </a>
+        </div>
+    </div>
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="http://p1.meituan.net/msmerchant/ce03d2e3c24a2cecd52e362c1ffdd4f781281.jpg@368w_208h_1e_1c" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">王异缤纷百果园</h4>
+                    <em class="group-location">5.2km</em>
+                    <p class="weui-media-box__desc">
+                        <span class="group-star">
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="full"></i>
+                            <i class="half"></i>
+                            <i class="none"></i>
+                        </span>
+                        月售0单
+                    </p>
+                    <span class="group-mendian">门店自提</span>
+                </div>
+            </a>
+        </div>
+        <div class="weui-panel__ft">
+            <a href="javascript:void(0);" class="group-foot">
+                <p><span class=" group-label group-label-blue">外</span><span style="color: #bbb">店内全9折</span></p>
+                <p><span class=" group-label group-label-defalut">超</span><span style="color: #bbb">店内全9折店内全9折</span></p>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script>
+    $.each($('.weui-navbar__item'),function (i) {
+        $(this).click(function () {
+            if($(this).hasClass('weui-bar__item--on')){
+                $.each($('.Category-eject'),function (j) {
+                    $(this).slideUp(250);
+                });
+                $(this).removeClass('weui-bar__item--on');
+            }else {
+                $.each($('.Category-eject'),function (j) {
+                    if(i == j){
+                        $(this).slideDown(250);
+                        $(".Category-w li").each(function( index ) {
+                            $( this ).css({'animation-delay': (index/10)+'s'});
+                        });
+                    }else {
+                        $(this).slideUp(250);
+                    }
+                });
+                $(this).addClass('weui-bar__item--on').siblings().removeClass('weui-bar__item--on');
+            }
+        })
+    });
+
+    function grade1(wbj) {
+        var arr = document.getElementById("Categorytw").getElementsByTagName("li");
+        for(var i =0;i<arr.length;i++){
+            var a = arr[i];
+            a.style.background="#fff";
+        };
+        $('#gradew').show();
+        wbj.style.background = "#eee";
+    }
+    function gradet(tbj) {
+        var arr = document.getElementById("gradew").getElementsByTagName("li");
+        for(var i =0;i<arr.length;i++){
+            var a = arr[i];
+            a.style.background="#eee";
+        };
+        $('#grades').show();
+        tbj.style.background = "#fff";
+        tbj.style.borderLeft="1px,solid,#eee"
+    }
+</script>
+</body>
+</html>

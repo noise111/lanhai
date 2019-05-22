@@ -1,0 +1,211 @@
+{template 'app2/header'}
+
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>{{item.title}}</span>
+        </h1>
+    </div>
+    <div class="header-padd"></div>
+    <div class="weui-loadmore" id="imgHtml" style="position: fixed;  width: 100%"></div>
+    <div id="ht">
+        <div class="weui-cells">
+
+            <div class="weui-cells input-right">
+                <a class="weui-cell weui-cell_access" href="javascript:;">
+                    <div class="weui-cell__hd"><label for="" class="weui-label">选择商家</label></div>
+                    <div class="weui-cell__bd">
+                        <select class="weui-select" v-model="dpid">
+                            <option value="">选择商家</option>
+                            <option v-for="(row, index) in items" :value="row.id">{{row.sjname}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="weui-cell__ft">
+                    </div>
+                </a>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">商品名称</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" :value="item.title"
+                           disabled >
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">团购说明</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请用简短的一句话描述（15个字以内）" :value="item.instruction" disabled>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">商品库存</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="商品库存" :value="item.total" disabled>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">商品原价</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="商品原价" :value="item.productprice" disabled>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">团 购 &nbsp;价</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="商品团购价" :value="item.marketprice" disabled>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">是否上架</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" value="是" disabled v-if="item.status==1">
+                    <input class="weui-input" type="text" placeholder="" value="否" disabled v-if="item.status==0">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd"><label class="weui-label">店铺推荐</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="" value="是" disabled v-if="item.recommand==1">
+                    <input class="weui-input" type="text" placeholder="" value="否" disabled v-if="item.recommand==0">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入抢购详情 " rows="3" disabled v-if="item.content">{{item.content}}</textarea>
+
+                </div>
+            </div>
+            <div class="weui-cell" v-if="item.thumb || item.description">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入购买须知 " rows="3" disabled v-if="item.description">{{item.description}}</textarea>
+                    <div class="weui-uploader" v-if="item.thumb">
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files" id="uploaderFiles">
+                                <li class="weui-uploader__file" :style="'background-image:url('+item.thumb+')'" >
+                                </li>
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin: 20px 20px">
+            <a href="javascript:;" class="weui-btn weui-btn_primary" @click="add()">修改商品</a>
+            <a href="javascript:;" class="weui-btn weui-btn_warn" @click="del()">删除商品</a>
+
+        </div>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            id: id,
+            item: [],
+            items:[],
+            dpid:''
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appbusiness/list')}";
+            $.getJSON(url, function (ret) {
+                self.items = ret.data
+            })
+            var link = "{php echo wxapp_url('appbusiness/goods',array('p'=>'detail'))}";
+            var data = {
+                id: self.id
+            }
+            $.getJSON(link, data, function (ret) {
+                self.item = ret.data
+                self.dpid = self.item.dpid
+                console.log(self.dpid)
+            })
+        },
+        mounted: function () {
+            var self = this
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            del : function () {
+                var data = {
+                    id: this.id
+                }
+                var url = "{php echo wxapp_url('appbusiness/goods',array('p'=>'del'))}";
+                $.showLoading('正在提交');
+                $.getJSON(url, data, function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    if (ret.err_code == 0) {
+                        setTimeout(function () {
+                            $.toast('删除成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business','p'=>'goods'))}";
+                        }, 500);
+                    }
+                })
+            },
+            add : function () {
+                var url = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business','p'=>'post'))}&id="+this.id;
+                window.location.href = url;
+            }
+        }
+    })
+
+</script>
+
+</body>
+</html>

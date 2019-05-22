@@ -1,0 +1,277 @@
+{template 'default2/header'}
+<style>
+    .weui-panel:first-child {
+        margin-top: 48px;
+        background: #faf9f9;
+        margin-bottom: 50px;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 30%;
+        height: 90px;
+    }
+
+    .weui-media-box {
+        padding: 8px 15px 8px 0px;
+    }
+
+    .weui-media-box__desc {
+        color: #000;
+        font-size: 14px;
+        word-break: break-all;
+        line-height: 17px;
+        margin-bottom: 5px;
+        position: absolute;
+        top: 8px;
+        margin-right: 10px;
+    }
+</style>
+
+<body>
+<div class="shopcart-tit">
+    <div class="check-box fl">
+        <label>
+            <input type="checkbox" value="" id="newslist-0" class="newslist">
+        </label>
+    </div>
+    <span class="fl"><span>全选</span></span>
+    <span class="fr clearfix"><a href="#" id="shop_edit">编辑</a></span>
+</div>
+<div id="list"></div>
+
+
+<script type="text/html" id="xq_list">
+    <div class="shopcart-group">
+        <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__bd">
+                {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+
+                <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" >
+                    <div class="check-box fl">
+                        <label>
+                            <input type="checkbox" name="newslist[]" id="newslist_{{d.list[i].goodsid}}" class="newslist"  value="{{d.list[i].id}}" data-marketprice="{{d.list[i].marketprice}}" data-num="{{d.list[i].total}}">
+                        </label>
+                    </div>
+                    <div class="weui-media-box__hd">
+                        <img class="weui-media-box__thumb" src="{{d.list[i].pic}}" alt="">
+                    </div>
+                    <div class="weui-media-box__bd">
+                        <p class="weui-media-box__desc">
+                            {{d.list[i].title}}
+                        </p>
+                        <div class="pro-details-tips clearfix">
+                            <em>￥<span class="shopcart-price">{{d.list[i].marketprice}}</span></em>
+                        </div>
+                    </div>
+
+                    <div class="shop-arithmetic">
+                        <i class="shop-minus" onclick="shopminus({{d.list[i].goodsid}})">-</i>
+                        <span class="zi" id="total_{{d.list[i].goodsid}}">{{d.list[i].total}}</span>
+                        <i class="shop-add" onclick="shopadd({{d.list[i].goodsid}})">+</i>
+                    </div>
+                </a>
+
+                {{# } }}
+
+            </div>
+        </div>
+    </div>
+    <div class="weui-tabbar">
+        <div class="shopcart-footer" id="shopcart-footer">
+            <div class="total">
+                <div id="total">
+                    <em>合计：￥<em id="shopcart-total-price">{{d.totalprice}}</em></em>
+                    <span>(不含运费)</span>
+                </div>
+            </div>
+            <div class="closing">
+                <a href="#" class="btn-sub" id="shop-account">去结算</a>
+                <a href="#" class="btn-sub" id="shop-del" style="display: none">删除</a>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('shopping/mycart')}&regionid=" + regionid;
+        loaddata(url, $("#list"), 'xq_list', true, function () {
+            var checked = true;
+            $("#newslist-0").get(0).checked = checked;
+            $("input:checkbox[name='newslist[]']").each(function () {
+                if($(this).data('num')){
+                    $(this).get(0).checked = checked;
+                }
+            })
+            $("#newslist-0").click(function () {
+                var check = $(this).get(0).checked;
+                $("input:checkbox[name='newslist[]']").each(function () {
+                    if($(this).data('num')){
+                        $(this).get(0).checked = check;
+                    }
+                })
+            })
+            $(".newslist").click(function () {
+                var totalprice = 0;
+                $('input[name="newslist[]"]:checked').each(function () {
+                    totalprice += Number($(this).data('marketprice')) * $(this).data('num');
+                })
+                $("#shopcart-total-price").text(totalprice);
+                if(totalprice ==0){
+                    $("#newslist-0").get(0).checked = false;
+                }
+            })
+            $("#shop-account").click(function () {
+                var goodsid = '';
+                $('input[name="newslist[]"]:checked').each(function () {
+                    var t1 = $(this).val();
+                    goodsid += t1+',';
+                })
+                console.log(goodsid);
+                if(goodsid == 0){
+                    $.toast('还未选择购买的商品','text');
+                }
+                window.location.href="{php echo $this->createMobileUrl('shopping',array('op'=>'confirm'))}&goodsid="+goodsid;
+            })
+            var status = 0;
+            $("#shop_edit").click(function () {
+                if(status==0){
+                    $(this).text('取消');
+                    $('#shop-account').hide();
+                    $('#total').hide();
+                    $('#shop-del').show();
+                    $("#newslist-0").click(function () {
+                        var check = $(this).get(0).checked;
+                        $("input:checkbox[name='newslist[]']").each(function () {
+                            if($(this).data('num')){
+                                $(this).get(0).checked = check;
+                            }
+                        })
+                    })
+                    status = 1;
+                }else {
+                    $(this).text('编辑');
+                    $('#shop-account').show();
+                    $('#total').show();
+                    $('#shop-del').hide();
+                    $("#newslist-0").get(0).checked = true;
+                    $("input:checkbox[name='newslist[]']").each(function () {
+                        if($(this).data('num')){
+                            $(this).get(0).checked = true;
+                        }
+                    })
+                    var totalprice = 0;
+                    $('input[name="newslist[]"]:checked').each(function () {
+                        totalprice += Number($(this).data('marketprice')) * $(this).data('num');
+                    })
+                    $("#shopcart-total-price").text(totalprice);
+                    if(totalprice ==0){
+                        $("#newslist-0").get(0).checked = false;
+                    }
+                    status =0;
+                }
+
+            })
+            var lock = false;
+            $('#shop-del').click(function () {
+                var cartids = '';
+                $('input[name="newslist[]"]:checked').each(function () {
+                    var t1 = $(this).val();
+                    cartids += t1+',';
+                })
+                console.log(cartids);
+                if(cartids == 0){
+                    $.toast('购物车还未有商品','text');
+                }
+                if(lock) return false;
+
+                lock = true;
+                $.showLoading('正在删除中');
+                var url = "{php echo wxapp_url('shopping/remove')}";
+                $.getJSON(url,{cartids:cartids},function (data) {
+                    if(data.err_code ==0){
+                        $.hideLoading();
+                        //提交成功提示内容: data.data.content
+                        setTimeout(function () {
+                            $.toast(data.data.content, "text");
+                            //定时刷新
+                            location.reload();
+                        }, 500);
+
+                    }
+                    lock = false;
+                })
+            })
+        });
+    })
+</script>
+<script>
+    var regionid = "{$_SESSION['community']['regionid']}";
+
+    //数量加减
+    function shopminus(id) {
+        var $tObj = $("#total_" + id);
+        var num = parseInt($tObj.text())
+        if (num > 0) {
+            $tObj.text(num - 1);
+        }
+        $tObj.text(num - 1);
+        var $obj = $("#newslist_" + id);
+        var t = num - 1;
+        if(t ==0){
+            $obj.get(0).checked = false;
+            $("#list_" + id).hide();
+        }
+        $obj.data('num',t);
+        var totalprice = 0;
+        $('input[name="newslist[]"]:checked').each(function () {
+            totalprice += Number($(this).data('marketprice')) * $(this).data('num');
+        })
+        $("#shopcart-total-price").text(totalprice);
+        if(totalprice ==0){
+            $("#newslist-0").get(0).checked = false;
+        }
+        var total = -1;
+        var url = "{php echo wxapp_url('shopping/update')}";
+        $.getJSON(url, {total: total, id: id, regionid: regionid}, function (data) {
+
+
+        })
+
+    }
+
+    // 增加数量
+    function shopadd(id) {
+        var $tObj = $("#total_" + id);
+        var num = parseInt($tObj.text())
+        if (num > 0) {
+            $tObj.text(num + 1);
+        }
+        $tObj.text(num + 1);
+        var $obj = $("#newslist_" + id);
+        var t = num - 1;
+        if(t ==0){
+            $obj.get(0).checked = false;
+        }
+        $obj.data('num',t);
+        var totalprice = 0;
+        $('input[name="newslist[]"]:checked').each(function () {
+            totalprice += Number($(this).data('marketprice')) * $(this).data('num');
+        })
+        $("#shopcart-total-price").text(totalprice);
+        if(totalprice ==0){
+            $("#newslist-0").get(0).checked = false;
+        }
+        var total = 1;
+        var url = "{php echo wxapp_url('shopping/update')}";
+        $.getJSON(url, {total: total, id: id, regionid: regionid}, function (data) {
+
+        })
+    }
+</script>
+</body>
+</html>

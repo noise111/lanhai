@@ -1,0 +1,48 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('group', array('op' => 'user'))}"></a>&nbsp;&nbsp;&nbsp;设置小区组</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('group',array('op' => 'edit','uid' => $_GPC['uid']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal ajaxfrom" role="form" id="form-user">
+    <input name="id" type="hidden" class="form-control" value="{$item['id']}"/>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">用户名</label>
+                <div class="col-sm-10 col-lg-9 col-xs-12">
+                    <input id="" name="username" type="text" class="form-control" value="{$user['username']}"
+                           readonly="true"/>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">所属用户组</label>
+                <div class="col-sm-10 col-lg-9 col-xs-12">
+                    <select name="groupid" class="form-control" id="groupid">
+                        <option value="0">请选择所属用户组</option>
+                        {loop $groups $row}
+                        <option value="{$row['id']}" {if $row['id'] == $item['groupid']}selected='selected'{/if}>{$row['title']}</option>
+                        {/loop}
+                    </select>
+                    <span class="help-block">分配用户所属用户组后，该用户会自动拥有此用户组内的小区数量</span>
+                    <span class="help-block"><strong class="text-danger">设置用户组后，系统会根据对应用户组的限制用户添加小区</strong></span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label"></label>
+        <div class="col-sm-10 col-xs-12">
+            <input name="token" type="hidden" value="{$_W['token']}" />
+            <input type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交" />
+        </div>
+    </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

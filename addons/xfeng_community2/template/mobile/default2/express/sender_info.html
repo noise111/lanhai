@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        body{
+            background: #F7F8F3;
+        }
+        .weui-cells{
+            font-size: 16px;
+        }
+        .weui-cells__title{
+            font-size: 15px;
+            margin-top: .3em;
+            color: #93948F;
+        }
+        .weui-icon-cancel{
+            color: #B2B2B2;
+        }
+        .weui-cell_warn{
+            color: #333;
+        }
+        .weui-btn{
+            width: 90%;
+            margin: 0 auto;
+            background: #ff9800;
+            color: #ffffff;
+            border-radius: 50px;
+            -moz-box-shadow: 2px 2px 5px #b9b9b9;
+            -webkit-box-shadow: 2px 2px 5px #b9b9b9;
+            box-shadow: 2px 2px 5px #b9b9b9;
+            font-size: 0.9em;
+            margin-top: 1.5em;
+        }
+        .toolbar .picker-button{
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-cells__title">姓名</div>
+<div class="weui-cells ">
+    <input type="hidden" id="manid" value="{$linkman['id']}">
+    <input type="hidden" id="status" value="{$status}">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" value="{$linkman['realname']}" placeholder="请输入姓名" id="name">
+        </div>
+        <div class="weui-cell__ft">
+            <i class="weui-icon-cancel"></i>
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">电话</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" value="{$linkman['phone']}" placeholder="请输入电话" id="tel">
+        </div>
+        <div class="weui-cell__ft">
+            <i class="weui-icon-cancel"></i>
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">地址</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_access">
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="address" type="text" value="{$linkman['address']}" placeholder="请选择地址">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">详细地址</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" value="{$linkman['address_detail']}" placeholder="请输入省市区下的详细信息" id="fullAddress">
+        </div>
+        <div class="weui-cell__ft">
+            <i class="weui-icon-cancel"></i>
+        </div>
+    </div>
+</div>
+<a class="weui-btn" id="submit">添加</a>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/city-picker.js"></script>
+<script>
+
+    $("#address").cityPicker({
+        title: "选择地址",
+        onChange: function (picker, values, displayValues) {
+            console.log(values, displayValues);
+        }
+    });
+
+    $(function () {
+        $('.weui-icon-cancel').click(function () {
+            var parentLi = $(this).parent().prev();
+            parentLi.children('.weui-input').val(" ");
+        })
+    });
+
+    $('#submit').click(function () {
+        var id = $("#manid").val();
+        var status = $("#status").val();
+        var name = $("#name").val();
+        var tel = $("#tel").val();
+        var address = $("#address").val();
+        var fullAddress = $("#fullAddress").val();
+        if(name == ''){
+            $.alert('请输入寄件人姓名！');
+            return false;
+        }
+        if(tel == ''){
+            $.alert('请输入寄件人电话！');
+            return false;
+        }
+        if(address == ''){
+            $.alert('请输入寄件人地址！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op' => 'send','p'=>'addressAdd'))}",
+            {id:id,status:status,name:name, tel:tel, address:address, fullAddress:fullAddress},function (e) {
+                if(e !== ''){
+                    $.toast('修改成功！', function () {
+                        window.location.href = "{php echo $this->createMobileUrl('express',array('op' => 'send','p'=> 'list'))}";
+                        if(e.status==2){
+                            sessionStorage.setItem('name2', e.realname);
+                            sessionStorage.setItem('tel2', e.phone);
+                            sessionStorage.setItem('address2', e.address);
+                            sessionStorage.setItem('fullAddress2', e.address_detail);
+                            sessionStorage.setItem('status2', e.status);
+                        }
+                    });
+
+                }
+
+            },'json')
+    });
+
+</script>
+
+</body>
+</html>

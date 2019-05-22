@@ -1,0 +1,123 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('pay')}"></a>&nbsp;&nbsp;&nbsp;在开启以下支付方式前，请到 <a href='{php echo url('profile/payment')}'>支付选项</a> 去设置好参数。</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('pay',array('op' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" >
+    <input type="hidden" name="id" value="{$set['id']}" />
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_1" value="1" {if $set['type'] == 1 || empty($set['type'])}checked="checked"{/if} />
+                            <label for="type_1">超市</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_2" value="2" {if $set['type'] == 2}checked="checked"{/if} />
+                            <label for="type_2">物业费</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_3" value="3" {if $set['type'] == 3}checked="checked"{/if} />
+                            <label for="type_3">商家</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_4" value="4" {if $set['type'] == 4}checked="checked"{/if} />
+                            <label for="type_4">小区活动</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_5" value="5" {if $set['type'] == 5}checked="checked"{/if} />
+                            <label for="type_5">无人超市</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_7" value="7" {if $set['type'] == 7}checked="checked"{/if} />
+                            <label for="type_7">充电桩</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_8" value="8" {if $set['type'] == 8}checked="checked"{/if} />
+                            <label for="type_8">生鲜超市</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="type_9" value="9" {if $set['type'] == 9}checked="checked"{/if} />
+                            <label for="type_9">报修维修费</label>
+                        </div>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="wechat" id="wechat_1" value="1" {if $set['wechat']==1}checked{/if} />
+                            <label for="wechat_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="wechat" id="wechat_0" value="0" {if $set['wechat']==0}checked{/if} />
+                            <label for="wechat_0">关闭</label>
+                        </div>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付宝支付</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="alipay" id="alipay_1" value="1" {if $set['alipay']==1}checked{/if} />
+                            <label for="alipay_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="alipay" id="alipay_0" value="0" {if $set['alipay']==0}checked{/if} />
+                            <label for="alipay_0">关闭</label>
+                        </div>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">余额支付</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="balance" id="balance_1" value="1" {if $set['balance']==1}checked{/if} />
+                            <label for="balance_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="balance" id="balance_0" value="0" {if $set['balance']==0}checked{/if} />
+                            <label for="balance_0">关闭</label>
+                        </div>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">货到付款</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="delivery" id="delivery_1" value="1" {if $set['delivery']==1}checked{/if} />
+                            <label for="delivery_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="delivery" id="delivery_0" value="0" {if $set['delivery']==0}checked{/if} />
+                            <label for="delivery_0">关闭</label>
+                        </div>
+                    </div>
+                </div>
+        <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                            <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                            <input type="hidden" name="token" value="{$_W['token']}" />
+                     </div>
+            </div>
+    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

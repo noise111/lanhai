@@ -1,0 +1,168 @@
+{template 'default/header'}
+
+<body class="max-width bg-f5">
+<div class="page" id="xq_content">
+
+
+
+
+</div>
+</body>
+<script type="text/html" id="xq_detail">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="#" onclick="window.location.href='{{d.link}}'"></a>
+        <h1 class="title txt-fff">团购详情</h1>
+    </header>
+    <div class="content" >
+    <div class="group-content">
+        <div class="swiper-container bussiness-swiper-container" data-space-between='10' data-pagination='.swiper-pagination' data-autoplay="3000">
+            <div class="swiper-wrapper">
+                <!--预留幻灯 -->
+                <div class="swiper-slide"><img src="{{d.thumb}}" alt=""></div>
+            </div>
+        </div>
+        <div class="group-idtit clearfix">
+            <span class="group-db"></span>
+            <div class="group-left">
+                <p class="group-left-tit">{{d.sjname}}</p>
+                <p class="group-left-tit2">{{d.title}}</p>
+            </div>
+            <div class="group-right">
+                <samp>已售{{d.sold }}</samp>
+            </div>
+        </div>
+    </div>
+    <div class="list-block media-list  businessd-info">
+        <ul>
+            <li>
+                <div href="#" class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title-row">
+                            <div class="item-title" style="color: #000000;font-size: 14px;">{{ d.sjname }}</div>
+                        </div>
+                        <div class="item-title-row">
+                            <div class="item-title">{{ d.address }}</div>
+                        </div>
+                        <div class="item-title-row">
+                            <div class="item-title">
+                                <i class="text-icon">⦿</i>&nbsp;离我最近</div>
+                            <div class="item-after">
+                                {{ d.distance }}km
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-inner business-item-inner">
+                        <a class="business-phone" href="#" onclick="window.location.href='tel:{{ d.mobile }}'">
+                            <i class="text-icon">✆</i>
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="list-block media-list businessd-info">
+        <div class="groupDe-tit">
+            团购内容
+        </div>
+        <div class="card groupDe-card">
+            <div class="card-footer ">
+                <div href="#" class="link">{{ d.title }}</div>
+                <div href="#" class="link">1份</div>
+                <div href="#" class="link">{{ d.marketprice }}元</div>
+            </div>
+        </div>
+    </div>
+    <div class="list-block media-list businessd-info">
+        <div class="groupDe-tit">
+            购买须知
+        </div>
+        <div class="card groupDe-card">
+            <div class="card-content">
+                <div class="card-content-inner">
+                   {{ d.description }}
+                    <!--<p class="groupDe-card-tit">有效期：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['coupondate']}</p>-->
+                    <!--<p class="groupDe-card-tit">使用时间：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['usedate']}</p>-->
+                    <!--<p class="groupDe-card-tit">使用规则：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['userule']}</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-block media-list businessd-info">
+        <div class="groupDe-tit">
+            团购详情
+        </div>
+        <div class="card groupDe-card">
+            <div class="card-content">
+                <div class="card-content-inner">
+                    {{ d.content }}
+                    <!--<p class="groupDe-card-tit">有效期：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['coupondate']}</p>-->
+                    <!--<p class="groupDe-card-tit">使用时间：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['usedate']}</p>-->
+                    <!--<p class="groupDe-card-tit">使用规则：</p>-->
+                    <!--<p class="groupDe-card-content">{$item['userule']}</p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <nav class="bar bar-tab">
+        <div class="list-block media-list mt0">
+            <div class="item-content">
+                <div class="item-inner">
+                    <div class="item-title-row">
+                        <div class="item-title" >
+                            <span class="groupDe-price">{{ d.marketprice }}</span>
+                            <s class="groupDe-yj">￥{{ d.productprice }}</s>
+                            {{# if(d.credit){ }}
+
+                            <span class="groupDe-jf">{{ d.credit }}</span>
+                            {{# } }}
+                        </div>
+                        <div class="item-after">
+                            <a class="button button-fill button-warning" style="top: 11px"  onclick="window.location.href='{{d.url}}'">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+
+
+
+</script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script>
+    $(document).ready(function() {
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                var lng = r.point.lng;
+                var lat = r.point.lat;
+                var gid = "{$gid}";
+                var url = "{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'detail'))}";
+                $.post(url,{lat:lat,lng:lng,gid:gid},function (data) {
+
+                        var gettpl = document.getElementById('xq_detail').innerHTML;
+                        laytpl(gettpl).render(data, function(html){
+                            $("#xq_content").append(html);
+                        });
+
+                },'json')
+
+            }else {
+                alert('获取当前位置失败,请确认是否开启定位服务');
+            }
+        },{enableHighAccuracy: true})
+
+    });
+</script>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+</html>

@@ -1,0 +1,187 @@
+{template 'app/header'}
+<style>
+    .photoList .on {
+        background: url({MODULE_URL}template/mobile/default/static/images/add.png) no-repeat 40px 40px;
+        margin-right: 0;
+        cursor: pointer;
+        border: 1px solid #dfdfdf;
+    }
+
+    .photoList .on, .maskLay {
+        width: 120px;
+        height: 120px;
+    }
+</style>
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">发布通知</h1>
+    </header>
+    <div class="content" style="overflow-y:auto;">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" placeholder="输入通知标题" id="title" value="{$item['title']}">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="tipLayer">
+                                <div class="photoList">
+                                    <ul style="padding-left: 0px">
+                                        <li class="on" id="addPic">
+                                            <img class="attchImg" style="max-width: 120px;max-height: 120px;"
+                                                 style="display: none;">
+                                            <input type="hidden" id="pic" name="pic">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <textarea id="reason" style="height: 200px;" placeholder="输入通知内容">{php echo strip_tags($item['reason'])}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="checkAll" name="checkAll" data-group="regionid">全部
+
+                                </label>
+                                {loop $regions $region}
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" id="regionid" value="{$region['id']}" data-group="regionid"
+                                           name="regionid[]" {if @in_array($region['id'], $regs)}checked='checked'
+                                    {/if}>{$region['title']}
+                                </label>
+                                {/loop}
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" value="{$item['id']}" id="nid"/>
+                    <div class="content-block">
+                        <div class="row">
+                            <div class="col-50"><a href="#" class="button button-big button-fill button-danger" id="qx">取消</a>
+                            </div>
+                            <div class="col-50"><a href="#" class="button button-big button-fill button-success"
+                                                   id="fb">发布</a></div>
+                        </div>
+                    </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#checkAll").click(function () {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("#regionid[data-group='" + group + "']").each(function () {
+                $(this).get(0).checked = checked;
+            })
+        });
+        $("#qx").click(function () {
+            $("#title").val('');
+            $("#reason").val('');
+        })
+        $("#fb").click(function () {
+            var title = $("#title").val();
+            var reason = $("#reason").val();
+            var regionid = '';
+            var pic = $("#pic").val();
+            $('input[name="regionid[]"]:checked').each(function () {
+                var t1 = $(this).val();
+                regionid += t1 + ',';
+            });
+            var id = $("#nid").val();
+            $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'add_notice'))}", {
+                title: title,
+                reason: reason,
+                regionid: regionid,
+                id: id,
+                pic: pic
+            }, function (data) {
+                if (data.status) {
+                    $.toast('发布成功');
+                    window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+                }
+            }, 'json')
+        })
+    })
+</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/jquery.min.js"
+        charset="utf-8"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'onMenuShareTimeline',
+        'onMenuShareAppitoast',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+        'chooseImage',
+        'uploadImage',
+    ];
+    $(function () {
+        $("#addPic").click(function () {
+            wx.config(jssdkconfig);
+            wx.ready(function () {
+                wx.chooseImage({
+                    count: 1, // 默认9
+                    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                    success: function (res) {
+                        var localId = res.localIds[0];
+                        wx.uploadImage({
+                            localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                            isShowProgressTips: 1, // 默认为1，显示进度提示
+                            success: function (res) {
+                                var serverId = res.serverId; // 返回图片的服务器端ID
+                                $(".attchImg").attr('src', localId);
+                                $("#pic").val(serverId);
+                            }
+                        });
+//                        if (localId) {
+//                            upload(localId);
+//                        }
+                    }
+                });
+            });
+//            function upload(localId) {
+//                wx.uploadImage({
+//                    localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+//                    isShowProgressTips: 1, // 默认为1，显示进度提示
+//                    success: function (res) {
+//                        var serverId = res.serverId; // 返回图片的服务器端ID
+//                        $(".attchImg").attr('src', localId);
+//                        $("#pic").val(serverId);
+//                    }
+//                });
+//            }
+        })
+
+
+    });
+
+</script>
+{template 'app/footer'}

@@ -1,0 +1,107 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>接收员管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op'=> 'manage'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="counter"/>
+                        <input type="hidden" name="op" value="manage"/>
+                        <div class="row">
+                            <div class="col-sm-12 m-b-xs">
+                                <a class="btn btn-sm btn-primary" href="{php echo $this->createWebUrl('counter', array('op' => 'manage','p' => 'add'))}"><i class="fa fa-plus"></i> 添加接收员</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>手机</th>
+                            <th>粉丝id</th>
+                            <th>通知</th>
+                            <th>小区</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['realname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td>{$item['openid']}</td>
+                            <td>{if $item['type'] == 1}微信{elseif $item['type'] == 2}短信{elseif $item['type'] == 3}全部通知{/if}</td>
+                            <td>{$item['rtitle']}</td>
+                            <td>
+                                <label data="{$item['enable']}" class='label label-default {if $item['enable']==1}label-info{/if}'
+                                onclick="verify(this,{$item['id']},'enable')">{if $item['enable']==1}开启{else}关闭{/if}</label>
+                            </td>
+                            <td >
+                                <a href="{php echo $this->createWebUrl('counter',array('op' => 'manage','p' => 'add','id' => $item['id']))}" class="btn btn-primary btn-sm" title="编辑">编辑</a>
+                                <a class="btn btn-default" onclick="del({$item['id']})" title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function del(id) {
+        var id = id;
+        var url = "{php echo $this->createWebUrl('counter',array('op' => 'manage','p' => 'del'))}";
+        $.post(url, {
+                id: id
+            },
+            function(msg) {
+                if (msg.status == 1) {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 100);
+                };
+
+            },
+            'json');
+    }
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('counter',array('op' => 'manage','p' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'enable') {
+                $(obj).html(d.data == '1' ? '开启' : '关闭');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+</script>
+

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$_GPC['title']}</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/demos.css">
+    <script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/laytpl.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+</head>
+
+<style>
+    body {
+        background: #F1F1F1;
+    }
+
+    .weui-flex {
+        position: relative;
+        top: 20px;
+    }
+
+    .weui-flex__item {
+        position: relative;
+        text-align: center;
+    }
+
+    .weui-cells__title {
+        font-size: 0.9em;
+    }
+
+    .weui-btn_mini {
+        display: block;
+        padding: 0 14px;
+        font-size: 0.8em;
+    }
+
+    .weui-cell__hd {
+        margin-right: 1em;
+    }
+
+    .weui-cells {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+    .weui-cells_checkbox .weui-icon-checked:before{
+        font-size: 18px;
+    }
+    .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+        color: #F7624B;
+    }
+</style>
+
+<body>
+<div class="weui-flex">
+    <div class="icon_step_line_left"></div>
+    <div class="icon_step_line_right"></div>
+    <div class="weui-flex__item icon_step_active">
+        <span class="icon_step">1</span>
+        <p class="icon_step_text">验证身份</p>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">2</span>
+        <div class="icon_step_text">房屋信息</div>
+    </div>
+    <div class="weui-flex__item">
+        <span class="icon_step">2</span>
+        <p class="icon_step_text">完善信息</p>
+    </div>
+</div>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div class="step-content" id="app" v-cloak>
+    <div class="step firstStep">
+        <div class="weui-cells__title">请填入预留信息</div>
+        <div class="weui-cells">
+            <div class="weui-cell" id="xqmobile" v-if="setting.verity_mobile">
+                <div class="weui-cell__hd">手机号</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="tel" placeholder="" id="mobile">
+                </div>
+
+                <div class="weui-cell__ft" v-if="setting.code" id='send'>
+                    <a href="javascript:;" class="weui-btn weui-btn_mini step-btn" id="verifyCodeBtn" onclick="sendVerifyCode();">获取验证码</a>
+                </div>
+
+            </div>
+
+            <div class="weui-cell" v-if="setting.code" id="xqcode">
+                <div class="weui-cell__hd">验证码</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="" id="code">
+                    <input type="hidden" id="_code">
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">注册码</div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="number" placeholder="" id="regcode">
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="shows()">下一步</a>
+    </div>
+    <div class="step secondStep" style="display: none">
+
+        <div class="weui-cells__title">请核对您的房屋信息</div>
+        <div class="weui-cells">
+            <div class="weui-cell weui-cell_access" >
+                <div class="weui-cell__hd"><label for="address" class="weui-label" >房号</label></div>
+                <div class="weui-cell__bd">
+                    <!--<input class="weui-input" id="address" type="text" disabled>-->
+                    <select id="addressid" class="weui-select">
+                        <option value="">请选择绑定房号</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="showt()">下一步</a>
+    </div>
+    <div class="step thereStep" style="display: none;">
+        <div class="weui-cells__title">您在家庭中的角色</div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_1" class="newslist" value="1" checked>
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_1"><p>房产证在我名下</p></label>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_2" class="newslist" value="2">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_2"><p>我是业主家属</p></label>
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd">
+                    <div class="check-box fl">
+                        <label>
+                            <input type="radio" name="status" id="status_3" class="newslist" value="3">
+                        </label>
+                    </div>
+                </div>
+                <div class="weui-cell__bd">
+                    <label for="status_3"><p>我是租客</p></label>
+                </div>
+            </a>
+        </div>
+        <div class="weui-cells_checkbox" style="margin-bottom: 10px" id="xy" v-if="setting.xy">
+            <label class="weui-cell weui-check__label" for="s11">
+                <div class="weui-cell__hd" style="padding-right: 0;margin-right: 0.5em">
+                    <input type="checkbox" class="weui-check" name="checkbox1" id="s11" checked="checked">
+                    <i class="weui-icon-checked"></i>
+                </div>
+            </label>
+            <div class="weui-cell__bd" style="font-size: 0.5em;position: relative;top: -28px;color: #868686;left: 50px;">
+                <p>我同意<a  href="#" class="color_y open-popup" data-target="#full">智慧社区应用使用条款与隐私规则</a></p>
+            </div>
+        </div>
+        <div id="full" class='weui-popup__container'>
+            <div class="weui-popup__overlay"></div>
+            <div class="weui-popup__modal" style="background: #ffffff">
+                <div style="padding: 10px 15px;font-size: 0.9em" id="xy_content" v-html="setting.xy_content">
+                    {{setting.xy_content}}
+                </div>
+                <a href="javascript:;" class="weui-btn register-guide-btn close-popup">关闭协议</a>
+            </div>
+        </div>
+        <a href="javascript:;" class="weui-btn register-guide-btn" onclick="closeme()">完成</a>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+
+<script>
+    $(document).on("open", ".weui-popup-modal", function() {
+        console.log("open popup");
+    }).on("close", ".weui-popup-modal", function() {
+        console.log("close popup");
+    });
+    var app = new Vue({
+        el: "#app",
+        data: {
+            regionid: "{$_GPC['regionid']}",
+            setting: []
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('setting/set')}"
+            var data = {
+                regionid: self.regionid
+            }
+            $.getJSON(url, data, function (ret) {
+                self.setting = ret.data
+            })
+
+        }
+    })
+    function shows() {
+        if($("#xqmobile").css("display")=='flex' ){
+            var mobile = $("#mobile").val();
+            if(mobile == ''){
+                $.toast('电话不可为空', "cancel");
+                return false;
+            }
+            if (!(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/.test(mobile))) {
+                $.toast('不是完整的11位手机号或者正确的手机号前七位', "cancel");
+                return false;
+            }
+        }
+
+        if($("#xqcode").css("display")=='flex' ){
+            var code = $("#code").val();
+            var _code = $("#_code").val();
+            if(code==''){
+                $.toast('验证码不可为空', "cancel");return false;
+            }
+            if(_code){
+                if(code != _code){
+                    $.toast('验证码不正确', "cancel");
+                    return false;
+                }
+            }else{
+                $.toast('验证码不正确', "cancel");
+                return false;
+            }
+        }
+        var regcode = $("#regcode").val();
+        if(regcode == ''){
+            $.toast('注册码不可为空', "cancel");
+            return false;
+        }
+        var regionid = "{$regionid}";
+        var url = "{php echo wxapp_url('register/veritycode')}";
+        $.getJSON(url,{mobile:mobile,regcode:regcode,regionid:regionid},function (data) {
+            if(data.err_code == -1){
+                $.toast('注册码不存在或该手机号未导入房号', "cancel");return false;
+            }
+            if(data.err_code ==0){
+                // $("#address").val(data.data.content);
+                var content = '';
+                var items = data.data.content
+                for(var o in items){
+                    content += "<option value='"+items[o].id+"'>"+items[o].address+"</option>"
+                }
+                $("#addressid").append(content);
+                $('.firstStep').hide();
+                $('.secondStep').show();
+                $('.weui-flex__item').eq(0).removeClass('icon_step_active');
+                $('.weui-flex__item').eq(2).addClass('icon_step_active');
+            }
+        })
+
+    }
+    function showt() {
+        $('.thereStep').show();
+        $('.secondStep').hide();
+        $('.weui-flex__item').eq(1).removeClass('icon_step_active');
+        $('.weui-flex__item').eq(2).addClass('icon_step_active');
+    }
+    var lock = false;
+    function closeme() {
+        // $(".step-content").hide();
+        if($("#xy").css("display")=='block' ) {
+            var xy = $('input[name="checkbox1"]:checked').val();
+            if (xy != 'on') {
+                $.toast('请勾选协议', "cancel");
+                return false;
+            }
+        }
+        var mobile = $("#mobile").val();
+        var realname = $("#realname").val();
+        var regionid = "{$regionid}";
+        var regcode = $("#regcode").val();
+        var memberid = "{$memberid}";
+        var status = $('input[name="status"]:checked').val();
+        var addressid = $("#addressid").val()
+        if(addressid == ''){
+            $.toast('房号必选', "cancel");return false;
+        }
+        if(lock) return false;
+
+        lock = true;
+        $.showLoading('正在提交');
+        $.post("{php echo wxapp_url('register/post')}",{mobile:mobile,realname:realname,regionid:regionid,regcode:regcode,status:status,memberid:memberid,type:2,addressid:addressid},function (data) {
+            $.hideLoading();
+            if (data.err_code == 0) {
+                setTimeout(function () {
+                    //提交成功提示内容: data.data.content
+                    $.toast(data.data.content);
+                    window.location.href = "{php echo $this->createMobileUrl('home')}";
+                }, 1500);
+            }
+            if(data.err_code == '10001'){
+                $.toast('微信异常，请重新关注', "cancel");
+            }
+            lock = false;
+
+        },'json')
+    }
+    function sendVerifyCode() {
+        var mobile = $('#mobile').val();
+        if (!mobile) {
+            alert('请输入您的手机号码！');
+            return false;
+        }
+        if (mobile.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1) {
+            alert('请输入正确的手机号码！');
+            return false;
+        }
+        $('#verifyCodeBtn').addClass('active');
+        $('#verifyCodeBtn').attr('disabled', true);
+        var countdown = 60;
+        timer = setInterval(function () {
+            if (countdown == 0) {
+                $('#verifyCodeBtn').removeClass('active');
+                $('#verifyCodeBtn').html('重新发送');
+                clearInterval(timer);
+                $('#verifyCodeBtn').attr('disabled', false);
+            }
+            $('#verifyCodeBtn').html(countdown--);
+
+        }, 1000);
+        var regionid = "{$_GPC['regionid']}";
+        $.post("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}&mobile=" + mobile + "&regionid=" + regionid,
+            function (data) {
+                $("#_code").val(data);
+            }, 'json');
+    }
+//    //短信验证码发送
+//    var $getCode = $('#registerCode');
+//    //定义参数
+//    $getCode.sendCode({
+//        disClass: 'weui-btn_disabled',
+//        secs: 60,
+//        run: false,
+//        runStr: '{%s}秒后重新获取',
+//        resetStr: '重新获取验证码'
+//    });
+//    $getCode.on('click', function () {
+//        /* ajax 成功发送验证码后调用【start】 */
+////         YDUI.dialog.loading.open('发送中');
+//
+//        var regionid = "{$regionid}";
+//        var mobile = $('#mobile').val();
+//        if (!mobile) {
+//            alert('请输入您的手机号码！');
+//            return false;
+//        }
+//        if (mobile.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1) {
+//            alert('请输入正确的手机号码！');
+//            return false;
+//        }
+//        $.showLoading('发送中');
+//        $.post("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}&mobile=" + mobile + "&regionid=" + regionid, function (data) {
+//            $.hideLoading();
+//            setTimeout(function () {
+////             YDUI.dialog.loading.close();
+//
+//                $getCode.sendCode('start');
+////             YDUI.dialog.toast('已发送', 'success', 1500);
+//                setTimeout(function () {
+//                    $("#_code").val(data);
+//                    $.toast("已发送", '');
+//                }, 500);
+////
+//            }, 1500);
+//        }, 'json');
+//
+//    });
+</script>
+</body>
+</html>

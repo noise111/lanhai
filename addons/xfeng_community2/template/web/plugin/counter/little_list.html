@@ -1,0 +1,41 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('counter', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;小柜子管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'little','deviceid' => $deviceid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>柜子</th>
+                            <th>设备状态</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{if $item['title']}{$item['title']}{else}{php echo $item['lock']+1}号柜子{/if}</td>
+                            <td><span class="label label-primary">{if $item['online']==1}在线{elseif $item['online']==0}离线{/if}</span></td>
+                            <td><span class="label label-primary">{if $item['enable']==0}空置{elseif $item['enable']==1}已满{elseif $item['enable']==2}占用{/if}</span></td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('counter',array('op' => 'little','p' => 'add','id' => $item['id'],'deviceid' => $deviceid))}" title="编辑" class="btn btn-primary btn-sm">编辑</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

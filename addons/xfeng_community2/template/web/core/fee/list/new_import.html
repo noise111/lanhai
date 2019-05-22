@@ -1,0 +1,190 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <!--<li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>-->
+                        <li><a href="{php echo $this->createWebUrl('fee', array('op'=>'list'))}" title="账单列表" >账单列表</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('fee', array('op'=>'list','p'=>'newImport'))}" title="新增导入" >新增导入</a></li>
+                        <li><a href="{php echo $this->createWebUrl('fee', array('op' => 'list','p' => 'import'))}" title="更新导入" >更新导入</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <div class="alert alert-info" role="alert">
+                            默认导入格式:地址/账单日期/状态/费用。具体请下载模板格式。
+                            <p>(<a href="{MODULE_URL}data/files/excel/fee.xlsx" target="_blank" style="font-size:16px;color:red">点击下载上传账单格式示例</a>)</p>
+                        </div>
+                        <form class="form-horizontal" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);" >
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">搜索</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                        <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">选择小区</label>
+                                <div class="col-sm-4">
+                                    <select name='regionid' class="form-control" id="regionid">
+                                        <option value="" > 选择小区</option>
+                                        {loop $regions $region}
+                                        <option value="{$region['id']}" > {$region['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">收费项目</label>
+                                <div class="col-sm-4">
+                                    <select name="category" id="category" class="form-control">
+                                        <option value="">请选择收费项目</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">账单名称</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="title" id="title" class="form-control" placeholder="例如：某某账单"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">截止日期</label>
+                                <div class="col-sm-4">
+                                    {php echo tpl_form_field_date('enddate',$enddate);}
+                                </div>
+                            </div>
+
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">备注</label>
+                                <div class="col-sm-4">
+                                    <textarea name="remark" id="remark" class="form-control">{$item['remark']}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="fee" class="col-sm-2 control-label">账单数据</label>
+                                <div class="col-sm-4">
+                                    <input type="file" name="fee" class="form-control" id="fee">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="button" id="myButton" data-loading-text="正在导入中，请勿关闭和刷新浏览器......" class="btn btn-w-m btn-primary" autocomplete="off">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form){
+        if (!form['regionid'].value) {
+            alert('请选择小区');
+            return false;
+        }
+        if (!form['category'].value) {
+            alert('请选择收费项目');
+            return false;
+        }
+        if (!form['fee'].value) {
+            alert('请上传账单表格');
+            return false;
+        }
+        return true;
+    }
+</script>
+<script>
+    $('#myButton').on('click', function () {
+        if (!$('#regionid').val()) {
+            alert('请选择小区');
+            return false;
+        }
+        if (!$('#category').val()) {
+            alert('请选择收费项目');
+            return false;
+        }
+        if (!$('#fee')[0].files[0]) {
+            alert('请上传账单表格');
+            return false;
+        }
+        var $btn = $(this).button('loading');
+        var formData = new FormData();
+        formData.append('fee', $('#fee')[0].files[0]);
+        formData.append('regionid', $('#regionid').val());
+        formData.append('category', $('#category').val());
+        formData.append('title', $('#title').val());
+        formData.append('remark', $('#remark').val());
+        formData.append('enddate', $('input[name="enddate"]').val());
+        $.ajax({
+            url : "{php echo $this->createWebUrl('fee',array('op'=> 'list','p'=> 'newImport'))}",
+            type : "POST",
+            cache: false,
+            data : formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success : function(data) {
+                if(data.result){
+                    alert(data.content);
+                    setTimeout(function(){
+                        window.location.href="{php echo $this->createWebUrl('fee',array('op' => 'list'))}";
+                    },000);
+                } else {
+                    alert(data.content);
+                }
+            },
+            error : function(data) {
+
+            }
+        });
+    })
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                $.getJSON("{php echo $this->createWebUrl('fee',array('op'=>'cat'))}", {
+                    regionid: data.regionid
+                }, function (data) {
+                    var fees = data
+                    var content = '<option value="">请选择项目</option>';
+                    for (var o in fees) {
+                        content += "<option value='" + fees[o].id + "'>" + fees[o].title + "</option>";
+                    }
+                    $("#category").html(content);
+                })
+            }
+        },'json')
+    })
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('fee',array('op'=>'cat'))}", {
+            regionid: regionid
+        }, function (data) {
+            var fees = data
+            var content = '<option value="">请选择项目</option>';
+            for (var o in fees) {
+                content += "<option value='" + fees[o].id + "'>" + fees[o].title + "</option>";
+            }
+            $("#category").html(content);
+        })
+    })
+</script>
+
+{template 'web/common/footer'}

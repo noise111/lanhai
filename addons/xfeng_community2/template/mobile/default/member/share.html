@@ -1,0 +1,104 @@
+{template 'default/header'}
+
+<body class="max-width">
+<div class="page" >
+
+    <div class="register-hd">
+        <div class="register-img">
+            <img src="{MODULE_URL}template/mobile/default/static/images/share.png">
+            <span style="font-size: 13px;font-weight: 100;">点击右上角分享按钮发送给微信好友</span>
+        </div>
+    </div>
+
+    <div class="content-block-title">家庭成员</div>
+    <div class="list-block">
+            <ul>
+                <li class="item-content">
+                    <div class="item-media"><i class="icon icon-me"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title">姓名</div>
+                        <div class="item-after">{$item['realname']}</div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-media"><i class="icon icon-phone"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title">手机</div>
+                        <div class="item-after">{php echo substr_replace($item['mobile'],'****',3,4)}</div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-media"><i class="icon icon-star"></i></div>
+                    <div class="item-inner">
+                        <div class="item-title">类型</div>
+                        <div class="item-after">{if $item['status'] == 2}家属{elseif $item['status'] == 3}租户{/if}</div>
+                    </div>
+                </li>
+            </ul>
+    </div>
+    <div class="content-block-title">物业地址</div>
+    <div class="list-block">
+        <ul>
+            <li class="item-content">
+                <div class="item-media"><i class="icon icon-home"></i></div>
+                <div class="item-inner">
+                    <div class="item-title">{$item['title']}</div>
+                </div>
+            </li>
+            <li class="item-content">
+                <div class="item-media"><i class="icon icon-home"></i></div>
+                <div class="item-inner">
+                    <div class="item-title">
+                        {if $item['area']}{$item['area']}-{/if}
+                        {if $item['build']}{$item['build']}-{/if}
+                        {if $item['unit']}{$item['unit']}-{/if}
+                        {if $item['room']}{$item['room']}{/if}
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+    </div>
+
+    <p style="width: 50%;margin: 0 auto"><a href="#" onclick="javascript:window.location.href='{php echo $this->createMobileUrl('member',array('op'=> 'del','logid' => $logid))}'"class="button button-fill button-warning">我要删除</a></p>
+
+</div>
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'onMenuShareTimeline',
+        'onMenuShareAppMessage',
+        'onMenuShareQQ',
+        'onMenuShareWeibo',
+    ];
+    $(function(){
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            wx.onMenuShareAppMessage({
+                title: "{$_share['title']}", // 分享标题
+                desc: "{$_share['desc']}", // 分享描述
+                link: "{$_share['link']}", // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                imgUrl: "{$_share['imgUrl']}", // 分享图标
+                type: '', // 分享类型,music、video或link，不填默认为link
+                dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+                success: function () {
+                    // 用户确认分享后执行的回调函数
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

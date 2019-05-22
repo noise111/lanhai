@@ -1,0 +1,69 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('staff', array('op' => 'perm'))}"></a>&nbsp;&nbsp;&nbsp;用户信息</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p' => 'commission','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+    <input type="hidden" name="id" value="{$user['id']}">
+            <div class="form-group">
+                <label for="username" class="col-sm-2 control-label">用户名</label>
+                <div class="col-xs-3">
+                    <input type='text' name='username' id='username' class="form-control" value="{$user['username']}" disabled/>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="commission" class="col-sm-2 control-label">平台分成</label>
+                <div class="col-xs-3">
+                    <input type='text' name='commission' id='commission' class="form-control" value="{$user['commission']}"/>
+                    <span class="help-block">(请输入0到1之间的数字,例如设置0.2 ,平台获取20%的提成)</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="commission" class="col-sm-2 control-label">小区分成</label>
+                <div class="col-xs-3">
+                    <input type='text' name='xqcommission' id='xqcommission' class="form-control" value="{$user['xqcommission']}"/>
+                    <span class="help-block">(请输入0到1之间的数字,例如设置0.1,业主所在的小区获得10%的提成)</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (form['commission'].value >= 1) {
+            alert('平台分成最大只能设置1');
+            return false;
+        }
+        if (form['xqcommission'].value >= 1) {
+            alert('小区分成最大只能设置1');
+            return false;
+        }
+        var xq = Number(form['commission'].value) + Number(form['xqcommission'].value);
+        if (xq >= 1) {
+            alert('小区分成和平台分成总和不能超过1');
+            return false;
+        }
+
+    }
+</script>
+{template 'web/common/footer'}

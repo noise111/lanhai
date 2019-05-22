@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        body{
+            background: #F7F8F3;
+            padding-bottom: 44px;
+        }
+        .weui-media-box__title{
+            font-size: 16px;
+            color: #959595;
+            white-space: normal;
+            line-height: 1.2;
+        }
+        .weui-media-box:before{
+            left: 0;
+        }
+        .weui-media-box_appmsg .weui-media-box__hd{
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+        }
+        .weui-cells__title{
+            font-size: 15px;
+            margin-top: .3em;
+            color: #51514F;
+        }
+        .weui-icon-cancel{
+            color: #B2B2B2;
+        }
+        .weui-cell_warn{
+            color: #333;
+        }
+        .weui-cells{
+            font-size: 16px;
+
+        }
+        .weui-cell:before{
+            left: 0px;
+        }
+        .weui-tabbar {
+            position: fixed;
+        }
+        .weui-tabbar:before{
+            border-top: none;
+        }
+        .weui-popup__overlay, .weui-popup__container{
+            z-index: 501;
+        }
+        .weui-popup__modal{
+            z-index: 502;
+        }
+        .weui-count .weui-count__btn:before{
+            margin-top: -1px;
+            background-color:#868684 ;
+        }
+        .weui-count .weui-count__btn:after{
+            background-color:#868684;
+        }
+        .weui-count .weui-count__btn{
+            border-radius: 0;
+            border: none;
+        }
+        .weui-count .weui-count__increase,.weui-count .weui-count__decrease{
+            background-color: #F0F0EE;
+        }
+        h4 {
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd">
+        <a href="{php echo $this->createMobileUrl('express',array('op' => 'send','p' => 'address', 'id' => $linkman['id'], 'status' => 1))}" class="weui-media-box weui-media-box_appmsg weui-cell_access" >
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/img/icon-sender.png" alt="">
+            </div>
+            <div class="weui-media-box__bd">
+                {if $linkman['id']==''}<h4 class="weui-media-box__title" id="send_tit">点击编辑寄件人信息</h4>{/if}
+                <span class="default-sender-name">{$linkman['realname']}</span>
+                <span style="float: right;margin-right: 10px;">{$linkman['phone']}</span>
+                <input class="weui-input" type="hidden" id="linkman" value="{$linkman['id']}">
+                <span class="weui-media-box__title"><h4>
+                    {$linkman['address']}
+                </h4></span>
+                <h5 class="weui-media-box__title">{$linkman['address_detail']}</h5>
+
+            </div>
+            <span class="weui-cell__ft"></span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('express',array('op' => 'send','p'=> 'address', 'status' => 2))}" class="weui-media-box weui-media-box_appmsg weui-cell_access">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="{MODULE_URL}template/mobile/default2/static/img/icon-recipients.png" alt="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h4 class="weui-media-box__title" id="recipients-tit">点击此编辑收件人信息</h4>
+                <div class="default-sender-item" id="recipients-item">
+                    <h4 class="weui-media-box__title"  style="color: #333">
+                        <span class="default-sender-name" id="recipients-name"></span>
+                        <span style="float: right;margin-right: 10px;" id="recipients-phone"></span>
+                    </h4>
+                    <h4 class="weui-media-box__title" id="recipients-address"></h4>
+                    <h4 class="weui-media-box__title" id="recipients-address-detail"></h4>
+                </div>
+
+            </div>
+            <span class="weui-cell__ft"></span>
+        </a>
+    </div>
+</div>
+
+<div class="weui-cells__title">快递公司选择</div>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">
+            <input class="weui-input" id="sendSite" type="text" value="" placeholder="请选择快递公司">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+</div>
+
+<div class="weui-cells__title">物品详情</div>
+<div class="weui-cells" style="margin-top: 5px">
+    <div class="weui-cell" href="javascript:;">
+        <div class="weui-cell__hd">
+            物品类型
+        </div>
+        <div class="weui-cell__bd">
+            {loop $types $type}
+            <span class="default-type-btn" value="{$type['id']}">{$type['type']}</span>
+            {/loop}
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <p>物品重量(kg)</p>
+        </div>
+        <div class="weui-cell__ft">
+            <div class="weui-count">
+                <a class="weui-count__btn weui-count__decrease"></a>
+                <input class="weui-count__number" type="number" value="1" id="weight">
+                <a class="weui-count__btn weui-count__increase"></a>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cell">
+        <div class="weui-cell__bd">
+            <textarea class="weui-textarea" placeholder="备注" rows="3" id="remark"></textarea>
+            <div class="weui-textarea-counter"><span>0</span>/20</div>
+        </div>
+    </div>
+</div>
+<div class="default-agree">
+    下单即表示同意<a href="javascript:;" class="open-popup" data-target="#full">《寄件服务条款》</a>
+</div>
+<div class="weui-tabbar">
+    <div class="supermarket-order-flex">
+        <div class="supermarket-order-item fl">
+            <p class="sm-price">预估：<span id="duePrice">￥<span>0.00</span></span></p>
+        </div>
+        <div class="supermarket-order-item fl" id="ensure">
+            <a href="#" class="supermarket-btn">下单</a>
+        </div>
+    </div>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/city-picker.js"></script>
+<script>
+    //获取指定session值
+    var status2 = sessionStorage.getItem("status2");
+
+    if(status2!==null){
+        $("#recipients-tit").css('display','none');
+        $("#recipients-item").css('display','block');
+        $("#recipients-name").text(sessionStorage.getItem("name2"));
+        $("#recipients-phone").text(sessionStorage.getItem("tel2"));
+        $("#recipients-address").text(sessionStorage.getItem("address2"));
+        $("#recipients-address-detail").text(sessionStorage.getItem("fullAddress2"));
+    }else {
+        $("#recipients-tit").css('display','block');
+        $("#recipients-item").css('display','none');
+    }
+</script>
+<script>
+    $("#address").cityPicker({
+        title: "选择地址",
+        onChange: function (picker, values, displayValues) {
+            console.log(values, displayValues);
+        }
+    });
+
+    $(function () {
+        $('.weui-icon-cancel').click(function () {
+            var parentLi = $(this).parent().prev();
+            parentLi.children('.weui-input').val(" ");
+        })
+    });
+
+    $("#sendSite").select({
+        title: "选择快递公司",
+        items: [{loop $companys $index $item}
+            "{$item['company']}",
+            {/loop}],
+    onChange: function(d) {
+        console.log(this, d);
+    },
+    onClose: function() {
+        console.log("close");
+    },
+    onOpen: function() {
+        console.log("open");
+    }
+    });
+    $('#sendSite').change(function () {
+        var linkman = $("#linkman").val();
+        var address = $("#recipients-address").text();
+        var company = $("#sendSite").val();
+        var weight = $("#weight").val();
+        if(address == ''){
+            $.alert('请输入收件人地址！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op' => 'send','p' => 'price'));}", {linkman:linkman,address:address,company:company,number:weight},function (e) {
+            $("#duePrice>span").text(e);
+
+        },'json')
+    });
+
+    $(".default-type-btn").click(function () {
+        var BtnState = $(this).hasClass("default-type-active");
+        if(BtnState==true){
+            $(this).removeClass("default-type-active");
+        }else {
+            $(this).addClass("default-type-active").siblings(".default-type-btn").removeClass("default-type-active");
+        }
+    });
+
+    var MAX = 99, MIN = 1;
+    $('.weui-count__decrease').click(function (e) {
+        var $input = $(e.currentTarget).parent().find('.weui-count__number');
+        var number = parseInt($input.val() || "0") - 1
+        if (number < MIN) number = MIN;
+        $input.val(number);
+        var linkman = $("#linkman").val();
+        var address = $("#recipients-address").text();
+        var company = $("#sendSite").val();
+        var goodstatus = $(".default-type-active").text();
+        if(address == ''){
+            $.alert('请输入收件人地址！');
+            return false;
+        }
+        if(company == ''){
+            $.alert('请选择快递！');
+            return false;
+        }
+        if(goodstatus == ''){
+            $.alert('请选择物品类型！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op' => 'send','p' => 'price'));}", {linkman:linkman,address:address,company:company,goodstatus:goodstatus,number:number},function (e) {
+            $("#duePrice>span").text(e);
+
+        },'json')
+    });
+    $('.weui-count__increase').click(function (e) {
+        var $input = $(e.currentTarget).parent().find('.weui-count__number');
+        var number = parseInt($input.val() || "0") + 1
+        if (number > MAX) number = MAX;
+        $input.val(number)
+        var linkman = $("#linkman").val();
+        var address = $("#recipients-address").text();
+        var company = $("#sendSite").val();
+        var goodstatus = $(".default-type-active").text();
+        if(address == ''){
+            $.alert('请输入收件人地址！');
+            return false;
+        }
+        if(company == ''){
+            $.alert('请选择快递！');
+            return false;
+        }
+        if(goodstatus == ''){
+            $.alert('请选择物品类型！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op' => 'send','p' => 'price'));}", {linkman:linkman,address:address,company:company,goodstatus:goodstatus,number:number},function (e) {
+            $("#duePrice>span").text(e);
+
+        },'json')
+    });
+
+    $("#ensure").click(function(){
+        var linkman = $("#linkman").val();
+        var name = $("#recipients-name").text();
+        var tel = $("#recipients-phone").text();
+        var address = $("#recipients-address").text();
+        var fullAddress = $("#recipients-address-detail").text();
+        var company = $("#sendSite").val();
+        var goodstatus = $(".default-type-active").text();
+        var price = $("#duePrice>span").text();
+        var remark = $("#remark").val();
+        var weight = $("#weight").val();
+        if(linkman == ''){
+            $.alert('请添加寄件人信息！');
+            return false;
+        }
+        if(name == ''){
+            $.alert('请输入收件人姓名！');
+            return false;
+        }
+        if(tel == ''){
+            $.alert('请输入收件人电话！');
+            return false;
+        }
+        if(address == ''){
+            $.alert('请输入收件人地址！');
+            return false;
+        }
+        if(company == ''){
+            $.alert('请选择快递！');
+            return false;
+        }
+        if(goodstatus == ''){
+            $.alert('请选择物品类型！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op' => 'send','p'=>'sendAdd'))}",
+            {name:name,tel:tel,address:address,fullAddress:fullAddress,company:company,goodstatus:goodstatus,price:price,remark:remark,weight:weight},function (e) {
+                if(e.code==1){
+                    $.toast('提交成功！');
+                    window.location.href = "{php echo $this->createMobileUrl('express')}";
+                }
+                if(e.code==2){
+                    $.toast('提交失败！','cancel');
+                    //window.location.href = "{php echo $this->createMobileUrl('index')}";
+                }
+
+            },'json')
+    });
+</script>
+</body>
+</html>

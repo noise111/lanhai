@@ -1,0 +1,182 @@
+{template 'web/common/header-base'}
+
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('report',array('op' => 'manage'))}"></a>&nbsp;&nbsp;&nbsp;添加接收员</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('report',array('op' => 'manage','operation' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionids" value="" />
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择物业<span style="color: red">*</span></label>
+                            <div class="col-sm-5">
+                                <select name="pid" class="form-control" id="pid">
+                                    <option>选择物业</option>
+                                    {loop $properties $property}
+                                    <option value="{$property['id']}" {if $item['pid'] == $property['id']}selected='selected'{/if}>{$property['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择部门<span style="color: red">*</span></label>
+                            <div class="col-sm-5">
+                                <select name="departmentid" class="form-control" id="departmentid">
+                                    <option value="{$item['departmentid']}" >{$item['title']}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择员工<span style="color: red">*</span></label>
+                            <div class="col-sm-5">
+                                <select name="userid" class="form-control" id="userid">
+                                    <option value="{$item['staffid']}" >{$item['realname']}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='realname' class="form-control" disabled id="realname" value="{$item['realname']}"/>
+                                <input type='hidden' name='staffid' class="form-control"  value="{$item['staffid']}"  id="staffid"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">通知方式</label>
+                            <div class="col-sm-5">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type0" value="0" {if empty($item['type'])}checked="true" {/if} />
+                                    <label for="type0">暂不启用</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type1" value="1" {if $item['type']==1 }checked="true" {/if} />
+                                    <label for="type1">模板消息通知</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type2" value="2" {if $item['type']==2}checked="true" {/if} />
+                                    <label for="type2">短信通知</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type"  id="type3" value="3" {if $item['type']==3}checked="true" {/if} />
+                                    <label for="type3">全部通知</label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="cid" class="col-sm-2 control-label">通知类型</label>
+                            <div class="col-sm-5">
+                                {loop $categories $k $category}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" type="checkbox" value="{$category['id']}" name="cid[]" id="cid_{$k}" {if @strstr($cid,$category['id'])}checked='checked' {/if}>
+                                    <label for="cid_{$k}"> {$category['name']} </label>
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">省市区</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'dist' => $item['dist']))}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group region" {if !$regs}style="display: none"{/if}>
+                        <label for="" class="col-sm-2 control-label">小区</label>
+                        <div class="col-sm-10 content">
+
+                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function check(form){
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        console.log(regionids);
+        $("input[name='regionids']").val(regionids);
+        return true;
+    }
+    $(function () {
+        $("#pid").change(function () {
+            var pid = $("#pid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'mail','p'=> 'change'))}",{pid:pid},function(data){
+                var content ="<option>选择部门</option>";
+                for (var o in data) {
+                    content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                }
+                $('#departmentid').html(content);
+
+            })
+        })
+        $("input[name='type']").click(function(){
+            var type = $("input[name='type']:checked").val();
+            if(type == 3){
+                $(".birth").show();
+            }
+            if(type ==1 || type == 2){
+                $(".birth").hide();
+                $(".region").hide();
+            }
+        })
+
+    })
+    $(function () {
+        $("#departmentid").change(function () {
+            var departmentid = $("#departmentid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=> 'change','type'=>1))}",{departmentid:departmentid},function(data){
+                var content ="<option>选择员工</option>";
+                for (var o in data) {
+                    content +="<option value='"+data[o].id+"'>"+data[o].realname+"</option>";
+                }
+                $('#userid').html(content);
+
+            })
+        })
+    })
+    $(function () {
+        $("#userid").change(function () {
+            var userid = $("#userid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=> 'user'))}",{userid:userid},function(data){
+                $("#realname").val(data.realname);
+                $("#staffid").attr("value",data.id)
+
+            })
+        })
+    })
+
+</script>
+{template 'web/common/footer'}

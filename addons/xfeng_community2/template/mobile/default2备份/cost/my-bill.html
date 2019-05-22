@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的账单</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../wxq4/dist/css/weui.min.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../wxq4/dist/css/demos.css">
+    <style>
+        .weui-cells:after, .weui-cells:before{
+            position: static;
+        }
+        .tab-panel .tab-panel-item{
+            padding: 0;
+        }
+        .tab-panel{
+            background-color: #F5F5F9;
+        }
+        .check-box input[type="radio"], .checkall input[type="radio"]{
+            position: relative;
+            bottom: 1.1px;
+        }
+        .weui-cells{
+            font-size: 0.9em;
+            background-color: transparent;
+            margin-top: 0;
+        }
+        .weui-cell{
+            background-color: #FFFFff;
+            margin-bottom:1.17647059em;
+        }
+        .weui-cell:before{
+            border-top: none;
+        }
+        .weui-flex__item{
+            text-align: center;
+        }
+        .weui-flex__item p:last-child{
+            color: #A6A6A6;
+        }
+        .weui-dialog__btn{
+            color: #FF5E53;
+        }
+        .weui-dialog__ft{
+            font-size: 0.9em;
+        }
+        .weui-dialog__title{
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+<div class="m-tab" data-ydui-tab><!-- 这里添加data-ydui-tab就可以啦 -->
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><a href="javascript:;">未缴账单</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">缴费记录</a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active">
+            <div class="weui-cells">
+                <div class="weui-cells__title">
+                    <div class="weui-flex">
+                        <div class="weui-flex__item" style="color: #333;text-align: left">各项缴费单</div>
+                        <div class="weui-flex__item color_y" style="text-align: right" id="checkAll">全选</div>
+                    </div>
+                </div>
+                <div  class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <div class="check-box fl">
+                            <label>
+                                <input type="checkbox" name="my-bill-unpaid" id="" class="newslist" value="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><p>水费</p><p>缴费项目</p></div>
+                            <div class="weui-flex__item"><p>￥20</p><p>缴费金额</p></div>
+                            <div class="weui-flex__item"><p>2017/1/9</p><p>出账时间</p></div>
+                        </div>
+                    </div>
+                    <div class="weui-cell__ft color_y">未缴</div>
+                </div>
+                <div  class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <div class="check-box fl">
+                            <label>
+                                <input type="checkbox" name="my-bill-unpaid" id="" class="newslist" value="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><p>煤气费</p><p>缴费项目</p></div>
+                            <div class="weui-flex__item"><p>￥20</p><p>缴费金额</p></div>
+                            <div class="weui-flex__item"><p>2017/1/9</p><p>出账时间</p></div>
+                        </div>
+                    </div>
+                    <div class="weui-cell__ft color_y">未缴</div>
+                </div>
+            </div>
+            <div class="address_form_ft">
+                <a href="javascript:;" class="weui-btn register-guide-btn">付款</a>
+            </div>
+        </div>
+        <div class="tab-panel-item">
+            <div class="weui-cells">
+                <div class="weui-cells__title">
+                    <div class="weui-flex">
+                        <div class="weui-flex__item" style="color: #333;text-align: left">已缴费用单</div>
+                        <div class="weui-flex__item color_y" style="text-align: right" id="delect">删除</div>
+                    </div>
+                </div>
+                <div  class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <div class="check-box fl">
+                            <label>
+                                <input type="checkbox" name="my-bill-complete" id="" class="newslist" value="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><p>水费</p><p>缴费项目</p></div>
+                            <div class="weui-flex__item"><p>￥20</p><p>缴费金额</p></div>
+                            <div class="weui-flex__item"><p>2017/1/9</p><p>缴费时间</p></div>
+                        </div>
+                    </div>
+                    <div class="weui-cell__ft color_g">已缴</div>
+                </div>
+                <div  class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <div class="check-box fl">
+                            <label>
+                                <input type="checkbox" name="my-bill-complete" id="" class="newslist" value="">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="weui-cell__bd">
+                        <div class="weui-flex">
+                            <div class="weui-flex__item"><p>煤气费</p><p>缴费项目</p></div>
+                            <div class="weui-flex__item"><p>￥20</p><p>缴费金额</p></div>
+                            <div class="weui-flex__item"><p>2017/1/9</p><p>缴费时间</p></div>
+                        </div>
+                    </div>
+                    <div class="weui-cell__ft color_g">已缴</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../wxq4/dist/js/jquery-2.1.4.js"></script>
+<script src="../../wxq4/dist/js/jquery-weui.js"></script>
+<script src="../../wxq4/dist/js/fastclick.js"></script>
+<script src="../../wxq4/dist/js/common.js"></script>
+<script src="../../wxq4/dist/js/ydui.js"></script>
+<script>
+    $('#checkAll').click(function () {
+        $("input[name='my-bill-unpaid']").prop("checked",true);
+    })
+    $('#delect').click(function () {
+        $.confirm({
+            title: '确定删除?',
+            onOK: function () {
+                //点击确认
+                $("input[name='my-bill-complete']").each(function () {
+                    if($(this).prop("checked")==true){
+                        $(this).parent().parent().parent().parent().remove();
+                    }
+                });
+            },
+            onCancel: function () {
+            }
+        });
+    })
+</script>
+</body>
+</html>

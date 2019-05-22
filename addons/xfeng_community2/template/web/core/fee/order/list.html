@@ -1,0 +1,180 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>账单统计</h5>
+
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'order'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="order"/>
+                        <div class="row">
+                            <!--<div class="col-sm-2 m-b-xs">-->
+                                <!--<select name="status" class="form-control">-->
+                                    <!--<option value="">请选择支付状态</option>-->
+                                    <!--<option value="2" {if $_GPC['status'] == 2} selected{/if}>已支付</option>-->
+                                    <!--<option value="1" {if $_GPC['status'] == 1} selected{/if}>未支付</option>-->
+                                <!--</select>-->
+                            <!--</div>-->
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="paytype" class="form-control">
+                                    <option value="">请选择支付方式</option>
+                                    <option value="1" {if $_GPC['paytype'] == 1} selected{/if}>余额</option>
+                                    <option value="2" {if $_GPC['paytype'] == 2} selected{/if}>微信支付</option>
+                                    <option value="4" {if $_GPC['paytype'] == 4} selected{/if}>支付宝</option>
+                                    <option value="5" {if $_GPC['paytype'] == 5} selected{/if}>现金</option>
+                                    <option value="6" {if $_GPC['paytype'] == 6} selected{/if}>银联刷卡</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="price" class="form-control">
+                                    <option value="">选择金额</option>
+                                    <option value="1" {if $_GPC['price'] == 1} selected{/if}>大于0元</option>
+                                    <option value="2" {if $_GPC['price'] == 2} selected{/if}>小于等于0元</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>ID</th>
+                            <th>收费项目</th>
+                            <th>所属小区</th>
+                            <th>楼宇</th>
+                            <th>单元</th>
+                            <th>房号</th>
+                            <th>账单日期</th>
+                            <th>状态</th>
+                            <th>应缴费用</th>
+                            <th>实付</th>
+                            <th>支付方式</th>
+                            <th>付款时间</th>
+                            <th>操作员</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{$item['regiontitle']}</td>
+                            <td>{$item['build']}栋</td>
+                            <td>{$item['unit']}单元</td>
+                            <td>{$item['room']}室</td>
+                            <td>{$item['jftime']}</td>
+                            <td>
+                                {if $item['status'] == 2}<span class="label label-success">已支付</span>{else}<span class="label label-danger">未支付</span>{/if}
+                            </td>
+                            <td>{$item['price']}</td>
+                            <td>{$item['pay_price']}</td>
+                            <td>
+                                {if $item['paytype'] == 5}现金{elseif $item['paytype']== 2}微信支付{elseif $item['paytype']== 4}支付宝{elseif $item['paytype']== 6}银联刷卡{elseif $item['paytype']== 1}余额{/if}
+                            </td>
+                            <td>{$item['paytime']}</td>
+                            <td>{$item['username']}</td>
+                            <td>
+                                {if ($user && $menu_opss && @in_array('fee_orderDetail', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'order','p' => 'add','id' => $item['id']))}" title="查看" class="btn btn-primary btn-sm">查看</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_orderDel', $menu_opss)) || empty($user)}
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'order','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                {/if}
+                                {if $p161 || $item['price'] > 0}
+                                {if ($user && $menu_opss && @in_array('fee_orderPrint', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'order','p' => 'print','id' => $item['id']))}" title="打印" class="btn btn-warning btn-sm" target="_blank">打印</a>
+                                {/if}
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_orderPlprint', $menu_opss)) || empty($user)}
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'center','p' => 'display','roomid' => $item['roomid'],'status' => 2))}" title="合并打印" class="btn btn-danger btn-sm">合并打印</a>
+                                {/if}
+                                {if ($user && $menu_opss && @in_array('fee_orderReckon', $menu_opss)) || empty($user)}
+                                <a data-toggle="modal" data-target="#myModal1" data-id="{$item['id']}" title="退款" class="btn btn-primary btn-sm" onclick="showid(this)">退款</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">退款</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form1" onsubmit="return check(this);">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">备注</label>
+                        <div class="col-sm-10">
+                            <textarea name="remark" class="form-control"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="id" value="" id="id">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="refund" id="refund" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function showid(obj) {
+        $("#id").val(obj.getAttribute("data-id"));
+    }
+</script>

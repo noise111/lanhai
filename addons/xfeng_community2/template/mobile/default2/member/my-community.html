@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的小区</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/jquery-weui.min.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/magic-check.css">
+    <link rel="stylesheet" href="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/css/demos.css">
+    <style>
+        body{
+            background: #ffffff;
+        }
+        .tab-nav:after{
+            border-bottom: none;
+        }
+        .weui-article{
+            padding: 10px;
+        }
+        .car-detail-cells{
+            position: relative;
+            top: 0;
+            width: 95%;
+            margin: 20px auto;
+            left: 0;
+        }
+        .car-flex{
+            padding: 10px;
+        }
+        .weui-flex__item{
+            text-align: center;
+        }
+        .weui-flex__item img{
+            width: 32px;
+        }
+        .weui-flex__item p{
+            font-size: 0.9em;
+        }
+        .weui-check__label:before{
+            content: " ";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            color: #d9d9d9;
+            top: 0;
+            border-top: 1px solid #d9d9d9;
+            -webkit-transform-origin: 0 0;
+            transform-origin: 0 0;
+            -webkit-transform: scaleY(.5);
+            transform: scaleY(.5);
+        }
+        .weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{
+            color: #FA7E0A;
+        }
+        .weui-cell__bd{
+            font-size: 0.65rem;
+        }
+        .weui-cell__bd p{
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="service_banner">
+    <img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/service/homemaking-banner.jpg">
+</div>
+<div id="J_Tab" class="m-tab" data-ydui-tab>
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><a href="javascript:;">物业介绍</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">人员介绍</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">小区客服</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">物业评价</a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active">
+            <article class="weui-article">
+                高科物业注册资金500万元，具有物业管理一级资质，是中国物业协会、陕西省物业协会会员单位，西安市物业协会副会长单位，西安市保安协会会员单位。公司实行董事会领导下的总经理负责制，设有三个项目服务中心以及技术部、安全事务部、行政人事部、品质部和财务部五个职能部门，现聘用员工400余名，其中管理人员50人，全部具有大专以上学历，其中包括研究生3人，高级职称3人，中级职称16人。操作层各类水、电、暖、绿化等技工60余人，协防人员170余人，保洁人员120余人。公司部门经理以上管理人员均取得国家建设部颁发的物业管理资格证书，高级管理人员经过了严格的专业培训，具有多年物业服务管理工作经验。
+            </article>
+        </div>
+        <div class="tab-panel-item">
+            <div class="default-m-list">
+                    <a href="javascript:;" class="default-m-list-item">
+                        <div class="default-m-list-img">
+                            <img src="http://www.jq22.com/demo/jQuery-hover-920160727/images/member_270x210.jpg">
+                            <div class="default-m-list-bottom"></div>
+                        </div>
+                        <div class="default-m-list-msg">
+                            <div class="default-m-list-name">
+                                <div>总经理</div>
+                                <div>赵小宝</div>
+                            </div>
+                            <p>15895810157</p>
+                        </div>
+                    </a>
+                    <a href="javascript:;" class="default-m-list-item">
+                        <div class="default-m-list-img">
+                            <img src="http://www.jq22.com/demo/jQuery-hover-920160727/images/member_270x210.jpg">
+                            <div class="default-m-list-bottom"></div>
+                        </div>
+                        <div class="default-m-list-msg">
+                            <div class="default-m-list-name">
+                                <div>行政总监</div>
+                                <div>赵小宝</div>
+                            </div>
+                            <p>15895810157</p>
+                        </div>
+                    </a>
+                <a href="javascript:;" class="default-m-list-item">
+                    <div class="default-m-list-img">
+                        <img src="http://www.jq22.com/demo/jQuery-hover-920160727/images/member_270x210.jpg">
+                        <div class="default-m-list-bottom"></div>
+                    </div>
+                    <div class="default-m-list-msg">
+                        <div class="default-m-list-name">
+                            <div>总经理</div>
+                            <div>赵小宝</div>
+                        </div>
+                        <p>15895810157</p>
+                    </div>
+                </a>
+                <a href="javascript:;" class="default-m-list-item">
+                    <div class="default-m-list-img">
+                        <img src="http://www.jq22.com/demo/jQuery-hover-920160727/images/member_270x210.jpg">
+                        <div class="default-m-list-bottom"></div>
+                    </div>
+                    <div class="default-m-list-msg">
+                        <div class="default-m-list-name">
+                            <div>行政总监</div>
+                            <div>赵小宝</div>
+                        </div>
+                        <p>15895810157</p>
+                    </div>
+                </a>
+                </div>
+        </div>
+        <div class="tab-panel-item">
+            <div class="weui-cells car-detail-cells">
+                <div class="weui-flex car-flex">
+                    <a class="weui-flex__item">
+                        <img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/my/phone.png">
+                        <p>小区电话</p>
+                    </a>
+                    <a class="weui-flex__item">
+                        <img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/my/kefu.png">
+                        <p>小区客服</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel-item">
+            <div class="group-evaluation" style="margin-top: 1.17647059em">
+                <div class="group-line"></div>
+                <div class="weui-cells-group">
+                    <section class="main">
+                        <div class="main-wrap">
+                            <span class="revtit">综合评分:</span>
+                            <div id="mydiv1" currentindex="1" class="mydiv">
+                                <ul class="star_ul">
+                                    <li num="1"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="2"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="3"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="4"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="5"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="main-wrap">
+                            <span class="revtit">基本素质:</span>
+                            <div id="mydiv2" currentindex="0" class="mydiv">
+                                <ul class="star_ul">
+                                    <li num="1"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="2"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="3"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="4"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="5"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="main-wrap">
+                            <span class="revtit">仪容着装:</span>
+                            <div id="mydiv3" currentindex="0" class="mydiv">
+                                <ul class="star_ul">
+                                    <li num="1"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="2"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="3"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="4"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                    <li num="5"><img src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon/star_empty.png" class="xing_hui"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <div class="group-line"></div>
+                <div class="weui-cells  weui-cells_checkbox" style="margin-top: 0">
+                    <div class="weui-cell group-evaluation-bg">
+                        <div class="weui-cell__bd">
+                            <textarea class="weui-textarea" placeholder="请输入评价内容" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="group-line"></div>
+                    <label class="weui-cell weui-check__label" for="s11">
+                        <div class="weui-cell__hd">
+                            <input type="checkbox" class="weui-check" name="checkbox1" id="s11">
+                            <i class="weui-icon-checked"></i>
+                        </div>
+                        <div class="weui-cell__bd">
+                            <p>匿名评价</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <div class="address_form_ft">
+                <a href="javascript:;" class="weui-btn register-guide-btn">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/fastclick.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/common.js"></script>
+<script src="../../../weiqing/addons/xfeng_community/template/mobile/default2/static/js/ydui.js"></script>
+<script>
+//    评价
+    var isclick = false;
+    function change(mydivid,num) {
+        if (!isclick) {
+            var tds = $("#"+mydivid+" ul li");
+            for (var i = 0; i < num; i++) {
+                var td = tds[i];
+                $(td).find("img").attr("src","../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon\/star_full.png");
+            }
+            var tindex = $("#"+mydivid).attr("currentIndex");
+            tindex = tindex==0?0:tindex+1;
+            for (var j = num; j < tindex; j++) {
+                var td = tds[j];
+                $(td).find("img").attr("src","../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon\/star_empty.png");
+            }
+            $("#"+mydivid).attr("currentIndex",num);
+        }
+    }
+    function repeal(mydivid,num) {
+        if (!isclick) {
+            var tds = $("#"+mydivid+" ul li");
+            var tindex = $("#"+mydivid).attr("currentIndex");
+            tindex = tindex==0?0:tindex+1;
+            for (var i = tindex; i < num; i++) {
+                var td = tds[i];
+                $(td).find("img").attr("src","../../../weiqing/addons/xfeng_community/template/mobile/default2/static/images/icon\/star_empty.png");
+            }
+            $("#"+mydivid).attr("currentIndex",num);
+        }
+    }
+    function change1(mydivid,num) {
+        if (!isclick) {
+            change(mydivid,num);
+        }
+        else {
+            alert("Sorry,You had clicked me!");
+        }
+    }
+    $(function(){
+        initEvent('mydiv1');
+        initEvent('mydiv2');
+        initEvent('mydiv3');
+    });
+    function initEvent(mydivid) {
+        var tds = $("#"+mydivid+" ul li");
+        for (var i = 0; i < tds.length; i++) {
+            var td = tds[i];
+            $(td).on('mouseover',function(){var num = $(this).attr("num");change(mydivid,num);});
+            $(td).on('click',function(){var num = $(this).attr("num");change1(mydivid,num);});
+        }
+    }
+</script>
+</body>
+</html>

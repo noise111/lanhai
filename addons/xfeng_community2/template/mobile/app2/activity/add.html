@@ -1,0 +1,342 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>发布活动</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">活动标题</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="活动标题" id="title" v-model="item.title">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">报名数量</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="如果允许一人报多个名额，请设置每人最多可报名数量。" id="number" v-model="item.number">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">报名人数</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="当前活动最大报名人数" id="num" v-model="item.num">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">预付定金</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="活动如需支付定金，请填写定金金额" id="price" v-model="item.price">
+            </div>
+        </div>
+        <div class="weui-cells input-right">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="" class="weui-label">推荐置顶</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" v-model="item.status">
+                        <option value="1">是</option>
+                        <option value="0">否</option>
+                    </select>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">有&nbsp;&nbsp;效&nbsp;&nbsp;期</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" id='starttime' placeholder="请选择开始日期" v-model="item.starttime"/>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">有&nbsp;&nbsp;效&nbsp;&nbsp;期</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" id='endtime' placeholder="请选择结束日期" v-model="item.endtime"/>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">报名截止</label></div>
+            <div class="weui-cell__bd">
+                <input type="text" id='enddate' placeholder="请选择截止日期" v-model="item.enddate"/>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="输入活动描述..." rows="3" id="content" v-model="item.content"></textarea>
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files" id="uploaderFiles" v-if="morepic">
+                            <!--多图-->
+                            <!--<li class="weui-uploader__file" :style="'background-image:url('+thumb+')'" v-for="(thumb, index) in morepic"></li>-->
+
+                            <li class="weui-uploader__file" :style="'background-image:url('+morepic+')'" ></li>
+                        </ul>
+                        <div class="weui-uploader__input-box" id="addPic">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__hd"><label for="village" class="weui-label">选择小区</label></div>
+            <div class="weui-cell__bd">
+
+                <input class="weui-input" id="village" type="text" readonly="" >
+
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </a>
+    </div>
+    <div style="margin: 20px 20px" >
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+</script>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            item:{
+                title:'',
+                content:'',
+                starttime:'',
+                endtime:'',
+                enddate:''
+
+            },
+            id:id,
+            morepic: '', //多图定义,
+
+        },
+        beforeMount: function () {
+            var self = this
+            console.log(self.item.startttime)
+            console.log(self.item)
+            var url = "{php echo wxapp_url('appactivity/detail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+                self.morepic = self.item.picurl
+            })
+
+
+        },
+        mounted: function () {
+            var that = this
+            wx.ready(function () {
+                $("#addPic").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds);
+                        }
+                    })
+                });
+            });
+            $("#starttime").datetimePicker({
+                title: '活动有效开始时间',
+                yearSplit: '年',
+                monthSplit: '月',
+                dateSplit: '日',
+                times: function () {
+                    return [  // 自定义的时间
+
+                    ];
+                },
+                onChange: function (picker, values, displayValues) {
+                    that.item.starttime = displayValues[0]+'-'+displayValues[1]+'-'+displayValues[2]
+                }
+            });
+            $("#endtime").datetimePicker({
+                title: '活动有效开始时间',
+                yearSplit: '年',
+                monthSplit: '月',
+                dateSplit: '日',
+                times: function () {
+                    return [  // 自定义的时间
+
+                    ];
+                },
+                onChange: function (picker, values, displayValues) {
+                    that.item.endtime = displayValues[0]+'-'+displayValues[1]+'-'+displayValues[2]
+                }
+            });$("#enddate").datetimePicker({
+                title: '活动有效开始时间',
+                yearSplit: '年',
+                monthSplit: '月',
+                dateSplit: '日',
+                times: function () {
+                    return [  // 自定义的时间
+
+                    ];
+                },
+                onChange: function (picker, values, displayValues) {
+                    that.item.enddate = displayValues[0]+'-'+displayValues[1]+'-'+displayValues[2]
+                }
+            });
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                var url = "{php echo wxapp_url('appactivity/add')}";
+                self.item.id=self.id
+                self.item.regionid = $("#village").data('values')
+                self.item.morepic = self.morepic
+                self.item.starttime = $('#starttime').val()
+                self.item.endtime = $('#endtime').val()
+                self.item.enddate = $('#enddate').val()
+                if(self.item.title == '' || self.item.content == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                console.log(self.item)
+                $.showLoading('正在提交');
+                $.getJSON(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code ==0){
+                        //提交成功提示内容: data.data.content
+                        setTimeout(function () {
+                            $.toast('添加成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'activity'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == 2){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg,'cancel');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                })
+            }
+            ,
+            wxUploadImg:function (localIds) {
+                var localId = localIds[idx]
+                var that = this
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        that.getImg(serverId);
+                        idx++ // 上传序号，上传一张 累计 +1
+                        // serverIds+=res.serverId+','; //存储图片媒体ID，用，号分割
+                        //本地图片ID 还没全部获取完图片媒体ID
+                        if (idx < localIds.length) {
+                            that.wxUploadImg(localIds); //调用上传递归函数
+                        }
+                        else {
+                            idx = 0;
+                            serverIds = '';
+                            return true;
+                        }
+                    },
+                    fail: function (res) {//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg：" + JSON.stringify(res));
+                    }
+                });
+            },
+            getImg: function (serverId) {
+                var that = this
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url, {serverId: serverId}, function (ret) {
+                    var imgUrl = ret.data.imgUrl
+                    that.morepic = imgUrl
+                })
+            }
+        }
+    })
+
+</script>
+<script>
+
+    $.post("{php echo wxapp_url('appregion/list')}", function (data) {
+        var json = new Array();
+        json = data.data;
+        $("#village").select({
+            title: "选择小区",
+            multi: true,
+            items:json,
+            beforeClose: function(values, titles) {
+                if(values.indexOf("1") !== -1) {
+                }
+            },
+            onChange: function(d) {
+                console.log(this, d);
+            },
+            onClose: function (d) {
+                console.log('close')
+            }
+        });
+
+    }, 'json')
+
+</script>
+{template 'app2/footer'}

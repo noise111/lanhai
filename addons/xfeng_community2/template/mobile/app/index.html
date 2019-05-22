@@ -1,0 +1,47 @@
+{template 'app/header'}
+<div class="page">
+    <!-- 标题栏 -->
+    <header class="bar bar-nav">
+        <!--<a class="icon icon-me pull-left open-panel"></a>-->
+        <h1 class="title">管理系统</h1>
+    </header>
+    <!-- 工具栏 -->
+
+
+    <!-- 这里是页面内容区 -->
+    <div class="content">
+        {if $menus}
+        <div class="search-grids" style="margin-bottom: 30px">
+
+            {loop $menus $item}
+            <a href="{php echo $this->createMobileUrl('xqsys',array('op' => 'list','type' => $item))}" class="search-grid">
+                <div class="search-grid-icon">
+                    <img src="{$data[$item][icon]}">
+                </div>
+                <p class="search-grid-lable">{$data[$item][$item]}</p>
+            </a>
+            {/loop}
+
+            {if empty($_SESSION['sysopenid'])}
+            <a href="#" onclick="window.location.href='{php echo $this->createMobileUrl('xqsys',array('op' => 'logout'))}'" class="search-grid">
+                <div class="search-grid-icon">
+                    <img src="{$_W['siteroot']}addons/{MODULE_NAME}/template/mobile/app/static/img/tc.png">
+                </div>
+                <p class="search-grid-lable">退出系统</p>
+            </a>
+            {/if}
+        </div>
+        {/if}
+    </div>
+</div>
+<script>
+    function show(id) {
+        $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'list'))}",{id:id},function (data) {
+                if(data){
+                    $("#content").html(data.content);
+                    $("#xqtitle").html(data.xqtitle);
+                }
+        },'json');
+    }
+</script>
+{template 'app/footer'}

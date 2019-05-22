@@ -1,0 +1,125 @@
+<div class="cd-bouncy-nav-modal">
+    <div class="weui-tab">
+        <div class="weui-navbar">
+            <a class="weui-navbar__item weui-bar__item--on" href="#tab1">小区一</a>
+            <a class="weui-navbar__item" href="#tab2">小区二</a>
+            <a class="weui-navbar__item" href="#tab3">小区三</a>
+        </div>
+        <div class="weui-tab__bd">
+            <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+                <nav>
+                    <ul class="cd-bouncy-nav home-bouncy-nav" id="openlist">
+                        <div class="weui-loadmore weui-loadmore_line" style="display: none;border-top:0" id="hideLoader" >
+                            <span class="weui-loadmore__tips" >您还没有注册为小区住户,请您完成注册后使用该功能</span>
+                            <a href="{php echo $this->createMobileUrl('register','op' =>'guide','regionid'=> {$_SESSION['community']['regionid']},'memberid' => {$_SESSION['community']['id']},'p'=>1)}">注册</a>
+                        </div>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <a href="#0" class="cd-close"><i class="iconfont">&#xe60e;</i></a>
+</div>
+<div class="weui-tabbar">
+    <a href="{php echo $this->createMobileUrl('home')}" class="weui-tabbar__item index-ft-btn {if $_GPC['do'] == 'home'}footer-on{/if}">
+        <div class="weui-tabbar__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/index01{if $_GPC['do'] == 'home'}-active{/if}.png">
+        </div>
+        <p class="weui-tabbar__label">
+            <span>社区</span>
+        </p>
+    </a>
+    <a href="{php echo $this->createMobileUrl('service')}" class="weui-tabbar__item index-ft-btn {if $_GPC['do'] == 'service'}footer-on{/if}">
+        <div class="weui-tabbar__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/index02{if $_GPC['do'] == 'service'}-active{/if}.png">
+        </div>
+        <p class="weui-tabbar__label">
+            <span>服务</span>
+        </p>
+    </a>
+    <a href="javascript:;" class="weui-tabbar__item" style="position: relative" id="unlock">
+        <div class="outbox">
+            <span class="open"></span>
+        </div>
+        <div class="weui-tabbar__icon">
+        </div>
+        <p class="weui-tabbar__label">
+            <span>门禁</span>
+        </p>
+    </a>
+    <a href="{php echo $this->createMobileUrl('news')}" class="weui-tabbar__item index-ft-btn {if $_GPC['do'] == 'news'}footer-on{/if}">
+        <div class="weui-tabbar__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/index03{if $_GPC['do'] == 'news'}-active{/if}.png">
+            <sup><span class="vux-badge vux-badge-single">2</span></sup>
+        </div>
+        <p class="weui-tabbar__label">
+            <span>消息</span>
+        </p>
+    </a>
+    <a href="{php echo $this->createMobileUrl('member')}" class="weui-tabbar__item index-ft-btn {if $_GPC['do'] == 'member'}footer-on{/if}">
+        <div class="weui-tabbar__icon">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/index04{if $_GPC['do'] == 'member'}-active{/if}.png">
+        </div>
+        <p class="weui-tabbar__label">
+            <span>我的</span>
+        </p>
+    </a>
+</div>
+<script type="text/html" id="open_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <li data-id="{{ d.list[i].id }}">
+        <div class="home-bouncy-img">
+            <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-rental.png">
+        </div>
+        <p class="home-bouncy-txt">{{ d.list[i].title }}{{ d.list[i].unit }}</p>
+    </li>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        if( localStorage.lng == undefined || localStorage.lat == undefined ){
+            localStorage.lastname="Smith";
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    var mk = new BMap.Marker(r.point);
+                    var lng = localStorage.lng = r.point.lng;
+                    var lat = localStorage.lat = r.point.lat;
+                    var regionid = "{$_SESSION['community']['regionid']}";
+                    var url = "{php echo wxapp_url('open/list')}"+"&lng="+lng+"&lat="+lat+"&regionid="+regionid;
+                    loaddata(url, $("#openlist"), 'open_list', true, function () {
+                        $('.weui-tab__bd-item li').click(function(){
+                            var id = $(this).data('id')
+                            $.post("{php echo wxapp_url('open/lock')}",{id:id},function (ret) {
+                                if(ret.err_code==0){
+                                    //提交成功提示内容: data.data.content
+                                    $.toast(ret.data.content, "text");
+                                }
+                            },'json')
+                        })
+                    });
+                }
+                else {
+                    alert('获取当前位置失败,请确认是否开启定位服务');
+                }
+            },{enableHighAccuracy: true})
+        }
+        else {
+            var regionid = "{$_SESSION['community']['regionid']}";
+            var url = "{php echo wxapp_url('open/list')}"+"&lng="+localStorage.lng+"&lat="+localStorage.lat+"&regionid="+regionid;
+            loaddata(url, $("#openlist"), 'open_list', true, function () {
+                $('.weui-tab__bd-item li').click(function(){
+                    var id = $(this).data('id')
+                    $.post("{php echo wxapp_url('open/lock')}",{id:id},function (ret) {
+                        if(ret.err_code==0){
+                            //提交成功提示内容: data.data.content
+                            $.toast(ret.data.content, "text");
+                        }
+                    },'json')
+                })
+            });
+        }
+    });
+</script>

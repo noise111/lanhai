@@ -1,0 +1,98 @@
+{template 'web/common/header-base'}
+<style>
+    .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+        vertical-align:middle;
+        text-align: center;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>寄件管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'parcel'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="express"/>
+                        <input type="hidden" name="op" value="parcel"/>
+                        <div class="row">
+                            <div class="col-sm-3 m-b-xs">
+                                <select name="status" id="status" class="form-control">
+                                    <option selected value="" >选择状态</option>
+                                    <option value="1">无状态</option>
+                                    <option value="2">已发货</option>
+                                    <option value="3">已代收</option>
+                                    <option value="4">已取货</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                {php echo tpl_form_field_daterange('createtime', $createtime),$time = false}
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                <input type="text" class="form-control"  placeholder="输入寄件人电话号码" name="sendphone" value="{$_GPC['sendphone']}" />
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control"  placeholder="输入收件人电话号码" name="phone" value="{$_GPC['phone']}" />
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>寄件人信息</th>
+                                <th>收件人信息</th>
+                                <th>物流公司</th>
+                                <th>物品类型</th>
+                                <th>物流状态</th>
+                                <th>下单时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['realname']}{$item['sendphone']}<br>{$item['sendaddress']}{$item['sendaddress_detail']}</td>
+                                <td>{$item['name']}{$item['phone']}<br>{$item['address']}{$item['address_detail']}</td>
+                                <td>{$item['company']}</td>
+                                <td>{$item['goodstatus']}</td>
+                                <td style="color: {if $item['status']==1}red{else if $item['status']==2}green{else if $item['status']==3}orange{else if $item['status']==4}blue{/if}">
+                                    {if $item['status']==1}未发货{else if $item['status']==2}已发货{else if $item['status']==3}已代收{else if $item['status']==4}已取件{/if}
+                                </td>
+                                <td>{php echo date('Y-m-d H:i', $item['createtime'])}</td>
+                                <td>
+                                    <a href="{php echo $this->createWebUrl('express',array('op' => 'parcel','p' => 'edit','id' => $item['id']))}" title="处理" class="btn btn-primary ">处理</a>
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

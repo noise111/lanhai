@@ -1,0 +1,151 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>抄表列表</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('fee',array('op' => 'entery'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="fee"/>
+                        <input type="hidden" name="op" value="entery"/>
+                        <div class="row">
+                            <div class="col-sm-4 m-b-xs">
+                                <a href="{php echo $this->createWebUrl('category',array('op' => 'list','type' => 9))}" class="btn btn-primary"><i class="fa fa-plus"></i>抄表分类</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'entery','p'=> 'add'))}" ><i class="fa fa-plus"></i>添加抄表</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee', array('op' => 'entery','p' => 'import'))}"> 导入抄表</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'entery','p'=> 'edit'))}" ><i class="fa fa-plus"></i>生成费用</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'entery','p'=> 'qr'))}" ><i class="fa fa-plus"></i>生成二维码</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('fee',array('op'=> 'entery','p'=> 'download'))}" ><i class="fa fa-plus"></i>一键下载二维码</a>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="category" class="form-control">
+                                    <option value="">抄表类型</option>
+                                    {loop $category $cate}
+                                    <option value="{$cate['id']}">{$cate['name']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary">搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}" />
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>手机</th>
+                            <th>所属小区</th>
+                            <th>地址</th>
+                            <th>上期度数</th>
+                            <th>本期度数</th>
+                            <th>抄表类型</th>
+                            <th>抄表时间</th>
+                            <th>费用</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['realname']}</td>
+                            <td>{$item['mobile']}</td>
+                            <td>{$item['title']}</td>
+                            <td>{if $item['raddress']}{$item['raddress']}{else}{$item['address']}{/if}</td>
+                            <td>{$item['old_num']}</td>
+                            <td>{$item['number']}</td>
+                            <td>{$item['name']}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>{$item['fee']}</td>
+                            <td>{if $item['status']}已支付{else}未支付{/if}</td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm">录入</a>
+                                {if $item['status'] != 1}<span class="btn btn-warning btn-sm" onclick="show('{$item['id']}')" data-toggle="modal" data-target="#myModal1">支付</span>{/if}
+                                <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'entery','p' => 'del','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title">备注信息</h4>
+
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type='hidden' name='enteryid' id='enteryid' class="form-control"/>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <select class="form-control" name="paytype" id="xqregionid">
+                                <option value="2">现金支付</option>
+                                <option value="3">刷卡支付</option>
+                                <option value="4">转账支付</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function show(id) {
+        var id = id;
+        $("#enteryid").val(id);
+
+    }
+</script>

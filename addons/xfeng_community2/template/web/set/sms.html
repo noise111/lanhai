@@ -1,0 +1,177 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>短信配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('sms')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+<form action="" method="post" class="form-horizontal form">
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">短信接口</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s1]" id="s1_1" value="1" {if @empty($set['s1']['value']) || $set['s1']['value']==1} checked{/if} />
+                            <label for="s1_1">乐信通(<a href="http://cn.mikecrm.com/0Z3k25z" style="color:green" target="_blank">立即申请</a>)</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s1]" id="s1_2" value="2" {if @$set['s1']['value']==2 }
+                            checked{/if} />
+                            <label for="s1_2">聚合(<a href="https://www.juhe.cn/docs/api/id/54" style="color:green" target="_blank">立即申请</a>)
+                                </label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s1]" id="s1_3" value="3" {if @$set['s1']['value']==3 }
+                            checked{/if} />
+                            <label for="s1_3">阿里云(<a href="https://market.aliyun.com/products/57002003/cmapi011900.html" style="color:green" target="_blank">立即申请</a>)
+                                </label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">统一短信接口</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s2]" id="s2_1" value="1" {if @$set['s2']['value']==1}
+                            checked{/if} />
+                            <label for="s2_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s2]" id="s2_2" value="0" {if @empty($set['s2']['value'])}
+                            checked{/if} />
+                            <label for="s2_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">房号短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s3]" id="s3_1" value="1" {if @$set['s3']['value']==1}
+                            checked{/if} />
+                            <label for="s3_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s3]" id="s3_2" value="0" {if @empty($set['s3']['value'])}
+                            checked{/if} />
+                            <label for="s3_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">注册短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s4]" id="s4_1" value="1" {if @$set['s4']['value']==1}
+                            checked{/if} />
+                            <label for="s4_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s4]" id="s4_2" value="0" {if @empty($set['s4']['value'])}
+                            checked{/if} />
+                            <label for="s4_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">意见报修短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s5]" id="s5_1" value="1" {if @$set['s5']['value']==1}
+                            checked{/if} />
+                            <label for="s5_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s5]" id="s5_2" value="0" {if @empty($set['s5']['value'])}
+                            checked{/if} />
+                            <label for="s5_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">超市发货短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s6]" id="s6_1" value="1" {if @$set['s6']['value']==1}
+                            checked{/if} />
+                            <label for="s6_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s6]" id="s6_2" value="0" {if @empty($set['s6']['value'])}
+                            checked{/if} />
+                            <label for="s6_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">物业缴费短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s7]" id="s7_1" value="1" {if @$set['s7']['value']==1}
+                            checked{/if} />
+                            <label for="s7_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s7]" id="s7_2" value="0" {if @empty($set['s7']['value'])}
+                            checked{/if} />
+                            <label for="s7_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">小区公告短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s17]" id="s17_1" value="1" {if @$set['s17']['value']==1}
+                            checked{/if} />
+                            <label for="s17_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s17]" id="s17_2" value="0" {if @empty($set['s17']['value'])}
+                            checked{/if} />
+                            <label for="s17_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">挪车短信</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s20]" id="s20_1" value="1" {if @$set['s20']['value']==1}
+                            checked{/if} />
+                            <label for="s20_1">开启</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="sms[s20]" id="s20_2" value="0" {if @empty($set['s20']['value'])}
+                            checked{/if} />
+                            <label for="s20_2">关闭</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+
+</form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

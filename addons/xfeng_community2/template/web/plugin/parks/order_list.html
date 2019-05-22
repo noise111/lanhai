@@ -1,0 +1,217 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $category == 1 && $p == 'list'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'list','category'=>1))}" title="月租车缴费记录" >月租车缴费记录</a></li>
+                        <li {if $category == 2 && $p == 'list'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'list','category'=>2))}" title="临时车缴费记录" >临时车缴费记录</a></li>
+                        <li {if $p == 'payoff'}class="active"{/if}><a href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'payoff'))}" title="超时未支付" >超时未支付</a></li>
+                    </ul>
+                    {if $p == 'list'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="order"/>
+                            <input type="hidden" name="p" value="list"/>
+                            <input type="hidden" name="category" value="{$_GPC['category']}"/>
+                            <div class="row">
+                                <div class="col-sm-3 m-b-xs">
+                                    <select name="pid" id="pid" class="form-control">
+                                        <option value="">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $_GPC['pid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    {php echo tpl_form_field_daterange('starttime', $starttime, $time = false)}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="按车牌号查找" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>订单号</th>
+                                <th>车牌号</th>
+                                <th>车场</th>
+                                <th>金额</th>
+                                {if $category == 1}
+                                <th>充值时间</th>
+                                <th>延期方式</th>
+                                <th>延期状态</th>
+                                {/if}
+                                {if $category == 2}
+                                <th>进场时间</th>
+                                <th>出场时间</th>
+                                <th>支付类型</th>
+                                <!--<th>抬杆状态</th>-->
+                                {/if}
+                                <th>支付状态</th>
+                                <th>支付方式</th>
+                                <th>支付时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['ordersn']}</td>
+                                <td>{$item['carno']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{$item['price']}</td>
+                                {if $category == 1}
+                                <td>{$item['num']}天</td>
+                                <td>
+                                    <label class='label {if $item['type']==2}label-danger{else if $item['type']==1}label-success{else} label-default{/if}'>{if $item['type']==1}线上延期{else}线下延期{/if}</label>
+                                </td>
+                                <td>
+                                    <label class='label {if $item['enable']==1}label-success{else} label-default{/if}'>{if $item['enable']==1}成功{else}失败{/if}
+                                </td>
+                                {/if}
+                                {if $category == 2}
+                                <td>{php echo date('Y-m-d H:i',$item['intotime'])}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['outtime'])}</td>
+                                <td>
+                                    <label class='label {if $item['type']==2}label-danger{else if $item['type']==1}label-success{else} label-default{/if}'>{if $item['type']==1}线上支付{else}线下支付{/if}
+                                </td>
+                                <!--<td>-->
+                                <!--<label class='label {if $item['rodtype']==2}label-danger{else if $item['rodtype']==1}label-success{else} label-default{/if}'>{if $item['rodtype']==1}成功{else}失败{/if}-->
+                                <!--</td>-->
+                                {/if}
+                                <td>
+                                    <label class='label {if $item['status']==0}label-warning{else if $item['status']==1}label-success{else} label-default{/if}'>{if $item['status']==1}已支付{else}未支付{/if}</label>
+                                </td>
+                                <td>{if $item['paytype'] == 1}余额{elseif $item['paytype'] == 2}微信{elseif $item['paytype'] == 4}支付宝{elseif $item['paytype'] == 5}现金{elseif $item['paytype'] == 6}刷卡{elseif $item['paytype'] == 7}余额代扣{elseif $item['paytype']==8}免费{else}微信{/if}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>
+                                    {if $item['enable'] == 2 && $category==1}
+                                    {if ($user && $menu_opss && @in_array('parks_orderChange', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('parks', array('op' => 'order','p' => 'change','id' => $item['id']))}" title="同步" class="btn btn-primary btn-sm">同步</a>
+                                    {/if}
+                                    {/if}
+                                    {if $category == 1}
+                                    {if ($user && $menu_opss && @in_array('parks_orderDel', $menu_opss)) || empty($user)}
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm">删除</a>
+                                    {/if}
+                                    {/if}
+                                    {if $category == 2}
+                                    {if ($user && $menu_opss && @in_array('parks_orderShortDel', $menu_opss)) || empty($user)}
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm">删除</a>
+                                    {/if}
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                    {/if}
+                    {if $p == 'payoff'}
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="order"/>
+                            <input type="hidden" name="p" value="list"/>
+                            <input type="hidden" name="category" value="{$_GPC['category']}"/>
+                            <div class="row">
+                                <div class="col-sm-3 m-b-xs">
+                                    <select name="pid" id="pid" class="form-control">
+                                        <option value="">请选择车场</option>
+                                        {loop $parks $k $park}
+                                        <option value="{$park['id']}" {if $park['id'] == $_GPC['pid']}selected{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                                <div class="col-sm-3 m-b-xs">
+                                    {php echo tpl_form_field_daterange('starttime', $starttime, $time = false)}
+                                </div>
+                                <div class="col-sm-6 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="keyword" placeholder="按车牌号查找" value="{$_GPC['keyword']}">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>id</th>
+                                <th>订单号</th>
+                                <th>车牌号</th>
+                                <th>车场</th>
+                                <th>类型</th>
+                                <th>金额</th>
+                                <th>出场时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['ordersn']}</td>
+                                <td>{$item['carno']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{if $item['category']==1}月租车{elseif $item['category']==2}临时车{elseif $item['category']==3}余额充值{/if}</td>
+                                <td>{$item['price']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('parks_orderPayoffDel', $menu_opss)) || empty($user)}
+                                    <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('parks',array('op' => 'order','p' => 'delete','id' => $item['id']))}" class="btn btn-default btn-sm">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

@@ -1,0 +1,115 @@
+<?php global $_GPC;?>
+{template '_header'}
+<style>
+.fui-message .btn.btn-danger{
+    background:linear-gradient(to right, #ff6775, #ff4051);
+  color: #fff;
+  border: 1px solid #ff6775;
+}
+</style>
+<div class='fui-page  fui-page-current message-page'>
+	<div class='fui-message' {if $message=="订单已经完成，无法进行自提!"}style="display:none;"{/if}>
+		<div class='icon '>
+			{if $type=='error'}
+			   <i class='icon icon-roundclose' style='color:#0290be;'></i>
+			{elseif $type=='success'}
+			   <i class='icon icon-roundcheckfill ' style='color:#ff4051;'></i>
+			{else}
+			   <i class='icon icon-information' ></i>
+			{/if}
+			
+		</div>
+		{if !empty($title)}<div class='title'>{$title}</div>{/if}
+		<div class='content' {if $message=="您可以退出浏览器了"}style="display:none;"{/if}>{$message}</div>
+		{if $buttondisplay}
+		<div class='button'>
+	    {if $type=='error'}
+		   <a id="ss_btn" href='{$redirect}' class='btn btn-danger external block'>{if empty($buttontext)}确认{else}{$buttontext}{/if}</a>
+		 {elseif $type=='success'}
+		   <a id="ss_btn" href='{$redirect}' class='btn btn-danger external block '>{if empty($buttontext)}确认{else}{$buttontext}{/if}</a>
+		{else}
+		   <a id="ss_btn" href='{$redirect}' class='btn btn-default  external block'>{if empty($buttontext)}确认{else}{$buttontext}{/if}</a>
+		{/if}
+		</div>
+		{/if}
+		
+	</div> 
+</div>
+
+<script>
+var _cookie =  "{$_COOKIE['sky']}";
+var t_message = "{$message}";
+if(_cookie*1 == 123 && t_message=="您可以退出浏览器了"){
+    $('.fui-page').hide();
+    delCookie('sky');
+    var sky_url = "/{$_GPC['sky']}";
+    wx.miniProgram.reLaunch({url: sky_url});
+}
+    wx.miniProgram.getEnv((res) => {
+        if (res.miniprogram) { //小程序环境
+            $("#ss_btn").removeAttr("href");
+            if(t_message=="您可以退出浏览器了"){
+                $(".content").remove();
+                document.cookie="sky=123";
+            }
+            if(t_message=="订单已经完成，无法进行自提!"){
+                if(_cookie*1 == 123){
+                    delCookie('sky');
+                    var sky_url = "/{$_GPC['sky']}";
+                    wx.miniProgram.reLaunch({url: sky_url});
+                }else{
+                    $('.fui-message').show();
+                }
+            }
+        }else{
+            $('.fui-message').show();
+            $(".content").show();
+            $("#ss_btn").removeAttr("id");
+        }
+    })
+
+$(document).ready(function(){
+    $('body').on('click','#ss_btn',function(){
+        var sky_url = "/{$_GPC['sky']}";
+        if(sky_url=="/"){
+            var sky_url2 = document.referrer;
+            var sky_url3 = sky_url2.replace(/^.+?sky\=/,'');
+            var sky_url4 = "/" + sky_url3;
+            wx.miniProgram.reLaunch({url: sky_url4});
+        }else{
+            wx.miniProgram.reLaunch({url: sky_url});
+        }
+
+    })
+});
+//写cookies
+function setCookie(c_name, value, expiredays){
+ 　　　　var exdate=new Date();
+　　　　exdate.setDate(exdate.getDate() + expiredays);
+　　　　document.cookie=c_name+ "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+ 　　}
+ 
+//读取cookies
+function getCookie(name)
+{
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+ 
+    if(arr=document.cookie.match(reg))
+ 
+        return (arr[2]);
+    else
+        return null;
+}
+
+//删除cookies
+function delCookie(name)
+{
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}
+
+</script>
+{template '_footer'}

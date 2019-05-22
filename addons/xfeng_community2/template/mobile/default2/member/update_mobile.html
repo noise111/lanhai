@@ -1,0 +1,129 @@
+{template 'default2/header'}
+<style>
+    .weui-dialog__btn {
+        color: #FF9900;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id="app" v-cloak>
+<div class="weui-cells" style="margin-top:0">
+    <div class="weui-cell">
+        <div class="weui-cell__hd weui-form-preview__label">当前的手机号码是</div>
+        <div class="weui-cell__bd">
+            {$_W['member']['mobile']}
+        </div>
+    </div>
+    <div class="weui-cell" :class = "{'weui-cell_vcode':setting.code ===1 ? true : false }">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="tel" placeholder="请输入新手机号" v-model="checkmobile" maxlength="11">
+        </div>
+        <div class="weui-cell__ft" v-if="setting.code" @click="sendVerifyCode();" >
+            <button class="weui-vcode-btn" id="verifyCodeBtn" style="width: 120px;">获取验证码</button>
+        </div>
+    </div>
+    <div class="weui-cell" v-if="setting.code" >
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="number" id="code" v-model="checkcode" placeholder="请输入验证码">
+        </div>
+    </div>
+</div>
+<a href="javascript:;" class="weui-btn register-guide-btn" style="margin-top: 2rem" @click="submit()">确认</a>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/vue.min.js"></script>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            regionid: "{$_SESSION['community']['regionid']}",
+            setting: [],
+            checkmobile:'',
+            tel:"{$_W['member']['mobile']}",
+            checkcode:'',
+            code:'',
+            timer:''
+        },
+        beforeMount:function () {
+            var self = this
+            var url = "{php echo wxapp_url('setting/set')}"
+            var data = {
+                regionid: self.regionid
+            }
+            $.getJSON(url, data, function (ret) {
+                self.setting = ret.data
+            })
+        },
+        methods: {
+            submit:function () {
+                var self=this
+                if(self.code !=self.checkcode){
+                    $.toast('验证码不正确','cancel');return false;
+                }
+                $.getJSON("{php echo wxapp_url('member/update')}", {mobile:self.checkmobile},function (data) {
+                    if(data.err_code ==0) {
+                        $.toast('修改成功');
+                        window.location.href = "{php echo $this->createMobileUrl('member',array('op'=>'my'))}";
+                    }
+                })
+            },
+            sendVerifyCode :function () {
+                var self=this
+                if(self.checkmobile.length!=11){
+                    $.toast('手机号不正确','cancel');return false;
+                }
+                $('#verifyCodeBtn').addClass('active');
+                $('#verifyCodeBtn').attr('disabled', true);
+                var countdown = 60;
+                self.timer = setInterval(function () {
+                    $('#verifyCodeBtn').html(countdown--);
+                    if (countdown == 0) {
+                        $('#verifyCodeBtn').removeClass('active');
+                        $('#verifyCodeBtn').html('重新发送');
+                        clearInterval(self.timer);
+                        $('#verifyCodeBtn').attr('disabled', false);
+                    }
+                }, 1000);
+                var data = {
+                    mobile:self.checkmobile,
+                    regiond:self.regionid
+                }
+                $.getJSON("{php echo $this->createMobileUrl('api',array('op' => 'verity'))}", data,function (ret) {
+                    self.code = ret
+                })
+            }
+        },
+        watch: {
+            // 监听 输入手机号 变化
+            checkmobile: function (val, oldVal) {
+                var self = this
+                if(val == self.tel){
+                    $.toast('手机号已注册','cancel');
+                    self.checkmobile=''
+                }
+                if(val.length==11){
+                    if(val.search(/^1[3|5|7|4|5|8|][0-9]\d{4,8}$/) == -1){
+                        $.toast('手机号不正确','cancel');
+                    }
+                }
+
+            },
+            // 监听 输入验证码 变化
+            checkcode: function (val, oldVal) {
+                var self = this
+                if(val.length==6){
+                    if(val != self.code){
+                        $.toast('验证码不正确','cancel');
+                        self.checkcode=''
+                    }
+                }
+
+            },
+        }
+    })
+
+</script>
+</body>
+</html>

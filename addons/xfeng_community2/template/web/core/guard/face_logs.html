@@ -1,0 +1,90 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li {if $type==1}class="active"{/if}><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceLogs','type' => 1))}" title="识别成功" >识别成功</a></li>
+                        <li {if $type==2}class="active"{/if}><a href="{php echo $this->createWebUrl('guard',array('op' => 'faceLogs','type' => 2))}" title="识别失败" >识别失败</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="guard"/>
+                            <input type="hidden" name="op" value="faceLogs"/>
+                            <div class="row">
+                                <div class="col-sm-6 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-2 m-b-xs">
+
+                                </div>
+                                <div class="col-sm-4 m-b-xs">
+                                    <div class="input-group">
+                                        <input type="text" name="keyword" value="{$_GPC['keyword']}" class="form-control" placeholder="设备号">
+                                        <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="form-horizontal form" method="post">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>姓名</th>
+                                    {if $type==1}
+                                    <th>guid</th>
+                                    {/if}
+                                    <th>设备号序列号</th>
+                                    <th>设备名称</th>
+                                    <th>识别模式</th>
+                                    <th>时间</th>
+                                    <th>现场图片</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>{$item['realname']}</td>
+                                    {if $type==1}
+                                    <td>{$item['personguid']}</td>
+                                    {/if}
+                                    <td>{$item['devicekey']}</td>
+                                    <td>{$item['title']}</td>
+                                    <td>{if $item['recmode'] == 1}<span class="label label-primary">刷脸</span>{elseif $item['recmode'] == 2}<span class="label label-success">刷卡</span>{elseif $item['recmode'] == 3}<span class="label label-danger">双重认证</span>{elseif $item['recmode'] == 4}<span class="label label-warning">人证对比</span>{/if}</td>
+                                    <td>{php echo date('Y-m-d H:i', $item['createtime'])}</td>
+                                    <td>{if $item['photourl']}<a href="{$item['photourl']}" target="_blank"><img src="{$item['photourl']}" alt="" style="height: 50px;"></a>{/if}</td>
+                                </tr>
+                                {/loop}
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td class="footable-visible">
+                                        <ul class="pagination pull-right">{$pager}</ul>
+                                    </td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center">
+                                    <td>没有找到对应的记录</td>
+                                </tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

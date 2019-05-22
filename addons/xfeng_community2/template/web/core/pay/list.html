@@ -1,0 +1,70 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>支付方式配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('pay')}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    {if ($user && $menu_opss && @in_array('pay_add', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('pay', array('op' => 'add'));}" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>添加支付方式</a>
+                    {/if}
+                    <form action="" method="post">
+                        <div id="editable_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                            <tr>
+                                <th style="width:5%;">id</th>
+                                <th style="width:8%">类型</th>
+                                <th style="width:30%;">支付方式</th>
+                                <th style="width:50%;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    {$item['id']}
+                                </td>
+                                <td>
+                                   {if $item['type']== 1}超市{elseif $item['type'] == 2}物业费{elseif $item['type'] == 3}商家{elseif $item['type'] == 4}小区活动{elseif $item['type'] == 5}无人超市{elseif $item['type'] == 7}充电桩{elseif $item['type'] == 8}城乡直通车{elseif $item['type'] == 9}报修维修费{elseif $item['type'] == 10}云柜{elseif $item['type'] == 11}智能车禁{/if}
+                                </td>
+                                <td>{if $item['wechat'] == 1}微信支付{/if}&nbsp;&nbsp;{if $item['alipay']}支付宝支付{/if}&nbsp;&nbsp;{if $item['balance']}余额支付{/if}&nbsp;&nbsp;{if $item['delivery']}货到付款{/if}&nbsp;&nbsp;{if $item['sub']}服务商支付{/if}&nbsp;&nbsp;{if $item['swiftpass']}微信支付(兴业银行/中信银行/农商银行){/if}&nbsp;&nbsp;{if $item['hsyunfu']}微信支付（华商云付）{/if}&nbsp;&nbsp;{if $item['chinaums']}微信支付（银联）{/if}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('pay_edit', $menu_opss)) || empty($user)}
+                                    <a href="{php echo $this->createWebUrl('pay',array('op' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm" >编辑</a>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('pay_del', $menu_opss)) || empty($user)}
+                                    <a onclick="return confirm('删除号码，此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('pay',array('op' => 'delete','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                        </tbody>
+                    </table>
+                        </div>
+                    </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{template 'web/common/footer'}

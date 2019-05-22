@@ -1,0 +1,150 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>通知设置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'notice','p' => 'list'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="staff"/>
+                        <input type="hidden" name="op" value="notice"/>
+                        <input type="hidden" name="p" value="list"/>
+                    <div class="row">
+                        <div class="col-sm-6 m-b-xs">
+                            <a class="btn btn-primary" href="{php echo $this->createWebUrl('staff', array('op' => 'notice','p' => 'add'));}"><i class="fa fa-plus"></i> 添加接收员</a>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" placeholder="输入姓名搜索">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+            <table class="table table-bordered">
+                <thead class="navbar-inner">
+                <tr>
+                    <th class="col-lg-2">姓名</th>
+                    <th class="col-lg-1">通知方式</th>
+                    <th class="col-lg-1">报修通知</th>
+                    <th class="col-lg-1">投诉通知</th>
+                    <th class="col-lg-1">超市通知</th>
+                    <th class="col-lg-1">商家通知</th>
+                    <th class="col-lg-1">家政通知</th>
+                    <th class="col-lg-1">缴费通知</th>
+                    <th class="col-lg-3">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td>{$item['ptitle']}-{$item['realname']}</td>
+                    <td>{if $item['type'] == 1}微信通知 {elseif $item['type'] == 2} 短信通知{else} 全部通知{/if}</td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox2_{$item['id']}" onclick="verity('repair',{$item['id']},this)" data="{$item['repair']}" {if $item['repair'] == 1}checked="checked"{/if}>
+                            <label for="inlineCheckbox2_{$item['id']}"> </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox3_{$item['id']}" onclick="verity('report',{$item['id']},this)" data="{$item['report']}" {if $item['report'] == 1}checked="checked"{/if}>
+                            <label for="inlineCheckbox3_{$item['id']}"> </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox4_{$item['id']}" onclick="verity('shopping',{$item['id']},this)" data="{$item['shopping']}" {if $item['shopping'] == 1 }checked="checked"{/if}>
+                            <label for="inlineCheckbox4_{$item['id']}"> </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox5_{$item['id']}" onclick="verity('business',{$item['id']},this)" data="{$item['business']}" {if $item['business'] == 1 }checked="checked"{/if}>
+                            <label for="inlineCheckbox5_{$item['id']}"> </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox6_{$item['id']}" onclick="verity('homemaking',{$item['id']},this)" data="{$item['homemaking']}" {if $item['homemaking'] == 1 }checked="checked"{/if}>
+                            <label for="inlineCheckbox6_{$item['id']}"> </label>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="checkbox checkbox-success checkbox-inline">
+                            <input type="checkbox" id="inlineCheckbox7_{$item['id']}" onclick="verity('cost',{$item['id']},this)" data="{$item['cost']}" {if $item['cost'] == 1 }checked="checked"{/if}>
+                            <label for="inlineCheckbox7_{$item['id']}"> </label>
+                        </div>
+
+
+                    </td>
+                    <td>
+                        <a title="编辑" href="{php echo $this->createWebUrl('staff',array('op'=> 'notice','p'=>'add','id' => $item['id']))}" class="btn btn-primary btn-sm">编辑</a>&nbsp;&nbsp;
+
+                        <a title="删除" onclick="del('{$item['id']}')" class="btn btn-default btn-sm">删除</a>
+
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                <thead>
+                {if $list}
+                <tr>
+                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                </tr>
+                {else}
+                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                {/if}
+                </thead>
+            </table>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function del(id) {
+        var id = id;
+        var url = "{php echo $this->createWebUrl('staff',array('op' => 'notice','p'=> 'delete'),true)}";
+        $.post(url,
+            {
+                id: id
+            },
+            function (msg) {
+                if (msg.status == 1) {
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 100);
+                }
+                ;
+
+            },
+            'json');
+    }
+    function verity(type,id,obj) {
+        $.post("{php echo $this->createWebUrl('staff',array('op'=>'notice','p'=> 'verify'))}",{id:id,type:type,status:obj.getAttribute("data")},function () {
+
+        })
+    }
+
+</script>
+
+{template 'web/common/footer'}

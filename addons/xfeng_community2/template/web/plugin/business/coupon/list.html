@@ -1,0 +1,161 @@
+{template 'web/common/header-base'}
+
+<style>
+    .text-danger {
+        color: red;
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>券号核销管理</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('business',array('op' => 'coupon'))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+					<form action="./index.php" method="get" class="form-horizontal" role="form">
+						<input type="hidden" name="c" value="site"/>
+						<input type="hidden" name="a" value="entry"/>
+						<input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+						<input type="hidden" name="do" value="business"/>
+						<input type="hidden" name="op" value="coupon"/>
+					<div class="row">
+						<div class="col-sm-4 m-b-xs">
+							{if $_W['uid']==1 || $user['type']==1}
+							<span>状态:</span>
+							<a class="btn btn-default {if $_GPC['status'] == '0' || $_GPC['status'] == ''}btn-primary{/if}" href="{php echo $this->createWebUrl('business',array('operation' => 'list','op' => 'coupon'))}">不限</a>
+							<a class="btn btn-default {if $_GPC['status'] == '1'}btn-primary{/if}" href="{php echo $this->createWebUrl('business',array('operation' => 'list','status' => 1,'op' => 'coupon'))}">未使用</a>
+							<a class="btn btn-default {if $_GPC['enable'] == '2'}btn-primary{/if}" href="{php echo $this->createWebUrl('business',array('operation' => 'list','status' => 2,'op' => 'coupon'))}">已核销</a>
+							{/if}
+						</div>
+						<div class="col-sm-8 m-b-xs">
+							<span class="input-group">
+							<input class="form-control" name="code" placeholder="code码" type="text"
+                                   value="{$_GPC['code']}">
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-primary">搜索</button>
+							<input type="hidden" name="token" value="{$_W['token']}"/>
+							</span>
+                    	</span>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="form-horizontal" action="" method="post"
+                          onkeydown="if(event.keyCode==13){return false;}">
+
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="140">平台订单号</th>
+                                <th width="150">微信订单号</th>
+                                <th width="110">商家名称</th>
+                                <th width="110">商品名称</th>
+                                <th width="80">购买人</th>
+                                <th width="80">code码</th>
+                                <th width="60">状态</th>
+                                <th width="120">购买时间</th>
+                                <th width="120">使用时间</th>
+                                <th width="120">操作人</th>
+                                <th width="120">ip</th>
+                                <th style="width:100px; ">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['ordersn']}</td>
+                                <td>{$item['transid']}</td>
+                                <td>{$item['sjname']}</td>
+                                <td>{$item['title']}</td>
+                                <td>
+                                    {$item['realname']}
+                                </td>
+                                <td>
+                                    {$item['couponsn']}
+                                </td>
+                                <td>
+                                    {if $item['status'] == 1}
+                                    <span class="label label-success">未使用</span>
+                                    {elseif $item['status'] == 2}
+                                    <span class="label label-danger">已核销</span>
+                                    {/if}
+                                </td>
+                                <td>
+                                    {php echo date('Y-m-d H:i',$item['createtime'])}
+                                </td>
+
+                                <td>
+                                    {if $item['usetime']}
+                                    {php echo date('Y-m-d H:i:s', $item['usetime']);}
+                                    {/if}
+                                </td>
+                                <td>
+                                    {$item['user']}
+                                </td>
+                                <td>{$item['ip']}</td>
+                                <td>
+                                    {if $item['status'] == 1}
+                                    {if ($user && $menu_opss && @in_array('business_coupon', $menu_opss)) || empty($user)}
+                                    <a href="javascript:;" class="consume btn btn-primary btn-sm" title="核销卡券"
+                                       data-id="{$item['id']}">核销卡券</a>
+                                    {/if}
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $(".consume").bind("click", function () {
+            var id = $(this).attr('data-id');
+            var url = "{php echo $this->createWebUrl('business',array('op' => 'coupon','operation' => 'use'),true)}";
+            $.post(url,
+                {
+                    id: id
+                },
+                function (msg) {
+                    if (msg.status == 1) {
+                        alert('核销成功')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100);
+                    }
+                    if (msg.status == 2) {
+                        alert('核销失败，已过期')
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 100);
+                    }
+
+                },
+                'json');
+        });
+    });
+</script>
+
+
+{template 'web/common/footer'}

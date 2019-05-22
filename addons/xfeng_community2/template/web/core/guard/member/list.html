@@ -1,0 +1,511 @@
+<!--{template 'web/common/header-base'}-->
+<style>
+    td .rowspan:first-child {
+        border-top: 0;
+    }
+
+    td .rowspan {
+        border-top: 1px solid #f0f0f0;
+    }
+</style>
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+
+                    <div class="ibox-content">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="{php echo $this->createWebUrl('guard',array('op' => 'member'))}" title="用户管理" >用户管理</a></li>
+                        </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="guard"/>
+                            <input type="hidden" name="op" value="member"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <select class="form-control" name="regionid" id="regionid">
+                                    <option>全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="buildid" class="form-control" id="build">
+                                    <option value="0">全部楼宇</option>
+                                    {loop $builds $build}
+                                    <option value="{$build['id']}" {if $build['id']==$_GPC['buildid']} selected{/if}>{$build['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-1 m-b-xs">
+                                <select class="form-control" name="open_door">
+                                    <option value="-1" {if $_GPC['open_door']==-1} selected{/if}>授权状态</option>
+                                    <option value="1" {if $_GPC['open_door']==1} selected{/if}>已授权</option>
+                                    <option value="0" {if $_GPC['open_door']==0} selected{/if}>未授权</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-1 m-b-xs">
+                                <select class="form-control" name="authstatus">
+                                    <option value="0" {if $_GPC['authstatus']} selected{/if}>授权时间</option>
+                                    <option value="1" {if $_GPC['authstatus']==1} selected{/if}>否</option>
+                                    <option value="2" {if $_GPC['authstatus']==2} selected{/if}>是</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                <span >授权时间：</span>
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <input type="text" placeholder="可查房号/业主姓名/业主手机" class="form-control" name="keyword" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                        <form action="" class="form-horizontal form" method="post" id="form">
+                            <input type="hidden" value="{$_GPC['regionid']}" name="regionid">
+                            <input type="hidden" value="{$id}" name="costid">
+                            <input type="hidden" name="record">
+                            <input type="hidden" name="limit" value="0">
+                            <input type="hidden" name="page" value="1">
+                            <input type="hidden" name="ok" value="0">
+                            <input type="hidden" name="fail" value="0">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width="30px">
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" id="checkids"
+                                                   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                            <label for="checkids"> </label>
+                                        </div>
+                                    </th>
+                                    <th>ID</th>
+                                    <th>姓名</th>
+                                    <th>手机</th>
+                                    <th>小区</th>
+                                    <th>房号</th>
+                                    <th>住户身份</th>
+                                    <th>绑定时间</th>
+                                    <th>手机号下发状态</th>
+                                    <th>开门</th>
+                                    <th>授权</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {loop $list $item}
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-success checkbox-inline">
+                                            <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                                   value="{$item['id']}">
+                                            <label for="ids_{$item['id']}"></label>
+                                        </div>
+
+                                    </td>
+                                    <td>{$item['id']}</td>
+                                    <td>{$item['realname']}</td>
+                                    <td>{php echo substr_replace($item['mobile'],'****',3,4)}</td>
+                                    <td>{$item['title']}</td>
+                                    <td>
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan">{$bind['address']}{if $bind['enable'] == 1}<span>(默认)</span>{/if}</div>
+                                        {/loop}
+                                    </td>
+                                    <td>
+                                        {if $item['bind']}
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan" style="color: red">{if $bind['bstatus'] == 1}户主 {elseif
+                                            $bind['bstatus'] == 2} 家属{elseif $bind['bstatus'] == 3}租户{/if}
+                                        </div>
+                                        {/loop}
+                                        {else}
+                                        <div class="rowspan" style="color: blue">游客</div>
+                                        {/if}
+                                    </td>
+
+                                    <td>
+                                        {loop $item['bind'] $bind}
+                                        <div class="rowspan">
+                                            {php echo date('Y-m-d H:i:s',$bind['bcreatetime'])}
+                                        </div>
+                                        {/loop}
+                                    </td>
+                                    <th>
+                                        {if $item['voicestatus']==1}
+                                        <label class='label  label-default label-success'>已下发</label>
+                                        {else}
+                                        <label class='label  label-default' >未下发</label>
+                                        {/if}
+                                    </th>
+                                    <td>
+                                        <label data="{$item['open_status']}" class='label  label-default {if $item['open_status']==1}label-info{/if}'
+                                        onclick="verify(this,{$item['id']},'open_status')">{if
+                                        $item['open_status']==1}开启{else}关闭{/if}</label>
+                                    </td>
+                                    <td>
+                                        {if $item['open_door']==1}
+                                        <label class='label  label-default label-info'>已授权</label>
+                                        {else}
+                                        <label class='label  label-default' >未授权</label>
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        {if ($user && $menu_opss && @in_array('guard_memberOpen', $menu_opss)) || empty($user)}
+                                        <a class="btn btn-primary btn-sm" data-id="{$item['uid']}" onclick="xqverify(this)" data-toggle="modal" data-target="#myModal1">授权开门</a>
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('guard_memberOpentime', $menu_opss)) || empty($user)}
+                                        <a href="{php echo $this->createWebUrl('guard',array('op'=>'opentime','id' => $item['id']))}" class="btn btn-warning btn-sm">设置开门时间</a>
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/loop}
+
+                                </tbody>
+                            </table>
+                            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                                <thead>
+                                {if $list}
+                                <tr>
+                                    <td id="pager_list_1_left" align="left">
+                                        {if ($user && $menu_opss && @in_array('guard_memberPlopen', $menu_opss)) || empty($user)}
+                                        <input type="submit" name="openup" id="openup" class="btn btn-success btn-sm" value="一键批量开通门禁" onclick="return confirm('如未勾选则为所有用户开通，确认吗？'); return false;">
+                                        {/if}
+                                        {if ($user && $menu_opss && @in_array('guard_memberPloff', $menu_opss)) || empty($user)}
+                                        <input type="submit" name="closeup" id="closeup" class="btn btn-warning btn-sm" value="一键批量关闭门禁" onclick="return confirm('如未勾选则为所有用户关闭，确认吗？'); return false;">
+                                        {/if}
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                        <span style="color: red">总计:{$total}</span>
+                                    </td>
+                                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                                </tr>
+                                {else}
+                                <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                                {/if}
+                                </thead>
+                            </table>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+<div class="modal inmodal" id="myModal1" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated ">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">关闭</span>
+                </button>
+                <i class="fa fa-laptop modal-icon"></i>
+                <h4 class="modal-title"> 授权绑定开门</h4>
+                <small class="font-bold">1.如果需要绑定多个门,需要去选择多次小区绑定.</small>
+                <small class="font-bold">2.采用授权绑定开门，需要在《小区管理》->《小区设置》启用授权验证开门</small>
+                <small class="font-bold">3.如需要门禁套餐，需要在《智能门禁》->《门禁分组》中添加</small>
+            </div>
+            <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                <input type='hidden' name='uid' id='uid' class="form-control"  />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">搜索</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择小区</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" name="regionid" id="xqregionid">
+                                <option value="0">全部小区</option>
+                                {loop $regions $region}
+                                <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none" id="group">
+                        <label for="deviceid" class="col-sm-2 control-label">选择套餐</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="groupid" id="groupid">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none" id="device">
+                        <label for="deviceid" class="col-sm-2 control-label">绑定门禁</label>
+                        <div class="col-xs-10" id="deviceid">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    <input type="submit" class="btn btn-primary" name="update" value="保存">
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $('#myButton').on('click',function () {
+        var $btn = $(this).button('loading');
+    })
+</script>
+<script type="text/javascript">
+    function verify(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('member',array('op' => 'verify'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function (d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            if (type == 'status') {
+                $(obj).html(d.data == '1' ? '通过' : '禁止');
+            }
+            if (type == 'open_status') {
+                $(obj).html(d.data == '1' ? '开启' : '关闭');
+            }
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+    $(function () {
+        $("#checkAll").click(function () {
+
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("#regionid[data-group='" + group + "']").each(function () {
+                $(this).get(0).checked = checked;
+            })
+        });
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#xqregionid').val(data.regionid);
+                    var uid = $("#uid").val();
+                    if (data.regionid != '0') {
+                        $.post("{php echo $this->createWebUrl('member',array('op' => 'group'))}", {
+                            regionid: data.regionid,
+                            uid: uid
+                        }, function (data) {
+                            if (data.status == 1 || data.status == 3) {
+                                alert(data.content);
+                                $("#group").hide();
+                                return false;
+                            }
+                            if (data.status == 2) {
+                                var content = "<option value='0'>全部套餐</option>";
+                                $.each(data.content, function (name, val) {
+                                    content += "<option value='"+val.id+"' "+val.select+">"+val.title+"</option>";
+                                });
+                                $("#groupid").html(content);
+                                $("#group").show();
+                            }
+
+                        }, 'json');
+                        $.post("{php echo $this->createWebUrl('member',array('op' => 'binddoor'))}", {
+                            regionid: data.regionid,
+                            uid: uid
+                        }, function (data) {
+                            if (data.status == 1 || data.status == 3) {
+                                alert(data.content);
+                                $("#device").hide();
+                                return false;
+                            }
+                            if (data.status == 2) {
+                                var result = data.result;
+                                var content = "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'><input type='checkbox' id='xqcheckAll' name='xqcheckAll' data-group='deviceid'><label for='xqcheckAll'>全部</label> </div>";
+                                $.each(data.content, function (name, val) {
+                                    content += "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'>";
+                                    content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_" + val.id + "' " + val.check + ">";
+                                    content += "<label for='deviceid_" + val.id + "' " + val.check + ">" + val.title + val.unit + "</label> </div>";
+                                });
+
+
+                                $("#deviceid").html(content);
+                                $("#xqcheckAll").click(function () {
+                                    var checked = $(this).get(0).checked;
+                                    var group = $(this).data('group');
+                                    $("input:checkbox[data-group='" + group + "']").each(function () {
+                                        $(this).get(0).checked = checked;
+                                    })
+                                });
+                                $("#device").show();
+                            }
+
+                        }, 'json');
+                    }
+                }
+            },'json')
+        })
+        $("#xqregionid").change(function () {
+            var regionid = $("#xqregionid option:selected").val();
+            var uid = $("#uid").val();
+            if (regionid != '0') {
+                $.post("{php echo $this->createWebUrl('member',array('op' => 'group'))}", {
+                    regionid: regionid,
+                    uid: uid
+                }, function (data) {
+                    if (data.status == 1 || data.status == 3) {
+                        alert(data.content);
+                        $("#group").hide();
+                        return false;
+                    }
+                    if (data.status == 2) {
+                        var content = "<option value='0'>全部套餐</option>";
+                        $.each(data.content, function (name, val) {
+                            content += "<option value='"+val.id+"' "+val.select+">"+val.title+"</option>";
+                        });
+                        $("#groupid").html(content);
+                        $("#group").show();
+                    }
+
+                }, 'json');
+                $.post("{php echo $this->createWebUrl('member',array('op' => 'binddoor'))}", {
+                    regionid: regionid,
+                    uid: uid
+                }, function (data) {
+                    if (data.status == 1 || data.status == 3) {
+                        alert(data.content);
+                        $("#device").hide();
+                        return false;
+                    }
+                    if (data.status == 2) {
+                        var result = data.result;
+                        var content = "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'><input type='checkbox' id='xqcheckAll' name='xqcheckAll' data-group='deviceid'><label for='xqcheckAll'>全部</label> </div>";
+                        $.each(data.content, function (name, val) {
+                            content += "<div class='checkbox checkbox-success checkbox-inline' style='width: 150px;'>";
+                            content += "<input type='checkbox' value='" + val.id + "' name='deviceid[]' data-group ='deviceid' id='deviceid_" + val.id + "' " + val.check + ">";
+                            content += "<label for='deviceid_" + val.id + "' " + val.check + ">" + val.title + val.unit + "</label> </div>";
+                        });
+
+
+                        $("#deviceid").html(content);
+                        $("#xqcheckAll").click(function () {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" + group + "']").each(function () {
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                        $("#device").show();
+                    }
+
+                }, 'json');
+            }
+        })
+        $('#wxsend').click(function () {
+            var ids = '';
+            $("input:checkbox[name='ids[]']:checked").each(function(){
+                var t1 = $(this).val();
+                ids += t1+',';
+            });
+            $('#ids').val(ids);
+        })
+    });
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}", {regionid: regionid}, function (data) {
+            var content = '<option value="0">请选择楼宇</option>';
+            var builds = data.list
+            for (var o in builds) {
+                content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + data.zd + "</option>";
+            }
+            $("#build").html(content);
+            var cont = '<option value="0">请选择单元</option>';
+            $("#unit").html(cont);
+        })
+    })
+
+    function xqverify(obj) {
+        document.getElementById("xqregionid").selectedIndex=0
+        $("#device").hide()
+        $("#group").hide()
+        $("#uid").val(obj.getAttribute("data-id"));
+    }
+    function remark(obj, remark) {
+        $("#memberid").val(obj.getAttribute("data-id"));
+        var remark = remark;
+        $("#xqremark").html(remark);
+        $("#remark").show();
+    }
+    function status(obj, status) {
+        $("#mid").val(obj.getAttribute("data-id"));
+    }
+    function showopenid(obj) {
+        $("#openid").html(obj.getAttribute("data-id"));
+    }
+    $("#xqhh").click(function () {
+        $("#remark").hide();
+    })
+    function showmsg(obj) {
+        $("#idcard").html(obj.getAttribute("data-id"));
+        $("#contract").html(obj.getAttribute("data-contract"));
+    }
+    var i=0;
+    var openid=[];
+    $('#pldoor').on('click',function() {
+        $('#pldoor').html("正在授权中,请勿关闭页面。");
+        // $('#msg2').empty();
+        $('#pldoor').prop('disabled', true);
+        var total = 0;
+        var ok = 0;
+        var fail = 0;
+        mass(total, ok, fail);
+    });
+    function mass(total, ok, fail) {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('member',array('op'=>'pldoor'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                console.log(data);
+                var n = parseInt($("input[name='limit']").val());
+                $("input[name='limit']").val(n+5);
+                total=data.total;//总的发送信息
+                $("input[name='record']").val(data.record);//发送记录
+                // ok += data.ok;//成功发送
+                // fail += data.fail;//发送失败
+                // $('#msg2').html("您一共发送"+total+"条消息,当前发送成功"+ok+"条,失败"+fail+"条。");
+                $("#record").html(data.record);
+                $("#ok").html(data.ok);
+                $("input[name='ok']").val(data.ok);
+                $("input[name='fail']").val(data.fail);
+                $("#fail").html(data.fail);
+                if(data.status == 'end'){
+                    // $("input[name='record']").attr('value','');
+                    $("input[name='limit']").val(0);
+                    // $('#msg1').html("任务完成!");
+                    $('#pldoor').html("授权完成");
+                    $('#pldoor').removeProp('disabled');
+                    return ;
+                }
+                var page = parseInt($("input[name='page']").val());
+                console.log(page+1)
+                $("input[name='page']").val(page+1);
+                mass(total, ok, fail );
+            }
+        });
+    }
+</script>

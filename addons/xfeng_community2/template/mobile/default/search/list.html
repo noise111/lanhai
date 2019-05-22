@@ -1,0 +1,35 @@
+{template 'default/header'}
+<body class="max-width bg-ff">
+    <div class="content">
+        <header class="bar bar-nav bg-green">
+            <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+            <h1 class="title txt-fff">便民查询</h1>
+        </header>
+        {if $slides}
+        <div class="banner bg-f2">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {loop $slides $row}
+                    <div class="swiper-slide" onclick="javascript:window.location.href='{$row['url']}';">
+                        <img src="{$row['thumb']}?imageView2/1/w/320/h/160/q/100" >
+                    </div>
+                    {/loop}
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+        {/if}
+        <div class="search-grids" {if $slides }style="padding-top:0"{/if}>
+            {loop $list $item}
+            <a href="{$item['surl']}" class="search-grid">
+                <div class="search-grid-icon">
+                    <img src="{php echo tomedia($item['icon'])}?imageView2/2/w/45/h/45">
+                </div>
+                <p class="search-grid-lable">{$item['sname']}</p>
+            </a>
+            {/loop}
+        </div>
+    </div>
+
+{template 'default/footer'}

@@ -1,0 +1,76 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'station'))}" title="充电桩管理" >充电桩管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="charging"/>
+                        <input type="hidden" name="op" value="qrlist"/>
+
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('charging',array('op'=> 'qrpl'))}" ><i class="fa fa-plus"></i>批量生成二维码</a>
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入关键字" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th style="width:5%;">id</th>
+                            <th>充电桩名称</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['title']}</td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('charging',array('op'=> 'download','id' => $item['id']))}" title="下载" class="btn btn-primary btn-sm">下载</a>
+                                <a href="{php echo $this->createWebUrl('charging',array('op'=> 'qrdel','id' => $item['id']))}" title="删除" class="btn btn-default btn-sm">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

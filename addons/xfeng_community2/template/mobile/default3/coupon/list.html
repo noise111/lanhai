@@ -1,0 +1,46 @@
+{template 'default2/header'}
+<style>
+    .weui-media-box_appmsg .weui-media-box__hd {
+        width: 90px;
+    }
+
+    .weui-media-box__title {
+        font-size: 0.6rem;
+        color: #333333;
+    }
+</style>
+
+<body>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd" id="list">
+
+
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op'=>'coupon','operation'=>'detail'))}&gid={{d.list[i].id}}'">
+        <div class="weui-media-box__hd">
+            <img class="weui-media-box__thumb" src="{{d.list[i].thumb}}" alt="">
+        </div>
+        <div class="weui-media-box__bd">
+            <h4 class="weui-media-box__title">{{d.list[i].title}}</h4>
+            <p class="group-shop-tit1">单人餐</p>
+            <p class="group-shop-tit2"><strong>{{d.list[i].marketprice}}</strong><span class="strong-color">元</span><span class="tag">多优惠+</span><span
+                    class="sold">已售:{{d.list[i].sold}}</span></p>
+        </div>
+    </a>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var dpid = "{$_GPC['dpid']}";
+        var url = "{php echo wxapp_url('coupon/list')}"+"&dpid="+dpid;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

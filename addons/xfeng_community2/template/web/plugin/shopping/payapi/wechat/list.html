@@ -1,0 +1,71 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>微信支付配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    {if ($user && $menu_opss && @in_array('shopping_payWechatAdd', $menu_opss)) || empty($user)}
+                    <a href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat','operation' => 'add'));}" class="btn btn-primary">
+                        <i class="fa fa-plus"></i>添加微信支付</a>
+                    {/if}
+        <form action="" method="post">
+            <table class="table table-bordered">
+                <thead class="navbar-inner">
+                <tr>
+                    <th style="width:50px;">id</th>
+                    <th style="width:15%">超市名称</th>
+                    <th style="width:150px;">公众号(AppId)</th>
+                    <th style="width:150px;">微信支付商户号</th>
+                    <th style="width:150px;">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td>
+                        {$item['id']}
+                    </td>
+                    <td>
+                        {$item['title']}
+                    </td>
+                    <td>
+                        {$item['appid']}
+                    </td>
+                    <td>
+                        {$item['mchid']}
+
+                    </td>
+                    <td>
+                        {if ($user && $menu_opss && @in_array('shopping_payWechatEdit', $menu_opss)) || empty($user)}
+                        <a href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat','operation' => 'add','id' => $item['id']));}" title="编辑" class="btn btn-primary btn-sm" >编辑</a>
+                        {/if}
+                        {if ($user && $menu_opss && @in_array('shopping_payWechatDel', $menu_opss)) || empty($user)}
+                        <a onclick="return confirm('删除号码，此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('shopping',array('op' => 'payapi','p' => 'wechat','operation' => 'del','id' => $item['id']));}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </form>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

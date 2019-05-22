@@ -1,0 +1,56 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>参数配置</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('counter',array('op' => 'set'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" class="form-horizontal form">
+                        <div class="form-group">
+                            <label for="account" class="col-sm-2 control-label">AppID</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="counter[p103]" id='account' class="form-control" value="{$set['p103']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="pwd" class="col-sm-2 control-label">Secret</label>
+                            <div class="col-sm-10">
+                                <input type="text" name="counter[p104]" id='pwd' class="form-control" value="{$set['p104']['value']}" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="" class="col-sm-2 control-label">超市是否开启货物投放</label>-->
+                            <!--<div class="col-sm-10">-->
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="counter[p105]" id="s2_1" value="1" {if @$set['p105']['value']==1}-->
+                                    <!--checked{/if} />-->
+                                    <!--<label for="s2_1">开启</label>-->
+                                <!--</div>-->
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="counter[p105]" id="s2_2" value="0" {if @empty($set['p105']['value'])}-->
+                                    <!--checked{/if} />-->
+                                    <!--<label for="s2_2">关闭</label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="hr-line-dashed"></div>-->
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

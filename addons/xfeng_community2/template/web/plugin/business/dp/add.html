@@ -1,0 +1,282 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('business',array('op' => 'dp'))}" title="店铺管理" >店铺管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('business',array('op' => 'dp','operation' => 'add','id' => $id))}" title="添加店铺" >添加店铺</a></li>
+                    <li><a href="{php echo $this->createWebUrl('business',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+
+<form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+    <input type="hidden" name="id" value="{$item['id']}">
+
+            <div class="form-group">
+                <label for="sjname" class="col-sm-2 control-label">店铺名称</label>
+                <div class="col-sm-4">
+                    <input type="text" name="sjname" id='sjname' value="{$item['sjname']}" class="form-control" placeHolder="请输入商家名称" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">配送方式</label>
+        <div class="col-sm-5 col-xs-5">
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="cid" value="1" id="cid1" {if $item['cid']==1 || empty($item['cid'])}checked="checked" {/if}/>
+                <label for="cid1">到店自提</label>
+            </div>
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="cid" value="2" id="cid2" {if $item['cid']==2}checked="checked" {/if}/>
+                <label for="cid2">商家配送</label>
+            </div>
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="cid" value="3" id="cid3" {if $item['cid']==3}checked="checked" {/if}/>
+                <label for="cid3">到店消费</label>
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">是否上线</label>
+        <div class="col-sm-5 col-xs-5">
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="enable" value="1" id="enable1" {if $item['enable']==1 || empty($item['enable'])}checked="checked" {/if}/>
+                <label for="enable1">上线</label>
+            </div>
+            <div class="radio radio-success radio-inline">
+                <input type="radio" name="enable" value="2" id="enable2" {if $item['enable']==2}checked="checked" {/if}/>
+                <label for="enable2">下线</label>
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="contactname" class="col-sm-2 control-label">联系人</label>
+                <div class="col-sm-4">
+                    <input type="text" name="contactname" id='contactname' value="{$item['contactname']}" class="form-control" placeHolder="请输入商家联系人" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group" id='s1'>
+                <label for="mobile" class="col-sm-2 control-label">手机</label>
+                <div class="col-sm-4">
+                    <input type="text" name="mobile" id='mobile' value="{$item['mobile']}" class="form-control" placeHolder="请输入商家联系人手机" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group" id='s2'>
+                <label for="phone" class="col-sm-2 control-label">电话</label>
+                <div class="col-sm-4">
+                    <input type="text" name="phone" id='phone' value="{$item['phone']}" class="form-control" placeHolder="请输入商家电话" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="qq" class="col-sm-2 control-label">QQ号</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" placeholder="请输入商家QQ号" name="qq" value="{$item['qq']}" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">客服链接</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="请输入客服链接" name="serviceurl" value="{$item['serviceurl']}" />
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="price" class="col-sm-2 control-label">人均价格</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" placeholder="请输入人均价格" name="price" value="{$item['price']}" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="area" class="col-sm-2 control-label">商圈名称</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" placeholder="请输入商圈名称" name="area" value="{$item['area']}" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="" class="col-sm-2 control-label">标签</label>
+        <div class="col-sm-10">
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" type="checkbox" name="tag[]" value="干净卫生" id="categoryid_0" {if @in_array('干净卫生',$tags)}checked='checked'{/if}>
+                <label for="categoryid_0">干净卫生</label>
+            </div>
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" type="checkbox" name="tag[]" value="环境优雅" id="categoryid_1" {if @in_array('环境优雅',$tags)}checked='checked'{/if}>
+                <label for="categoryid_1">环境优雅</label>
+            </div>
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" type="checkbox" name="tag[]" value="免费wifi" id="categoryid_2" {if @in_array('免费wifi',$tags)}checked='checked'{/if}>
+                <label for="categoryid_2">免费wifi</label>
+            </div>
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" type="checkbox" name="tag[]" value="免费停车" id="categoryid_3" {if @in_array('免费停车',$tags)}checked='checked'{/if}>
+                <label for="categoryid_3">免费停车</label>
+            </div>
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 营业时间</label>
+                <div class="col-sm-9 col-xs-4 col-md-3">
+                    <div class="input-group">
+                        <!--<input type="text" class="form-control" name="open_time_start" value="{if $businesstime[0]}{$businesstime[0]}{else}8:00{/if}">-->
+                        {php echo tpl_form_field_clock(open_time_start, $start);}
+                        <span class="input-group-addon" id="basic-addon2">-</span>
+                        <!--<input type="text" class="form-control" name="open_time_end" value="{if $businesstime[1]}{$businesstime[1]}{else}24:00{/if}">-->
+                        {php echo tpl_form_field_clock(open_time_end, $end);}
+                    </div>
+                    <span class="help-block">营业时间，24小时制表示，如 8:00-20:00</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group" id='s4'>
+                <label for="" class="col-sm-2 control-label">展示图片</label>
+                <div class="col-sm-6">
+                    {php echo tpl_form_field_image(picurl,$item['picurl'],'',$options);}
+                    <span class="help-block">图片比例3:2(长*宽)</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">行业</label>
+                <div class="col-sm-8 col-xs-12">
+                {php echo tpl_form_field_category_2level('category', $parent, $children, $pcate, $ccate)}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 地址</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_district('reside',array('province' => $item['province'],'city' => $item['city'],'district' => $item['dist']));}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 详细地址</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" name="address" id="address" class="form-control" placeholder="输入详细地址，请勿重复填写省市区信息" value="{$item['address']}" />
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 定位</label>
+                <div class="col-sm-8 col-xs-12" id="map">
+                    {php echo tpl_form_field_coordinate('baidumap', array('lng' => $item['lng'],'lat' => $item['lat']))}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">商家外链</label>
+                <div class="col-sm-6">
+                    {php echo tpl_form_field_link('businessurl',$item['businessurl'])}
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="qq" class="col-sm-2 control-label">证照链接</label>
+        <div class="col-sm-6">
+            {php echo tpl_form_field_link('cardurl',$item['cardurl'])}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group">
+        <label for="qq" class="col-sm-2 control-label">活动链接</label>
+        <div class="col-sm-6">
+            {php echo tpl_form_field_link('activityurl',$item['activityurl'])}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">最新通知</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="instruction" class="form-control" placeholder="例如： 本店最新推出，新奥尔鸡翅，欢迎前来品尝" value="{$item['instruction']}" id="instruction"/>
+                    <span class="help-block">请用简短的一句话描述（15个字以内）</span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger"></span> 简介</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_ueditor('shopdesc', $item['shopdesc']);}
+                    <span class="help-block">商户简介，主要介绍商户信息等 </span>
+                </div>
+            </div>
+    <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+
+</form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function() {
+    $("#checkAll").click(function() {
+
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("#regionid[data-group='" + group + "']").each(function() {
+            $(this).get(0).checked = checked;
+        })
+
+    });
+});
+$('#submit').on('click', function () {
+    if(!$("#sjname").val()){
+        alert('请输入商家名称。');
+        return false;
+    }
+    if(!$("#contactname").val()){
+        alert('请输入商家联系人。');
+        return false;
+    }
+    if(!$("#mobile").val()){
+        alert('请输入联系电话。');
+        return false;
+    }
+    if(!$("#address").val()){
+        alert('请输入商家详细地址。');
+        return false;
+    }
+    if(!$("#instruction").val()){
+        alert('请输入最新通知。');
+        return false;
+    }
+    $('#submit').html("正提交中,请勿关闭页面。");
+    $('#submit').prop('disabled', true);
+    var url = "{php echo $this->createWebUrl('business',array('op'=>'dp','operation' => 'add'))}"
+    $.ajax({
+        type: "POST",
+        url: url,
+        dataType: 'json',
+        data: $('#form').serialize(),
+        success: function (res) {
+            if (res.status) {
+                alert('提交成功')
+                location.reload();
+            }else{
+                alert(res.content)
+                $('#submit').html("提交");
+                $('#submit').prop('disabled', false);
+            }
+        }
+    });
+})
+</script>

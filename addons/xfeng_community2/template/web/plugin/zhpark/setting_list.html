@@ -1,0 +1,79 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>参数列表</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('zhpark',array('op' => 'setting'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site" />
+                        <input type="hidden" name="a" value="entry" />
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}" />
+                        <input type="hidden" name="do" value="zhpark" />
+                        <input type="hidden" name="op" value="setting" />
+                    <div class="row">
+                        <div class="col-sm-6 m-b-xs">
+                            <a class="btn btn-primary" href="{php echo $this->createWebUrl('zhpark', array('op' => 'setting','p' => 'add'));}"><i class="fa fa-plus"></i> 添加参数</a>
+                        </div>
+                        <div class="col-sm-6 m-b-xs">
+                            <div class="input-group">
+                                <input class="form-control" name="keyword"  type="text" value="{$_GPC['keyword']}" placeholder="输入关键字">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary"> 搜索</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+        <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+            <table class="table table-bordered">
+                <thead class="navbar-inner">
+                <tr>
+                     <th style="width:30px;">ID</th>
+                    <th class="col-lg-2">物业公司</th>
+                    <th>物业ID</th>
+                    <th>添加时间</th>
+                    <th class="col-lg-3">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $item}
+                <tr>
+                    <td>{$item['id']}</td>
+                    <td>{$item['title']}</td>
+                    <td>{$item['company_id']}</td>
+                    <td>{php echo date('Y-m-d H:i:s', $item[createtime]);}</td>
+                    <td>
+                        <span>
+                            <a href="{php echo $this->createWebUrl('zhpark',array('op' => 'setting','p' => 'add','id' => $item['id']))}" title="编辑" class="btn btn-primary btn-sm" >编辑</a>
+                            <a onclick="return confirm('此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('zhpark',array('op' => 'setting','p' => 'delete','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+
+						</span>
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                <thead>
+                {if $list}
+                <tr>
+                    <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                </tr>
+                {else}
+                <tr style="text-align: center"><td>没有找到对应的记录</td></tr>
+                {/if}
+                </thead>
+            </table>
+
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

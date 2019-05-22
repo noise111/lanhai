@@ -1,0 +1,61 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'list','p' => 'list'))}" title="车场管理" >车场管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'passlog','p' => 'list','parkid' => $parkid))}" title="车辆通行记录" >车辆通行记录</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="./index.php" method="get" class="form-horizontal" role="form">
+                            <input type="hidden" name="c" value="site"/>
+                            <input type="hidden" name="a" value="entry"/>
+                            <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                            <input type="hidden" name="do" value="parks"/>
+                            <input type="hidden" name="op" value="passlog"/>
+                            <div class="row">
+
+                            </div>
+                        </form>
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th style="width:5%;">id</th>
+                                <th>车牌号</th>
+                                <th>设备序列号</th>
+                                <th>类型</th>
+                                <th>时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['carno']}</td>
+                                <td>{$item['identity']}</td>
+                                <td>{if $item['type'] == 1}白名单抬杠{elseif $item['type'] == 2}遥控抬杠{elseif $item['type'] == 3}平台控制抬杠{elseif $item['type'] == 4}临时车辆抬杠{/if}</td>
+                                <td>{$item['identity']}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

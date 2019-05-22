@@ -1,0 +1,127 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>信息管理</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('homemaking',array('op' => 'list'))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+					<form action="./index.php" method="get" class="form-horizontal" role="form">
+						<input type="hidden" name="c" value="site"/>
+						<input type="hidden" name="a" value="entry"/>
+						<input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+						<input type="hidden" name="do" value="homemaking"/>
+						<input type="hidden" name="op" value="list"/>
+					<div class="row">
+						<div class="col-sm-3 m-b-xs">
+							<select name="regionid" class="form-control">
+								<option value="0">全部小区</option>
+								{loop $regions $region}
+								<option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+								{/loop}
+							</select>
+						</div>
+						<div class="col-sm-2 m-b-xs">
+							<select name="category" class="form-control">
+								<option value="0">请选择家政项目</option>
+								{loop $categories $key $category}
+								<option value="{$category['id']}" {if $category['id'] == $_GPC['category']} selected="selected"{/if}>{$category['name']}{$category['price']}/{$category['gtime']}</option>
+								{/loop}
+							</select>
+						</div>
+						<div class="col-sm-3 m-b-xs">
+							{php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+						</div>
+						<div class="col-sm-2 m-b-xs">
+							<select name="status" class="form-control">
+								<option value="0" {if empty($_GPC['status'])}selected="selected"{/if}>未完成</option>
+								<option value="1" {if $_GPC['status'] == 1}selected="selected"{/if}>已完成</option>
+								<option value="2" {if $_GPC['status'] == 2}selected="selected"{/if}>已取消</option>
+							</select>
+						</div>
+
+						<div class="col-sm-2 m-b-xs">
+							<span class="input-group-btn" >
+								<button type="submit" class="btn btn-primary" style="margin-right: 3px">搜索</button>
+								<button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+								<input type="hidden" name="token" value="{$_W['token']}"/>
+							</span>
+						</div>
+					</div>
+					</form>
+		<form class="form-horizontal form" method="post" >
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th style="width:30px;">
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input type="checkbox" id="checkids"
+								   onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+							<label for="checkids"> </label>
+						</div>
+					</th>
+					<th style="width:60px;">姓名</th>
+					<th style="width:80px;">手机</th>
+					<th style="width:250px;">地址</th>
+					<th style="width:120px;">服务时间</th>
+					<th style="width:120px;">发布时间</th>
+					<th style="width:100px;">状态</th>
+					<th style="width:120px;">操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				{loop $list $item}
+				<tr>
+					<td>
+						<div class="checkbox checkbox-success checkbox-inline">
+							<input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+								   value="{$item['id']}">
+							<label for="ids_{$item['id']}"></label>
+						</div>
+					</td>
+					<td>{$item['realname']}</td>
+					<td>{$item['mobile']}</td>
+					<td>{$item['title']}{if $item['area']}{$item['area']}区{/if}{if $item['build']}{$item['build']}栋{/if}{if $item['unit']}{$item['unit']}单元{/if}{if $item['room']}{$item['room']}室{/if}</td>
+					<td>{$item['servicetime']}</td>
+					<td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+					<td>{if $item['status'] ==1 }<span class="label label-success">已完成</span>{/if}{if $item['status'] == 0 }<span class="label label-info">未完成</span>{/if}{if $item['status'] == 2 }<span class="label label-danger">已取消</span>{/if}</td>
+					<td>
+						{if ($user && $menu_opss && @in_array('homemaking_add', $menu_opss)) || empty($user)}
+						<span>
+							<a  class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('homemaking',array('op'=>'add','id'=>$item['id']));}">查看</a>
+						</span>
+						{/if}
+						{if ($user && $menu_opss && @in_array('homemaking_del', $menu_opss)) || empty($user)}
+						<span>
+							<a  class="btn btn-default btn-sm" onclick="return confirm('删除操作不可恢复，确认吗？')" href="{php echo $this->createWebUrl('homemaking',array('op'=>'delete','id'=>$item['id']));}">删除</a>
+						</span>
+						{/if}
+					</td>
+				</tr>
+				{/loop}
+			</tbody>
+		</table>
+			<table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+				<thead>
+				{if $list}
+				<tr>
+					<td class="text-left">
+						<input name="token" type="hidden" value="{$_W['token']}" />{if ($user && $menu_opss && @in_array('homemaking_pldel', $menu_opss)) || empty($user)}
+						<input type="submit" class="btn btn-danger btn-sm" name="delete" value="批量删除" />
+						{/if}
+					</td>
+					<td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+				</tr>
+				{else}
+				<tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+				{/if}
+				</thead>
+			</table>
+		</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

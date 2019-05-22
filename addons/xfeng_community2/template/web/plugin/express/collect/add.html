@@ -1,0 +1,122 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('express', array('op' => 'collect','p' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;代收点添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'collect','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="priceId" value="{$editData['id']}">
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">代收点名称</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="name" id="name" value="{$collecting['name']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="mobile" id="mobile" value="{$collecting['mobile']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-xs-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入姓名/昵称/手机搜索粉丝openid">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary" id="search">搜索</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">openid</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="openid" id="openid" value="{$collecting['openid']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物流公司</label>
+                            <div class="col-xs-5">
+                                <select name="companyid" id="companyid" class="form-control">
+                                    <option value="">请选择快递</option>
+                                    {loop $companys $com}
+                                    <option value="{$com['id']}" {if $collecting['companyid'] == $com['id']}selected{/if}>{$com['company']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" id="submit" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('address',array('op'=> 'search'))}",{words:words},function (data) {
+            if (data.err_code == 0){
+                $('#openid').val(data.openid);
+            }
+        },'json')
+    })
+</script>
+<script type="text/javascript">
+    $(".tpl-city").hide();
+    $(".tpl-district").hide();
+    $('#submit').on('click', function () {
+        if(!$("#name").val()){
+            alert('名称不可为空。');
+            return false;
+        }
+        if(!$("#mobile").val()){
+            alert('联系电话不可为空。');
+            return false;
+        }
+        if(!$("#openid").val()){
+            alert('openid不可为空。');
+            return false;
+        }
+        if(!$("#companyid").val()){
+            alert('请选择快递。');
+            return false;
+        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('express',array('op'=>'collect','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

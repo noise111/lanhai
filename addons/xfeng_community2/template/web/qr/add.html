@@ -1,0 +1,168 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('qr')}"></a>&nbsp;&nbsp;&nbsp;生成{if $enable  == 1}小区{else}商家{/if}二维码</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('qr',array('op' => 'add','enable' => $enable))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+
+	<form class="form-horizontal form" action="" method="post" id="form1">
+		<input type="hidden" name="id" value="{$row['id']}" />
+		<input type="hidden" name="acid" value="{$row['acid']}" />
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">场景名称</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" id="scene-name" class="form-control" placeholder="" name="scene-name" value="{$row['name']}" />
+						<span class="help-block">需要生成的小区二维码名称</span>
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+		<div class="form-group">
+			<label class="col-xs-12 col-sm-3 col-md-2 control-label">搜索</label>
+			<div class="col-sm-9 col-xs-12">
+				<div class="input-group">
+					<input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+					<input type="hidden" class="form-control" name="enable" id="enable" value="{$enable}">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">{if $enable  == 1}选择小区{else}选择商家{/if}</label>
+					<div class="col-sm-9 col-xs-12">
+						<select name='keyword' id='keyword' class="form-control">
+							{if $enable  == 1}
+							{loop $regions $region}
+							<option value='{$region['keyword']}' {if substr($row['keyword'],1) == $region['keyword']}selected ='selected'{/if}>{$region['title']}</option>
+							{/loop}
+							{else}
+							{loop $dps $dp}
+							<option value='{$dp['sjname']}' {if substr($row['keyword'],1) == $dp['keyword']}selected ='selected'{/if}>{$dp['sjname']}</option>
+							{/loop}
+
+							{/if}
+						</select>
+					</div>
+				</div>
+				{if empty($id)}
+		<div class="hr-line-dashed"></div>
+				<div class="form-group">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">二维码类型</label>
+					<div class="col-sm-9 col-xs-12">
+						<label for="radio_1" class="radio-inline"><input type="radio" name="qrc-model" id="radio_1" onclick="$('#model2').hide();$('#model1').show();" value="1" {if empty($row['model']) || $row['model'] == 1}checked="checked"{/if} /> 临时</label>
+						<label for="radio_0" class="radio-inline"><input type="radio" name="qrc-model" id="radio_0" onclick="$('#model1').hide();$('#model2').show();" value="2" {if $row['model'] == 2}checked="checked"{/if} /> 永久</label>
+						<span class="help-block">目前有2种类型的二维码, 分别是临时二维码和永久二维码, 前者有过期时间, 最大为7天（2592000秒）, 但能够生成较多数量, 后者无过期时间, 数量较少(目前参数只支持1--100000).</span>
+					</div>
+				</div>
+		<div class="hr-line-dashed"></div>
+				<div class="form-group" id="model1">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">过期时间</label>
+					<div class="col-sm-9 col-xs-12">
+						<input type="text" id="expire-seconds" class="form-control" placeholder="" name="expire-seconds" value="2592000" />
+						<span class="help-block">临时二维码过期时间, 最大为7天（2592000秒）.</span>
+					</div>
+				</div>
+
+				<div class="form-group" id="model2" style="display:none;">
+					<label class="col-xs-12 col-sm-3 col-md-2 control-label">场景值</label>
+					<div class="col-sm-9 col-xs-12">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="场景值" id="scene_str" name="scene_str" value="{if empty($row['scene_str'])}{php echo random(10);} {else}{php echo substr($row['scene_str'], 0 , 10)} {/if}" />
+							<span onclick="tokenGen();" style="cursor:pointer" class="input-group-addon">生成新的</span>
+						</div>
+					</div>
+				</div>
+				{/if}
+
+			<div class="hr-line-dashed"></div>
+		<div class="form-group">
+			<label for="" class="col-sm-2 control-label"></label>
+			<div class="col-sm-10">
+				<button type="submit" class="btn btn-primary btn-w-m" name="submit" value="提交">提交</button>
+				<input type="hidden" name="token" value="{$_W['token']}" />
+			</div>
+		</div>
+	</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+    function tokenGen() {
+        var letters = 'abcdefghijklmnopqrstuvwxyz';
+        var token = '';
+        for(var i = 0; i < 32; i++) {
+            var j = parseInt(Math.random() * (31 + 1));
+            token += letters[j];
+        }
+        $(':text[name="scene_str"]').val(token);
+    }
+</script>
+<script type="text/javascript">
+    if($("#radio_2").attr("checked") == "checked") {
+        $('#model1').hide();
+        $('#model2').show();
+    }
+    $("#form1").submit(function(){
+        if($(":text[name='scene-name']").val() == '') {
+            util.itoast('抱歉，场景名称为必填项，请返回修改！', '', 'error');
+            return false;
+        }
+        if($(":text[name='keyword']").val() == '') {
+            util.itoast('抱歉，场景管理关键字为必填项，请返回修改！', '', 'error');
+            return false;
+        }
+        var model = $(':radio[name="qrc-model"]:checked').val();
+        if(model == 1) {
+            if ($(":text[name='expire-seconds']").val() == '') {
+                util.itoast('抱歉，临时二维码过期时间为必填项，请返回修改！', '', 'error');
+                return false;
+            }
+            var r2 = /^\+?[1-9][0-9]*$/;
+            if(!r2.test($(":text[name='expire-seconds']").val())){
+                util.itoast('抱歉，临时二维码过期时间必须为正整数，请返回修改！', '', 'error');
+                return false;
+            }
+            if(parseInt($(":text[name='expire-seconds']").val())<30 || parseInt($(":text[name='expire-seconds']").val())>2592000) {
+                util.itoast('抱歉，临时二维码过期时间必须在30-2592000秒之间，请返回修改！', '', 'error');
+                return false;
+            }
+        }
+        if(model == 2) {
+            var scene_str = $.trim($('#scene_str').val());
+            if(!scene_str) {
+                util.itoast('场景值不能为空！', '', 'error');
+                return false;
+            }
+            var reg =  /^\d+$/g;
+            if(reg.test(scene_str)){
+                util.itoast('场景值不能是数字！', '', 'error');
+                return false;
+            }
+            $.post("{php echo url('platform/qr/check_scene_str')}", {'scene_str':scene_str}, function(data){
+                if(data == 'repeat') {
+                    util.itoast('场景值和现有二维码场景值重复，请修改场景值', '', 'error');
+                    return false;
+                }
+            });
+        }
+        return true;
+    });
+    $('#search').click(function () {
+		var words = $('#words').val();
+        var enable = $('#enable').val();
+		$.post("{php echo $this->createWebUrl('qr',array('op'=> 'search'))}",{words:words,enable:enable},function (data) {
+			if (data.err_code == 0){
+				$('#keyword').val(data.keyword);
+			}
+		},'json')
+    })
+</script>
+{template 'web/common/footer'}

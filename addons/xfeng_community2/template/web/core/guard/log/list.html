@@ -1,0 +1,127 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>刷卡记录</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('guard',array('op' => 'log'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form" >
+                        <input type="hidden" name="record" value="0">
+                        <div class="row">
+                            <div class="col-sm-10 m-b-xs">
+                                {if $_W['uid'] == 1}
+                                <!--<a class="btn btn-primary" href="{MODULE_URL}data/menjin.docx" >配置说明</a>-->
+                                {/if}
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th width="30px">
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" id="checkids"
+                                               onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});">
+                                        <label for="checkids"> </label>
+                                    </div>
+                                </th>
+                                <th style="width:30px;">ID</th>
+                                <th>门禁名称</th>
+                                <th>卡号</th>
+                                <th>刷卡时间</th>
+                                <th>类型</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" type="checkbox" name="ids[]" id="ids_{$item['id']}"
+                                               value="{$item['id']}">
+                                        <label for="ids_{$item['id']}"></label>
+                                    </div>
+                                </td>
+                                <td>{$item['id']}</td>
+                                <td>{$item['regiontitle']}-{$item['devicetitle']}{if $item['unit']}({$item['unit']}){/if}</td>
+                                <td>{$item['cardno']}</td>
+                                <td>{php echo date('Y-m-d H:i:s',$item['sktime']);}</td>
+                                <td>{$item['type']}</td>
+
+
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+                                    {if ($user && $menu_opss && @in_array('guard_logPldel', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="pldel" class="btn btn-danger btn-sm" value="批量删除记录" onClick="return confirm('确定选中并删除记录吗?');">
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('guard_logClear', $menu_opss)) || empty($user)}
+                                    <input type="submit" name="clear" class="btn btn-info btn-sm" value="一键清空记录" onClick="return confirm('确定一键清空吗?');">
+                                    {/if}
+                                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </td>
+                                <td class="footable-visible">
+                                    <ul class="pagination pull-right">{$pager}</ul>
+                                </td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center">
+                                <td>没有找到对应的记录</td>
+                            </tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // 提交事件
+    var page=1
+    $('#submit').on('click',function() {
+        $('#submit').html("正在同步中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        mass();
+    });
+    function mass() {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('guard',array('op'=>'log','p'=>'send'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+                $("#record").html(data.record);
+                $("input[name='record']").val(data.record);//
+                if(data.status == 'end'){
+                    $('#submit').html("同步完成");
+                    $('#submit').removeProp('disabled');
+                    window.location.reload();
+                    return ;
+                }
+                if(data.status == 'emp'){
+                    $('#submit').html("同步结束");
+                    $('#submit').removeProp('disabled');
+                    window.location.reload();
+                    return false;
+                }
+                mass();
+            }
+        });
+    }
+</script>
+{template 'web/common/footer'}

@@ -1,0 +1,9 @@
+{
+	"description": "项目配置文件。",
+	"compileType": "miniprogram",
+	"libVersion": "1.7.1",
+	"appid": "wx9255150e6bc73e11",
+	"projectname": "MinUI",
+	"setting": {},
+	"condition": {}
+}

@@ -1,0 +1,349 @@
+{template 'default2/header'}
+    <style>
+        .weui-media-box_appmsg .weui-media-box__hd{
+            width: 4.5rem;
+            height: 4.5rem;
+        }
+        .weui-icon-success{
+            font-size: 16px;
+        }
+        [class*=" weui-icon-"]:before, [class^=weui-icon-]:before{
+            margin-left: 0;
+        }
+        .news-contain{
+            top: 42px;
+        }
+        .weui-media-box{
+            padding: 8px 15px;
+        }
+        .weui-panel__hd{
+            padding: 8px 15px 8px;
+        }
+        .weui-btn_mini{
+            font-size: 12px;
+            margin-right: 10px;
+            margin-left: 0px;
+        }
+        .weui-btn_mini:last-child{
+            margin-left: auto;
+        }
+        .weui-btn+.weui-btn{
+            margin-top: 0px;
+        }
+        .weui-form-preview:before{
+            border-top:none;
+        }
+        .weui-form-preview:after{
+            border-bottom: none;
+        }
+        .weui-form-preview__hd:after{
+            border-bottom: none;
+        }
+        .weui-form-preview__hd{
+            border-bottom: 1px solid #D9D9D9;
+            line-height:inherit;
+        }
+        .weui-form-preview__label{
+            text-align: left;
+            text-align-last:left;
+            color: #333333;
+        }
+        .homemaking-card-tit{
+            color: #FF5500;
+        }
+        .weui-form-preview__bd{
+            padding: 0;
+            text-align: left;
+            color: #333333;
+        }
+        .weui-cell:before{
+            right: 15px;
+        }
+        .weui-media-box__desc{
+            -webkit-line-clamp:3;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<div class="news-head">
+    <!-- 头部信息 begin -->
+    <div class="swiper-container swiper1 b-line swiper-container-horizontal swiper-container-free-mode">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide selected">家政</div>
+            <div class="swiper-slide">集市</div>
+            <div class="swiper-slide">租赁</div>
+            <div class="swiper-slide">拼车</div>
+        </div>
+    </div>
+    <!-- 头部信息 end -->
+</div>
+<div class="news-contain">
+    <!-- 内容信息 begin -->
+    <div class="swiper-container swiper2 swiper-container-horizontal swiper-container-autoheight">
+        <div class="swiper-wrapper" >
+            <div class="swiper-slide swiper-no-swiping" id="homelist">
+
+
+            </div>
+            <div class="swiper-slide swiper-no-swiping" id="marketlist">
+
+            </div>
+            <div class="swiper-slide swiper-no-swiping" id="leaselist">
+
+            </div>
+            <div class="swiper-slide swiper-no-swiping" id="carlist">
+
+
+            </div>
+        </div>
+    </div>
+    <div class="weui-loadmore" id="loading" style="display: none">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips loading"></span>
+    </div>
+    <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+        <span class="weui-loadmore__tips">暂无数据</span>
+    </div>
+    <!-- 内容信息 end -->
+</div>
+<script type="text/html" id="home_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-form-preview homemaking-order-box">
+        <div class="weui-form-preview__hd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label"><span class="left-line"></span>{{d.list[i].name}}</label>
+                <label class="homemaking-card-tit">{{# if(d.list[i].status == 1){ }}已完成{{# }else{ }}未完成{{# } }}</label>
+            </div>
+        </div>
+        <div class="weui-form-preview__bd">
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-address.png" alt="" style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{d.list[i].address}}</p>
+                </div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-homekeeping-time.png" alt="" style="width:25px;margin-right:15px;display:block">
+                </div>
+                <div class="weui-cell__bd">
+                    <p>{{d.list[i].servicetime}}</p>
+                </div>
+            </div>
+        </div>
+        {{# if(d.list[i].status ==0){ }}
+        <div class="weui-panel__ft">
+            <div class="weui-cell  weui-cell_link my-issue-cell">
+                <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" onclick="del({{d.list[i].id}},'home')">删除</a>
+
+                <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default" onclick="finish({{d.list[i].id}},'home')">确认完成</a>
+
+            </div>
+        </div>
+        {{# } }}
+    </div>
+    {{# } }}
+</script>
+<script type="text/html" id="market_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">{{d.list[i].datetime}}<span style="float: right">{{# if(d.list[i].status == 1){ }}已完成{{# }else{ }}未完成{{# } }}</span></div>
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{{# if(d.list[i].images[0]){ }}{{d.list[i].images[0]}}{{# }else{ }}{MODULE_URL}template/mobile/default2/static/images/xq.png{{# } }}" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <h4 class="weui-media-box__title">{{d.list[i].title}}</h4>
+                    <p class="weui-media-box__desc">{{d.list[i].description}}</p>
+                </div>
+            </a>
+        </div>
+        {{# if(d.list[i].status ==0){ }}
+        <div class="weui-panel__ft">
+            <div class="weui-cell  weui-cell_link my-issue-cell">
+                <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" onclick="del({{d.list[i].id}},'market')">删除</a>
+                <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" onclick="goadd({{d.list[i].id}},{{d.list[i].type}})">编辑</a>
+
+                <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default" onclick="finish({{d.list[i].id}},'market')">确认完成</a>
+
+            </div>
+        </div>
+        {{# } }}
+    </div>
+
+    {{# } }}
+</script>
+<script type="text/html" id="lease_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__hd">{{d.list[i].datetime}}<span style="float: right">{{# if(d.list[i].status == 1){ }}已完成{{# }else{ }}未完成{{# } }}</span></div>
+        <div class="weui-panel__bd">
+            <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+                <div class="weui-media-box__hd">
+                    <img class="weui-media-box__thumb" src="{{# if(d.list[i].images[0]){ }}{{d.list[i].images[0]}}{{# }else{ }}{MODULE_URL}template/mobile/default2/static/images/xq.png{{# } }}" alt="">
+                </div>
+                <div class="weui-media-box__bd">
+                    <div class="lease-tit"><p>{{ d.list[i].way }}&nbsp;{{ d.list[i].fitment}}</p><span>{{d.list[i].price}}<samp>元/月</samp></span></div>
+                    <p class="lease-jianjie">{{ d.list[i].house_model }}   |  {{ d.list[i].model_area }}m²  |  {{ d.list[i].fitment }}</p>
+                    <p class="lease-label">
+                        <i class="weui-icon-success"></i><span>
+                        {{# if(d.list[i].category == 1){ }}
+                出租
+                {{# } }}
+                {{# if(d.list[i].category == 2){ }}
+                求租
+                {{#} }}
+                {{# if(d.list[i].category == 3){ }}
+                出售
+                {{# } }}
+                {{# if(d.list[i].category == 4){ }}
+                求购
+                {{# } }}
+
+                    </span>
+                        <i class="weui-icon-success"></i><span>{{ d.list[i].way }}</span>
+                    </p>
+                </div>
+            </a>
+        </div>
+        {{# if(d.list[i].status ==0){ }}
+        <div class="weui-panel__ft">
+            <div class="weui-cell  weui-cell_link my-issue-cell">
+                <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" onclick="del({{d.list[i].id}},'lease')">删除</a>
+                <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" onclick="window.location.href='{php echo $this->createMobileUrl('houselease',array('op'=>'add'))}&id={{d.list[i].id}}'">编辑</a>
+
+                <a href="javascript:;" class="weui-btn weui-btn_mini my-issue-default" onclick="finish({{d.list[i].id}},'lease')">确认完成</a>
+
+            </div>
+        </div>
+        {{# } }}
+    </div>
+
+    {{# } }}
+</script>
+<script type="text/html" id="car_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <ul class="car-list">
+        <li>
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__bd car-item-tit">
+                    <p>{{ d.list[i].title }}</p>
+                </div>
+
+                <div class="weui-cell__ft car-item-ft" onclick="del({{d.list[i].id}},'car')">确认删除</div>
+
+            </a>
+        </li>
+        <li class="car-item car-item-time iconfont">{{d.list[i].gotime}}</li>
+        <li class="car-item car-item-start">{{d.list[i].start_position}}</li>
+        <li class="car-item car-item-end">{{d.list[i].end_position}}</li>
+    </ul>
+    {{# } }}
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/swiper.min.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url1 = "{php echo wxapp_url('my/home')}&regionid="+regionid;
+        loaddata(url1, $("#homelist"), 'home_list', true);
+        var url2 = "{php echo wxapp_url('my/market')}&regionid="+regionid;
+        loaddata(url2, $("#marketlist"), 'market_list', true);
+        var url3 = "{php echo wxapp_url('my/lease')}&regionid="+regionid;
+        loaddata(url3, $("#leaselist"), 'lease_list', true);
+        var url4 = "{php echo wxapp_url('my/car')}&regionid="+regionid;
+        loaddata(url4, $("#carlist"), 'car_list', true);
+    })
+    var lock = false;
+    function finish(id,obj) {
+        var id = id;
+        var p = obj;
+        if(lock) return false;
+        lock = true;
+        $.showLoading('正在提交');
+        var url = "{php echo wxapp_url('my/finish')}";
+        $.getJSON(url,{id:id,p:obj},function (data) {
+            if(data.err_code ==0){
+                $.hideLoading();
+                //提交成功提示内容: data.data.content
+                setTimeout(function () {
+                    $.toast(data.data.content, "text");
+                    location.reload()
+
+                }, 500);
+
+            }
+            lock = false;
+        })
+    }
+    function del(id,obj) {
+        var id = id;
+        var p = obj;
+        if(lock) return false;
+        lock = true;
+        $.showLoading('正在提交');
+        var url = "{php echo wxapp_url('my/del')}";
+        $.getJSON(url,{id:id,p:obj},function (data) {
+            if(data.err_code ==0){
+                $.hideLoading();
+                //提交成功提示内容: data.data.content
+                setTimeout(function () {
+                    $.toast(data.data.content, "text");
+                    location.reload()
+                }, 500);
+
+            }
+            lock = false;
+        })
+    }
+    function goadd(id,type) {
+        window.location.href="{php echo $this->createMobileUrl('market',array('op' => 'add'))}&id="+id+"&type="+type;
+    }
+</script>
+<script>
+
+    $(function () {
+        function setCurrentSlide(ele,index) {
+            $(".swiper1 .swiper-slide").removeClass("selected");
+            ele.addClass("selected");
+        }
+        var swiper1 = new Swiper('.swiper1',{
+            slidesPerView:4,
+            paginationClickable:true,
+//            spaceBetween:15,
+            freeMode:true,
+            loop:false,
+            loopedSlide:4,
+            onTab:function (swiper) {
+                var n = swiper1.clickedIndex
+            }
+        });
+        swiper1.slides.each(function (index,val) {
+            var ele = $(this);
+            ele.on("click",function () {
+                setCurrentSlide(ele,index);
+                swiper2.slideTo(index,500,false);
+            });
+        });
+        var swiper2 = new Swiper('.swiper2',{
+            direction: 'horizontal',
+            loop: false,
+            autoHeight: true,
+            onSlideChangeEnd: function(swiper) {
+                //回调函数，swiper从一个slide过渡到另一个slide结束时执行。
+                var n = swiper.activeIndex;
+                setCurrentSlide($(".swiper1 .swiper-slide").eq(n), n);
+                swiper1.slideTo(n, 500, false);
+            }
+        });
+    })
+</script>
+</body>
+</html>

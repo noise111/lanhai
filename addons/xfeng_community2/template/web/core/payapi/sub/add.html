@@ -1,0 +1,102 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('payapi', array('op' => 'service','operation' => 'group'))}"></a>&nbsp;&nbsp;&nbsp;添加商户</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('payapi',array('op' => 'sub','operation' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+
+    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" onsubmit="return check(this);">
+        <input type="hidden" value="{$item['id']}" name="id">
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="s2_2" value="1" {if $item['type'] == 1 || empty($item['type'])}checked="checked"{/if} />
+                            <label for="s2_2">物业费/小区活动</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="s2_1" value="2" {if $item['type'] == 2}checked="checked"{/if}/>
+                            <label for="s2_1">商家/小区超市/无人超市</label>
+                        </div>
+                        <span class="help-block" style="color: red">注意：全部就是物业费、商家、超市都缴纳到当前接口。适用当前分权用户既是物业又是商家 </span>
+                    </div>
+
+                </div>
+        <div class="hr-line-dashed"></div>
+                <div class="form-group" id="company" {if $set['regionid'] || $item['type'] == 1 || empty($item['type'])}style="display: block" {else}style="display: none"{/if}>>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">小区</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <select name="cid" class="form-control">
+                            {loop $regions $region}
+                            <option value="{$region['id']}" {if $region['id'] == $item['userid']}selected = 'selected'{/if}>{$region['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="userid" {if $set['userid'] || $item['type'] == 2 }style="display: block" {else}style="display: none"{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商家</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <select name="userid" class="form-control">
+                            <option value="{$_W['uid']}" {if $item['userid'] == $_W['uid']}selected = 'selected'{/if}>{$_W['username']}</option>
+                            {loop $permission $user}
+                            <option value="{$user['uid']}" {if $user['uid'] == $item['userid']}selected = 'selected'{/if}>{$member[$user['uid']]['username']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">子商户号(sub_mch_id)</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="sub_mch_id" class="form-control" value="{$item['sub_mch_id']}" autocomplete="off"/>
+                        <span class="help-block">子商户号是在服务商商户号下申请的子商户号</span>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="submit" name="submit" value="提交" class="btn btn-w-m btn-primary"  />
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+
+            </div>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+    $(function () {
+        $("input[name='type']").click(function () {
+            var type = $('input[name="type"]:checked ').val();
+            if(type == 2){
+                $("#userid").show();
+                $("#company").hide();
+            }
+            if(type == 1){
+                $("#userid").hide();
+                $("#company").show();
+            }
+            if(type == 3){
+                $("#userid").hide();
+                $("#company").hide();
+            }
+        })
+    })
+    function check(form) {
+        if (!form['sub_mch_id'].value) {
+            alert('子商户号不可为空。');
+            return false;
+        }
+
+
+    }
+</script>
+{template 'web/common/footer'}

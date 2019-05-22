@@ -1,0 +1,147 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('guard', array('op' => 'group'))}"></a>添加设备分组</h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('guard',array('op' => 'group','p'=> 'add','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-6">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">所属小区</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="0">全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">设备分组名称</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <input type="text" class="form-control" placeholder="请输入项目名称" name="title"
+                                       value="{$item['title']}">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">绑定设备</label>
+                            <div class="col-sm-6 col-xs-6" id="category">
+                                {if $categories}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" name="categoryid[]" id="categoryid_00" data-group='categoryss'>
+                                    <label for="categoryid_00">全部</label>
+                                </div>
+                                {loop $categories $category}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" name="categoryid[]" value="{$category['id']}" id="categoryid_{$category['id']}" data-group='categoryss' {if @in_array($category['id'],$categoryids)}checked{/if} >
+                                    <label for="categoryid_{$category['id']}">{$category['title']}</label>
+                                </div>
+                                {/loop}
+                                {/if}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-6 col-xs-6">
+                                <textarea name="remark" class="form-control">{$item['remark']}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10 col-xs-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['regionid'].value) {
+            alert('请选择小区。');
+            return false;
+        }
+        if (!form['title'].value) {
+            alert('请输入项目名称。');
+            return false;
+        }
+    }
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.post("{php echo $this->createWebUrl('guard',array('op'=> 'group','p'=> 'cat'))}",{regionid:data.regionid},function (data) {
+                        var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+                        for(var o in data){
+                            content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categorys'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                        }
+                        $("#category").html(content);
+                        $("#categoryid_0").click(function() {
+                            var checked = $(this).get(0).checked;
+                            var group = $(this).data('group');
+                            $("input:checkbox[data-group='" +group + "']").each(function(){
+                                $(this).get(0).checked = checked;
+                            })
+                        });
+                    },'json')
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.post("{php echo $this->createWebUrl('guard',array('op'=> 'group','p'=> 'cat'))}",{regionid:regionid},function (data) {
+                var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+                for(var o in data){
+                    content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='categoryid[]' id='categoryid_"+data[o].id+"' data-group='categorys'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+                }
+                $("#category").html(content);
+                $("#categoryid_0").click(function() {
+                    var checked = $(this).get(0).checked;
+                    var group = $(this).data('group');
+                    $("input:checkbox[data-group='" +group + "']").each(function(){
+                        $(this).get(0).checked = checked;
+                    })
+                });
+            },'json')
+        })
+        $("#categoryid_00").click(function() {
+            var checked = $(this).get(0).checked;
+            var group = $(this).data('group');
+            $("input:checkbox[data-group='" +group + "']").each(function(){
+                $(this).get(0).checked = checked;
+            })
+        });
+    })
+
+</script>
+

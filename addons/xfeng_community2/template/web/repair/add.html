@@ -1,0 +1,217 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"  onClick="javascript :history.back(-1);"></a>&nbsp;&nbsp;&nbsp;报修处理</h5>
+
+                </div>
+                <div class="ibox-content">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>电话</th>
+                <th>房号</th>
+                <th>内容</th>
+                <th>图片</th>
+                <th>状态</th>
+                <th>维修费用</th>
+                <th>评价</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{$item['realname']}</td>
+                <td>{$item['mobile']}</td>
+                <td>{$item['title']}{$item['address']}</td>
+                <td>{$item['content']}</td>
+                <td>{if $imgs}
+                    {loop $imgs $img}
+                    <a href="{php echo tomedia($img['src'])}" target="_blank">
+                        <img src="{php echo tomedia($img['src'])}" alt="..." class="img-thumbnail" width="60" height="60">
+                    </a>
+                    {/loop}
+                    {/if}
+
+                    {if $images&&$state }
+                    {loop $images $image}
+                    <a href="{php echo tomedia($image)}" target="_blank">
+                        <img src="{php echo tomedia($image)}" alt="..." class="img-thumbnail" width="60" height="60">
+                    </a>
+                    {/loop}
+                    {/if}
+                </td>
+                <td>
+                    {if $item['status'] == 1}<span class="label label-success">已处理</span>{elseif
+                    $item['status'] == 3}<span class="label label-info">处理中</span>{else}<span class="label label-primary">未处理</span>{/if}
+                </td>
+                <td>{$item['price']}</td>
+                <td>
+
+                    {if $item['mrank']}<span class="label label-info">{if $item['mrank'] == 1}满意{elseif $item['mrank'] == 2}一般{else}不满意{/if}&nbsp;&nbsp;{$item['rank_content']}</span>{/if}
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+                    {if $logs}
+                    {loop $logs $k $log}
+                    <div class="timeline-item" >
+                        <div class="row">
+                            <div class="col-xs-3 date">
+                                <i class="fa fa-file-text"></i> {php echo date('Y-m-d H:i',$log['createtime'])}
+                                <br>
+                                <!--<small class="text-navy">3小时前</small>-->
+                            </div>
+                            <div class="col-xs-7 content">
+                                <p class="m-b-xs"><strong>{if $log['dealing']}{$log['dealing']}{else}{$log['realname']}{/if}</strong>
+                                </p>
+                                <p>{$log['content']}</p>
+                                {if $log['cause']}<p>原因分析：{$log['cause']}</p>{/if}
+                                {if $log['measure']}<p>预防措施：{$log['measure']}</p>{/if}
+                                {if $log['rank']}<p>维修评价：{$log['rank']}</p>{/if}
+                                <p>维修费用：{$log['price']}</p>
+                                <p>
+                                    {if $log['images']}
+                                    {loop $log['thumbs'] $thumb}
+                                    <a href="{php echo tomedia($thumb)}" target="_blank">
+                                        <img src="{php echo tomedia($thumb)}" alt="..." class="img-thumbnail" width="60" height="60"></a>
+                                    {/loop}
+                                    {/if}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {/loop}
+                    {/if}
+                    <div class="hr-line-dashed"></div>
+        <form action="" class="form-horizontal form" method="post" onsubmit="return check(this);">
+            <input type="hidden" name="reportid" value="{$item['id']}">
+
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">状态:</label>
+                <div class="col-sm-5">
+                    <select name="status" class="form-control">
+                        <option value="2" {if intval($item['status'])==2} selected{/if}>未处理</option>
+                        <option value="3" {if intval($item['status'])==3} selected{/if}>处理中</option>
+                        <option value="1" {if intval($item['status'])==1} selected{/if}>已处理</option>
+                    </select>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">质保:</label>
+                <div class="col-sm-10">
+                    <div class="radio radio-success radio-inline">
+                        <input type="radio" name="categoryid" id="categoryid_1" value="1" {if $item['categoryid'] || empty($item['categoryid'])==1}
+                        checked{/if} />
+                        <label for="categoryid_1">质保内</label>
+                    </div>
+                    <div class="radio radio-success radio-inline">
+                        <input type="radio" name="categoryid" id="categoryid_2" value="2" {if $item['categoryid'] == 2}
+                        checked{/if} />
+                        <label for="categoryid_2">质保外</label>
+                    </div>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">处理结果:</label>
+                <div class="col-sm-5">
+                    <textarea style="height:100px;" class="form-control" name="content" cols="70"></textarea>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">原因分析:</label>
+                <div class="col-sm-5">
+                    <textarea style="height:100px;" class="form-control" name="cause" cols="70"></textarea>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">预防措施:</label>
+                <div class="col-sm-5">
+                    <textarea style="height:100px;" class="form-control" name="measure" cols="70"></textarea>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">维修评价:</label>
+                <div class="col-sm-5">
+                    <textarea style="height:100px;" class="form-control" name="rank" cols="70" placeholder="维修人员对业主的评价"></textarea>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">其他图片:</label>
+                <div class="col-sm-5 ">
+                    {php echo tpl_form_field_multi_image('thumbs')}
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">处理人:</label>
+                <div class="col-sm-5">
+                    <input type="text" value=""
+                           name='dealing' class="form-control" value="{$user['realname']}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">联系电话:</label>
+                <div class="col-sm-5">
+                    <input type="text" value=""
+                           name='mobile' class="form-control" value="{$user['mobile']}"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">维修费用:</label>
+                <div class="col-sm-5">
+                    <input type="text" value="" name='price' class="form-control" value=""/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary btn-block" name="submit" value="提交">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input type="hidden" name="id" value="{$item['id']}"/>
+                </div>
+            </div>
+        </form>
+
+                </div></div></div></div></div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['dealing'].value) {
+            alert('请输入处理人。');
+            return false;
+        }
+        if (!form['mobile'].value) {
+            alert('请输入处理电话。');
+            return false;
+        }
+        if (!form['price'].value) {
+            alert('请输入维修费用。');
+            return false;
+        }
+    }
+    $("#show").click(function () {
+        var more = $('#more').css('display');
+        if(more == 'none')
+        {
+            $("#more").show();
+        }
+        else
+        {
+            $("#more").hide();
+        }
+    })
+</script>
+{template 'web/common/footer'}

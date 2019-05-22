@@ -1,0 +1,245 @@
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+        <script> document.documentElement.style.fontSize =document.documentElement.clientWidth/750*40 +"px";</script>
+        <meta name="format-detection" content="telephone=no" />
+        <title>{if empty($this->merch_user)}{$_W['shopset']['shop']['name']}{else}{php echo $this->merch_user['merchname']}{/if}</title>
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/fonts/iconfont.css?v=2017070719">
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/js/dist/foxui/css/foxui.min.css?v={php echo time()}">
+        <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/template/mobile/default/static/css/style.css?v={php echo time()}">
+        <link rel="stylesheet" type="text/css" href="{php echo EWEI_SHOPV2_LOCAL}static/fonts/iconfont.css?v=2017070719">
+        <script src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+       <script src='//res.wx.qq.com/open/js/jweixin-1.3.2.js'></script>
+    </head>
+    <body ontouchstart>
+		<div class='fui-page-group {if is_ios()}statusbar{/if}'>
+{template 'commission/common'}
+<script>document.title = "业务佣金账单"; </script>
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/css/mobileselect.css">
+<script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/jquery.min.js"></script>
+<script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/mobileselect.js"></script>
+<script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/selectdate.js"></script>
+<style>
+.order_title{
+    overflow:hidden;
+    position:relative;
+    margin:0 0.6rem;
+    color:#333333;
+    font-size:0.75rem;
+        height: 1.1rem;
+    line-height: 1.1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+.time_div{
+    width:auto;
+    color:#5882f5;
+    font-size:0.65rem;
+    float:right;
+        height: 1.1rem;
+    line-height: 1.1rem;
+}
+.icon-sanjiao1{
+    font-size: 0.45rem;
+    float: right;
+    margin-left: 0.2rem;
+}
+.fui-list-inner .title {
+    color:#333333;
+    margin-top:0.15rem;
+    line-height:150%;
+}
+.fui-list-inner .text {
+    color:#666666;
+    font-size:0.65rem;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    white-space:normal;
+    height:auto;
+    line-height:150%;
+}
+.fui-list-angle{
+    margin-right:0;
+    text-align:right;
+}
+.fui-list-angle .text{
+    font-size:0.9rem;
+    color:#a81515;
+        line-height: 150%;
+}
+.fui-list-angle .time{
+    font-size:0.65rem;
+    color:#999999;
+        line-height: 150%;
+}
+.fui-list-group{
+    margin-top:0;
+}
+.fui-list:after {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: auto;
+    right: 0.6rem;
+    bottom: 0;
+    border-bottom: 1px solid #eeeeee;
+    transform-origin: 0 100%;
+    transform: scaleY(0.5);
+}
+.fui-list-group .fui-list:last-child:after {
+    display:none
+}
+#time{
+    width: 2.4rem;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    background-color: transparent;
+    font-size: inherit;
+    color: inherit;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    color: #5882f5;
+}
+</style>
+<div class="fui-page fui-page-current page-commission-order">
+    <div class="fui-content navbar">
+        <div class='fui-cell-group' style='margin-top:0px;background: #a81515;color: #fff;'>
+            <div class='fui-cell'>
+                <div class='fui-cell-info' style='width:auto;color: #fff;'>{php echo $this->set['texts']['commission_total']}：+{php echo number_format($member['commission_total'],2)}{php echo $this->set['texts']['yuan']}</div>
+            </div>
+        </div>
+
+        <div class='content-empty' style='display:none;'>
+            <i class='icon icon-list'></i><br/>暂时没有任何订单
+        </div>
+        <div  id="container">
+            <div class="order_title">
+                   业务佣金账单明细
+                <div  class="time_div">
+                    <input id="time" readonly="readonly" unselectable="on" value='<?php echo date("Y-m")?>'>
+                    <font class="icon icon-sanjiao1"></font>
+                </div>
+            </div>
+
+            <div class='fui-list-group'>
+                <div class="fui-list" >
+                    <div class="fui-list-inner">
+                        <div class="title">
+                            小炒肉购买了纸尿裤
+                        </div>
+                          <div class="text">
+                            一级佣金
+                        </div>
+                    </div>
+                    <div class="fui-list-angle" >
+                       <div class="text">
+                             +500.00
+                       </div>
+                       <div class="time">
+                            2019-02-01 10:10
+                       </div>
+                    </div>
+                </div>
+
+                <div class="fui-list" >
+                    <div class="fui-list-inner">
+                        <div class="title">
+                            小炒肉购买了纸尿裤
+                        </div>
+                          <div class="text">
+                            二级佣金
+                        </div>
+                    </div>
+                    <div class="fui-list-angle" >
+                       <div class="text">
+                             +1000.00
+                       </div>
+                       <div class="time">
+                            2019-02-01 10:10
+                       </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class='infinite-loading' style='display:none;'><span class='fui-preloader'></span><span class='text'> 正在加载...</span></div>
+   </div>
+</div>
+<!--
+<script id='tpl_commission_order_list' type='text/html'>
+    <%each list as order%>
+    <div class='fui-list-group'>
+
+        {if !empty($this->set['openorderdetail']) || !empty($this->set['openorderbuyer'])}
+                {if !empty($this->set['openorderbuyer'])}
+                <div class="fui-list" style="height: 2.4rem">
+                    <div class="fui-list-media">
+                        <img src="<%order.buyer.avatar%>" class="round" style='width:1.4rem;height:1.4rem;border-radius: 50%'>
+                    </div>
+                    <div class="fui-list-inner">
+                        <div class="row">
+                            <div class="row-text" style="font-size: .6rem"><%order.buyer.nickname%></div>
+                        </div>
+                    </div>
+                    <div class="fui-list-angle" style="margin: 0;font-size: .6rem; <%if order.status==1%>color:#ff8000;<%else if order.status==0%>color:#ff5555;<%else if order.status==3%>color:#04ab02;<%else%>color:#b2b2b2;<%/if%>"><%order.statusstr%></div>
+                </div>
+                {/if}
+                {if !empty($this->set['openorderdetail'])}
+                <%each order.order_goods as g%>
+                <div class="fui-list no-border" style="background: #f9f9f9;height: 3.25rem;margin-top: .1rem">
+                    <div class="fui-list-media">
+                        <img src="<%g.thumb%>" class="round" style='width:2.5rem;height:2.5rem;'>
+                    </div>
+                    <div class="fui-list-inner">
+                        <div class="row">
+                            <div class="row-text" style="font-size: .6rem;color: #000"><%g.title%></div>
+                        </div>
+                        <div class="subtitle" style="font-size: .6rem;color: #999;"><%g.optionname%>x<%g.total%></div>
+                    </div>
+                    <div class="row-remark">
+                        <p>预计</p>
+                        <p>+<%g.commission%></p>
+                    </div>
+                </div>
+                <%/each%>
+                {/if}
+        {/if}
+        <div class='fui-list'>
+                    <span class="left" style="font-size: .55rem;color: #999;line-height: .95rem">{if !p('offic')}分销等级：<%order.level%>{/if}<br>订单编号：<%order.ordersn%><br>下单时间：<%order.createtime%>
+                    </span>
+        </div>
+        <div class='fui-list' style="font-size: .55rem;justify-content: flex-end;border-top: .025rem solid #ebebeb;">
+            预计佣金：<span class="right" style="font-size: .8rem">+<%order.commission%></span>
+        </div>
+    </div>
+    <%/each%>
+</script>
+
+<script language='javascript'>
+    require(['../addons/ewei_shopv2/plugin/commission/static/js/order.js'], function (modal) {
+    modal.init({fromDetail:false});
+});
+</script>
+-->
+
+<script type="text/javascript">
+	 $.selectDate_YM("#time");
+     
+     $(document).ready(function(){ 
+            $('.ensure').bind('click', function() {
+               var _val = $('#time').val();
+               alert(_val)
+            });
+        })
+</script>
+{php $this->footerMenus()}
+{template '_footer'}
+

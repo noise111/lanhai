@@ -1,0 +1,65 @@
+{template 'default2/header'}
+<style>
+    .weui-cell__ft {
+        font-size: 12px;
+    }
+
+    .weui-cells {
+        margin-top: 0;
+    }
+
+    .property-item-tit {
+        float: left;
+        min-width: 4em;
+        text-align: justify;
+        text-align-last: justify;
+    }
+</style>
+
+<body>
+<div id="list"></div>
+
+<script type="text/html" id="xq_list">
+    <div class="property02-head">
+        <p>{{# if(d.status ==2){ }}本期账单未缴金额合计{{# }else{ }}本期账单已缴金额合计{{# } }}</p>
+        <p><span>{{d.total}}</span></p>
+    </div>
+    <div class="weui-tab">
+        <div class="weui-cells" >
+            <a class="weui-cell " href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p class="property-item-tit">账单时间</p>
+                </div>
+                <div class="weui-cell__ft color_y">{{d.costtime}}</div>
+            </a>
+            {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+            <a class="weui-cell " href="javascript:;">
+                <div class="weui-cell__bd">
+                    <p class="property-item-tit">{{d.list[i].category}}</p>
+                </div>
+                <div class="weui-cell__ft color_y">￥{{d.list[i].fee}}</div>
+            </a>
+            {{# } }}
+
+
+        </div>
+        {{# if(d.status ==2){ }}
+        <div class="weui-tabbar address_tabbar" onclick="window.location.href='{php echo $this->createMobileUrl('cost',array('op'=>'add','status'=> 2))}'">
+            <a href="javascript:;" class="weui-btn address_tabbar_btn ">我要缴费</a>
+        </div>
+        {{# } }}
+    </div>
+
+</script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        var id= "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('cost/detail')}&id="+id;
+        _loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>账单打印</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        table, th, td
+        {
+            border: 1px solid #CCCCCC;
+            text-align: center;
+        }
+        th
+        {
+            font-weight: bold;
+            font-size: 17px
+        }
+        .bodystyle{
+            filter:alpha(opacity=50);
+            -moz-opacity:0.5;
+            -khtml-opacity: 0.5;
+            opacity: 0.5;
+            width:100%;
+            position:absolute;
+            background-attachment:fixed;
+        }
+    </style>
+<body>
+<div style="margin-top: 2%;margin-left:10%;width: 900px;">
+    <h3 style="text-align: center">{$ptitle}</h3>
+    <h3 style="text-align: center">催缴通知单</h3>
+    <div style="float: right;margin-right: 102px;font-weight: bold;">
+        <span>NO：{$numno}</span>
+    </div>
+    <div style="clear: both"></div>
+    <div style="float: left">
+        <span>交款人姓名：{$realname}{$address}</span>
+    </div>
+    <div style="float: right;margin-right: 111px">
+        <span>打印日期：{php echo date('Y-m-d')}</span>
+    </div>
+    <div style="clear: both"></div>
+    <table style="border-collapse:collapse;font-size: 14px">
+        <tr>
+            <th style="width: 150px;">收款项目</th>
+            <th style="width: 100px;">收款方式</th>
+            <th style="width: 350px;">摘 要</th>
+            <th style="width: 100px;">金 额</th>
+            <th style="width: 300px;">备 注</th>
+        </tr>
+        {loop $list $item}
+        <tr>
+            <td>{$item['title']}</td>
+            <td>{if $item['paytype'] == 1}现金{elseif $item['paytype'] == 2}微信支付{elseif $item['paytype'] == 3}支付宝{else}现金{/if}</td>
+            <td>{$item['title']}
+                {php echo date('Y-m-d',$item['starttime'])} 至{php echo date('Y-m-d',$item['endtime'])}
+            </td>
+            <td>{$item['price']}</td>
+            <td>{if $item['type']==2}上期度数:{$item['old_num']}° 本期度数:{$item['new_num']}°{/if}</td>
+        </tr>
+        {/loop}
+        {$tab}
+    </table>
+    <div style="float: left">
+        <span>金额合计（大写）：{$stotal}</span>
+    </div>
+    <div style="float: right;margin-right: 252px">
+        <span>（小写）：{$total}</span>
+    </div>
+    <div style="position: relative;right: -460px;top:30px">
+        <span>操作员：{if $user}{$user['realname']}{else}{$_W['user']['username']}{/if}</span>
+    </div>
+    <div style="clear: both"></div>
+    <div class="bodystyle" style="float: right;position: relative;top: -194px;right: -660px;">
+        <img src="{php echo tomedia($region['stamp'])}" alt="" width="183px">
+    </div>
+</div>
+</body>
+</html>

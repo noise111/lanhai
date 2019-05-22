@@ -1,0 +1,92 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>菜单管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('menu',array('op' => 'list'))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" method="post" onsubmit="return formcheck(this)">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="col-sm-1">显示顺序</th>
+                                <th class="col-sm-2">菜单名称</th>
+                                <th class="col-sm-2">是否显示</th>
+                                <th class="col-sm-10">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $key $row}
+                            {if $row}
+                            <tr>
+
+                                <td>
+                                    <div class="pad-bottom ">{$row['displayorder']}</div>
+                                </td>
+                                <td>
+                                    <div class="type-parent">{$row['title']}
+                                    </div>
+                                </td>
+                                <th>
+                                    <input type="checkbox" name="status" data="{$row['status']}" data-id="{$row['id']}" class="js-switch_{$row['id']}" {if $row['status'] == 1 }checked="checked"{/if}>
+                                </th>
+                                <td>
+                                    <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('menu',array('op'=> 'add','id'=> $row['id']))}" >编辑</a>
+                                </td>
+                            </tr>
+                                {if $children[$row['id']]}
+                                    {loop $children[$row['id']] $k $item}
+                                    {if $item}
+
+                                    <tr>
+
+                                        <td><div class="pad-bottom ">{$item['displayorder']}</div></td>
+                                        <td>
+                                            <div style="float:left;line-height:60px;">{$item['id']}{$item['title']}
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" data="{$item['status']}" data-id="{$item['id']}" class="js-switch_{$item['id']}" {if $item['status'] == 1 }checked="checked"{/if}></span>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" href="{php echo $this->createWebUrl('menu',array('op'=> 'add','id'=> $item['id']))}" >编辑</a>
+                                        </td>
+                                    </tr>
+
+                                    {/if}
+                                    {/loop}
+                                {/if}
+                            {/if}
+                            {/loop}
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(function () {
+        $(':checkbox').on('change', function (e, state) {
+            $this = $(this);
+            var id = $this.attr('data-id');
+            var status = this.checked ? 1 : 0;
+            $this.val(status);
+            $.post("{php echo $this->createWebUrl('menu')}",{id:id,status:status},function () {
+            })
+        });
+        $('.btn').hover(function () {
+            $(this).tooltip('show');
+        }, function () {
+            $(this).tooltip('hide');
+        });
+    });
+
+</script>

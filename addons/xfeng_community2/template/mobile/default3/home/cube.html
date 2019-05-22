@@ -1,0 +1,149 @@
+<!--魔方布局-->
+<!--一张图片-->
+<div id="list_cube"></div>
+<script type="text/html" id="xq_list_cube">
+    {{# var l = d.cubes.length; }}
+    {{# if(l==1){ }}
+
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_whole" onclick="window.location.href='{{d.cubs[0].url}}'">
+            <div class="cube_grid_img" data-ratio="2:1">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+        </a>
+    </div>
+    {{# } }}
+    {{# if(l==2){ }}
+    <!--两张图片-->
+
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_half" onclick="window.location.href='{{d.cubes[0].url}}'">
+            <div class="cube_grid_img" data-ratio="1:1">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+        </a>
+        <a  href="javascript:;" class="weui-grid cube_grid width_half" onclick="window.location.href='{{d.cubes[1].url}}'">
+            <div class="cube_grid_img" data-ratio="1:1">
+                <img src="{{ d.cubes[1].thumb }}">
+            </div>
+        </a>
+    </div>
+    {{# } }}
+    {{# if(l==3){ }}
+    <!--三张图片-->
+
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_half cube_pading" onclick="window.location.href='{{d.cubes[0].url}}'">
+            <div class="cube_grid_img" data-ratio="1:1">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+        </a>
+        <a  href="javascript:;" class="weui-grid cube_grid width_half">
+            <div class="cube_pading_bottom" onclick="window.location.href='{{d.cubes[1].url}}'">
+                <div class="cube_grid_img" data-ratio="2:1">
+                    <img src="{{ d.cubes[1].thumb }}">
+                </div>
+            </div>
+            <div class="cube_pading_bottom" onclick="window.location.href='{{d.cubes[2].url}}'">
+                <div class="cube_grid_img" data-ratio="2:1">
+                    <img src="{{ d.cubes[2].thumb }}">
+                </div>
+            </div>
+        </a>
+    </div>
+    {{# } }}
+    {{# if(l==4){ }}
+
+    <!--四张图片-->
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_half" onclick="window.location.href='{{d.cubes[0].url}}'">
+            <div class="cube_grid_img" data-ratio="1:1">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+        </a>
+        <a  href="javascript:;" class="weui-grid cube_grid width_half" >
+            <div class="width_whole" onclick="window.location.href='{{d.cubes[1].url}}'">
+                <div class="cube_grid_img" data-ratio="2:1">
+                    <img src="{{ d.cubes[1].thumb }}">
+                </div>
+            </div>
+            <div class="width_half" onclick="window.location.href='{{d.cubes[2].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[2].thumb }}">
+                </div>
+            </div>
+            <div class="width_half" onclick="window.location.href='{{d.cubes[3].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[3].thumb }}">
+                </div>
+            </div>
+        </a>
+    </div>
+    {{# } }}
+    {{# if(l==5){ }}
+    <!--五张图片-->
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_half" onclick="window.location.href='{{d.cubes[0].url}}'">
+            <div class="cube_grid_img" data-ratio="1:1">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+        </a>
+        <a  href="javascript:;" class="weui-grid cube_grid width_half">
+            <div class="width_half" onclick="window.location.href='{{d.cubes[1].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[1].thumb }}">
+                </div>
+            </div>
+            <div class="width_half" onclick="window.location.href='{{d.cubes[2].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[2].thumb }}">
+                </div>
+            </div>
+            <div class="width_half" onclick="window.location.href='{{d.cubes[3].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[3].thumb }}">
+                </div>
+            </div>
+            <div class="width_half" onclick="window.location.href='{{d.cubes[4].url}}'">
+                <div class="cube_grid_img" data-ratio="1:1">
+                    <img src="{{ d.cubes[4].thumb }}">
+                </div>
+            </div>
+        </a>
+    </div>
+    {{# } }}
+    {{# if(l==6){ }}
+    <!--六张图片-->
+    <div  class="weui-grids cube_grids">
+        <a  href="javascript:;" class="weui-grid cube_grid width_half">
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[0].url}}'">
+                <img src="{{ d.cubes[0].thumb }}">
+            </div>
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[1].url}}'">
+                <img src="{{ d.cubes[1].thumb }}">
+            </div>
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[2].url}}'">
+                <img src="{{ d.cubes[2].thumb }}">
+            </div>
+        </a>
+        <a  href="javascript:;" class="weui-grid cube_grid width_half">
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[3].url}}'">
+                <img src="{{ d.cubes[3].thumb }}">
+            </div>
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[4].url}}'">
+                <img src="{{ d.cubes[4].thumb }}">
+            </div>
+            <div class="cube_grid_img" data-ratio="2:1" onclick="window.location.href='{{d.cubes[5].url}}'">
+                <img src="{{ d.cubes[5].thumb }}">
+            </div>
+        </a>
+    </div>
+    {{# } }}
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('display/cubes')}&regionid="+regionid;
+        _loaddata(url, $("#list_cube"), 'xq_list_cube', true);
+    })
+</script>

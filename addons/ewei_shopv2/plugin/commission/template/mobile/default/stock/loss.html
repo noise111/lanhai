@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
+    <script> document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 40 + "px";</script>
+    <meta name="format-detection" content="telephone=no" />
+    <title>{if empty($this->merch_user)}{$_W['shopset']['shop']['name']}{else}{php echo
+        $this->merch_user['merchname']}{/if}</title>
+    <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/fonts/iconfont.css?v=2017070719">
+    <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/static/js/dist/foxui/css/foxui.min.css?v={php echo time()}">
+    <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/template/mobile/default/static/css/style.css?v={php echo time()}">
+    <link rel="stylesheet" type="text/css" href="{php echo EWEI_SHOPV2_LOCAL}static/fonts/iconfont.css?v=2017070719">
+    <script src="./resource/js/lib/jquery-1.11.1.min.js"></script>
+    <script src='//res.wx.qq.com/open/js/jweixin-1.3.2.js'></script>
+    {template 'commission/common'}
+    <script>document.title = "损耗管理"; </script>
+    <link rel="stylesheet" href="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/css/mobileselect.css">
+    <script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/jquery.min.js"></script>
+    <script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/mobileselect.js"></script>
+    <script src="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/js/selectdate.js"></script>
+    <link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/font/iconfont.css?v=2017070719">
+</head>
+<style>
+.fui-tab.fui-tab-danger a.active {
+    color: #a81515;
+    border-color: #a81515;
+    z-index: 100;
+}
+.tongji2 {
+    font-size: 0.7rem;
+    margin: 0.7rem 0.6rem 0 0.6rem;
+    display: flex;
+    line-height: 150%;
+    padding: 0;
+    background: none;
+}
+.text01 {
+    color: #333333;
+    display: inline-block;
+}
+.text02 {
+    color: #a81515;
+    display: inline-block;
+    margin-left: 0.1rem;
+}
+.tongji2 .btn {
+    margin: 0;
+    padding: 0 0.4rem;
+    font-size: 0.6rem;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    background: #a81515;
+    color: #ffffff;
+    border: none;
+}
+.searchbar_div{
+    display: flex;
+}
+.searchbar {
+    flex:1;
+    margin: 0 0.6rem;
+}
+.searchbar .search-input input {
+    border: 0;
+    background: #ffffff;
+    margin: 0;
+    height: 1.4rem;
+}
+.time_div {
+    width: auto;
+    color: #5882f5;
+    font-size: 0.65rem;
+    float: right;
+    height: auto;
+    line-height: 1.4rem;
+    padding: 0.5rem 0;
+    margin-right: 0.6rem;
+}
+
+.icon-sanjiao1 {
+    font-size: 0.45rem;
+    float: right;
+    margin-left: 0.2rem;
+}
+
+#time {
+    width: 2.4rem;
+    border: 0;
+    outline: 0;
+    -webkit-appearance: none;
+    background-color: transparent;
+    font-size: inherit;
+    color: inherit;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    color: #5882f5;
+}
+.table {
+                background-color: #ffffff;
+                position: relative;
+                margin: 0;
+                margin-top: 0;
+                overflow: hidden;
+                border-radius: 0;
+                font-size: 0.65rem;
+                color: #666666;
+            }
+
+            .tr {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                -webkit-box-align: center;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+
+.th,
+.td {
+    padding: 0.4rem 0;
+    text-align: center;
+    width: 100%;
+}
+
+.th {
+    font-weight: 700;
+    font-size: 0.7rem;
+    border-bottom: 1px solid #eeeeee;
+    color: #333333;
+}
+.btn {
+    padding: 0 0.4rem;
+    font-size: 0.6rem;
+    height: 1.4rem;
+    line-height: 1.4rem;
+    background: #a81515;
+    color: #ffffff;
+    border: none;
+    margin: 0.5rem 0.6rem 0.5rem 0;
+}
+</style>
+<div class="fui-page fui-page-current page-commission-index ">
+
+    <div class='fui-content navbar' style="    top: 0;">
+
+
+    <div class="searchbar_div">
+        <div class="searchbar">
+            <div class="search-input">
+                <i class="icon icon-search"></i>
+                <input type="search" name="keywords" placeholder="搜索商品、操作人">
+            </div>
+        </div>
+        <div class="time_div">
+            <input id="time" readonly="readonly" unselectable="on" value="2019-03" style="cursor: pointer;">
+            <font class="icon icon-sanjiao1"></font>
+        </div>
+        <a href="{php echo mobileUrl('commission/stock/post')}" class="btn">损耗操作</a>
+    </div>
+
+    <div style="margin-top:0rpx;">
+            <div class="table" >
+                <div class="tr">
+                    <div class="th">日期</div>
+                    <div class="th">商品</div>
+                    <div class="th">分类</div>
+                    <div class="th">数量</div>
+                    <div class="th">类型</div>
+                    <div class="th">操作人</div>
+                    <div class="th">操作</div>
+                </div>
+                <div class="tr" >
+                    <div class="td">1日</div>
+                    <div class="td">商品2</div>
+                    <div class="td">分类1</div>
+                    <div class="td">4件</div>
+                    <div class="td"></div>
+                    <div class="td">业务员甲</div>
+                    <div class="td"><a style="color: #5882f5;" href="{php echo mobileUrl('commission/stock/detail')}">详情</a></div>
+                </div>
+            </div>
+        </div>
+
+	</div>
+
+</div>
+
+<style>
+    .fui-navbar .nav-item.active,
+    .fui-navbar .nav-item:active {
+        color: #a81515;
+    }
+</style>
+<div class="fui-navbar">
+        <a href="{php echo mobileUrl('commission/stock')}" class="external nav-item {if ($_W['routes']=='commission.stock' || $_W['routes']=='commission.stock.record')}active{/if}">
+        <span class="icon icon-home"></span>
+        <span class="label">库存</span>
+
+    </a>
+    <a href="{php echo mobileUrl('commission/stock/stockin')}" class="external nav-item {if $_W['routes']=='commission.stock.stockin' }active{/if}">
+        <span class="iconfont icon-ruku"></span>
+        <span class="label">入库</span>
+    </a>
+
+    <a href="{php echo mobileUrl('commission/stock/stockout')}" class="external nav-item {if $_W['routes']=='commission.stock.stockout' }active{/if}">
+        <span class="iconfont icon-chuku"></span>
+        <span class="label">出库</span>
+    </a>
+
+    <a href="{php echo mobileUrl('commission/stock/loss')}" class="external nav-item {if $_W['routes']=='commission.stock.loss' }active{/if}">
+        <span class="iconfont icon-jiesuansunhaoshuliang"></span>
+        <span class="label">损耗</span>
+    </a>
+</div>
+
+<script type="text/javascript">
+    $.selectDate_YM("#time");
+    $(document).ready(function(){ 
+           $('.ensure').bind('click', function() {
+              var _val = $('#time').val();
+              alert(_val)
+           });
+       })
+</script>
+</body>
+</html>

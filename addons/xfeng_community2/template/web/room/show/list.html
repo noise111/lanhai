@@ -1,0 +1,112 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('room', array('op' => 'list'))}"></a>预留信息管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('room',array('op'=>'show','p'=>'list','addressid'=>$addressid))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site" />
+                        <input type="hidden" name="a" value="entry" />
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}" />
+                        <input type="hidden" name="do" value="room" />
+                        <input type="hidden" name="op" value="show" />
+                        <input type="hidden" name="p" value="list" />
+                        <div class="row">
+                            <div class="col-sm-4 m-b-xs">
+                                {if $addressid}
+                                <a href="{php echo $this->createWebUrl('room',array('op' => 'show','p'=>'add','addressid'=>$addressid))}" class="btn btn-primary">
+                                    <i class="fa fa-plus"></i>添加预留信息</a>
+                                {else}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('room',array('op'=> 'qrpl'))}" ><i class="fa fa-plus"></i>批量生成二维码</a>
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('room',array('op'=> 'download'))}" ><i class="fa fa-plus"></i>一键下载二维码</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control" >
+                                    <option value="" >全部小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="可输入姓名/电话/房号" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary"> 搜索</button>
+                                        <button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+                                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post">
+                        <table class="table table-bordered">
+                            <thead >
+                            <tr>
+                                <th>ID</th>
+                                <th class="col-md-1">预留姓名</th>
+                                <th class="col-md-1">预留电话</th>
+                                <th class="col-md-2">房号</th>
+                                <th class="col-md-1">身份</th>
+                                <th class="col-md-10">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            {if $item['realname']}
+                            <tr>
+                                <td>
+                                    {$item['id']}
+                                </td>
+
+                                <td>{if $item['realname']}{$item['realname']}{else}xxxxxx{/if}</td>
+                                <td>{if $item['mobile']}{$item['mobile']}{else}xxxxxxxxxxx{/if}</td>
+                                <td>{$item['title']}{$item['address']}</td>
+                                <td>{if $item['status'] == 1}户主 {elseif $item['status'] == 2} 家属{elseif $item['status'] == 3}租户{/if}</td>
+                                <td>
+                                    <a href="{php echo $this->createWebUrl('room', array('op'=>'qr', 'id' => $item['id']));}" class="btn btn-warning btn-sm">二维码</a>
+                                    <a href="{php echo $this->createWebUrl('room', array('op'=>'show','p'=>'add','id' => $item['id']));}" class="btn btn-primary btn-sm">编辑</a>
+
+
+                                    <a href="{php echo $this->createWebUrl('room', array('op'=>'show','p'=>'del','id' => $item['id']));}" class="btn btn-default btn-sm" onClick="return confirm('确定删除?');">删除</a>
+
+                                </td>
+                            </tr>
+                            {/if}
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td id="pager_list_1_left" align="left">
+
+                                    {if $total}
+                                    <span style="color: red">总人数:{$total}人</span>
+                                    {/if}
+                                </td>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{template 'web/common/footer'}

@@ -1,0 +1,123 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                        <li><a href="{php echo $this->createWebUrl('recommand', array('op' => 'list'))}" title="商品推荐" >商品推荐</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('recommand', array('op'=>'house'))}" title="租赁推荐" >租赁推荐</a></li>
+                        <li><a href="{php echo $this->createWebUrl('recommand',array('op' => 'market'))}" title="集市推荐" >集市推荐</a></li>
+                        <li><a href="{php echo $this->createWebUrl('recommand',array('op' => 'activity'))}" title="活动推荐" >活动推荐</a></li>
+                    </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="recommand"/>
+                        <input type="hidden" name="op" value="{$op}"/>
+                        <div class="row">
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="regionid" class="form-control">
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id']==$_GPC['regionid']} selected{/if}>{$region['city']}{$region['dist']}{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="category" class="form-control">
+                                    <option value="0">租赁分类</option>
+                                    <option value="1" {if  $_GPC['category'] == 1} selected="selected"{/if}>出租</option>
+                                    <option value="2" {if  $_GPC['category'] == 2} selected="selected"{/if}>求租</option>
+                                    <option value="3" {if  $_GPC['category'] == 3} selected="selected"{/if}>出售</option>
+                                    <option value="4" {if  $_GPC['category'] == 4} selected="selected"{/if}>求购</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3 m-b-xs">
+                                {php echo tpl_form_field_daterange('birth', array('starttime' => date('Y-m-d',empty($starttime) ? TIMESTAMP-86400*30 : $starttime),'endtime' =>date('Y-m-d',empty($endtime) ? TIMESTAMP+86400*30 : $endtime)));}
+                            </div>
+                            <div class="col-sm-2 m-b-xs">
+                                <select name="status" class="form-control">
+                                    <option value="0" {if empty($_GPC['status'])}selected="selected"{/if}>未成交</option>
+                                    <option value="1" {if $_GPC['status'] == 1}selected="selected"{/if}>已成交</option>
+                                </select>
+                            </div>
+
+                            <div class="col-sm-2 m-b-xs">
+							<span class="input-group-btn" >
+								<button type="submit" class="btn btn-primary" style="margin-right: 3px">搜索</button>
+								<button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>
+								<input type="hidden" name="token" value="{$_W['token']}"/>
+							</span>
+                            </div>
+                        </div>
+                    </form>
+                    <form class="form-horizontal form" method="post" >
+                        <table class="table table-bordered">
+                            <thead >
+                            <tr>
+                                <th style="width:15%;">状态</th>
+                                <th style="width:130px;">标题</th>
+                                <th style="width:80px;">姓名</th>
+                                <th style="width:100px;">手机</th>
+                                <th style="width:100px;">时间</th>
+                                <th style="width:100px">成交状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>
+                                    <label data='{$item['recommand']}' class='label label-default {if $item['recommand']==1}label-info{/if}' onclick="setProperty(this,{$item['id']},1)"/>
+                                    {if $item['recommand']==1}推荐{else}不推荐{/if}
+                                    </label>
+                                </td>
+                                <td>{$item['title']}{$item['way']}</td>
+                                <td>{if $item['realname']}{$item['realname']}{else}{$item['t_realname']}{/if}</td>
+                                <td>{if $item['mobile']}{$item['mobile']}{else}{$item['t_mobile']}{/if}</td>
+                                <td>{php echo date('Y-m-d H:i', $item[createtime]);}</td>
+                                <td>{if $item['status'] ==1 }<span class="label label-success">已成交</span>{/if}{if $item['status'] == 0 }<span class="label label-info">未成交</span>{/if}{if $item['status'] == 2 }<span class="label label-danger">已取消</span>{/if}</td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="text-left">
+                                    <span style="color: red">总计:{$total}</span>
+                                </td>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function setProperty(obj, id, type) {
+        $(obj).html($(obj).html() + "...");
+        $.post("{php echo $this->createWebUrl('recommand',array('op' => 'change'))}", {
+            id: id,
+            type: type,
+            data: obj.getAttribute("data")
+        }, function(d) {
+            $(obj).html($(obj).html().replace("...", ""));
+            $(obj).html(d.data == '1' ? '推荐' : '不推荐');
+            $(obj).attr("data", d.data);
+            if (d.result == 1) {
+                $(obj).toggleClass("label-info");
+            }
+        }, "json");
+    }
+</script>

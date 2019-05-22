@@ -1,0 +1,134 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'list'))}" title="车辆管理" >车辆管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'update','id' => $id))}" title="手动延期" >手动延期</a></li>
+                    </ul>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" value="{$id}" name="id"/>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">到期时间</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="" id='' value="{php echo date('Y-m-d',$item['endtime'])}" class="form-control" placeHolder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">月租车月租</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="price" id='price' value="{$rule['price']}" class="form-control" placeHolder="" readonly/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">续费套餐</label>
+                            <div class="col-sm-4">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" id="type_1" value="1" checked/>
+                                    <label for="type_1">按套餐</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="type" id="type_2" value="2" />
+                                    <label for="type_2">按天</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" id="endmonth">
+                            <label class="col-sm-2 control-label">选择月份</label>
+                            <div class="col-sm-4 ">
+                                <select name="month" id="month" class="form-control">
+                                    <option value="">请选择月份</option>
+                                    <option value="1">1月</option>
+                                    <option value="2">2月</option>
+                                    <option value="3">3月</option>
+                                    <option value="4">4月</option>
+                                    <option value="5">5月</option>
+                                    <option value="6">6月</option>
+                                    <option value="7">7月</option>
+                                    <option value="8">8月</option>
+                                    <option value="9">9月</option>
+                                    <option value="10">10月</option>
+                                    <option value="11">11月</option>
+                                    <option value="12">12月</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" style="display: none;" id="endday">
+                            <label class="col-sm-2 control-label">续费时间</label>
+                            <div class="col-sm-4 ">
+                                {php echo tpl_form_field_date('endtime',$item['endtime']);}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">支付方式</label>
+                            <div class="col-sm-4">
+                                <select class="form-control" name="paytype">
+                                    <option value="">请选择支付方式</option>
+                                    <option value="2">微信</option>
+                                    <option value="4">支付宝</option>
+                                    <option value="5">现金</option>
+                                    <option value="6">刷卡</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#submit').on('click', function () {
+        if(!$("#price").val()){
+            alert('请输入价格。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'cars','p'=>'update'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $(":radio").click(function() {
+        var type = $('input[name="type"]:checked').val();
+        if(type==2){
+            $("#endday").show()
+            $("#endmonth").hide()
+        }else{
+            $("#endmonth").show()
+            $("#endday").hide()
+        }
+    });
+</script>
+{template 'web/common/footer'}
+

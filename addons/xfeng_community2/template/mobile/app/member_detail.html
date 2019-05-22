@@ -1,0 +1,92 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">住户信息</h1>
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">姓名：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['realname']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">电话：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['mobile']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">注册时间：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {php echo date('Y-m-d H:i',$item['createtime'])}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Date -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">审核状态：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <select name="status" id="status">
+                                    <option value="0" {if intval($item['status'])==0} selected{/if}>禁止</option>
+                                    <option value="1" {if intval($item['status'])==1} selected{/if}>通过</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">开门状态：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <select name="open_status" id="open_status">
+                                    <option value="0" {if intval($item['open_status'])==0} selected{/if}>关闭</option>
+                                    <option value="1" {if intval($item['open_status'])==1} selected{/if}>通过</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <div class="content-block">
+                    <div class="row">
+                        <div class="col-100"><a href="#" class="button button-big button-fill button-success" id="fb">提交</a></div>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $("#fb").click(function () {
+            var status = $("#status").val();
+            var open_status = $("#open_status").val();
+            var id = "{$_GPC['id']}";
+            $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'member_detail'))}",{status:status,id:id,open_status:open_status},function (data) {
+                if(data.status){
+                    $.toast('提交成功');
+                    window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+                }
+            },'json')
+        })
+    })
+</script>
+{template 'app/footer'}

@@ -1,0 +1,107 @@
+{template 'default2/header'}
+<style>
+    .cd-bouncy-nav {
+        max-height: 300px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
+
+    .weui-navbar {
+        background: transparent;
+        width: 95%;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+    }
+
+    .weui-navbar__item {
+        color: #ffffff;
+        font-size: 0.9em;
+    }
+
+    .weui-navbar__item.weui-bar__item--on {
+        background: transparent;
+        color: #ffffff;
+        border-bottom: 1px solid #ffffff;
+
+    }
+
+    .weui-navbar:after {
+        border-bottom: none;
+    }
+
+    .weui-navbar__item:after {
+        border-right: none;
+    }
+</style>
+<style>
+    body {
+        background: #fff;
+    }
+
+    .weui-media-box_appmsg .weui-media-box__hd {
+        height: 48px;
+        width: 48px;
+    }
+
+    .weui-media-box__desc {
+        line-height: 2.2;
+        -webkit-line-clamp: 1
+    }
+
+    .weui-media-box__bd p {
+        position: relative
+    }
+
+    .weui-media-box > .vux-reddot:after {
+        top: 3px;
+    }
+</style>
+
+<body ontouchstart>
+<div style="padding-bottom: 80px">
+    <div class="weui-panel weui-panel_access">
+        <div class="weui-panel__bd" id="newslist">
+
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="news_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="#" class="weui-media-box weui-media-box_appmsg">
+        <!--<div class="weui-media-box__hd vux-reddot">-->
+            <!--<img class="weui-media-box__thumb " src="{MODULE_URL}template/mobile/default2/static/images/home/demoImg01.png" alt="">-->
+        <!--</div>-->
+        <div class="weui-media-box__bd">
+            <p>
+                <span class="weui-media-box__title">{{d.list[i].title}}</span>
+                <span class="weui-media-box__time">{{d.list[i].content}}</span>
+            </p>
+            <p class="weui-media-box__desc">{{d.list[i].content}}</p>
+        </div>
+    </a>
+    {{# } }}
+</script>
+{template 'default2/footer'}
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $(function () {
+        var regionid = "{$_SESSION['community']['regionid']}";
+        var url = "{php echo wxapp_url('news/list')}&regionid="+regionid;
+        loaddata(url, $("#newslist"), 'news_list', true);
+    })
+</script>
+</body>
+</html>

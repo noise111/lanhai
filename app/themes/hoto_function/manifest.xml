@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest versionCode="0.52,0.6">
+	<identifie><![CDATA[hoto_function]]></identifie>
+	<title><![CDATA[【HOTO】功能展示模版]]></title>
+	<type><![CDATA[often]]></type>
+	<description><![CDATA[一款微信公众号平台展示风格模版]]></description>
+	<author><![CDATA[HOTO小拓]]></author>
+	<url><![CDATA[http://www.haoid.cn/]]></url>
+	<sections><![CDATA[0]]></sections>
+	<settings>
+		<item variable="min_cid" content="1" description="配置您首页案例展示分类ID"/>
+		<item variable="notice_cid" content="7" description="配置滚动公告分类ID"/>
+		<item variable="list_pagesize" content="10" description="配置列表页文章展示条数（可留空）"/>
+		<item variable="relative_pagesize" content="5" description="配置微站内容页相关文章展示条数(可留空)"/>
+		<item variable="copyright" content="(c)2008-2016 好站长资源网" description="配置您的版权信息(可留空)"/>
+		<item variable="index_tel" content="18888888888" description="配置您首页底部联系号码"/>
+		<item variable="index_qq" content="1831331234" description="配置您首页底部联系qq"/>		
+	</settings>
+</manifest>

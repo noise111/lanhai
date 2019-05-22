@@ -1,0 +1,26 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('phone', array('op' => 'apply'))}"></a>&nbsp;&nbsp;&nbsp;查看
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('phone',array('op' => 'apply','p' => 'detail','id' => $id))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+                    <p><code>分类：{$item['name']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>名称：{$item['content']} 号码：{$item['phone']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>地址：{$item['address']}</code></p>
+                    <div class="hr-line-dashed"></div>
+                    <p><code>简介：{$item['introduction']}</code></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

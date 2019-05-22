@@ -1,0 +1,422 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id='app' v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>发布房屋</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="regionid" v-model="item.regionid">
+                    <option value="">选择小区</option>
+                    <option v-for="(row, index) in regions" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="category" v-model="item.category">
+                    <option value="">选择分类</option>
+                    <option value="1">出租</option>
+                    <option value="3">出售</option>
+                    <option value="4">求购</option>
+                    <option value="2">求租</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select" v-if="item.category">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.way" v-if="item.category==1">
+                    <option value="">选择出租方式</option>
+                    <option value="整套出租">整套出租</option>
+                    <option value="单间出租">单间出租</option>
+                    <option value="床位出租">床位出租</option>
+                </select>
+                <select class="weui-select" v-model="item.way" v-if="item.category==2">
+                    <option value="">选择求租方式</option>
+                    <option value="整套求租">整套求租</option>
+                    <option value="单间求租">单间求租</option>
+                    <option value="床位求租">床位求租</option>
+                </select>
+                <select class="weui-select" v-model="item.way" v-if="item.category==3">
+                    <option value="">选择出售方式</option>
+                    <option value="整套出售">整套出售</option>
+                </select>
+                <select class="weui-select" id="way" v-model="item.way" v-if="item.category==4">
+                    <option value="">选择求购方式</option>
+                    <option value="整套求购">整套求购</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.house_aspect">
+                    <option value="">选择房屋朝向</option>
+                    <option value="东">东</option>
+                    <option value="南">南</option>
+                    <option value="西">西</option>
+                    <option value="北">北</option>
+                    <option value="南北">南北</option>
+                    <option value="东西">东西</option>
+                    <option value="东南">东南</option>
+                    <option value="西南">西南</option>
+                    <option value="东北">东北</option>
+                    <option value="西北">西北</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.fitment">
+                    <option value="">选择装修情况</option>
+                    <option value="毛坯">毛坯</option>
+                    <option value="简单装修">简单装修</option>
+                    <option value="中等装修">中等装修</option>
+                    <option value="精装修">精装修</option>
+                    <option value="豪华装修">豪华装修</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.house">
+                    <option value="">选择住宅类别</option>
+                    <option value="普通住宅">普通住宅</option>
+                    <option value="平房">平房</option>
+                    <option value="四合院">四合院</option>
+                    <option value="公寓">公寓</option>
+                    <option value="别墅">别墅</option>
+                    <option value="商住两用">商住两用</option>
+                    <option value="其他">其他</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cells">
+            <a class="weui-cell weui-cell_access" href="javascript:;">
+                <div class="weui-cell__hd"><label for="spec" class="weui-label">房屋配置</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" id="spec" type="text" value="" readonly="" v-model="item.spec">
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋户型</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text"  id="house-model" placeholder="请选择房屋户型" value="1室 0厅 0卫" v-model="item.house_model">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">楼层</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text"  id="house-floor" placeholder="请选择房屋楼层" value="1层 共1层" v-model="item.house_floor">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select" v-if="item.category==1 || item.category==2">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="item.price_way" >
+                    <option value="">选择押金方式</option>
+                    <option value="押一付一">押一付一</option>
+                    <option value="押一付二">押一付二</option>
+                    <option value="押一付三">押一付三</option>
+                    <option value="押一付六">押一付六</option>
+                    <option value="押二付一">押二付一</option>
+                    <option value="押二付二">押二付二</option>
+                    <option value="押二付三">押二付三</option>
+                    <option value="面议">面议</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋面积</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入房屋面积"  v-model="item.model_area">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">房屋总价</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入房屋总价"  v-model="item.price">
+            </div>
+            <div class="weui-cell__ft" v-if="item.category==3 || item.category==4">万元/套</div>
+            <div class="weui-cell__ft" v-if="item.category==1 || item.category==2">元/月</div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd">
+                <label class="weui-form-preview__label" v-if="item.category==3 || item.category==4">建筑年代</label>
+                <label class="weui-form-preview__label" v-if="item.category==1 || item.category==2">入住时间</label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" id="checktime" type="text"  value="{php echo date('Y-m-d',TIMESTAMP)}" v-model="item.checktime">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="其他说明,长度5-200个字之间。" rows="3" id="content" v-model="item.content"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin: 20px 20px" id="submit">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            regions: [],
+            item:{
+                regionid:'',
+                category:'',
+                way:'',
+                house_aspect:'',
+                model_area:'',
+                fitment:'',
+                house:'',
+                spec:'',
+                price:''
+            },
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appregion/list')}";
+            $.getJSON(url, function (ret) {
+                self.regions = ret.data
+            })
+            if(id){
+                var url = "{php echo wxapp_url('apphouselease/detail')}";
+                var data = {
+                    id:id
+                }
+                $.getJSON(url,data, function (ret) {
+                    self.item = ret.data
+                })
+            }
+
+        },
+        mounted: function () {
+            $("#spec").select({
+                title: "请选择房屋配置",
+                multi: true,
+                items: [
+                    {
+                        title: "床",
+                        value: "iconfont icon-chuangdian|床",
+                    },
+                    {
+                        title: "衣柜",
+                        value: "iconfont icon-dpc|衣柜",
+                    },
+                    {
+                        title: "沙发",
+                        value: "iconfont icon-shafa|沙发",
+                    },
+                    {
+                        title: "燃气",
+                        value: "iconfont icon-7|燃气",
+                    },
+                    {
+                        title: "洗衣机",
+                        value: "iconfont icon-xiyiji|洗衣机",
+                    },
+                    {
+                        title: "网络",
+                        value: "iconfont icon-wifi|网络",
+                    },
+                    {
+                        title: "冰箱",
+                        value: "iconfont icon-bingxiang|冰箱",
+                    },
+                    {
+                        title: "书桌",
+                        value: "iconfont icon-bangongzhuo|书桌",
+                    },
+                    {
+                        title: "空调",
+                        value: "iconfont icon-kongdiao|空调",
+                    },
+                    {
+                        title: "餐桌",
+                        value: "iconfont icon-zhuozi|餐桌",
+                    },
+                    {
+                        title: "椅子",
+                        value: "iconfont icon-yizi|椅子",
+                    },
+                    {
+                        title: "微波炉",
+                        value: "iconfont icon-weibolu|微波炉",
+                    },
+                    {
+                        title: "电视",
+                        value: "iconfont icon-dianshi|电视",
+                    },
+                    {
+                        title: "热水器",
+                        value: "iconfont icon-reshui|热水器",
+                    },
+                    {
+                        title: "橱柜",
+                        value: "iconfont icon-chugui|橱柜",
+                    },
+                    {
+                        title: "油烟机",
+                        value: "iconfont icon-xiyouyanji|油烟机",
+                    },
+                    {
+                        title: "电梯",
+                        value: "iconfont icon-gsdt|电梯",
+                    },
+                    {
+                        title: "供暖",
+                        value: "iconfont icon-nuanqi|供暖",
+                    },
+                    {
+                        title: "车位",
+                        value: "iconfont icon-tingchewei|车位",
+                    },
+                    {
+                        title: "门禁",
+                        value: "iconfont icon-menjin|门禁",
+                    },
+                ],
+                beforeClose: function(values, titles) {
+
+                },
+                onChange: function(d) {
+                    console.log(this, d);
+                },
+                onClose: function (d) {
+                    console.log('close')
+                }
+            });
+            $("#checktime").calendar({
+                onChange: function (p, values, displayValues) {
+                }
+            });
+            $("#house-model").picker({
+                title: "请选择房屋户型",
+                cols: [
+                    {
+                        textAlign: 'center',
+                        values: ['1室', '2室','3室','4室','5室','6室','7室','8室','9室']
+                    },
+                    {
+                        textAlign: 'center',
+                        values: ['0厅','1厅', '2厅','3厅','4厅','5厅','6厅','7厅','8厅','9厅']
+                    },
+                    {
+                        textAlign: 'center',
+                        values: ['0卫','1卫', '2卫','3卫','4卫','5卫','6卫','7卫','8卫','9卫']
+                    }
+                ]
+            })
+            var floor_items = new Array(100);
+            for (var i=0;i<floor_items.length;i++)
+            {
+                floor_items[i] = i+'层';
+            }
+            var total_floor_items = new Array(100);
+            for (var i=0;i<total_floor_items.length;i++)
+            {
+                total_floor_items[i] = '共'+i+'层';
+            }
+            $("#house-floor").picker({
+                title: "请选择楼层",
+                cols: [
+                    {
+                        textAlign: 'center',
+                        values: floor_items
+                    },
+                    {
+                        textAlign: 'center',
+                        values: total_floor_items
+                    }
+                ]
+            });
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                return false;
+                var url = "{php echo wxapp_url('apphouselease/add')}";
+                self.item.id=self.id
+                self.item.hid=self.id
+                if(self.item.regionid == '' || self.item.category == '' || self.item.way == '' || self.item.house_aspect == '' || self.item.model_area == '' || self.item.fitment == '' || self.item.house == '' || self.item.spec == '' || self.item.price == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('提交成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'houselease'))}";
+                        }, 500);
+                    }
+                    if(ret.err_code == 2){
+                        setTimeout(function () {
+                            $.toast(ret.err_msg,'cancel');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'home'))}";
+                        }, 500);
+                    }
+                },'json')
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

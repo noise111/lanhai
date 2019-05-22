@@ -1,0 +1,224 @@
+{template 'default2/header'}
+    <style>
+        .weui-cells:first-child{
+            margin-top: 0;
+        }
+        .repairs-detail-tit{
+            font-size: 15px;
+            color: #F7624B;
+        }
+        .repairs-detail-tit p:last-child{
+            color: #C8C8C8;
+        }
+        .weui-cells__title{
+            color: #000000;
+            line-height: 39px;
+            margin-top: 0;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+        .weui-form-preview__label{
+            color: #666666;
+        }
+        .weui-form-preview__bd{
+            color: #666666;
+        }
+        .weui-form-preview__value{
+            color: #666666;
+        }
+        .weui-uploader__file{
+            margin-right: 0px;
+            margin-left: 9px;
+        }
+        .weui-textarea{
+            font-size: 0.9em;
+            min-height: 120px;
+            background: #ffffff;
+        }
+        .opt{
+            float: left;
+            margin-right: 8px;
+        }
+        .magic-radio + label, .magic-checkbox + label{
+            padding-left: 22px;
+        }
+        .magic-radio:checked + label:before{
+            border: 1px solid #F7624B;
+        }
+        .magic-radio + label:after{
+            top: 6px;
+            left: 6px;
+            background: #F7624B;
+        }
+    </style>
+
+<body ontouchstart>
+<div id="list">
+</div>
+
+<script type="text/html" id="xq_list">
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="javascript:;">
+            <div class="weui-cell__bd weui-cell_primary repairs-detail-tit">
+                <p>进行中</p>
+                <p>温馨提示:意见建议{{# if(d.status == 2){ }}未处理{{# } }}{{# if(d.status == 3){ }}处理中{{# } }}
+                    {{# if(d.status == 1){ }}已处理{{# } }}</p>
+                <p>{{ d.createtime }}</p>
+            </div>
+            <span class="weui-cell__ft"></span>
+        </a>
+    </div>
+    <div class="weui-cells__title">建议信息</div>
+    <div class="weui-form-preview" >
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">姓名</label>
+                <span class="weui-form-preview__value">{{ d.realname }}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">建议电话</label>
+                <a class="weui-form-preview__value" href="tel:{{ d.mobile }}">{{ d.mobile }}</a>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">建议内容</label>
+                <span class="weui-form-preview__value">{{ d.content }}</span>
+            </div>
+            {{# if(d.images){ }}
+            {{# if(d.images.length >0 ){ }}
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">建议图片</label>
+                <span class="weui-form-preview__value">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        {{# for(var i = 0, len = d.images.length; i < len; i++){ }}
+                                <li class="weui-uploader__file" style="background-image:url({{ d.images[i] }})"></li>
+                        {{# } }}
+                    </ul>
+                </div>
+            </span>
+            </div>
+            {{# } }}
+            {{# } }}
+        </div>
+    </div>
+    {{# if(d.status == 1){ }}
+    <div class="weui-cells__title">处理信息</div>
+    <div class="weui-form-preview">
+        <div class="weui-form-preview__bd">
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">处理人</label>
+                <span class="weui-form-preview__value">{{ d.dealing }}</span>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">电话</label>
+                <a class="weui-form-preview__value" href="tel:{{ d.logmobile }}">{{ d.logmobile }}</a>
+            </div>
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">处理结果</label>
+                <span class="weui-form-preview__value">{{ d.logcontent }}</span>
+            </div>
+            {{# if(d.logimages){ }}
+            {{# if(d.logimages.length >0 ){ }}
+            <div class="weui-form-preview__item">
+                <label class="weui-form-preview__label">报修图片</label>
+                <span class="weui-form-preview__value">
+                <div class="weui-uploader__bd">
+                    <ul class="weui-uploader__files" id="uploaderFiles">
+                        {{# for(var i = 0, len = d.logimages.length; i < len; i++){ }}
+                                <li class="weui-uploader__file" style="background-image:url({{ d.logimages[i] }})"></li>
+                        {{# } }}
+                    </ul>
+                </div>
+            </span>
+            </div>
+            {{# } }}
+            {{# } }}
+        </div>
+    </div>
+
+    {{# } }}
+    {{# if(d.status == 1){ }}
+    <div class="weui-cells__title">报修评价</div>
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="请输入评价内容" rows="3" id="content"></textarea>
+            </div>
+        </div>
+        <div class="weui-cell evaluate-list">
+            <div class="weui-cell__bd">
+                <div class="opt">
+                    <input class="magic-radio" type="radio" name="status" id="r1" value="1" checked>
+                    <label for="r1">满意</label>
+                </div>
+                <div class="opt">
+                    <input class="magic-radio" type="radio" name="status" id="r2" value="2">
+                    <label for="r2">一般</label>
+                </div>
+                <div class="opt">
+                    <input class="magic-radio" type="radio" name="status" id="r3" value="3">
+                    <label for="r3">失望</label>
+                </div>
+            </div>
+            <div class="weui-cell__ft">
+                <div class="button_sp_area">
+                    <a href="javascript:;" class="weui-btn weui-btn_mini weui-btn_plain-default" id="evaluate">评价提交</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{# } }}
+</script>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script>
+    $('#evaluate').click(function () {
+        var c = $('.weui-textarea').val();
+
+        if(c.length>5){
+            setTimeout(function () {
+                $('.evaluate-list').remove();
+                $(".weui-textarea").attr("disabled",true);
+            }, 300);
+        }else{
+            alert('评价必须大于五个字');
+        }
+
+    })
+</script>
+<script type="text/javascript">
+    $(function () {
+        var id = "{$_GPC['id']}";
+        var url = "{php echo wxapp_url('report/detail')}&id="+id;
+        _loaddata(url, $("#list"), 'xq_list', true,function () {
+            var lock = false;
+            $("#evaluate").click(function () {
+                var content = $("#content").val();
+                var status = $('input[name="status"]:checked').val();
+                var url = "{php echo wxapp_url('report/rank')}";
+                if(lock) return false;
+                lock = true;
+                $.showLoading('正在提交');
+                $.getJSON(url,{content:content,status:status,rankid:id},function (data) {
+                    if(data.err_code ==0){
+                        $.hideLoading();
+                        //提交成功提示内容: data.data.content
+                        setTimeout(function () {
+                            $.toast(data.data.content, "text");
+                            //定时刷新
+                            window.location.href="{php echo $this->createMobileUrl('report')}";
+                        }, 500);
+
+                    }
+                    lock = false;
+                })
+
+            })
+        });
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">订单管理</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0">
+            <ul>
+                {loop $list $item}
+                <li>
+                    <label class="label-checkbox item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['transid']}</div>
+                                <div class="item-after">{php echo date('Y-m-d H:i:s',$item['createtime'])}</div>
+                            </div>
+                            <div class="item-subtitle">{if $item['status'] == 0}<span class="label-danger">待付款</span>{/if} {if $item['status'] == 1}<span class="label-info">已付款</span>{/if}</div>
+                            <div class="item-text">{$item['realname']}-{$item['homenumber']}-{$item['mobile']}-{$item['price']}元</div>
+                        </div>
+                    </label>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+
+
+{template 'app/footer'}

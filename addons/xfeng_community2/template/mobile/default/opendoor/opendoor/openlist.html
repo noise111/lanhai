@@ -1,0 +1,119 @@
+{template 'default/header'}
+{if set('p86')['value']}
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=77E9802d7cfbcde01b5ea17f1388f35d"></script>
+{/if}
+
+<style>
+    .button{
+        height:40px;
+        line-height: 40px;
+    }
+</style>
+<body class="max-width">
+<header class="bar bar-nav bg-green">
+    <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('home')}'"></a>
+    <h1 class="title txt-fff">手机开门</h1>
+</header>
+<div class="content page" >
+        <div class="content-block-title" style="margin-top: 7px;">你拥有的小区开门权限</div>
+        <div class="list-block" style="margin-bottom:100px;overflow-y:scroll">
+            <ul id="content">
+                <!--{loop $doors $door}-->
+                <!--<li class="item-content item-link" onclick="window.location.href='{php echo $this->createMobileUrl('opendoor',array('op' => 'xqdoor','id' => $door['id']))}'">-->
+                    <!--<div class="item-media"><img src="{php echo tomedia($door['thumb'])}" style="width: 30px;height: 30px;"></div>-->
+                    <!--<div class="item-inner">-->
+                        <!--<div class="item-title">{$door['title']}</div>-->
+                        <!--<div class="item-after"></div>-->
+                    <!--</div>-->
+                <!--</li>-->
+                <!--{/loop}-->
+            </ul>
+        </div>
+
+</div>
+<style>
+    .xqbar-tab {
+        bottom: 0;
+        z-index: 9000;
+        width: 100%;
+        height: 80px;
+        padding: 0;
+        table-layout: fixed;
+        border-top: 1px solid #e7e7e7;
+        border-bottom: 0;
+        border-left: 0;
+        -webkit-transition-duration: 400ms;
+        -o-transition-duration: 400ms;
+        transition-duration: 400ms;
+    }
+    .xqbar {
+        position: absolute;
+        right: 0;
+        left: 0;
+        z-index: 10;
+        height: 80px;
+        background-color: #f7f7f8;
+        border-bottom: 1px solid #e7e7e7;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+</style>
+{if $slides}
+<div class="xqbar xqbar-tab" style="margin-top: 30px;">
+    <div class="swiper-container" >
+        <div class="swiper-wrapper">
+            {loop $slides $row}
+            <div class="swiper-slide" onclick="javascript:window.location.href='{$row['url']}';">
+                <img src="{$row['thumb']}?imageView2/1/w/160/h/80/q/100" style="max-height: 100px;">
+            </div>
+            {/loop}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
+</div>
+{/if}
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <li class="item-content item-link" onclick="window.location.href='{php echo $this->createMobileUrl('opendoor',array('op' => 'xqdoor'))}&id={{ d.list[i].id }}'">
+        <div class="item-media"><img src="{{ d.list[i].thumb }}" style="width: 30px;height: 30px;"></div>
+        <div class="item-inner">
+            <div class="item-title">{{ d.list[i].title }}</div>
+            <div class="item-after"></div>
+        </div>
+    </li>
+    {{# } }}
+
+</script>
+<script>
+    $(document).ready(function() {
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                var mk = new BMap.Marker(r.point);
+                var lng = r.point.lng;
+                var lat = r.point.lat;
+                var url = "{php echo $this->createMobileUrl('opendoor')}&lng="+lng+"&lat="+lat;
+                $.get(url,function (data) {
+                    if (data.list.length > 0) {
+                        var gettpl = document.getElementById('xq_list').innerHTML;
+                        laytpl(gettpl).render(data, function(html){
+                            $("#content").append(html);
+                        });
+                    }
+                },'json')
+            }else {
+                alert('获取当前位置失败,请确认是否开启定位服务');
+            }
+        },{enableHighAccuracy: true})
+    });
+</script>
+<script>$.config = {autoInit: true}</script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+</body>
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7-swiper.min.js" charset="utf-8"></script>
+<!--<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="UTF-8"></script>-->
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/swiper.min.js" charset="utf-8"></script>
+</html>

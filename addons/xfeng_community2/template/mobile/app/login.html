@@ -1,0 +1,84 @@
+{template 'app/header'}
+<style>
+    .page-login i.icon-form-name {
+        background: url(../addons/{MODULE_NAME}/template/mobile/app/static/image/zh.png) no-repeat;
+        background-size: 21px 23px;
+        background-position: 5px 7px;
+    }
+    i.icon.icon-form-name {
+        width: 1.45rem;
+        height: 1.45rem;
+    }
+    .page-login i.icon-form-email {
+        background: url(../addons/{MODULE_NAME}/template/mobile/app/static/image/mima.png) no-repeat;
+        background-size: 19px 23px;
+        background-position: 6px 1px;
+    }
+    i.icon.icon-form-email {
+        width: 1.45rem;
+        height: 1.45rem;
+    }
+</style>
+<div class="page page-current page-inited" id="page-1494834298850">
+    <!--<header class="bar bar-nav">-->
+        <!--<h1 class="title"></h1>-->
+    <!--</header>-->
+    <form role="form" method="post" enctype="multipart/form-data" class="form-horizontal">
+    <div class="content">
+        <div class="page-login">
+            <div class="list-block inset text-center">
+                <h3>小区管理系统</h3>
+                <ul>
+                    <!-- Text inputs -->
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-name"></i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input type="text" placeholder="账号" name="username">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media"><i class="icon icon-form-email"></i></div>
+                            <div class="item-inner">
+                                <div class="item-input">
+                                    <input type="password" placeholder="密码" name="password">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block">
+                <p>
+                    <button type="submit" class="button button-big button-fill external" style="width: 100%">登录</button>
+                    <input name="token" value="{$_W['token']}" type="hidden" />
+                </p>
+            </div>
+        </div>
+        <style>
+            .content {
+                color: #999;
+            }
+            .button.button-fill.button-big {
+                line-height: 2.0rem;
+                height: 2.0rem;
+            }
+            .list-block {
+                margin: .75rem;
+            }
+            .content-block {
+                margin: .75rem 0;
+            }
+            .signup a {
+                color: #999;
+            }
+        </style>
+    </div>
+    </form>
+</div>
+
+

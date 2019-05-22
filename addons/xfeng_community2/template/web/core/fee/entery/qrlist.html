@@ -1,0 +1,68 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <!--<li><a href="{php echo $this->createWebUrl('category',array('op' => 'list','type' => 9))}" title="抄表分类" >抄表分类</a></li>-->
+                        {if ($user && $menu_opss && @in_array('fee_enteryPrice', $menu_opss)) || empty($user)}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'edit'))}" title="生成抄表费用" >生成抄表费用</a></li>
+                        {/if}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'list'))}" title="抄表费用列表" >抄表费用列表</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'qrlist'))}" title="抄表二维码列表" >抄表二维码列表</a></li>
+                        {if ($user && $menu_opss && @in_array('fee_enteryManage', $menu_opss)) || empty($user)}
+                        <li><a href="{php echo $this->createWebUrl('fee',array('op' => 'wechat','p' => 'list'))}" title="抄表管理员" >抄表管理员</a></li>
+                        {/if}
+                    </ul>
+                    <div class="ibox-content"></div>
+                    <div class="row">
+                        <div class="col-sm-12 m-b-xs">
+                            <a href="{php echo $this->createWebUrl('fee',array('op' => 'entery','p' => 'qr'))}" class="btn btn-primary"><i class="fa fa-plus"></i>生成抄表二维码</a>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-striped">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>ID</th>
+                            <th>小区名称</th>
+                            <th>抄表类型</th>
+                            <th>数量</th>
+                            <th>生成时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{$item['region']}</td>
+                            <td>{$item['category']}</td>
+                            <td>{$item['num']}</td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                            <td>
+                                <a href="{php echo $this->createWebUrl('fee',array('op'=>'entery','p' => 'qrdown','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-warning btn-sm" data-original-title="下载">下载</a>
+                                <a onclick="return confirm('删除后，将同时删除目录下的二维码，此操作不可恢复，确认吗？'); return false;" href="{php echo $this->createWebUrl('fee',array('op'=>'entery','p' => 'qrdel','id' => $item['id']))}" title="" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-sm" data-original-title="删除">删除</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,114 @@
+{template 'default/header'}
+<body class="max-width bg-f2">
+<div class="page">
+    <!-- 标题栏 -->
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" href="javascript:history.go(-1);"></a>
+        <h1 class="title txt-fff">新增地址</h1>
+    </header>
+
+    <!-- 这里是页面内容区 -->
+    <div class="content">
+        <div class="list-block" style="margin:0">
+            <ul>
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"></div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="tel" placeholder="手机号码" id='mobile' value="{$_W['member']['mobile']}">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </li>
+
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"></div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" placeholder="姓名" id='realname' value="{$_W['member']['realname']}">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </li>
+
+                <li>
+                    <div class="item-content">
+                        <div class="item-media"></div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                <input type="text" placeholder="地址" id='address' value="">
+                            </div>
+
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="content-block">
+            <div class="row" style="width: 40%;margin: 0 auto">
+                <a href="#" class="button button-big button-fill button-success" id="showToast">提交</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function() {
+        $("#showToast").click(function(event) {
+            var realname = $("#realname").val();
+            if (realname == '') {
+                alert('请填写姓名');
+                return false
+            };
+            var mobile = $("#mobile").val();
+            if (mobile == '') {
+                alert('请填写电话');
+                return false
+            };
+            var address = $("#address").val();
+            if (address == '') {
+                alert('请填写地址');
+                return false
+            };
+            var gid = "{$_GPC['gid']}";
+
+            $.ajax({
+                url: "{php echo $this->createMobileUrl('shopping',array('op' => 'add_address'))}",
+                dataType: 'json',
+                data: {
+                    realname:realname,
+                    mobile:mobile,
+                    address:address,
+                    gid:gid
+                },
+                success: function(s) {
+                    if (s.status == 1) {
+                        $.toast('添加成功');
+                        setTimeout(function () {
+                            window.location.href = "{php echo $this->createMobileUrl('shopping',array('op' => 'confirm'))}&id="+s.gid;
+                        }, 2000);
+                    }
+                    if (s.status == 2) {
+                        $.toast('添加失败');
+                    }
+                }
+            })
+
+
+        });
+
+    })
+
+</script>
+
+
+<script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+{template 'default/footer'}

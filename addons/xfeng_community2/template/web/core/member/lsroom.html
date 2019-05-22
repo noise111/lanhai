@@ -1,0 +1,50 @@
+
+{template 'web/common/header'}
+<ul class="nav nav-tabs">
+    <li><a href="{php echo $this->createWebUrl('member',array('op' => 'list'));}">业主管理</a></li>
+    <li class="active"><a href="#">v8历史房号</a></li>
+</ul>
+
+<div class="main">
+    <form action="" method="post" class="form-horizontal form" id="form">
+        <div class="panel panel-default">
+            <div class="panel-heading">v8.0版升级v9.0版历史房号</div>
+            <div class="panel-body">
+
+                <div style="color: red">共有{if $count}{$count}{else}0{/if}条,需要导出{php echo ceil($count/1000)}页，默认导出第一页1000条，多页输入页码。如第二页，输入2</div>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label for="mobile" class="col-sm-2 control-label">小区</label>
+                    <div class="col-sm-5">
+                        <select id="regionid" name="regionid" class='form-control'>
+                            <option value="0">选择小区</option>
+                            {loop $regions $region}
+                            <option value="{$region['id']}" >{$region['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">页码</label>
+                    <div class="col-sm-5">
+                        <input name="page" type="number"  class="form-control" value='1' style="width:30%"/>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <div class="col-xs-12 col-sm-9 col-md-10 col-lg-10 col-sm-offset-3 col-md-offset-2 col-lg-offset-2">
+
+                        <input name="update_room" type="submit" value="房号导出" class="btn btn-primary" />&nbsp;&nbsp;
+
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+{template 'web/common/footer'}

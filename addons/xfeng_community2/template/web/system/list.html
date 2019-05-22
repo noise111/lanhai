@@ -1,0 +1,90 @@
+{template 'web/common/header'}
+<ul class="nav nav-tabs">
+    <li {if $operation=='list'}class="active"{/if}><a href="{php echo $this->createWebUrl('system', array('op'=> 'menu','operation' => 'list'))}">管理菜单</a></li>
+
+
+</ul>
+
+<div class="panel panel-default" >
+    <div class="table-responsive">
+        <form action="" method="post" onsubmit="return formcheck(this)">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="col-sm-1">显示顺序</th>
+                    <th class="col-sm-2">菜单名称</th>
+                    <th class="col-sm-2">显示</th>
+                    <th class="col-sm-10">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $key $row}
+
+                <tr>
+
+                    <td>
+                        <div class="pad-bottom ">{$row['displayorder']}</div>
+                    </td>
+                    <td>
+                        <div class="type-parent">{$row['title']}&nbsp;&nbsp;
+
+                        </div>
+                    </td>
+                    <th>
+                        <input type="checkbox" name="status" data="{$row['status']}" data-id="{$row['id']}" {if $row['status'] == 1 }checked="checked"{/if}>
+                    </th>
+                    <td>
+
+                        <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('menu',array('op'=> 'add','id'=> $row['id']))}" >
+                            <i class="fa fa-edit" data-toggle="tooltip" data-placement="top"></i>编辑</a>
+
+                    </td>
+                </tr>
+
+                {loop $children[$row['id']] $k $item}
+                <tr>
+
+                    <td> <div class="pad-bottom ">{$item['displayorder']}</div></td>
+                    <td>
+                        <div style="float:left;line-height:60px;">{$item['title']}&nbsp;&nbsp;
+                        </div>
+                    </td>
+                    <td>
+                        <input type="checkbox" data="{$item['status']}" data-id="{$item['id']}" {if $item['status'] == 1 }checked="checked"{/if}></span>
+                    </td>
+                    <td>
+                        <a class="btn btn-default btn-sm" href="{php echo $this->createWebUrl('system',array('op'=> 'menu','operation'=> 'add','id'=> $item['id']))}" >
+                            <i class="fa fa-edit" data-toggle="tooltip" data-placement="top"></i>编辑</a>
+                    </td>
+                </tr>
+                {/loop}
+                {/loop}
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    require(['bootstrap.switch', 'util'], function ($, u) {
+        $(function () {
+            $(':checkbox').bootstrapSwitch();
+            $(':checkbox').on('switchChange.bootstrapSwitch', function (e, state) {
+                $this = $(this);
+                var id = $this.attr('data-id');
+                var status = this.checked ? 1 : 0;
+                $this.val(status);
+                $.post("{php echo $this->createWebUrl('menu')}",{id:id,status:status},function () {
+
+                })
+            });
+            $('.btn').hover(function () {
+                $(this).tooltip('显示');
+            }, function () {
+                $(this).tooltip('隐藏');
+            });
+        });
+    });
+</script>
+{template 'web/common/footer'}

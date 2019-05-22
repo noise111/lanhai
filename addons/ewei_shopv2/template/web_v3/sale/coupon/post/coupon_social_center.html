@@ -1,0 +1,167 @@
+<style type="text/css">
+    .label-italic{font-weight: normal; font-style: italic;}
+    .a-inline{margin-top: 6px}
+    .input-sm{padding:2px;}
+</style>
+<div class="form-group">
+    <label class="col-lg control-label">是否创建直接领取链接</label>
+    <div class="col-sm-9 col-xs-12" >
+        {ife 'sale.coupon' $item}
+        <label class="radio-inline">
+            <input type="radio" name="quickget" value="1" {if $item['quickget'] == 1}checked="true"{/if} /> 可以
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="quickget" value="0" {if $item['quickget'] == 0}checked="true"{/if}/> 不可以
+        </label>
+        <span class='help-block'>会员是否可以通过链接直接获取优惠券.注意!!!此功能无法与支付与积分兑换优惠券功能同时使用!!!</span>
+        {else} 
+        <div class='form-control-static'>
+        {if $item['quickget']==1}可以{else}不可以{/if}
+        </div>
+        {/if}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-lg control-label">加入领券中心</label>
+    <div class="col-sm-9 col-xs-12" >
+        {ife 'sale.coupon' $item}
+        <label class="radio-inline">
+            <input type="radio" name="gettype" value="1" {if $item['gettype'] == 1}checked="true"{/if} onclick="$('.gettype').show()" /> 可以
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="gettype" value="0" {if $item['gettype'] == 0}checked="true"{/if}  onclick="$('.gettype').hide()"/> 不可以
+        </label>
+
+        <span class='help-block'>会员是否可以在领券中心直接领取或购买</span>
+
+        {else} <div class='form-control-static'>
+        {if $item['gettype']==1}可以{else}不可以{/if}
+    </div>
+        {/if}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-lg control-label">自动发放规则</label>
+    <div class="col-sm-3 col-xs-12">
+        <div class='input-group'>
+            <span class="input-group-addon">发放对象</span>
+            <select name='autotarget' class='form-control'>
+                <option value='0'></option>
+                <option value='1' {if $item['autotarget'] == 1}selected="selected"{/if}>门店店员</option>
+                <option value='2' {if $item['autotarget'] == 2}selected="selected"{/if}>用户</option>
+                <option value='3' {if $item['autotarget'] == 3}selected="selected"{/if}>其他</option>
+            </select>
+        </div>
+    </div>   
+</div>
+<div class="form-group autotarget1" {if $item['autotarget'] !=1}style="display:none;"{/if}>
+    <label class="col-lg control-label"></label>
+    <div class="col-sm-3 col-xs-12">
+        <div class='input-group'>
+            <span class="input-group-addon">类型</span>
+            <select name='autotype' class='form-control'>
+                <option value='1' {if $item['autotype'] == 1}selected="selected"{/if}>导购</option>
+                <option value='2' {if $item['autotype'] == 2}selected="selected"{/if}>店长</option>
+            </select>
+        </div>
+        <div class='input-group'>
+            <span class="input-group-addon">数量</span>
+            <input type='text' name='autonumber' class='form-control' value="{$item['autonumber']}"/>
+        </div>
+    </div>
+</div>
+
+<div class="form-group autotarget2" {if $item['autotarget'] !=2}style="display:none;"{/if}>
+    <label class="col-lg control-label"></label>
+    <div class="col-sm-3 col-xs-12">
+        <div class='input-group'>
+            <span class="input-group-addon">类型</span>
+            <select name='autotype' class='form-control'>
+                <option value='1' {if $item['autotype'] == 1}selected="selected"{/if}>每订单</option>
+                <option value='2' {if $item['autotype'] == 2}selected="selected"{/if}>每个商品</option>
+            </select>
+        </div>
+        <div class='input-group'>
+            <span class="input-group-addon">数量</span>
+            <input type='text' name='autonumber' class='form-control' value="{$item['autonumber']}"/>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-lg control-label">自动发放条件</label>
+    <div class="col-sm-3 col-xs-12">
+        <div class='input-group'>
+            <label class='checkbox-inline'>
+                <input type="checkbox" name="social_rule[]" value="1" aria-invalid="false" class="valid" {if $item['isnewpass'] == 1}checked="checked"{/if} />新注册并通过审核
+            </label>
+            <label class='checkbox-inline'>
+                <input type="checkbox" name="social_rule[]" value="2" aria-invalid="false" class="valid" {if $item['finishorder'] == 1}checked="checked"{/if}/>完成订单
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-lg control-label">自动发放订单商品</label>
+    <div class="col-sm-3 col-xs-12">
+        <label class="radio-inline coupon-radio">
+            <input type="radio" name="autogoods" value="0" {if $item['autogoodsid'] == ''}checked="true"{/if} onclick="$('.selectgoods').hide();" /> 不添加商品限制
+        </label>
+        <label class="radio-inline coupon-radio">
+            <input type="radio" name="autogoods" value="1" {if $item['autogoodsid'] != ''}checked="true"{/if} onclick="$('.selectgoods').show();" /> 购买以下商品自动发送
+        </label>
+    </div>   
+</div>
+
+<div class="form-group selectgoods" {if $item['autogoodsid'] == ''}style="display:none"{/if}>
+    {ife 'sale.coupon' $item}
+        <div class="" >
+            <label class="col-lg control-label">选择商品</label>
+            <div class="col-sm-9 col-xs-12">
+                <div class="">
+                    <?php echo tpl_selector('autogoodsid',array(
+                    'preview'=>true,
+                    'readonly'=>true,
+                    'multi'=>1,
+                    'value'=>$item['title'],
+                    'url'=>webUrl('sale/coupon/querygoods'),
+                    'items'=>$autogoods,
+                    'buttontext'=>'选择商品',
+                    'placeholder'=>'请选择商品')
+                    )
+                    ?>
+                </div>
+                <span class='help-block'>添加限制的商品必须已上架</span>
+            </div>
+        </div>
+    {else}
+        {if !empty($autogoods)}
+            {loop $autogoods $item}
+                <a href="{php echo tomedia($item['thumb'])}" target='_blank'>
+                    <img src="{php echo tomedia($item['thumb'])}" style='width:100px;border:1px solid #ccc;padding:1px' />
+                </a>
+            {/loop}
+        {else}
+            暂无商品
+        {/if}
+    {/if}
+
+</div>
+
+<script language='javascript'>
+    $("select[name='autotarget']").change(function(){
+        var target = $(this).val();
+        if(target == 1){
+            $(".autotarget1").show();
+            $(".autotarget2").hide();
+        } else if(target == 2) {
+            $(".autotarget1").hide();
+            $(".autotarget2").show();
+        } else {
+            $(".autotarget1").hide();
+            $(".autotarget2").hide();
+        }
+    });
+</script>

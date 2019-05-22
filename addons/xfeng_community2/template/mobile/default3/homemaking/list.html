@@ -1,0 +1,63 @@
+{template 'default2/header'}
+<style>
+    .weui-tabbar__item.weui-bar__item--on .weui-tabbar__label {
+        color: #3E8CCA;
+    }
+
+    .weui-grids {
+        background: #ffffff;
+    }
+
+    .weui-grid {
+        width: 50%;
+        padding: 10px 10px;
+        overflow: hidden;
+    }
+</style>
+
+<body ontouchstart>
+<div class="weui-tab">
+    <div class="service_banner">
+        <img src="{MODULE_URL}template/mobile/default2/static/images/service/homemaking-banner.jpg">
+    </div>
+    <div class="weui-tab__bd" style="margin-bottom: 80px">
+        <div id="tab1" class="weui-tab__bd-item weui-tab__bd-item--active">
+            <div class="weui-grids" id="list">
+
+            </div>
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <a href="{php echo $this->createMobileUrl('homemaking',array('op'=> 'detail'))}&cid={{d.list[i].id}}" class="  weui-grid js_grid">
+        <div class="homemaking-tit">
+            <h4>{{ d.list[i].name }}</h4>
+            <p>{{ d.list[i].description }}</p>
+        </div>
+        <div class="homemaking-tit-img">
+            <img src="{{ d.list[i].thumb }}">
+        </div>
+    </a>
+    {{# } }}
+</script>
+
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var url = "{php echo wxapp_url('category/list')}&type=1";
+        _loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

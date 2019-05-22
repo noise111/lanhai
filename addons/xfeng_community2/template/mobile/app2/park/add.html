@@ -1,0 +1,145 @@
+{template 'app2/header'}
+<style>
+    body{
+        background: #F6F6F6;
+    }
+    .weui-cells:first-child{
+        margin-top: 0;
+    }
+    .weui-cells{
+        font-size: 0.9em;
+    }
+    .weui-textarea{
+        min-height: 100px;
+    }
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+</style>
+<body ontouchstart>
+<style>[v-cloak] { display: none !important; }</style>
+<div id='app' v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加车位</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="regionid" v-model="item.regionid">
+                    <option value="">选择小区</option>
+                    <option v-for="(row, index) in regions" :value="row.id">{{row.title}}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">车位号</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入车位号" id="place_num" v-model="item.place_num">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">产权面积</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="输入产权面积" id="area" v-model="item.area">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-form-preview__label">车位状态</label></div>
+            <div class="weui-cell__bd">
+                <select class="weui-select" id="status" v-model="item.status">
+                    <option value="">请选择车位状态</option>
+                    <option value="已售">已售</option>
+                    <option value="已租">已租</option>
+                    <option value="空置">空置</option>
+                    <option value="自用">自用</option>
+                    <option value="暂停">暂停</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="输入备注..." rows="3" id="remark" v-model="item.remark"></textarea>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="margin: 20px 20px" id="submit">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            regions: [],
+            item:{
+                place_num:'',
+                regionid:'',
+                area:'',
+                status:"",
+                remark:''
+            },
+            id:id,
+        },
+        beforeMount: function () {
+            var self = this
+            var url = "{php echo wxapp_url('appregion/list')}";
+            $.getJSON(url, function (ret) {
+                self.regions = ret.data
+            })
+            var url = "{php echo wxapp_url('apppark/detail')}";
+            var data = {
+                id:id
+            }
+            $.getJSON(url,data, function (ret) {
+                self.item = ret.data
+            })
+        },
+        mounted: function () {
+
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('apppark/add')}";
+                self.item.id=self.id
+                if(self.item.regionid == '' || self.item.place_num == '' || self.item.area == '' || self.item.status == ''){
+                    $.toast('有未填写的信息','cancel');return false;
+                }
+                $.showLoading('正在提交');
+                $.post(url,self.item,function (ret) {
+                    $.hideLoading();
+                    if(ret.err_code == 0){
+                        setTimeout(function () {
+                            $.toast('提交成功');
+                            //定时刷新
+                            window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'park'))}";
+                        }, 500);
+                    }
+                },'json')
+            }
+        }
+    })
+
+</script>
+</body>
+</html>

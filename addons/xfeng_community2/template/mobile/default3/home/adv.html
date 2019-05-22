@@ -1,0 +1,45 @@
+<div class="swiper-container" id="home-swiper-container">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper" id="list_swiper">
+        <!-- Slides -->
+
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+</div>
+<!--<div style="margin-bottom: 80px">-->
+
+    <script type="text/html" id="xq_list_swiper">
+
+        {{# for(var i = 0, len =d.swipers.length; i < len; i++){ }}
+        <div class="swiper-slide home-swiper-slide" data-ratio="16:9" onclick="window.location.href='{{ d.swipers[i].url }}'" >
+            <img src="{{ d.swipers[i].thumb }}"/>
+        </div>
+        {{# } }}
+    </script>
+
+    <script type="text/javascript">
+        $(function () {
+            var url = "{php echo wxapp_url('display/swipers')}&regionid="+regionid;
+            _loaddata(url, $("#list_swiper"), 'xq_list_swiper', true,function () {
+                //    轮播图
+                var swiper = new Swiper('#home-swiper-container',{
+                    speed: 1000,
+                    loop: true,
+                    autoplay: 3000,
+                    observer:true,
+                    observeParents:true,
+                    autoplayDisableOnInteraction : false,
+                    pagination: '.swiper-pagination',
+                    onInit: function(swiper){
+                        swiperAnimateCache(swiper);
+                        swiperAnimate(swiper);
+                    },
+                    onSlideChangeStart:function(swiper)
+                    {
+                        console.log(swiper.activeIndex)
+                    }
+                });
+            });
+        })
+    </script>

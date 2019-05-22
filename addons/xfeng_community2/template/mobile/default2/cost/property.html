@@ -1,0 +1,47 @@
+{template 'default2/header'}
+<style>
+    .weui-cells {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+</style>
+</head>
+
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="{php echo $this->createMobileUrl('cost',array('op'=>'list'))}">
+        <div class="weui-cell__hd"><img
+                src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-base-pay01.png" alt=""
+                style="width:25px;margin-right:10px;display:block"></div>
+        <div class="weui-cell__bd">
+            <p>物业费</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+</div>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="{php echo $this->createMobileUrl('zhpark')}">
+        <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-park.png"
+                                        alt=""
+                                        style="width:25px;margin-right:10px;display:block"></div>
+        <div class="weui-cell__bd">
+            <p>停车费</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+</div>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="https://payapp.weixin.qq.com/life/index?showwxpaytitle=1#wechat_redirect">
+        <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/images/icon/icon-lift.png"
+                                        alt=""
+                                        style="width:25px;margin-right:10px;display:block"></div>
+        <div class="weui-cell__bd">
+            <p>生活缴费</p>
+        </div>
+        <div class="weui-cell__ft"></div>
+    </a>
+</div>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+</body>
+</html>

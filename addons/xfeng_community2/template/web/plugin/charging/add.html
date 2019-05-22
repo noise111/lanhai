@@ -1,0 +1,246 @@
+{template 'web/common/header-base'}
+
+<div class="wrapper wrapper-content animated">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'station'))}" title="充电桩管理" >充电桩管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('charging',array('op' => 'station','p' => 'add','id' => $id))}" title="添加充电桩" >添加充电桩</a></li>
+                    <li><a href="{php echo $this->createWebUrl('charging',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="title" id='title' value="{$item['title']}" class="form-control" placeHolder="请输入名称" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-xs-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" id="region">
+                            <label for="regionid" class="col-sm-2 control-label">选择小区<span style="color: red">*</span></label>
+                            <div class="col-xs-4">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="">选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected='selected'{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" >
+                            <label for="tid" class="col-sm-2 control-label">选择运营商</label>
+                            <div class="col-xs-4">
+                                <select name="tid" class="form-control" id="tid">
+                                    <option>选择运营商</option>
+                                    {loop $throws $throw}
+                                    <option value="{$throw['id']}" {if $item['tid'] == $throw['id']}selected='selected'{/if}>{$throw['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">充电桩型号</label>
+                            <div class="col-sm-4">
+                                <select name="type" class="form-control" id="type">
+                                    <option>选择充电桩型号</option>
+                                    <option value="1" {if $item['type'] == 1}selected='selected'{/if}>DWD-A2001</option>
+                                    <option value="2" {if $item['type'] == 2}selected='selected'{/if}>DWD-1806C10</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">appid</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="appid" id='appid' value="{$item['appid']}" class="form-control" placeHolder="请输入充电桩云参数appid"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">appsecret</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="appsecret" id='appsecret' value="{$item['appsecret']}" class="form-control" placeHolder="请输入充电桩云参数appsecret"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">充电桩编号</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="code" id='code' value="{$item['code']}" class="form-control" placeHolder="请输入充电桩编号"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="code" class="col-sm-2 control-label">充电桩展示编号</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="zscode" id='zscode' value="{$item['zscode']}" class="form-control" placeHolder="请输入充电桩前端展示编号"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="line" class="col-sm-2 control-label">充电桩插座数量</label>
+                            <div class="col-sm-4">
+                                <!--<input type="text" name="line" id='line' value="{$item['line']}" class="form-control" placeHolder="请输入插头数" {if $item['line']}readonly{/if}/>-->
+                                <select name="line" class="form-control" id="line">
+                                    <option value="10" {if $item['line'] == 10}selected='selected'{/if}>10路</option>
+                                    <option value="20" {if $item['line'] == 20}selected='selected'{/if}>20路</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">地址</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="address" id='address' value="{$item['address']}" class="form-control" placeHolder="请输入充电桩所在地址"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">坐标</label>
+                            <div class="col-sm-5">
+                                {php echo tpl_form_field_coordinate('baidumap', $item)}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启广告区域一</label>
+                            <div class="col-xs-5">
+                                <div class="radio radio-success checkbox-inline">
+                                    <input type="radio" name="advone" id="advone1" value="1" {if $advpic['advone'] == 1}checked{/if}/>
+                                    <label for="advone1"> 是 </label>
+
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="advone" id="advone0" value="0" {if $advpic['advone'] == 0 || empty($advpic['advone'])}checked{/if} />
+                                    <label for="advone0">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">广告图片一</label>
+                            <div class="col-sm-5 col-xs-5">
+                                {php echo tpl_form_field_multi_image('picone',$advpic['picone'],$options)}
+                                <span class="help-block">建议比例：5:1</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">是否开启广告区域二</label>
+                            <div class="col-xs-5">
+                                <div class="radio radio-success checkbox-inline">
+                                    <input type="radio" name="advtwo" id="advtwo1" value="1" {if $advpic['advtwo'] == 1}checked{/if}/>
+                                    <label for="advtwo1"> 是 </label>
+
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="advtwo" id="advtwo0" value="0" {if $advpic['advtwo'] == 0 || empty($advpic['advtwo'])}checked{/if} />
+                                    <label for="advtwo0">否</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">广告图片二</label>
+                            <div class="col-sm-5 col-xs-5">
+                                {php echo tpl_form_field_multi_image('pictwo',$advpic['pictwo'],$options)}
+                                <span class="help-block">建议比例：5:1</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="remark" class="col-sm-2 control-label">备注</label>
+                            <div class="col-sm-4">
+                                <textarea name="remark" id="remark" class="form-control" style="height: 200px;" >{$item['remark']}</textarea>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if(!$("#title").val()){
+            alert('请输入名称。');
+            return false;
+        }
+        if(!$("#address").val()){
+            alert('请输入地址。');
+            return false;
+        }
+        if(!$("#code").val()){
+            alert('请输入充电桩编号。');
+            return false;
+        }
+        if(!$("#appid").val()){
+            alert('请输入充电桩云参数appid。');
+            return false;
+        }
+        if(!$("#appsecret").val()){
+            alert('请输入充电桩云参数appsecret。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('charging',array('op'=>'station','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+            }
+        },'json')
+    })
+</script>

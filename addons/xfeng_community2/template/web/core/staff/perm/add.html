@@ -1,0 +1,434 @@
+{template 'web/common/header-base'}
+
+<script>
+    var regionids = {$regionids};
+</script>
+<script src="{MODULE_URL}static/js/lib/public.js"></script>
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <!--<div class="ibox-title">-->
+                    <!--<h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('staff', array('op' => 'perm'))}"></a>&nbsp;&nbsp;&nbsp;添加管理员</h5>-->
+                    <!--<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p' => 'add','id' => $id))}"></a></h5>-->
+                <!--</div>-->
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                        <li><a href="{php echo $this->createWebUrl('staff',array('op' => 'role','p'=>'list'))}" title="角色管理" >角色管理</a></li>
+                        <li><a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','uuid'=>$_GPC['uuid']))}" title="权限设置" >权限设置</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','p'=>'add','id'=>$id))}" title="添加管理员" >添加管理员</a></li>
+                    </ul>
+                <div class="ibox-content">
+
+<div class="alert alert-warning" role="alert">
+    &nbsp;&nbsp;<span style="font-size: 18px;">权限说明：</span><br>
+    <span><span style="color:red">《超级管理员》</span>：等同于总管理员，拥有所有管理所有小区的权限。设置权限后和总管理员的权限一致</span><br>
+    <span><span style="color:red">《普通管理员》</span>：适用于给社区等，还有给其他角色发布通知。拥有所有的小区操作权限，但只限于管理自己发布的信息</span><br>
+    <span><span style="color:red">《小区管理员》</span>：选择小区管理员后，需绑定小区。管理绑定小区的信息，适合报修，建议等等</span>
+</div>
+<form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+    <input type="hidden" name="regionids" value="" />
+            <div class="form-group">
+
+                {if empty($user) || $user['xqtype'] == 1}
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">人员类型<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="xqtype" id="xqtype1" value="1" {if $item['xqtype'] == 1 || empty($item['xqtype'])}checked="checked"{/if} />
+                            <label for="xqtype1">物业员工</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="xqtype"  id="xqtype2" value="2" {if $item['xqtype']==2 } checked{/if} />
+                            <label for="xqtype2">外部人员</label>
+                        </div>
+
+                    </div>
+                </div>
+                {/if}
+                <div class="form-group"  {if $user['xqtype']==2 || $item['xqtype']==2}style='display:block'{else}style="display: none" {/if}id="company">
+                    <label for="" class="col-sm-2 control-label">选择公司<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <select name="companyid" class="form-control" id="companyid">
+                            <option value="">选择公司</option>
+                            {loop $companies $company}
+                            <option value="{$company['id']}" {if $item['pid'] == $company['id']}selected='selected'{/if}>{$company['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                {if $item['xqtype']==1 || empty($item)}
+    <!--<div class="form-group" >-->
+        <!--<label class="col-sm-2 control-label">搜索</label>-->
+        <!--<div class="col-xs-4">-->
+            <!--<div class="input-group">-->
+                <!--<input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">-->
+                <!--<span class="input-group-btn">-->
+						<!--<button type="button" class="btn btn-primary" id="search">搜索</button>-->
+					<!--</span>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+                <div class="form-group" id="property" {if $user['xqtype']==1 || empty($user)}style='display:block'{else}style="display: none" {/if}>
+                    <label for="" class="col-sm-2 control-label">选择物业<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <select name="pid" class="form-control" id="pid">
+                            <option value="">选择物业</option>
+                            {loop $properties $property}
+                            <option value="{$property['id']}" {if $item['pid'] == $property['id']}selected='selected'{/if}>{$property['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="department" {if $user['xqtype']==1 || empty($user)}style='display:block'{else}style="display: none" {/if}>
+                    <label for="" class="col-sm-2 control-label">选择部门<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <select name="departmentid" class="form-control" id="departmentid">
+                            <option>选择部门</option>
+                            {loop $departments $department}
+                            <option value="{$department['id']}" {if $item['departmentid'] == $department['id']}selected='selected'{/if}>{$department['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            {/if}
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">选择员工<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <select name="userid" class="form-control" id="userid">
+                            <option value="">选择员工</option>
+                            {loop $staffs $staff}
+                            <option value="{$staff['id']}" {if $item['staffid'] == $staff['id']}selected='selected'{/if}>{$staff['realname']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">登录账号</label>
+                    <div class="col-xs-4">
+                        <input type='text' class="form-control" disabled id="username" value="{$item['username']}"/>
+                        <input type='hidden' name='username' class="form-control"  value=""  id="_username"/>
+                        <input type='hidden' name='staffid' class="form-control"  value="{$item['staffid']}"  id="staffid"/>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">姓名</label>
+                    <div class="col-xs-4">
+                        <input type='text' name='realname' class="form-control" disabled id="realname" value="{$item['realname']}"/>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">登录密码</label>
+                    <div class="col-xs-4">
+                        <input id="password" name="password" type="password" class="form-control" value="" autocomplete="off" />
+                        <span class="help-block">请填写密码，最小长度为 8 个字符</span>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">确认密码</label>
+                    <div class="col-xs-4">
+                        <input id="repassword" name="repassword" type="password" class="form-control" value="" autocomplete="off" />
+                        <span class="help-block">重复输入密码，确认正确输入</span>
+                    </div>
+                </div>
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">状态</label>
+                    <div class="col-sm-10 col-lg-9 col-xs-12">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="status"  id="qystatus" value="2" {if $m['status'] ==2 || empty($m)}checked{/if} />
+                            <label for="qystatus">启用</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="status" id="jhstatus" value="1"  {if $m['status'] == 1}checked {/if}/>
+                            <label for="jhstatus">禁用</label>
+                        </div>
+
+                    </div>
+                </div>
+
+            <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">选择角色<span style="color: red">*</span></label>
+                    <div class="col-xs-4">
+                        <select name="roleid" class="form-control" id="roleid">
+                            <option value="">选择角色</option>
+                            {loop $roles $role}
+                            <option value="{$role['id']}" {if $item['roleid'] == $role['id']}selected='selected'{/if}>{$role['title']}</option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-2 col-md-2 col-lg-2 control-label">权限</label>
+                    <div class="col-sm-10 col-lg-9 col-xs-12">
+                        {if empty($user) || $user['type'] == 1 }
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type" id="cjtype" value="1" {if $item['type'] == 1 || empty($item['type'])}checked{/if} />
+                            <label for="cjtype">超级管理员</label>
+                        </div>
+                        {/if}
+                        {if empty($user) || $user['type'] == 1 || $user['type'] == 2}
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type"  id="pytype" value="2" {if $item['type'] == 2 || $user['type'] == 2 }checked{/if}/>
+                            <label for="pytype">普通管理员</label>
+                        </div>
+                        {/if}
+                        {if empty($user) || $user['type'] == 3 || $user['type'] == 1}
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type"  id="xxqtype" value="3" {if $item['type'] == 3 }checked{/if}/>
+                            <label for="xxqtype">小区管理员</label>
+                        </div>
+                        {/if}
+                        {if empty($user) || $user['type'] == 4 || $user['type'] == 1}
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type"  value="4" id="xxqtype1" {if $item['type'] == 4 }checked{/if}/>
+                            <label for="xxqtype1">超市管理员</label>
+                        </div>
+                        {/if}
+                        {if empty($user) || $user['type'] == 5 || $user['type'] == 1}
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="type"  value="5" id="xxqtype2" {if $item['type'] == 5 }checked{/if}/>
+                            <label for="xxqtype2">商家管理员</label>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+                <div class="form-group birth" {if $item['type'] == 3 || $user['type'] == 3 || $user['type'] == 4 || $item['type'] == 4}style="display: block"{else}style="display: none"{/if}>
+                        <label for="" class="col-sm-2 control-label">省市区</label>
+                        <div class="col-sm-5">
+                            {php echo tpl_form_field_district('birth',array('province' => $province,'city' =>$city,'dist' => $dist))}
+                        </div>
+                    </div>
+                <div class="form-group region" {if $item['type'] == 3 || $item['type'] == 4 || $user['type'] == 3 || $user['type'] == 4}style="display: block"{else}style="display: none"{/if}>
+                    <label for="" class="col-sm-2 control-label">小区</label>
+                    <div class="col-sm-10 content">
+                    </div>
+                </div>
+    <div id="shops" {if $item['type'] == 4 || $user['type'] == 4}style="display: block"{else}style="display: none"{/if}>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group" >
+        <label class="col-sm-2 control-label">选择超市</label>
+        <div class="col-sm-6 col-xs-6" id="shop">
+            {if $shops}
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" name="_shopids[]" id="shopid_0" data-group='shopss'>
+                <label for="shopid_0">全部</label>
+            </div>
+            {loop $shops $shop}
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" name="shopids[]" value="{$shop['id']}" id="shopid_{$shop['id']}" data-group='shopss' {if @in_array($shop['id'],$storeids)}checked{/if} >
+                <label for="shopid_{$shop['id']}">{$shop['title']}</label>
+            </div>
+            {/loop}
+            {/if}
+        </div>
+    </div>
+</div>
+    <div id="dps" {if $item['type'] == 5 || $user['type'] == 5}style="display: block"{else}style="display: none"{/if}>
+    <div class="hr-line-dashed"></div>
+    <div class="form-group" >
+        <label class="col-sm-2 control-label">选择店铺</label>
+        <div class="col-sm-6 col-xs-6" id="dp">
+            {if $dps}
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" name="_dpids[]" id="dpid_0" data-group='dpss'>
+                <label for="dpid_0">全部</label>
+            </div>
+            {loop $dps $dp}
+            <div class="checkbox checkbox-success checkbox-inline">
+                <input type="checkbox" name="dpids[]" value="{$dp['id']}" id="dpid_{$dp['id']}" data-group='dpss' {if @in_array($dp['id'],$storeids)}checked{/if} >
+                <label for="dpid_{$dp['id']}">{$dp['sjname']}</label>
+            </div>
+            {/loop}
+            {/if}
+        </div>
+    </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary btn-w-m" name="submit" id="submit" value="提交">提交</button>
+                        <input type="hidden" value="{$id}" name="id">
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#userid").val()){
+            alert('请选择员工。');
+            return false;
+        }
+        if(!$("#password").val()){
+            alert('请输入密码。');
+            return false;
+        }
+        if(!$("#repassword").val()){
+            alert('请输入重复密码。');
+            return false;
+        }
+        if($("#password").val() != $("#repassword").val()){
+            alert('两次密码不正确,请重新输入。');
+            return false;
+        }
+        if(!$("#roleid").val()){
+            alert('请选择角色。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var regionids = [];
+        $("input[name='regionid']:checked").each(function(){
+            var lastid = $(this).val();
+            regionids.push(lastid);
+        })
+        regionids.join(",");
+        $("input[name='regionids']").val(regionids);
+        var url = "{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $(function () {
+        $("input[name='type']").click(function(){
+            var type = $("input[name='type']:checked").val();
+            if(type == 3 || type==4){
+                $(".birth").show();
+                $("#dps").hide();
+                if (type == 4){
+                    $("#shops").show();
+                }else{
+                    $("#shops").hide();
+                }
+            }
+            if(type ==1 || type == 2 || type==5){
+                $(".birth").hide();
+                $(".region").hide();
+                $("#shops").hide();
+                if (type == 5){
+                    $("#dps").show();
+                }else{
+                    $("#dps").hide();
+                }
+            }
+        })
+        $("input[name='xqtype']").click(function(){
+            var type = $("input[name='xqtype']:checked").val();
+            if(type == 1){
+                $("#company").hide();
+                $("#property").show();
+                $("#department").show();
+            }
+            if(type == 2){
+                $("#property").hide();
+                $("#department").hide();
+                $("#company").show();
+            }
+        })
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'property'},function (data) {
+                if (data.err_code == 0){
+                    $('#pid').val(data.pid);
+                    $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'mail','p'=> 'change'))}",{pid:data.pid},function(data){
+                        var content ="<option>选择部门</option>";
+                        for (var o in data) {
+                            content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                        }
+                        $('#departmentid').html(content);
+
+                    })
+                }
+            },'json')
+        })
+        $("#pid").change(function () {
+            var pid = $("#pid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'mail','p'=> 'change'))}",{pid:pid},function(data){
+                var content ="<option>选择部门</option>";
+                for (var o in data) {
+                    content +="<option value='"+data[o].id+"'>"+data[o].title+"</option>";
+                }
+                $('#departmentid').html(content);
+
+            })
+        })
+        $("#departmentid").change(function () {
+            var departmentid = $("#departmentid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=> 'change','type'=>1))}",{departmentid:departmentid},function(data){
+                var content ="<option>选择员工</option>";
+                for (var o in data) {
+                    content +="<option value='"+data[o].id+"'>"+data[o].realname+"</option>";
+                }
+                $('#userid').html(content);
+
+            })
+        })
+        $("#userid").change(function () {
+            var userid = $("#userid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=> 'user'))}",{userid:userid},function(data){
+                $("#realname").val(data.realname);
+                $("#username").val(data.mobile);
+                $("#_username").attr("value",data.mobile);
+                $("#staffid").attr("value",data.id)
+
+            })
+        })
+        $("#companyid").change(function () {
+            var departmentid = $("#companyid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('staff',array('op'=>'perm','p'=> 'change','type'=>2))}",{departmentid:departmentid},function(data){
+                var content ="<option>选择员工</option>";
+                for (var o in data) {
+                    content +="<option value='"+data[o].id+"'>"+data[o].realname+"</option>";
+                }
+                $('#userid').html(content);
+
+            })
+        })
+    })
+    $("#dpid_0").click(function() {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" +group + "']").each(function(){
+            $(this).get(0).checked = checked;
+        })
+    });
+    $("#shopid_0").click(function() {
+        var checked = $(this).get(0).checked;
+        var group = $(this).data('group');
+        $("input:checkbox[data-group='" +group + "']").each(function(){
+            $(this).get(0).checked = checked;
+        })
+    });
+</script>
+{template 'web/common/footer'}

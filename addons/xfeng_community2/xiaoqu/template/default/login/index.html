@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>小区管理系统 - 登录</title>
+    <meta name="keywords" content="智慧物业,智慧小区,微物业">
+    <meta name="description" content="智慧物业,智慧小区,微物业">
+    <link href="./static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./static/css/font-awesome.css?v=4.4.0" rel="stylesheet">
+    <link href="./static/css/animate.css" rel="stylesheet">
+    <link href="./static/css/style.css" rel="stylesheet">
+    <link href="./static/css/login.css" rel="stylesheet">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./static/js/slick.js"></script>
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <!--<script>-->
+        <!--if (window.top !== window.self) {-->
+            <!--window.top.location = window.location;-->
+        <!--}-->
+    <!--</script>-->
+
+</head>
+
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="signin-info">
+                <div class="logopanel m-b">
+                    <h1>[ 小区管理系统 ]</h1>
+                </div>
+                <div class="m-b"></div>
+                <h4>欢迎使用 <strong>小区管理系统</strong></h4>
+                <!--<ul class="m-b">-->
+                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势一</li>-->
+                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势二</li>-->
+                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势三</li>-->
+                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势四</li>-->
+                    <!--<li><i class="fa fa-arrow-circle-o-right m-r-xs"></i> 优势五</li>-->
+                <!--</ul>-->
+                <!--<strong>还没有账号？ <a href="#">立即注册&raquo;</a></strong>-->
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <!--<form method="post" action="">-->
+                <h4 class="no-margins">登录：</h4>
+                <p class="m-t-md">登录到小区系统管理后台</p>
+                <input type="text" name="username" id="username" class="form-control uname" placeholder="用户名" />
+                <input type="password" name="password" id="password" class="form-control pword m-b" placeholder="密码" />
+                <!--<a href="">忘记密码了？</a>-->
+            <input type="button" id="register-submit" class="btn btn-success btn-block" value="登录">
+                <!--<button class="btn btn-success btn-block" id="register-submit">登录</button>-->
+            <!--</form>-->
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-left">
+            &copy; 2015 All Rights 智慧小区
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $(":input[name='username'],:input[name='password']").keydown(function(e){
+            var e = e || event,
+                keycode = e.which || e.keyCode;
+            if (keycode==13) {
+                $("#register-submit").trigger("click");
+            }
+        });
+
+        $("#register-submit").on("click",function(){
+//            if(username == ''){
+//                alert('用户名不可为空');return false;
+//            }
+//            if(password == ''){
+//                alert('密码不可为空');return false;
+//            }
+            var username = $("#username").val();
+            var password = $("#password").val();
+            if(username != '' && password != ''){
+                $('#register-submit').val('正在登录...');
+                $.post("{php echo webUrl('login/check')}",{username : username,password : password},function (data) {
+                    $('#register-submit').val('登录');
+                    if(data.msg =="true" ){
+
+                        window.location.href=data.url;
+                    }else{
+                        alert(data.msg);return false;
+                    }
+                },'json')
+
+            }
+
+        })
+    })
+</script>
+</html>

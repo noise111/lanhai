@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        body{
+            background: #F7F8F3;
+        }
+        .weui-cells{
+            font-size: 16px;
+        }
+        .weui-cells__title{
+            font-size: 15px;
+            margin-top: .3em;
+            color: #93948F;
+        }
+        .weui-icon-cancel{
+            color: #B2B2B2;
+        }
+        .weui-cell_warn{
+            color: #333;
+        }
+        .weui-btn{
+            width: 90%;
+            margin: 0 auto;
+            background: #F7624B;
+            color: #ffffff;
+            border-radius: 50px;
+            -moz-box-shadow: 2px 2px 5px #b9b9b9;
+            -webkit-box-shadow: 2px 2px 5px #b9b9b9;
+            box-shadow: 2px 2px 5px #b9b9b9;
+            font-size: 0.9em;
+            margin-top: 1.5em;
+        }
+        .toolbar .picker-button{
+            color: #F7624B;
+        }
+    </style>
+</head>
+<body>
+
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_access" id="code">
+        <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/img/saoma.png" alt="" style="width:40px;margin-right:5px;display:block"></div>
+        <div class="weui-cell__bd">
+            <p>扫码</p>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">扫码结果</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请扫码获取运单号" id="waybillcode">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">收件人姓名</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入收件人姓名" id="name">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">手机号码</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入收件人手机号" id="mobile">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="id" value="{$parcel['id']}">
+<a class="weui-btn" id="submit">添加</a>
+
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'scanQRCode'
+    ];
+
+    $(function () {
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            $('#code').click(function () {
+                wx.scanQRCode({
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: function (res) {
+                        //var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                        $('#waybillcode').val(res.resultStr);
+                    }
+                });
+            });
+        });
+    });
+
+    $('#submit').click(function () {
+        var waybillcode = $("#waybillcode").val();
+        var name = $("#name").val();
+        var mobile = $("#mobile").val();
+        if (waybillcode == '') {
+            $.alert('请扫码获取运单号！');
+            return false;
+        }
+        if (name == '') {
+            $.alert('请输入收件人姓名！');
+            return false;
+        }
+        if (mobile == '') {
+            $.alert('请输入收件人手机号！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express', array('op' => 'store','p'=>'arrive'))}",
+            {waybillcode:waybillcode, mobile:mobile,name:name},function (e) {
+                if(e.code == 1){
+                    $.toast('入库成功！', function () {
+                        //发送取货码
+                        $.post("{php echo $this->createMobileUrl('express', array('op' => 'sendsms'))}&mobile=" + e.phone,{waybillcode:waybillcode},function (data) {
+                            if(data=='1'){
+                                //alert('获取失败，请重新在试');return false;
+                                $.toast('已发送短信');
+                            }
+                            else
+                            {
+                                $.toast('发送短信失败！', 'cancel');
+                            }
+                        }, 'json');
+                    });
+                }
+                if(e.code == 2) {
+                    $.toast('无法处理！请扫描运单条形码', 'cancel');
+                }
+                if(e.code == 3) {
+                    $.toast('运单已入库');
+                }
+            },'json')
+    });
+
+</script>
+
+</body>
+</html>

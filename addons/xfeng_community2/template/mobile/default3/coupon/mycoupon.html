@@ -1,0 +1,96 @@
+{template 'default2/header'}
+    <style>
+        body{
+            background: #ffffff;
+        }
+        .aui-list-product-fl-title{
+            color:#EB5211;
+            font-size: 1em;
+            position: relative;
+        }
+        .aui-list-product-item-price{
+            font-size: 0.8em;
+            color: #666666;
+        }
+        .aui-btn-purchase{
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+<div id="J_Tab" class="m-tab" data-ydui-tab>
+    <ul class="tab-nav">
+        <li class="tab-nav-item {if empty($_GPC['status'])}tab-active{/if}" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon'))}'"><a href="javascript:;" >未付款</a></li>
+        <li class="tab-nav-item {if $_GPC['status'] == 1}tab-active{/if}" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon','status'=>1))}'"><a href="javascript:;">未消费</a></li>
+        <li class="tab-nav-item {if $_GPC['status'] == 2}tab-active{/if}" onclick="window.location.href='{php echo $this->createMobileUrl('business',array('op' => 'coupon','operation' => 'mycoupon','status'=>2))}'"><a href="javascript:;">已消费</a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active" id="list">
+
+            <div class="weui-loadmore" id="loading" style="display: none">
+                <i class="weui-loading"></i>
+                <span class="weui-loadmore__tips loading"></span>
+            </div>
+            <div class="weui-loadmore weui-loadmore_line" style="display: none" id="hideLoader">
+                <span class="weui-loadmore__tips">暂无数据</span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="xq_list">
+    {{# for(var i = 0, len = d.list.length; i < len; i++){ }}
+    <div class="shop-order-list">
+        <a href="#" class="aui-well ">
+            <div class="aui-well-bd">有效期:{{d.list[i].createtime}}</div>
+            <div class="aui-well-ft">
+                {{# if(d.list[i].t_status == 3){ }}未付款{{# } }}
+                {{# if(d.list[i].status ==1 ){ }}未消费{{# } }}
+                {{# if(d.list[i].status ==2){ }}已消费{{# } }}
+            </div>
+        </a>
+        <a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+            <div class="weui-media-box__hd">
+                <img class="weui-media-box__thumb" src="{{d.list[i].thumb}}" alt="">
+            </div>
+            <div class="weui-media-box__bd">
+                <h3 class="aui-list-product-fl-title">
+                    {{d.list[i].title}}
+                    <span style="position: absolute;right: 0px">￥{{d.list[i].price}}</span>
+                </h3>
+                <div class="aui-list-product-fl-mes">
+                    <div>
+									<span class="aui-list-product-item-price">
+										订单编号:{{d.list[i].ordersn}}
+									</span>
+                    </div>
+                    <div class="aui-btn-purchase">
+                       {{# if(d.list[i].couponsn){ }}团购券号:{{d.list[i].couponsn}}{{# } }}
+                    </div>
+                </div>
+            </div>
+        </a>
+        {{# if(d.list[i].t_status == 0){ }}
+        <div class="aui-list-title-btn">
+            <a href="#">删除</a>
+            <a href="#" class="red-color" onclick="window.location.href='{php echo $this->createMobileUrl('paycenter',array('type'=>3))}&orderid={{d.list[i].id}}'">确定付款</a>
+        </div>
+        <div class="aui-dri"></div>
+        {{# } }}
+    </div>
+    {{# } }}
+</script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/fastclick.js"></script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/common.js"></script>
+    <script src="{MODULE_URL}template/mobile/default2/static/js/ydui.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/list.js"></script>
+<script type="text/javascript">
+    $(function () {
+        var status = "{$_GPC['status']}";
+        var addressid = "{$_SESSION['community']['addressid']}";
+        var url = "{php echo wxapp_url('coupon/order')}&addressid="+addressid+"&status="+status;
+        loaddata(url, $("#list"), 'xq_list', true);
+    })
+</script>
+</body>
+</html>

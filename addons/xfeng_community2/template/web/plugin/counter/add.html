@@ -1,0 +1,247 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('counter',array('op' => 'list'))}" title="主柜子管理" >主柜子管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('counter',array('op' => 'list','p' => 'add','id' => $id))}" title="添加主柜子" >添加主柜子</a></li>
+                    <li><a href="{php echo $this->createWebUrl('counter',array('op' => 'manage','p' => 'list','type' => 1))}" title="超级管理员" >超级管理员</a></li>
+                    <li><a href="{php echo $this->createWebUrl('counter',array('op' => 'manage','p' => 'list','type' => 2))}" title="快递管理员" >快递管理员</a></li>
+                    <li><a href="{php echo $this->createWebUrl('counter',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="title" id='title' value="{$item['title']}" class="form-control" placeHolder="请输入名称" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" id="region">
+                            <label for="" class="col-sm-2 control-label">选择小区<span style="color: red">*</span></label>
+                            <div class="col-xs-4">
+                                <select name="regionid" class="form-control" id="regionid">
+                                    <option value="">选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $item['regionid'] == $region['id']}selected='selected'{/if}>{$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div id="build" {if $id}{else}style="display:none"{/if}>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label">选择楼宇<span style="color: red">*</span></label>
+                                <div class="col-xs-4">
+                                    <select name="buildid" class="form-control" id="buildid">
+                                        <option>选择楼宇</option>
+                                        {loop $builds $build}
+                                        <option value="{$build['id']}" {if $item['buildid'] == $build['id']}selected='selected'{/if}>{$build['buildtitle']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                        <div class="hr-line-dashed"></div>
+                        </div>
+
+                    <div class="form-group">
+                        <label for="type" class="col-sm-2 control-label">选择类型<span style="color: red">*</span></label>
+                        <div class="col-xs-4">
+                            <select name="type" class="form-control" id="type">
+                                <option value="">产品类型</option>
+                                <option value="1" {if $item['type'] == 1}selected='selected'{/if}>mejia1-16</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">是否收费</label>
+                        <div class="col-sm-10">
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="stat" id="stat1" value="1" {if $item['stat'] == 1 || empty($item['stat'])}checked{/if} />
+                                <label for="stat1">是</label>
+                            </div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" name="stat" id="stat2" value="2" {if $item['stat'] == 2}checked{/if} />
+                                <label for="stat2">否</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="statshow" {if $item['stat'] == 2}style="display: none"{/if}>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">收费规则</label>
+                            <div class="col-sm-10">
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="rule" id="rule1" value="1" {if $item['rule'] == 1 || empty($item['rule'])}checked{/if} />
+                                    <label for="rule1">按次收费</label>
+                                </div>
+                                <div class="radio radio-success radio-inline">
+                                    <input type="radio" name="rule" id="rule2" value="2" {if $item['rule'] == 2}checked{/if} />
+                                    <label for="rule2">按时收费</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="type" class="col-sm-2 control-label">收费标准<span style="color: red">*</span></label>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <input type="text" name="price" id="price" class="form-control" value="{$item['price']}" />
+                                    <span class="input-group-addon" id="unit">{if $item['rule'] == 1 || empty($item['rule'])}元/次{elseif $item['rule'] == 2}元/小时{/if}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="device" class="col-sm-2 control-label">设备id</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="device" id='device' value="{$item['device']}" class="form-control" placeHolder="请输入设备id"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="appid" class="col-sm-2 control-label">appid</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="appid" id='appid' value="{$item['appid']}" class="form-control" placeHolder="请输入appid"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="secret" class="col-sm-2 control-label">secret</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="secret" id='secret' value="{$item['secret']}" class="form-control" placeHolder="请输入secret"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <label for="secret" class="col-sm-2 control-label">柜子数量</label>
+                        <div class="col-sm-4">
+                            <input type="number" name="amount" id='amount' value="{$item['amount']}" class="form-control" placeHolder="请输入小柜子数量" {if $id}readonly{/if} />
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">使用场景</label>
+                    <div class="col-sm-10">
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="status" id="s2_1" value="1" {if $item['status'] == 1 || empty($item['status'])}checked{/if} />
+                            <label for="s2_1">超市投放</label>
+                        </div>
+                        <div class="radio radio-success radio-inline">
+                            <input type="radio" name="status" id="s2_2" value="2" {if $item['status'] == 2}checked{/if} />
+                            <label for="s2_2">储物柜</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#regionid").val()){
+            alert('请选择小区。');
+            return false;
+        }
+        if(!$("#amount").val()){
+            alert('请输入小柜子数量。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('counter',array('op'=>'list','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $(function () {
+        $('#search').click(function () {
+            var words = $('#words').val();
+            $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+                if (data.err_code == 0){
+                    $('#regionid').val(data.regionid);
+                    $.getJSON("{php echo $this->createWebUrl('counter',array('op'=>'list','p'=> 'build'))}",{regionid:data.regionid},function(data){
+                        var content = '<option>选择楼宇</option>';
+                        for (var o in data) {
+                            content += '<option value="'+data[o].id+'">'+data[o].buildtitle+'</option>'
+                        }
+                        $('#build').css('display','block');
+                        $('#buildid').html(content);
+                    })
+                }
+            },'json')
+        })
+        $("#regionid").change(function () {
+            var regionid = $("#regionid option:selected").val();
+            $.getJSON("{php echo $this->createWebUrl('counter',array('op'=>'list','p'=> 'build'))}",{regionid:regionid},function(data){
+                var content = '<option>选择楼宇</option>';
+                for (var o in data) {
+                    content += '<option value="'+data[o].id+'">'+data[o].buildtitle+'</option>'
+                }
+                $('#build').css('display','block');
+                $('#buildid').html(content);
+            })
+        })
+        $("input[name='stat']").click(function(){
+            var type = $("input[name='stat']:checked").val();
+            if(type == 1){
+                $("#statshow").show();
+            }
+            if(type == 2){
+                $("#statshow").hide();
+            }
+        })
+        $("input[name='rule']").click(function(){
+            var type = $("input[name='rule']:checked").val();
+            if(type == 1){
+                $("#unit").html("元/次");
+            }
+            if(type == 2){
+                $("#unit").html("元/小时");
+            }
+        })
+    })
+</script>

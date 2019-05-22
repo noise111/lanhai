@@ -1,0 +1,85 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5><a class="glyphicon glyphicon-arrow-left" href="javascript:history.back(-1)"></a>&nbsp;&nbsp;&nbsp;订单查看</h5>
+					<h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('business',array('op' => 'order','operation' => 'detail','id' => $id))}"></a></h5>
+				</div>
+				<div class="ibox-content">
+
+	<form class="form-horizontal form" action="" method="post" enctype="multipart/form-data" onsubmit="return formcheck(this)">
+		{if $item['transid']}<div  class="alert alert-error"><i class="fa fa-lightbulb"></i> 此为微信支付订单，必须要提交发货状态！</div>{/if}
+		<input type="hidden" name="dispatchid" value="{$dispatch['id']}" />
+		<table class="table table-bordered">
+			<thead>
+			<tr>
+				<th>交易号</th>
+				<th>价钱</th>
+				<th>付款方式</th>
+				<th>订单状态</th>
+				<th>下单日期</th>
+				<th>备注</th>
+				<th>姓名</th>
+				<th>手机</th>
+				<th>地址</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>{$item['transid']}</td>
+				<td>{$item['price']} 元 </td>
+				<td>
+					<p class="form-control-static">
+						{if $item['paytype'] == 1}余额支付{/if}
+						{if $item['paytype'] == 2}在线支付{/if}
+						{if $item['paytype'] == 3}货到付款{/if}
+						{if $item['paytype'] == 4}后台支付{/if}
+					</p>
+				</td>
+				<td>
+					{if $item['status'] == 0}<span class="label label-info">未付款</span>{/if}
+					{if $item['status'] == 1}<span class="label label-success">已付款</span>{/if}
+				</td>
+				<td>
+					{php echo date('Y-m-d H:i:s', $item['createtime'])}
+				</td>
+				<td>{$item['remark']}</td>
+				<td>{$item['realname']}</td>
+				<td>{$item['mobile']}</td>
+				<td>{$item['city']}{$item['address']}</td>
+			</tr>
+			</tbody>
+		</table>
+
+				<table class="table table-bordered">
+					<thead>
+					<tr>
+						<th style="width:5%;">ID</th>
+						<th style="width:5%;">商家名称</th>
+						<th style="width:5%;">商品标题</th>
+						<th style="width:20%;">团购价/原价</th>
+						<th style="width:10%;">属性</th>
+						<th style="width:5%;">数量</th>
+					</tr>
+					</thead>
+					<tr>
+						<td>{$item['id']}</td>
+						<td>{$item['sjname']}</td>
+						<td>
+							{$item['title']}
+						</td>
+						<td>{$item['marketprice']}元 / {$item['productprice']}元</td>
+						<td>{if $item['goods_status']==1}<span class="label label-success">上架</span>{else}<span class="label label-error">下架</span>{/if}</td>
+						<td>{$item['total']}</td>
+					</tr>
+				</table>
+	</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+

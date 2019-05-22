@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "xfeng_community/pages/index/index",
+    "wxapp_web/pages/view/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "",
+    "navigationBarBackgroundColor": "#000",
+    "backgroundColor": "#f5f5f5",
+    "enablePullDownRefresh": true
+  }
+}

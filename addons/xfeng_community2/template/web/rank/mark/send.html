@@ -1,0 +1,46 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('rank', array('op' => 'mark'))}"></a>&nbsp;&nbsp;&nbsp;评价推送</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('rank',array('op' => 'mark','p' => 'send','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+        <form action="" class="form-horizontal form" method="post" onsubmit="return check(this);">
+            <input type="hidden" value="{$id}" name="rankid">
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">接收员:</label>
+                <div class="col-sm-3">
+                    <select name="manageid" class="form-control" id="manageid">
+                        <option value="">选择接收员</option>
+                        {loop $list $item}
+                        <option value="{$item['id']}">{$item['realname']}</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label"></label>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary btn-block" name="submit" value="提交">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function check(form) {
+        if (!form['openid'].value) {
+            alert('请选择接收员');
+            return false;
+        }
+    }
+</script>
+{template 'web/common/footer'}

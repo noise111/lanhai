@@ -1,0 +1,116 @@
+{template 'default/header'}
+
+<body class="max-width">
+    <header class="bar bar-nav bg-green">
+        <a class="icon icon-left pull-left txt-fff" onclick="window.location.href='{php echo $this->createMobileUrl('report',array('op'=> 'list'))}'"></a>
+        <h1 class="title txt-fff">意见详情</h1>
+    </header>
+    <div class="content page">
+        <div class="list-block repair-list-block mt0">
+            <ul>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                          姓名:&nbsp;&nbsp;{$item['realname']}
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            电话:&nbsp;&nbsp;{php echo substr_replace($item['mobile'],'****',3,4)}
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            状态:&nbsp;&nbsp;{if $item['status'] == 1}<span class="repair-lable bg-success">已处理</span>
+                            {elseif $item['status'] == 3}
+                            <span class="repair-lable bg-primary">处理中</span>
+                            {else}
+                            <span class="repair-lable bg-danger">未处理</span>
+                            {/if}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="card">
+                <div class="card-header">意见内容</div>
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        {$item['content']}
+                    </div>
+                    {if $imgs}
+                    <div class="card-content-inner"><a href="#" class="button button-fill button-danger pb-popup" style="width:40%">查看意见图片</a></div>
+                    {/if}
+                </div>
+            </div>
+            {if $item['status'] == 1 || $item['status'] == 3}
+            <ul>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            本单处理人:&nbsp;&nbsp;{if $log['dealing']}{$log['dealing']}{else}{$log['t_realname']}{/if}
+                        </div>
+                    </div>
+                </li>
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            联系电话:&nbsp;&nbsp;{if $log['mobile']}{$log['mobile']}{else}{$log['t_mobile']}{/if}
+                        </div>
+                        <p style="height: 25px;width:80px;background-color: #00a0da;text-align: center;float: right"><a href="javascript:;" onclick="window.location.href='tel:{$log['mobile']}'" style="color: white;font-size:16px;line-height: 25px;  ">打电话</a></p>
+                    </div>
+                </li>
+                {if empty($item['rid']) && $item['status'] == 1}
+                <li class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title">
+                            <a href="javascript:;" onclick="window.location.href='{php echo $this->createMobileUrl('repair',array('op' => 'rank','id' => $item['id']))}'" class="button button-fill button-success">我要评价</a>
+                        </div>
+                    </div>
+                </li>
+                {/if}
+            </ul>
+
+            <div class="card" style="min-height: 50px;">
+                <div class="card-header">处理结果</div>
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        {$log['content']}
+                    </div>
+                    <div class="card-content-inner">
+                        {loop $grabimages $image}
+                        <img src="{php echo tomedia($image)}" style="width: 60px;height: 60px;">
+                        {/loop}
+                    </div>
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{MODULE_URL}template/mobile/default/static/js/light7.js" charset="utf-8"></script>
+    <script>
+        $(function(){
+
+            $(document).on('click','.pb-popup',function () {
+                var imgArray = [];
+                var img  = {$images} || [];//
+                for(var o in img){
+                    var itemSrc =img[o].src;
+                    imgArray.push(itemSrc);
+                }
+                /*=== Popup ===*/
+                var myPhotoBrowserPopup = $.photoBrowser({
+                    photos : imgArray,
+                    type: 'popup'
+                });
+                myPhotoBrowserPopup.open();
+            });
+
+
+        })
+    </script>
+{template 'default/footer'}

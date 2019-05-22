@@ -1,0 +1,359 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>
+                        <a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('guard', array('op' => 'comb'))}"></a>&nbsp;&nbsp;&nbsp;发卡管理
+                    </h5>
+                    <h5 style="float: right">
+                        <a class="glyphicon glyphicon-refresh"
+                           href="{php echo $this->createWebUrl('guard',array('op' => 'comb','p' => 'add'))}"></a>
+                    </h5>
+                </div>
+                <div class="ibox-content">
+
+                    <form class="form-horizontal form" id="form" >
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索</label>
+                            <div class="col-sm-5">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="words" id="words" placeholder="输入关键字">
+                                    <span class="input-group-btn">
+						<button type="button" class="btn btn-primary" id="search">搜索</button>
+					</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-5">
+                                <select name='regionid' class="form-control" id="regionid">
+                                    <option>请选择小区</option>
+                                    {loop $regions $region}
+                                    <option value="{$region['id']}" {if $region['id'] == $item['regionid']}selected {/if} >
+                                    {$region['title']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div id="_area" {if $arr[a]}style='display:block' {else}style='display:none' {/if}>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">区域</label>
+                            <div class="col-sm-5">
+                                <select name="area" class="form-control" id="area">
+                                    <option value="0">请选择</option>
+                                    {loop $areas $area}
+                                    <option value="{$area['id']}" {if $item['areaid']==$area['id']}selected='selected'{/if}>{$area['title']}{$a[a1]}
+                                    </option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                </div>
+                        <div id="_build" {if $arr[b]}style='display:block' {else}style='display:none' {/if}>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">楼宇</label>
+                            <div class="col-sm-5">
+                                <select name="build" class="form-control" id="build">
+                                    <option value="0">请选择</option>
+                                    {loop $builds $build}
+                                    <option value="{$build['id']}" {if $item['buildid']==$build['id']}selected='selected'{/if}>{$build['buildtitle']}{$arr[b1]}
+                                    </option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                </div>
+                <div id="_unit" {if $arr[c]}style='display:block' {else}style='display:none' {/if}>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">单元</label>
+                    <div class="col-sm-5">
+                        <select name="unit" class="form-control" id="unit">
+                            <option value="0">请选择</option>
+                            {loop $units $unit}
+                            <option value="{$build['id']}" {if $item['unitid']==$unit['id']}selected='selected'{/if}>{$unit['unit']}{$arr[c1]}
+                            </option>
+                            {/loop}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="_room" {if $arr[d]}style='display:block' {else}style='display:none' {/if}>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">房号</label>
+                <div class="col-sm-5">
+                    <select id="addressid" name="addressid" class='form-control'>
+                        <option value="0">请选择</option>
+                        {loop $rooms $room}
+                        <option value="{$room['id']}" {if $item['addressid']==$room['id']}selected='selected'{/if}>{$room['room']}{$arr[d1]}
+                        </option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+        </div>
+                        <div style="display: none" id="device">
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group" >
+                                <label class="col-sm-2 control-label">选择门禁</label>
+                                <div class="col-sm-6 col-xs-6" id="category">
+                                    {if $categories}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" id="categoryid_00" data-group='categoryss'>
+                                        <label for="categoryid_00">全部</label>
+                                    </div>
+                                    {loop $categories $category}
+                                    <div class="checkbox checkbox-success checkbox-inline">
+                                        <input type="checkbox" name="deviceids[]" value="{$category['id']}" id="categoryid_{$category['id']}" data-group='categoryss' {if @in_array($category['id'],$categoryids)}checked{/if} >
+                                        <label for="categoryid_{$category['id']}">{$category['title']}</label>
+                                    </div>
+                                    {/loop}
+                                    {/if}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="carno" class="col-sm-2 control-label">卡片号码</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='cardno' id='carno' class="form-control"
+                                       value="{$item['cardno']}" placeHolder="输入卡号"/>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="mobile" class="col-sm-2 control-label">手机号</label>
+                            <div class="col-sm-5">
+                                <input type='text' name='mobile' id='mobile' class="form-control" value="{$item['mobile']}" placeHolder="输入手机号"/>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <!--<div class="form-group">-->
+                            <!--<label for="" class="col-sm-2 control-label">卡片状态</label>-->
+                            <!--<div class="col-sm-5">-->
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="type" value="1" id="c1_1" {if $item['category'] == 1 || empty($item['category'])}checked{/if}>-->
+                                    <!--<label for="c1_1">白名单</a></label>-->
+                                <!--</div>-->
+                                <!--<div class="radio radio-success radio-inline">-->
+                                    <!--<input type="radio" name="type" value="2" id="c1_2" {if $item['category'] == 2 }checked{/if}>-->
+                                    <!--<label for="c1_2">黑名单</a></label>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">门禁截止时间</label>
+                            <div class="col-xs-5">
+
+
+                                {php echo tpl_form_field_date('enddate',$enddate,true);}
+
+
+                                <span class="help-block">默认有效时间1年</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <button type="submit" class="btn btn-w-m btn-primary" id="submit" value="提交">提交
+                                </button>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#search').click(function () {
+        var words = $('#words').val();
+        $.post("{php echo $this->createWebUrl('region',array('op'=> 'search'))}",{words:words,p:'region'},function (data) {
+            if (data.err_code == 0){
+                $('#regionid').val(data.regionid);
+                var regionid = data.regionid;
+                $.post("{php echo $this->createWebUrl('guard',array('op'=> 'device'))}",{regionid:regionid},function (rdata) {
+                    var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+                    for(var o in rdata){
+                        content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+rdata[o].id+"' name='deviceids[]' id='categoryid_"+rdata[o].id+"' data-group='categorys'><label for='categoryid_"+rdata[o].id+"'>"+rdata[o].title+"</label></div>";
+                    }
+                    $("#category").html(content);
+                    $("#categoryid_0").click(function() {
+                        var checked = $(this).get(0).checked;
+                        var group = $(this).data('group');
+                        $("input:checkbox[data-group='" +group + "']").each(function(){
+                            $(this).get(0).checked = checked;
+                        })
+                    });
+                    $("#device").show();
+                },'json')
+                $.post("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}", {regionid: regionid}, function (res) {
+                    if (res.kg) {
+                        var content = '<option value="0">请选择</option>';
+                        var areas = res.list
+                        for (var o in areas) {
+                            content += "<option value='" + areas[o].id + "'>" + areas[o].title + res.zd + "</option>";
+                        }
+                        $("#area").html(content);
+                        $("#_area").show();
+                        var cont = '<option value="0">请选择</option>';
+                        $("#addressid").html(cont);
+                        $("#build").html(cont);
+                        $("#unit").html(cont);
+                    }
+                    else {
+                        var content = '<option value="0">请选择</option>';
+                        var builds = res.list
+                        for (var o in builds) {
+                            content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + res.zd + "</option>";
+                        }
+                        $("#build").html(content);
+                        $("#_build").show();
+                        var cont = '<option value="0">请选择</option>';
+                        $("#addressid").html(cont);
+                        $("#unit").html(cont);
+                    }
+
+                },'json')
+            }
+        },'json')
+    })
+
+    $("#regionid").change(function () {
+        var regionid = $("#regionid option:selected").val();
+        $.post("{php echo $this->createWebUrl('guard',array('op'=> 'device'))}",{regionid:regionid},function (data) {
+            var content ='<div class="checkbox checkbox-success checkbox-inline"><input type="checkbox" type="checkbox" name="categoryid[]" id="categoryid_0" data-group="categorys"><label for="categoryid_0">全部</label></div>';
+            for(var o in data){
+                content +="<div class='checkbox checkbox-success checkbox-inline'><input type='checkbox' type='checkbox' value='"+data[o].id+"' name='deviceids[]' id='categoryid_"+data[o].id+"' data-group='categorys'><label for='categoryid_"+data[o].id+"'>"+data[o].title+"</label></div>";
+            }
+            $("#category").html(content);
+            $("#categoryid_0").click(function() {
+                var checked = $(this).get(0).checked;
+                var group = $(this).data('group');
+                $("input:checkbox[data-group='" +group + "']").each(function(){
+                    $(this).get(0).checked = checked;
+                })
+            });
+            $("#device").show();
+        },'json')
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'region'))}", {regionid: regionid}, function (data) {
+            if (data.kg) {
+                var content = '<option value="0">请选择</option>';
+                var areas = data.list
+                for (var o in areas) {
+                    content += "<option value='" + areas[o].id + "'>" + areas[o].title + data.zd + "</option>";
+                }
+                $("#area").html(content);
+                $("#_area").show();
+                var cont = '<option value="0">请选择</option>';
+                $("#addressid").html(cont);
+                $("#build").html(cont);
+                $("#unit").html(cont);
+            }
+            else {
+                var content = '<option value="0">请选择</option>';
+                var builds = data.list
+                for (var o in builds) {
+                    content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + data.zd + "</option>";
+                }
+                $("#build").html(content);
+                $("#_build").show();
+                var cont = '<option value="0">请选择</option>';
+                $("#addressid").html(cont);
+                $("#unit").html(cont);
+            }
+
+        })
+    })
+    $("#area").change(function () {
+        var areaid = $("#area option:selected").val();
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'build'))}", {
+            areaid: areaid,
+            regionid: regionid
+        }, function (data) {
+            var builds = data.list
+            var content = '<option value="0">请选择</option>';
+            for (var o in builds) {
+                content += "<option value='" + builds[o].id + "'>" + builds[o].title+ builds[o].buildtitle + data.zd + "</option>";
+            }
+            $("#build").html(content);
+            $("#_build").show();
+            var cont = '<option value="0">请选择</option>';
+            $("#addressid").html(cont);
+            $("#unit").html(cont);
+        })
+    })
+    $("#build").change(function () {
+        var buildid = $("#build option:selected").val();
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'unit'))}", {
+            buildid: buildid,
+            regionid: regionid
+        }, function (data) {
+            var units = data.list
+            var content = '<option value="0">请选择</option>';
+            for (var o in units) {
+                content += "<option value='" + units[o].id + "'>" + units[o].unit + data.zd + "</option>";
+            }
+            $("#unit").html(content);
+            $("#_unit").show();
+            var cont = '<option value="0">请选择</option>';
+            $("#addressid").html(cont);
+        })
+    })
+    $("#unit").change(function () {
+        var unitid = $("#unit option:selected").val();
+        var regionid = $("#regionid option:selected").val();
+        $.getJSON("{php echo $this->createWebUrl('member',array('op'=>'room','p'=>'room'))}", {
+            unitid: unitid,
+            regionid: regionid
+        }, function (data) {
+            var rooms = data.list
+            var content = '<option value="0">请选择</option>';
+            for (var o in rooms) {
+                content += "<option value='" + rooms[o].id + "'>" + rooms[o].room + data.zd + "</option>";
+            }
+            $("#addressid").html(content);
+            $("#_room").show();
+        })
+    })
+</script>
+<script>
+    $('#submit').on('click',function() {
+        $('#submit').html("正在提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        mass();
+    });
+    function mass() {
+        $.ajax({
+            type: "POST",
+            url: "{php echo $this->createWebUrl('guard',array('op'=>'sub'))}",
+            dataType:'json',
+            data: $('#form').serialize(),
+            success: function (data) {
+
+                    alert(data.content);
+
+                    $('#submit').html("提交");
+                    $('#submit').removeAttr("disabled");
+                    return ;
+
+            }
+        });
+    }
+</script>

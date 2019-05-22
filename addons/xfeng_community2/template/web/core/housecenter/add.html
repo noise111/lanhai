@@ -1,0 +1,122 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('housecenter',array('op' => 'list'))}" title="住户中心设置">住户中心设置</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('housecenter',array('op' => 'add','id' => $id))}" title="添加导航">添加导航</a></li>
+                    </ul>
+                <div class="ibox-content">
+
+                    <form action="" method="post" class="form-horizontal form" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="pcate" value="{$_GPC['pcate']}"/>
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <input type="hidden" name="regionids" value=""/>
+
+                        <div class="form-group">
+                            <label for="displayorder" class="col-sm-2 control-label">排序</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="displayorder" id='displayorder' class="form-control"
+                                       value="{$item['displayorder']}" placeholder="排序"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">菜单名称</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="title" class="form-control" value="{$item['title']}" id='title'
+                                       placeholder="请输入菜单名称"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">菜单链接</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_link('url',$item['url'])}
+                            </div>
+                            <span class="help-block">默认链接请勿修改。</span>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">背景图片</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_image(thumb,$item['thumb'],'',$options)}(39px39px)
+                                <span class="help-block">导航的背景图标，图片优先。</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">选择小区</label>
+                            <div class="col-sm-10">
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="checkAll" name="checkAll" data-group="regionid">
+                                    <label for="checkAll"> 全部 </label>
+                                </div>
+                                {loop $regions $region}
+                                <div class="checkbox checkbox-success checkbox-inline">
+                                    <input type="checkbox" id="regionid_{$region['id']}" name="regionid[]"
+                                           value="{$region['id']}" data-group="regionid" {if @strstr($regionid,$region['id'])}checked='checked' {/if}>
+                                    <label for="regionid_{$region['id']}"> {$region['dist']}{$region['title']} </label>
+                                </div>
+                                {/loop}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-5">
+                                <input name="submit" type="submit" value="提交" id="submit" class="btn btn-w-m btn-primary">
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript">
+        $(function () {
+            $("#checkAll").click(function () {
+                var checked = $(this).get(0).checked;
+                var group = $(this).data('group');
+                $("input:checkbox[data-group='" + group + "']").each(function () {
+                    $(this).get(0).checked = checked;
+                })
+            });
+
+        });
+        $('#submit').on('click', function () {
+            if (!$("#title").val()) {
+                alert('请输入菜单标题。');
+                return false;
+            }
+            $('#submit').val("正提交中,请勿关闭页面。");
+            $('#submit').prop('disabled', true);
+            var regionids = [];
+            $("input[name='regionid[]']:checked").each(function(){
+                var lastid = $(this).val();
+                regionids.push(lastid);
+            })
+            regionids.join(",");
+            $("input[name='regionids']").val(regionids);
+            var url = "{php echo $this->createWebUrl('housecenter',array('op'=>'add'))}"
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: 'json',
+                data: $('#form').serialize(),
+                success: function (res) {
+                    if (res.status) {
+                        alert('提交成功')
+                        location.reload();
+                    }
+                }
+            });
+        })
+    </script>
+
+    {template 'web/common/footer'}

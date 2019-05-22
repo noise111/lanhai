@@ -1,0 +1,115 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <ul class="nav nav-tabs">
+                    <li><a href="{php echo $this->createWebUrl('supermark',array('op' => 'dp'))}" title="超市管理" >超市管理</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('supermark',array('op' => 'dp','p' => 'add','id' => $id))}" title="添加超市" >添加超市</a></li>
+                    <li><a href="{php echo $this->createWebUrl('supermark',array('op' => 'qrlist'))}" title="二维码管理" >二维码管理</a></li>
+                </ul>
+                <div class="ibox-content">
+
+                    <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="id" value="{$item['id']}">
+
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">超市名称</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="title" id='title' value="{$item['title']}" class="form-control" placeHolder="例如：未来超市" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="tel" class="col-sm-2 control-label">联系电话</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="tel" id='tel' value="{$item['tel']}" class="form-control" placeHolder="请输入联系电话" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">超市地址</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="address" id='address' value="{$item['address']}" class="form-control" placeHolder="请输入地址" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="device_code" class="col-sm-2 control-label">设备编号</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="device_code" id='device_code' value="{$item['device_code']}" class="form-control" placeHolder="请输入超市门锁设备编号" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="address" class="col-sm-2 control-label">开门范围</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="range" id='range' value="{$item['range']}" class="form-control" placeHolder="请输入定位距离" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group" id='s1'>
+                            <label for="copy" class="col-sm-2 control-label">底部版权</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="copy" id='copy' value="{$item['copy']}" class="form-control" placeHolder="请输入版权" />
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 定位</label>
+                            <div class="col-sm-8 col-xs-12" id="map">
+                                {php echo tpl_form_field_coordinate('baidumap', array('lng' => $item['lng'],'lat' => $item['lat']))}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label"></label>
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#title").val()){
+            alert('超市名称不可为空。');
+            return false;
+        }
+        if(!$("#device_code").val()){
+            alert('设备编号不可为空。');
+            return false;
+        }
+        if(!$("#tel").val()){
+            alert('电话不可为空。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('supermark',array('op'=>'dp','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>

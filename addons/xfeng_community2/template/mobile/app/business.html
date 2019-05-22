@@ -1,0 +1,88 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">兑换详情</h1>
+    </header>
+    <div class="content">
+        <div class="list-block" style="margin: 0">
+            <ul>
+                <!-- Text inputs -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">姓名：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['realname']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Date -->
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">电话：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['mobile']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">时间：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {php echo date('Y-m-d H:i:s', $item['createtime'])}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">商品：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['title']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="item-content">
+                        <div class="item-media">兑换码：</div>
+                        <div class="item-inner">
+                            <div class="item-input">
+                                {$item['couponsn']}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <input type="hidden" value="{$id}" id="couponid"/>
+        <div class="content-block">
+        {if $item['enable'] == 1}
+            <p><button type="submit"  id="use" class="button button-fill" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto">我要核销</button></p>
+        {else}
+            <p><button class="button button-fill button-success" style="height: 40px;line-height: 40px;font-size: 16px;width: 60%;text-align: center;margin: 0 auto">已核销</button></p>
+
+            {/if}
+        </div>
+
+    </div>
+</div>
+<script>
+    $("#use").click(function () {
+        var couponid = $("#couponid").val();
+        $.post("{php echo $this->createMobileUrl('xqsys',array('op' => 'use'))}",{couponid:couponid},function (data) {
+            if(data.status == 1){
+                $.toast("核销成功");
+                window.location.href="{php echo $this->createMobileUrl('xqsys',array('op' => 'index'))}";
+            }
+        },'json')
+    })
+</script>
+{template 'app/footer'}

@@ -1,0 +1,32 @@
+{template 'app/header'}
+<div class="page">
+    <header class="bar bar-nav">
+        <a class="icon icon-left pull-left open-panel" onclick="javascript:history.back(-1);"></a>
+        <h1 class="title">拼车订单</h1>
+    </header>
+    <div class="content">
+        <div class="list-block media-list" style="margin: 0 0 60px 0">
+            <ul>
+                {loop $list $item}
+                <li>
+                    <label class="label-checkbox item-content">
+                        <div class="item-inner">
+                            <div class="item-title-row">
+                                <div class="item-title">{$item['start_position']}->{$item['end_position']}</div>
+                                <div class="item-after">人数:{$item['seat']},价格:{$item['sprice']}</div>
+                            </div>
+                            <div class="item-subtitle">{$item['gotime']}->{$item['backtime']}</div>
+                            <div class="item-text">{php echo date('Y-m-d H:i',$item['createtime'])}</div>
+                        </div>
+                    </label>
+                </li>
+                {/loop}
+            </ul>
+            {$pager}
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{template 'app/footer'}

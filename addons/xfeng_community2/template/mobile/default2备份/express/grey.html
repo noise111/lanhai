@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="yes" name="apple-touch-fullscreen">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-  scale=1;user-scalable=no;">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/weui.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/jquery-weui.css">
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_615611_he1yvrogukd18aor.css">
+    <link rel="stylesheet" href="{MODULE_URL}template/mobile/default2/static/css/express/style.css">
+    <style>
+        body{
+            background: #F7F8F3;
+        }
+        .weui-cells{
+            font-size: 16px;
+        }
+        .weui-cells__title{
+            font-size: 15px;
+            margin-top: .3em;
+            color: #93948F;
+        }
+        .weui-icon-cancel{
+            color: #B2B2B2;
+        }
+        .weui-cell_warn{
+            color: #333;
+        }
+        .weui-btn{
+            width: 90%;
+            margin: 0 auto;
+            background: #F7624B;
+            color: #ffffff;
+            border-radius: 50px;
+            -moz-box-shadow: 2px 2px 5px #b9b9b9;
+            -webkit-box-shadow: 2px 2px 5px #b9b9b9;
+            box-shadow: 2px 2px 5px #b9b9b9;
+            font-size: 0.9em;
+            margin-top: 1.5em;
+        }
+        .toolbar .picker-button{
+            color: #F7624B;
+        }
+    </style>
+</head>
+<body>
+<div class="weui-cells__title">运单信息</div>
+<div class="weui-form-preview" id="xq_list">
+    <div class="weui-form-preview__bd">
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">寄件人信息</label>
+            <span class="weui-form-preview__value">{$linkman['realname']}</span>
+            <span class="weui-form-preview__value">{$linkman['phone']}</span>
+            <span class="weui-form-preview__value">{$linkman['address']}{$linkman['address_detail']}</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">收件人信息</label>
+            <span class="weui-form-preview__value">{$parcel['name']}</span>
+            <span class="weui-form-preview__value">{$parcel['phone']}</span>
+            <span class="weui-form-preview__value">{$parcel['address']}{$parcel['address_detail']}</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">物流公司</label>
+            <span class="weui-form-preview__value">{$parcel['company']}</span>
+        </div>
+
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">物品类型</label>
+            <span class="weui-form-preview__value">{$parcel['goodstatus']}</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">物品重量</label>
+            <span class="weui-form-preview__value">{$parcel['weight']}kg</span>
+        </div>
+        <div class="weui-form-preview__item">
+            <label class="weui-form-preview__label">下单时间</label>
+            <span class="weui-form-preview__value">{php echo date('Y-m-d H:i', $parcel['createtime'])}</span>
+        </div>
+    </div>
+</div>
+
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_access" id="code">
+        <div class="weui-cell__hd"><img src="{MODULE_URL}template/mobile/default2/static/img/saoma.png" alt="" style="width:40px;margin-right:5px;display:block"></div>
+        <div class="weui-cell__bd">
+            <p>扫码</p>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+<div class="weui-cells__title">运单号</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请扫码获取运单号" id="waybillcode" value="{$parcel['waybillcode']}">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+
+<div class="weui-cells__title">寄件价格</div>
+<div class="weui-cells ">
+    <div class="weui-cell weui-cell_warn">
+        <div class="weui-cell__bd">
+            <input class="weui-input" type="text" placeholder="请输入寄件价格" id="price" value="{$parcel['price']}">
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </div>
+</div>
+
+<div class="weui-cells__title">物流状态</div>
+<div class="weui-cells">
+    <a class="weui-cell weui-cell_access" href="javascript:;">
+        <div class="weui-cell__bd">
+            <select name="status" id="status" class="weui-input">
+                <option value="2">已发货</option>
+                <option value="1">未发货</option>
+                <option value="4">已取件</option>
+            </select>
+        </div>
+        <div class="weui-cell__ft">
+        </div>
+    </a>
+</div>
+<input type="hidden" id="id" value="{$parcel['id']}">
+{if $parcel['status'] == 1}
+<a class="weui-btn" id="submit">添加</a>
+{/if}
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-2.1.4.js"></script>
+<script src="{MODULE_URL}template/mobile/default2/static/js/jquery-weui.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+<script>
+
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'scanQRCode'
+    ];
+    $(function () {
+        wx.config(jssdkconfig);
+        wx.ready(function () {
+            $('#code').click(function () {
+                wx.scanQRCode({
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: function (res) {
+                        //var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                        $('#waybillcode').val(res.resultStr);
+                    }
+                });
+            });
+        });
+    });
+
+    $('#submit').click(function () {
+        var id = $("#id").val();
+        var waybillcode = $("#waybillcode").val();
+        var status = $("#status").val();
+        var price = $("#price").val();
+        if (waybillcode == '') {
+            $.alert('请扫码获取运单号！');
+            return false;
+        }
+        if (price == '') {
+            $.alert('请输入寄件价格！');
+            return false;
+        }
+        $.post("{php echo $this->createMobileUrl('express',array('op'=>'grey','p'=>'grey'))}",
+            {id:id,status:status,waybillcode:waybillcode, price:price},function (e) {
+                if(e.code == 1){
+                    $.toast('处理成功！');
+                } else {
+                    $.toast('寄件已签收，无法处理！');
+                }
+            },'json')
+    });
+
+</script>
+
+</body>
+</html>

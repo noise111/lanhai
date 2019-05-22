@@ -1,0 +1,320 @@
+{template '_header'}
+<script>document.title = "团队与客户"; </script>
+<style>
+.fui-header {
+    height: 4.2rem;
+}
+.page-shop-goods_category .fui-header .title {
+    padding-left: 0;
+    background:#ffffff;
+}
+
+.fui-tab{
+    margin-top:2rem;
+    margin-bottom:0px;
+        width: 100%;
+}
+.fui-tab.fui-tab-warning a.active {
+    color: #a81515;
+    border-color: #a81515;
+    z-index: 100;
+}
+
+.tongji{
+    font-size: 0.7rem;
+    margin: 0.7rem 0.6rem 0 0.6rem;
+    display: flex;
+    line-height: 150%;
+    padding: 0;
+    background: none;
+}
+
+.text01{
+  color:#333333;
+  display: inline-block;
+}
+
+.text02{
+  color:#a81515;
+  display: inline-block;
+  margin-left:0.1rem;
+}
+
+.fui-header ~ .fui-content {
+    top: 4rem;
+}
+.fui-header:after{
+    display:none;
+}
+
+.page-shop-goods_category .fui-header {
+    background: none;
+    height:4rem;
+}
+
+.fui-list-image{
+    width:2rem;
+    height:2rem;
+    display:block;
+    border-radius:50%;
+    overflow:hidden;
+    border:1px solid #eeeeee;
+    margin-right:0.8rem;
+}
+.fui-list-image img{
+        width:2rem;
+    height:2rem;
+    float:left;
+}
+
+.fui-list-inner .name{
+    font-size:0.7rem;
+    color:#333333;
+    width:100%;
+    display:table;
+    line-height:100%;
+    margin-bottom:0.4rem;
+}
+
+.fui-list-inner .text {
+    font-size:0.65rem;
+    color:#999999;
+    width:100%;
+    display:table;
+    line-height:100%;
+}
+.member_num {
+    font-size:0.6rem;
+    color:#666666;
+    width:auto;
+    display:-webkit-flex;
+    display:-webkit-inline-flex;
+    display:flex;
+    line-height:150%;
+}
+
+.log_left {
+    display:-webkit-flex;
+    display:-webkit-inline-flex;
+    display:flex;
+    flex-direction:column;
+    color:#999999;
+}
+
+.log_right {
+    display:-webkit-flex;
+    display:-webkit-inline-flex;
+    display:flex;
+    flex-direction:column;
+}
+
+.text_status{
+    line-height: 0.9rem;
+    width: 2.25rem;
+    height: 0.9rem;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #ffffff;
+    border-radius: 100px;
+    margin-left: 0.5rem;
+    display: inline-block;
+    background: #5ddbc8;
+}
+
+.tongji .btn{
+    margin: 0;
+    padding: 0 0.4rem;
+    font-size: 0.6rem;
+    height: 1.1rem;
+    line-height: 1.1rem;
+    background: #a81515;
+    color: #ffffff;
+    border: none;
+}
+
+ .fui-cell-remark {
+    color: #999;
+    text-align: right;
+    font-size: 0.65rem;
+    margin-left: .2rem;
+    line-height: 0.65rem;
+}
+
+.fui-cell-remark:after {
+    content: " ";
+    display: inline-block;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    height: 0.4rem;
+    width: 0.4rem;
+    border-width: 1px 1px 0 0;
+    border-color: #C8C8CD;
+    border-style: solid;
+    position: relative;
+    top: 0px;
+    margin-left: 0;
+}
+
+.text_status.status0{
+    background: #f26d86;
+}
+</style>
+<div class="fui-page fui-page-current page-shop-goods_category">
+    <div class="fui-header">
+        <div class="title">
+            <form method="post" action="{php echo mobileUrl('goods')}">
+                <div class="searchbar">
+                    <div class="search-input">
+                        <i class="icon icon-search"></i>
+                        <input type="search" name="keywords" placeholder="搜索昵称、姓名、手机号">
+                    </div>
+                </div>
+            </form>
+        </div>
+    
+    <div class="fui-tab fui-tab-warning" id="tab">
+            <a id="type1" class="active" data-type="1" >我的客户</a>
+            <a id="type2" data-type="2">我的团队</a>
+    </div>
+    </div>
+	<div class="fui-content navbar">
+        <div id="tab1" class="tab_main">
+            <div class="tongji">
+                <div style="flex:1;text-align:left;">
+                <div class="text01">直接客户: </div>
+                <div class="text02">1</div>
+                </div>
+                <div style="flex:1;text-align:center;">
+                <div class="text01">间接客户: </div>
+                <div class="text02">2</div>
+                </div>
+                <div style="flex:1;text-align:right;">
+                <div class="text01">客户总数: </div>
+                <div class="text02">3</div>
+                </div>
+            </div>
+
+            <div class="fui-list-group">
+
+                <div class="fui-list"> 
+                    <div class="fui-list-image">
+                            <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJxcnmF5hLib1WaB4ia093mLmqENCLBlvOicqr9MTiaqVfL7RibCMSA5jZlFyAD6nnl08YgT00GSJfaNww/132">
+                    </div>
+                    <div class="fui-list-inner">
+                            <div class="name">
+                                昵称
+                            </div>
+                            <div class="text">
+                                归属：陈小姐
+                            </div>
+                    </div>
+                    <div class="member_num">
+                            <div class="log_left">
+                                <div class="text">
+                                    客户来源：
+                                </div>
+                                <div class="text">
+                                    累计消费：
+                                </div>
+                                <div class="text">
+                                    最近购物：
+                                </div>
+                            </div>
+                            <div class="log_right">
+                                <div class="text">
+                                会员（昵称）推荐
+                                </div>
+                                <div class="text">
+                                    1000元
+                                </div>
+                                <div class="text">
+                                    2019-01-01
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab2" style="display:none;" class="tab_main">
+            <div class="tongji">
+                <div style="flex:1;text-align:left;">
+                <div class="text01">团队总人数: </div>
+                <div class="text02">1</div>
+                </div>
+
+                <div style="flex:1;text-align:right;">
+                    <a href="{php echo mobileUrl('commission/salesmanadd')}" class="btn" >推荐成为业务员</a>
+                </div>
+            </div>
+
+            <div class="fui-list-group">
+
+                <a class="fui-list" href="{php echo mobileUrl('commission/salesmandetail')}"> 
+                    <div class="fui-list-image">
+                            <img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJxcnmF5hLib1WaB4ia093mLmqENCLBlvOicqr9MTiaqVfL7RibCMSA5jZlFyAD6nnl08YgT00GSJfaNww/132">
+                    </div>
+                    <div class="fui-list-inner">
+                            <div class="name">
+                                业务员乙
+                                <div class="text_status">
+                                    启用
+                                </div>
+                                <div class="text_status status0">
+                                    禁用
+                                </div>
+                            </div>
+                            <div class="text">
+                                13928665289
+                            </div>
+                    </div>
+                    <div class="member_num">
+                            <div class="log_left">
+                                <div class="text">
+                                    客户数量：
+                                </div>
+                                <div class="text">
+                                    业绩金额：
+                                </div>
+                                <div class="text">
+                                    最近成交：
+                                </div>
+                            </div>
+                            <div class="log_right">
+                                <div class="text">
+                                  100
+                                </div>
+                                <div class="text">
+                                    1000元
+                                </div>
+                                <div class="text">
+                                    2019-01-01
+                                </div>
+                            </div>
+                    </div>
+                    <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+
+        $(document).ready(function(){ 
+            $('#tab a').bind('click', function() {
+               var _val = $(this).attr('data-type');
+               $('.tab_main').hide();
+               $('#tab a').removeClass('active');
+               $(this).addClass('active');
+               $('#tab'+_val).show();
+            });
+            {if $_GPC['tab']==2}
+            $('#type2').click();
+            {/if}
+        })
+</script>
+{php $this->footerMenus()}
+{template '_footer'}

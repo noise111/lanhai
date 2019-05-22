@@ -1,0 +1,155 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <ul class="nav nav-tabs">
+                        <li><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'list'))}" title="车辆管理" >车辆管理</a></li>
+                        <li class="active"><a href="{php echo $this->createWebUrl('parks',array('op' => 'cars','p' => 'add','id' => $id))}" title="添加车辆" >添加车辆</a></li>
+                    </ul>
+                    <div class="ibox-content">
+                        <form action="" class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            {if empty($item['id'])}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">姓名</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="realname" class="form-control" value="{$item['realname']}" placeholder="请输入姓名"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">电话</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="mobile" class="form-control" value="{$item['mobile']}" placeholder="请输入联系电话"/>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            <div class="form-group">
+                                <label for="carno" class="col-sm-2 control-label">车牌号</label>
+                                <div class="col-sm-4">
+                                    <input type="text" name="carno" id='carno' value="{$item['carno']}" class="form-control" placeHolder="请输入车牌号" />
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">车辆类型</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="type" id="type">
+                                        <option value="1">月租车</option>
+                                        <option value="4">免费车</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group" id="">
+                                <label for="parkid" class="col-sm-2 control-label">所属车场<span style="color: red">*</span></label>
+                                <div class="col-xs-4">
+                                    <select name="parkid" class="form-control" id="parkid">
+                                        <option value="">选择车场</option>
+                                        {loop $parks $park}
+                                        <option value="{$park['id']}" {if $item['parkid'] == $park['id']}selected='selected'{/if}>{$park['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group" id="">
+                                <label for="parkid" class="col-sm-2 control-label">所属车位</label>
+                                <div class="col-xs-4">
+                                    <select name="parking_id" class="form-control" id="parking_id">
+                                        <option value="">选择车位</option>
+                                        {loop $parkings $parking}
+                                        <option value="{$parking['id']}" {if $item['parking_id'] == $parking['id']}selected='selected'{/if}>{$parking['place_num']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">收费标准</label>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="ruleId" id="ruleId">
+                                        <option value="0">请选择收费标准</option>
+                                        {loop $rules $rule}
+                                        <option value="{$rule['id']}" {if $rule['id'] == $item['rule_id']}selected{/if}>{$rule['title']}</option>
+                                        {/loop}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {if empty($item['id'])}
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-3 col-md-2 control-label">到期时间</label>
+                                <div class="col-sm-4">
+                                    {php echo tpl_form_field_date('endtime',$endtime);}
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            {/if}
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">备注</label>
+                                <div class="col-sm-4">
+                                    <textarea name="remark" style="height: 100px" class="form-control">{$item['remark']}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="" class="col-sm-2 control-label"></label>
+                                <div class="col-sm-10">
+                                    <button type="submit" class="btn btn-w-m btn-primary" name="submit" id="submit" value="提交">提交</button>
+                                    <input type="hidden" name="token" value="{$_W['token']}" />
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#submit').on('click', function () {
+        if(!$("#parkid").val()){
+            alert('请选择车场。');
+            return false;
+        }
+        if(!$("#carno").val()){
+            alert('请输入车牌号。');
+            return false;
+        }
+        $('#submit').html("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('parks',array('op'=>'cars','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').html("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+    $('#parkid').change(function () {
+        var parkid = $("#parkid option:selected").val();
+        $.post("{php echo $this->createWebUrl('parks',array('op'=>'parking'))}",{parkid:parkid},function (data) {
+            var content = '<option value="0">请选择车位</option>';
+            var parkings = data;
+            for(var o in parkings){
+                content +="<option value='"+parkings[o].id+"'>"+parkings[o].place_num+"</option>";
+            }
+            $("#parking_id").html(content);
+        },'json')
+    })
+</script>

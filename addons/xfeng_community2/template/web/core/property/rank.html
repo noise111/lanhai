@@ -1,0 +1,81 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('property', array('op' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;评价管理</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('property',array('op' => 'rank','pid'=>$_GPC['pid']))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="property"/>
+                        <input type="hidden" name="op" value="rank"/>
+                        <input type="hidden" name="pid" value="{$pid}">
+                        <div class="row">
+
+                            <div class="col-sm-3 m-b-xs">
+                                {php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d', $starttime),'endtime'=>date('Y-m-d', $endtime)));}
+                            </div>
+
+                            <div class="col-sm-4 m-b-xs">
+                                <div class="input-group">
+                                    <input class="form-control" name="keyword" type="text" value="{$_GPC['keyword']}" placeholder="可查询姓名">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                     <input type="hidden" name="token" value="{$_W['token']}" />
+                                    <!--<button type="submit" name="export" value="1" class="btn btn-primary">导出数据</button>-->
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-bordered" ng-controller="advAPI" style="width:100%;" cellspacing="0" cellpadding="0">
+                        <thead>
+                        <tr>
+                            <th width="50">编号</th>
+                            <th width="100">用户</th>
+                            <th width="100">评分</th>
+                            <th width="100">总分</th>
+                            <th width="100">评价内容</th>
+                            <th width="80">评价时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $item}
+                        <tr>
+                            <td>{$item['id']}</td>
+                            <td>{if $item['status'] == 2}{$item['realname']}{else}匿名{/if}</td>
+                            <td>
+                                {$item['rank']}
+                            </td>
+                            <td>15</td>
+                            <td>
+                                {$item['content']}
+
+                            </td>
+                            <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                    <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                        <thead>
+                        {if $list}
+                        <tr>
+                            <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                        </tr>
+                        {else}
+                        <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                        {/if}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left"
+                           href="{php echo $this->createWebUrl('shopping',array('op' => 'address'))}"></a>&nbsp;&nbsp;&nbsp;编辑地址
+                    </h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh"
+                                                href="{php echo $this->createWebUrl('shopping', array('op' => 'address','operation'=>'add','id' => $id))}"></a></h5>
+                </div>
+                <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" onsubmit="return check(this);">
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">姓名</label>
+                            <div class="col-xs-5">
+                                <input type="text" id="realname" name="realname" class="form-control" value="{$item['realname']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">手机号</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="mobile" id="mobile" class="form-control" value="{$item['mobile']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">省市区</label>
+                            <div class="col-xs-5">
+                                {php echo tpl_form_field_district('birth',array('province' => $item['province'],'city' => $item['city'],'district' => $item['dist']))}
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">地址</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="address" id="address" class="form-control" value="{$item['address']}"/>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input type="submit" name="submit" value="提交" class="btn btn-primary btn-w-m"/>
+                                <input type="hidden" name="id" value="{$item['id']}"/>
+                                <input type="hidden" name="token" value="{$_W['token']}"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+{template 'web/common/footer'}

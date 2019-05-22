@@ -1,0 +1,84 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <ul class="nav nav-tabs">
+                    <li><a href="javascript:history.back(-1)" title="返回" >返回</a></li>
+                    <li class="active"><a href="{php echo $this->createWebUrl('staff',array('op' => 'role','p'=>'list'))}" title="角色管理" >角色管理</a></li>
+                    <li><a href="{php echo $this->createWebUrl('staff',array('op' => 'perm','uuid'=>$_GPC['uuid']))}" title="权限设置" >权限设置</a></li>
+                </ul>
+                <div class="ibox-content">
+                    <form action="./index.php" method="get" class="form-horizontal" role="form">
+                        <input type="hidden" name="c" value="site"/>
+                        <input type="hidden" name="a" value="entry"/>
+                        <input type="hidden" name="m" value="{php echo $this->module['name']}"/>
+                        <input type="hidden" name="do" value="staff"/>
+                        <input type="hidden" name="op" value="role"/>
+                        <div class="row">
+                            <div class="col-sm-6 m-b-xs">
+                                {if ($user && $menu_opss && @in_array('staff_roleAdd', $menu_opss)) || empty($user)}
+                                <a class="btn btn-primary" href="{php echo $this->createWebUrl('staff', array('op' => 'role','p' => 'add'));}"><i class="fa fa-plus"></i> 添加角色</a>
+                                {/if}
+                            </div>
+                            <div class="col-sm-6 m-b-xs">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="keyword" placeholder="输入角色名" value="{$_GPC['keyword']}">
+                                    <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">搜索</button>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>Id</th>
+                                <th>角色</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $item}
+                            <tr>
+                                <td>{$item['id']}</td>
+                                <td>{$item['title']}</td>
+                                <td>{php echo date('Y-m-d H:i',$item['createtime'])}</td>
+                                <td>
+                                    {if ($user && $menu_opss && @in_array('staff_roleEdit', $menu_opss)) || empty($user)}
+                                    <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'role','p'=> 'add','id' => $item['id']));}" data-placement="top" class="btn btn-primary btn-sm" data-original-title="编辑">编辑</a>
+                                    </span>
+                                    {/if}
+                                    {if ($user && $menu_opss && @in_array('staff_roleDel', $menu_opss)) || empty($user)}
+                                    <span>
+                            <a href="{php echo $this->createWebUrl('staff',array('op' => 'role','p'=> 'delete','id' => $item['id']))}" title="删除" onClick="return confirm('确认删除当前角色，确定删除吗？');" class="btn btn-default btn-sm">删除</a>
+                                    </span>
+                                    {/if}
+                                </td>
+                            </tr>
+                            {/loop}
+                            </tbody>
+                        </table>
+                        <table class="footable table table-stripped toggle-arrow-tiny footable-loaded tablet breakpoint">
+                            <thead>
+                            {if $list}
+                            <tr>
+                                <td class="footable-visible"><ul class="pagination pull-right">{$pager}</ul></td>
+                            </tr>
+                            {else}
+                            <tr style="text-align: center"><td >没有找到对应的记录</td></tr>
+                            {/if}
+                            </thead>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'web/common/footer'}

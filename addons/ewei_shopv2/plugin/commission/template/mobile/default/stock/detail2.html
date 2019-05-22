@@ -1,0 +1,156 @@
+{template '_header'}
+{template 'commission/common'}
+<link rel="stylesheet" type="text/css" href="../addons/ewei_shopv2/plugin/commission/template/mobile/default/static/font/iconfont.css?v=2017070719">
+<script>document.title = "记录查看商品详情"; </script>
+<style>
+	#file-avatar {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		z-index: 9;
+		background: red;
+		width: 100%;
+	}
+	.fui-list-img{
+		display: -webkit-box;
+		display: -webkit-flex;
+		display: flex;
+		-webkit-flex-shrink: 0;
+		-ms-flex: 0 0 auto;
+		-webkit-flex-shrink: 0;
+		flex-shrink: 0;
+		-webkit-box-lines: single;
+		-moz-box-lines: single;
+		-webkit-flex-wrap: nowrap;
+		flex-wrap: nowrap;
+		box-sizing: border-box;
+		-webkit-box-align: center;
+		-webkit-align-items: center;
+		align-items: center;
+		margin-right: .6rem;
+		color: #aaa;
+		position: relative;
+		margin-right: 0;
+	}
+	.fui-list-img img{
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+	}
+	.fui-cell-group .fui-cell  .fui-cell-remark.down:after {
+		-webkit-transform: rotate(135deg);
+		-ms-transform: rotate(135deg);
+		transform: rotate(135deg);
+		top:-.1rem;
+	}
+</style>
+<div class='fui-page  fui-page-current '>
+
+    <div class='fui-content navbar'>
+        <div class="fui-cell-group">
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">记录ID</div>
+                <div class="fui-cell-info c000">
+                    12345678
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">记录时间</div>
+                <div class="fui-cell-info c000">
+                    2019-01-09
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">商品名称</div>
+                <div class="fui-cell-info c000">
+                    商品名称01
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">所属分类</div>
+                <div class="fui-cell-info c000">
+                    分类01
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">规格</div>
+                <div class="fui-cell-info c000">
+                    规格01
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">库存数量</div>
+                <div class="fui-cell-info c000">
+                    36件
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">库存状态</div>
+                <div class="fui-cell-info c000">
+                    入库48件 出库10件 损耗2件 结余36件
+                </div>
+            </div>
+            
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">变动数量</div>
+                <div class="fui-cell-info c000">
+                    1件
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">变动日期</div>
+                <div class="fui-cell-info c000">
+                    2019-01-01
+                </div>
+            </div>
+            <div class="fui-cell" style="    padding: 0.6rem 0.6rem 0.65rem;">
+                <div class="fui-cell-label">操作人</div>
+                <div class="fui-cell-info c000">
+                    业务员a
+                </div>
+            </div>
+        </div>
+        
+
+        <a href="{php echo mobileUrl('commission/stock/post2')}" class='btn btn-danger block mtop'>入库</a>
+        <a href="{php echo mobileUrl('commission/stock/post2')}" class='btn btn-primary block mtop'>出库</a>
+        <a href="{php echo mobileUrl('commission/stock/post2')}" class='btn btn-warning block mtop'>损耗</a>
+
+	</div>
+
+</div>
+
+
+<style>
+        .fui-navbar .nav-item.active,
+        .fui-navbar .nav-item:active {
+            color: #a81515;
+        }
+    </style>
+    <div class="fui-navbar">
+        <a href="{php echo mobileUrl('commission/stock')}" class="external nav-item {if ($_W['routes']=='commission.stock' || $_W['routes']=='commission.stock.record')}active{/if}">
+            <span class="icon icon-home"></span>
+            <span class="label">库存</span>
+    
+        </a>
+        <a href="{php echo mobileUrl('commission/stock/stockin')}" class="external nav-item {if $_W['routes']=='commission.stock.stockin' }active{/if}">
+            <span class="iconfont icon-ruku"></span>
+            <span class="label">入库</span>
+        </a>
+    
+        <a href="{php echo mobileUrl('commission/stock/stockout')}" class="external nav-item {if $_W['routes']=='commission.stock.stockout' }active{/if}">
+            <span class="iconfont icon-chuku"></span>
+            <span class="label">出库</span>
+        </a>
+    
+        <a href="{php echo mobileUrl('commission/stock/loss')}" class="external nav-item {if $_W['routes']=='commission.stock.loss' }active{/if}">
+            <span class="iconfont icon-jiesuansunhaoshuliang"></span>
+            <span class="label">损耗</span>
+        </a>
+    </div>
+</body>
+</html>
+

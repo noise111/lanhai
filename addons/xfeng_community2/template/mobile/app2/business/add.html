@@ -1,0 +1,335 @@
+{template 'app2/header'}
+
+<style>
+    body {
+        background: #F6F6F6;
+    }
+
+    .weui-cells:first-child {
+        margin-top: 0;
+    }
+
+    .weui-cells {
+        font-size: 0.9em;
+    }
+
+    .weui-textarea {
+        min-height: 100px;
+    }
+
+    .weui-cells {
+        margin-top: 0;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 14px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    #addPic div:nth-child(2) {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
+
+<body ontouchstart>
+<style>[v-cloak] {
+    display: none !important;
+}</style>
+<div id="app" v-cloak>
+    <div class="defalut-header">
+        <div class="defalut-header-left"  @click="goBack()">
+            <a class="defalut-header-back"></a>
+            <div class="left-arrow">
+            </div>
+        </div>
+        <h1 class="defalut-header-tit">
+            <span>添加店铺</span>
+        </h1>
+    </div>
+    <div class="weui-cells header-padd">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">店铺名称</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入店铺名称" v-model="item.sjname">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联&nbsp;系&nbsp;&nbsp;人</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入联系人" v-model="item.contactname">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系手机</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入联系手机" v-model="item.mobile">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联系电话</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入联系电话" v-model="item.phone">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">联&nbsp;&nbsp;系qq</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入联系qq" v-model="item.qq">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">人均价格</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="number" placeholder="请输入人均价格" v-model="item.price">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商圈名称</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入商圈名称" v-model="item.area">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_access">
+            <div class="weui-cell__hd"><label class="weui-label">营业时间</label></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="如(8:00)" style="text-align: left" v-model="item.open_time_start">
+                </div>
+                ▬
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="如(24:00)" style="text-align: center" v-model="item.open_time_end">
+                </div>
+
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">详细地址</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入详细地址" v-model="item.address">
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="parentvalue">
+                    <option value="">选择分类</option>
+                    <option v-for="(row,index) in parents" :value="row.id">{{row.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell weui-cell_select">
+            <div class="weui-cell__bd">
+                <select class="weui-select" v-model="childvalue">
+                    <option value="">选择分类</option>
+                    <option v-for="(row,index) in childs" :value="row.id">{{row.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label">商家外链</label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" placeholder="请输入商家外链" v-model="item.businessurl">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__bd">
+                <textarea class="weui-textarea" placeholder="商户简介，主要介绍商户信息等 " rows="3"
+                          id="shopdesc" v-model="item.shopdesc">{{item.shopdesc}}</textarea>
+                <div class="weui-uploader">
+                    <div class="weui-uploader__bd">
+                        <ul class="weui-uploader__files" id="uploaderFiles" v-if="morepic">
+                            <li class="weui-uploader__file" :style="'background-image:url('+morepic+')'"></li>
+                        </ul>
+                        <div class="weui-uploader__input-box" id="addPic">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="margin: 20px 20px">
+        <a href="javascript:;" class="weui-btn weui-btn_primary" @click="postdata()">提交</a>
+    </div>
+</div>
+
+<script>
+    // jssdk config 对象
+    jssdkconfig = {php echo json_encode($_W['account']['jssdkconfig']);} ||{};
+    // 是否启用调试
+    jssdkconfig.debug = false;
+    jssdkconfig.jsApiList = [
+        'openLocation',
+        'getLocation',
+        'chooseImage',
+        'uploadImage',
+    ];
+    // ID数组
+    var localIds = null;
+    // 上传序号
+    var idx = 0;
+    var serverIds = '';
+    wx.config(jssdkconfig);
+
+</script>
+
+<script>
+    var id = "{$_GPC['id']}"
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: [],
+            dpid: '',
+            item: {},
+            id: id,
+            parents: [],
+            childs: [],
+            parentvalue: '',
+            childvalue: '',
+            groupList: [],
+            morepic: '',
+            address:''
+        },
+        beforeMount: function () {
+            var self = this
+            if (localStorage.lng == undefined || localStorage.lat == undefined) {
+                localStorage.lastname = "Smith";
+                var geolocation = new BMap.Geolocation();
+                geolocation.getCurrentPosition(function (r) {
+                    if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                        var mk = new BMap.Marker(r.point);
+                        var lng = localStorage.lng = r.point.lng;
+                        var lat = localStorage.lat = r.point.lat;
+
+                        self.item = {lng: localStorage.lng, lat: localStorage.lat}
+                    }
+                    else {
+                        alert('获取当前位置失败,请确认是否开启定位服务');
+                    }
+                }, {enableHighAccuracy: true})
+            }
+            else {
+                self.item = {lng: localStorage.lng, lat: localStorage.lat,address:this.address}
+            }
+
+            console.log(self.item)
+            if(id){
+                var url = "{php echo wxapp_url('appbusiness/dp',array('p'=>'detail'))}";
+                var data = {
+                    id: id
+                }
+                $.getJSON(url, data, function (ret) {
+                    self.item = ret.data
+                    self.morepic = self.item.picurl
+                    self.address = self.item.address
+                })
+            }
+
+            var data = {
+                type: 6
+            }
+            var link = "{php echo wxapp_url('category/app')}";
+            $.getJSON(link, data, function (ret) {
+                self.parents = ret.data.parents
+                self.childs = ret.data.childs
+                self.groupList = {
+                    childs: ret.data.childs
+                }
+
+            })
+        },
+        mounted: function () {
+            var that = this
+            wx.ready(function () {
+                $("#addPic").click(function () {
+                    wx.chooseImage({
+                        count: 9, // 默认9
+                        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+                        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+                        success: function (res) {
+                            var localIds = res.localIds;
+                            //调用上传递归函数
+                            that.wxUploadImg(localIds);
+                        }
+                    })
+                });
+            });
+        },
+        methods: {
+            goBack: function () {
+                javascript :history.back(-1)
+            },
+            postdata: function () {
+                var self = this
+                console.log(self.item)
+                var url = "{php echo wxapp_url('appbusiness/add')}";
+                self.item.id = self.id
+                self.item.parentid = self.parentvalue
+                self.item.childid = self.childvalue
+                self.item.morepic = self.morepic
+                $.showLoading('正在提交');
+                $.getJSON(url, self.item, function (ret) {
+                    $.hideLoading();
+                    //提交成功提示内容: data.data.content
+                    setTimeout(function () {
+                        $.toast('添加成功');
+                        //定时刷新
+                        window.location.href = "{php echo $this->createMobileUrl('xqsys',array('op'=>'business'))}";
+                    }, 500);
+                })
+            },
+            wxUploadImg: function (localIds) {
+                var localId = localIds[idx]
+                var that = this
+                wx.uploadImage({//获取图片媒体ID
+                    localId: localId,  // 需要上传的图片的本地ID
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {//获取成功
+                        var serverId = res.serverId; // 返回图片的服务器端ID
+                        that.getImg(serverId);
+                        idx++ // 上传序号，上传一张 累计 +1
+                        // serverIds+=res.serverId+','; //存储图片媒体ID，用，号分割
+                        //本地图片ID 还没全部获取完图片媒体ID
+                        if (idx < localIds.length) {
+                            that.wxUploadImg(localIds); //调用上传递归函数
+                        }
+                        else {
+                            idx = 0;
+                            serverIds = '';
+                            return true;
+                        }
+                    },
+                    fail: function (res) {//获取多媒体id失败 返回错误代码
+                        alert("上传失败，msg：" + JSON.stringify(res));
+                    }
+                });
+            },
+            getImg: function (serverId) {
+                var that = this
+                var url = "{php echo wxapp_url('getImg')}"
+                $.getJSON(url, {serverId: serverId}, function (ret) {
+                    var imgUrl = ret.data.imgUrl
+//                    that.morepic.push(imgUrl) //多图
+                    that.morepic = imgUrl
+
+                })
+            },
+
+        }
+        ,
+        watch: {
+            // 监听 areasValue 变化
+            parentvalue: function (val, oldVal) {
+                console.log(val, oldVal)
+                var that = this
+                // parentvalue 变化时根据其值，改变 builds 数组
+                that.childs = that.groupList.childs[val]
+                console.log(that.childs)
+
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

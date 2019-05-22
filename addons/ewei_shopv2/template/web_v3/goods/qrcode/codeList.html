@@ -1,0 +1,118 @@
+{template '_header'}
+<div class="page-header">
+    当前位置：<span class="text-primary">{$good['title']} {$item['batch']}批次二维码，数量{$item['total']}</span>
+</div>
+<div class="page-content">
+    <form action="./index.php" method="get" class="form-horizontal table-search" role="form"  id="search">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r" value="goods.qrcode.codeList" />
+        <input type="hidden" name="id" value="{$_GPC['id']}"/>
+        <input type="hidden" name="sales_status" value="{$_GPC['sales_status']}" />
+        <input type="hidden" name="search_type" value="{$_GPC['search_type']}" />
+        <input type="hidden" name="keyword" value="{$_GPC['keyword']}" />       
+        <div class="page-toolbar">
+            <div class="input-group">
+                <span class="input-group-select">
+                    <select name="sales_status" class="form-control" style="width:100px;padding:0 5px;">
+                        <option value="-1" {if $_GPC['sales_status']==''}selected{/if}>销售状态</option>
+                        <option value="1" {if $_GPC['sales_status']=='1'}selected{/if}>已销售</option>
+                        <option value="0" {if $_GPC['sales_status']=='0'}selected{/if}>未销售</option>
+                    </select>
+                </span>
+                <span class="input-group-select">
+                    <select name=''  class='form-control'   style="width:100px;padding:0 5px;"  id="searchtime">
+                        <option value=''>销售日期</option>
+                    </select>
+                </span>
+                <span class="input-group-btn">
+                    {php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d H:i', $starttime),'endtime'=>date('Y-m-d H:i', $endtime)),true);}
+                </span>
+                <span class="input-group-select">
+                    <select name='search_type'  class='form-control'   style="width:110px;padding:0 5px;"  >
+                        <option value='' {if $_GPC['search_type'] == ''}selected{/if}>搜索类型</option>
+                        <option value='1' {if $_GPC['search_type'] == '1'}selected{/if}>导购</option>
+                        <option value='2' {if $_GPC['search_type'] == '2'}selected{/if}>会员</option>
+                        <option value='3' {if $_GPC['search_type'] == '3'}selected{/if}>门店</option>
+                        <option value='4' {if $_GPC['search_type'] == '4'}selected{/if}>零售商</option>
+                    </select>
+                </span>
+                <input type="text" class="form-control input-sm"  name="keyword" id="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词"/>
+                <span class="input-group-btn">
+                    <button type="submit"  class="btn btn-primary btn-submit"> 搜索</button>
+                </span>
+            </div>
+        </div>
+    </form>
+    <div class="page-toolbar m-b-sm m-t-sm" style="height: 18px;">
+            批次总数: <span class="text-danger" style="margin-right: 10px;">{$item['total']}</span>   已完成销售: <span class="text-danger" style="margin-right: 10px;">{$sale_total}</span>  销售进度百分比: <span class="text-danger">{php echo (round($sale_total/$item['total'], 2)) * 100;}%</span>
+    </div>
+    <div >
+        <table class="table table-responsive">
+            <thead class="navbar-inner">
+                <tr>
+                    <th style="width:50px;">序号</th>
+                    <th style="width:120px;">批次</th>
+                    <th >扫码用户</th>
+                    <th >扫码店员</th>
+                    <th >运营中心区域</th>
+                    <th >特约零售商</th>
+                    <th style="width:150px">销售时间</th>
+                    <th style="width:80px">二维码</th>
+                </tr>
+            </thead>
+            <tbody>
+                {loop $list $code}
+                <tr>
+                    <td>{$code['no']}</td>
+                    <td>{$item['batch']}</td>
+                    <td>
+                        <div style="display: flex">
+                            {if $code['member_avatar']}<img src="{$code['member_avatar']}" class="img-40" style="border-radius: 50%; border: 1px solid #efefef;" />{/if}
+                            <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                <span class="nickname">
+                                    {$code['member_nickname']}
+                                </span>
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex">
+                            {if $code['saler_avatar']}<img src="{$code['saler_avatar']}" class="img-40" style="border-radius: 50%; border: 1px solid #efefef;" />{/if}
+                            <span style="display: flex;flex-direction: column;justify-content: center;align-items: flex-start;padding-left: 5px">
+                                <span class="nickname">
+                                    {$code['saler_nickname']}
+                                </span>
+                            </span>
+                        </div>
+                    </td>
+                    <td>{$code['province']}{$code['city']}{$code['area']}</td>
+                    <td>{if empty($code['merchname'])}---{else}{$code['merchname']}{/if}<br>{if empty($code['storename'])}---{else}{$code['storename']}{/if}</td>
+                    <td>{if empty($code['create_time'])}---{else}{$code['create_time']}{/if}</td>
+                    <td>
+                        {if $code['qrcode']}
+                        <a href="javascript:void(0);" class="btn  btn-op btn-operation" data-toggle="popover" data-trigger="hover" data-html="true"
+                            data-content="<img src='{$code['qrcode']}' width='130' alt='链接二维码'>" data-placement="auto right">
+                            <i class="icow icow-erweima3"></i>
+                        </a>
+                        {else}   
+                            未生成
+<!--                            <a >
+                                <span class='label label-primary'>点击生成</span>
+                            </a>-->
+                        {/if}
+                    </td>                    
+                </tr>
+                {/loop}
+                <tr>
+                    <td colspan="5">
+                        {$pager}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{template '_footer'}

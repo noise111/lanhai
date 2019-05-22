@@ -1,0 +1,167 @@
+{template 'web/common/header-base'}
+<div class="wrapper wrapper-content animated ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5><a class="glyphicon glyphicon-arrow-left" href="{php echo $this->createWebUrl('express', array('op' => 'price','p' => 'list'))}"></a>&nbsp;&nbsp;&nbsp;价格添加</h5>
+                    <h5 style="float: right"><a class="glyphicon glyphicon-refresh" href="{php echo $this->createWebUrl('express',array('op' => 'price','p' => 'add','id' => $id))}"></a></h5>
+                </div>
+                <div class="ibox-content">
+                    <form action="" class="form-horizontal form" method="post" enctype="multipart/form-data" id="form">
+                        <input type="hidden" name="priceId" value="{$editData['id']}">
+                        <input type="hidden" name="id" value="{$id}">
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">寄件地址</label>
+                            <div class="col-xs-5">
+                                <select name="mailaddress" id="mailaddress" class="form-control">
+                                    <option value="北京市" {if $price['mailaddress'] == '北京市'}selected{/if}>北京市</option>
+                                    <option value="天津市" {if $price['mailaddress'] == '天津市'}selected{/if}>天津市</option>
+                                    <option value="河北省" {if $price['mailaddress'] == '河北省'}selected{/if}>河北省</option>
+                                    <option value="山西省" {if $price['mailaddress'] == '山西省'}selected{/if}>山西省</option>
+                                    <option value="内蒙古自治区" {if $price['mailaddress'] == '内蒙古自治区'}selected{/if}>内蒙古自治区</option>
+                                    <option value="辽宁省" {if $price['mailaddress'] == '辽宁省'}selected{/if}>辽宁省</option>
+                                    <option value="吉林省" {if $price['mailaddress'] == '吉林省'}selected{/if}>吉林省</option>
+                                    <option value="黑龙江省" {if $price['mailaddress'] == '黑龙江省'}selected{/if}>黑龙江省</option>
+                                    <option value="上海市" {if $price['mailaddress'] == '上海市'}selected{/if}>上海市</option>
+                                    <option value="江苏省" {if $price['mailaddress'] == '江苏省'}selected{/if}>江苏省</option>
+                                    <option value="浙江省" {if $price['mailaddress'] == '浙江省'}selected{/if}>浙江省</option>
+                                    <option value="安徽省" {if $price['mailaddress'] == '安徽省'}selected{/if}>安徽省</option>
+                                    <option value="福建省" {if $price['mailaddress'] == '福建省'}selected{/if}>福建省</option>
+                                    <option value="江西省" {if $price['mailaddress'] == '江西省'}selected{/if}>江西省</option>
+                                    <option value="山东省" {if $price['mailaddress'] == '山东省'}selected{/if}>山东省</option>
+                                    <option value="河南省" {if $price['mailaddress'] == '河南省'}selected{/if}>河南省</option>
+                                    <option value="湖北省" {if $price['mailaddress'] == '湖北省'}selected{/if}>湖北省</option>
+                                    <option value="湖南省" {if $price['mailaddress'] == '湖南省'}selected{/if}>湖南省</option>
+                                    <option value="广东省" {if $price['mailaddress'] == '广东省'}selected{/if}>广东省</option>
+                                    <option value="广西壮族自治区" {if $price['mailaddress'] == '广西壮族自治区'}selected{/if}>广西壮族自治区</option>
+                                    <option value="海南省" {if $price['mailaddress'] == '海南省'}selected{/if}>海南省</option>
+                                    <option value="重庆市" {if $price['mailaddress'] == '重庆市'}selected{/if}>重庆市</option>
+                                    <option value="四川省" {if $price['mailaddress'] == '四川省'}selected{/if}>四川省</option>
+                                    <option value="贵州省" {if $price['mailaddress'] == '贵州省'}selected{/if}>贵州省</option>
+                                    <option value="云南省" {if $price['mailaddress'] == '云南省'}selected{/if}>云南省</option>
+                                    <option value="西藏自治区" {if $price['mailaddress'] == '西藏自治区'}selected{/if}>西藏自治区</option>
+                                    <option value="陕西省" {if $price['mailaddress'] == '陕西省'}selected{/if}>陕西省</option>
+                                    <option value="甘肃省" {if $price['mailaddress'] == '甘肃省'}selected{/if}>甘肃省</option>
+                                    <option value="青海省" {if $price['mailaddress'] == '青海省'}selected{/if}>青海省</option>
+                                    <option value="宁夏回族自治区" {if $price['mailaddress'] == '宁夏回族自治区'}selected{/if}>宁夏回族自治区</option>
+                                    <option value="新疆维吾尔自治区" {if $price['mailaddress'] == '新疆维吾尔自治区'}selected{/if}>新疆维吾尔自治区</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">收件地址</label>
+                            <div class="col-xs-5">
+                                <select name="receiveaddress" id="receiveaddress" class="form-control">
+                                    <option value="北京市" {if $price['receiveaddress'] == '北京市'}selected{/if}>北京市</option>
+                                    <option value="天津市" {if $price['receiveaddress'] == '天津市'}selected{/if}>天津市</option>
+                                    <option value="河北省" {if $price['receiveaddress'] == '河北省'}selected{/if}>河北省</option>
+                                    <option value="山西省" {if $price['receiveaddress'] == '山西省'}selected{/if}>山西省</option>
+                                    <option value="内蒙古自治区" {if $price['receiveaddress'] == '内蒙古自治区'}selected{/if}>内蒙古自治区</option>
+                                    <option value="辽宁省" {if $price['receiveaddress'] == '辽宁省'}selected{/if}>辽宁省</option>
+                                    <option value="吉林省" {if $price['receiveaddress'] == '吉林省'}selected{/if}>吉林省</option>
+                                    <option value="黑龙江省" {if $price['receiveaddress'] == '黑龙江省'}selected{/if}>黑龙江省</option>
+                                    <option value="上海市" {if $price['receiveaddress'] == '上海市'}selected{/if}>上海市</option>
+                                    <option value="江苏省" {if $price['receiveaddress'] == '江苏省'}selected{/if}>江苏省</option>
+                                    <option value="浙江省" {if $price['receiveaddress'] == '浙江省'}selected{/if}>浙江省</option>
+                                    <option value="安徽省" {if $price['receiveaddress'] == '安徽省'}selected{/if}>安徽省</option>
+                                    <option value="福建省" {if $price['receiveaddress'] == '福建省'}selected{/if}>福建省</option>
+                                    <option value="江西省" {if $price['receiveaddress'] == '江西省'}selected{/if}>江西省</option>
+                                    <option value="山东省" {if $price['receiveaddress'] == '山东省'}selected{/if}>山东省</option>
+                                    <option value="河南省" {if $price['receiveaddress'] == '河南省'}selected{/if}>河南省</option>
+                                    <option value="湖北省" {if $price['receiveaddress'] == '湖北省'}selected{/if}>湖北省</option>
+                                    <option value="湖南省" {if $price['receiveaddress'] == '湖南省'}selected{/if}>湖南省</option>
+                                    <option value="广东省" {if $price['receiveaddress'] == '广东省'}selected{/if}>广东省</option>
+                                    <option value="广西壮族自治区" {if $price['receiveaddress'] == '广西壮族自治区'}selected{/if}>广西壮族自治区</option>
+                                    <option value="海南省" {if $price['receiveaddress'] == '海南省'}selected{/if}>海南省</option>
+                                    <option value="重庆市" {if $price['receiveaddress'] == '重庆市'}selected{/if}>重庆市</option>
+                                    <option value="四川省" {if $price['receiveaddress'] == '四川省'}selected{/if}>四川省</option>
+                                    <option value="贵州省" {if $price['receiveaddress'] == '贵州省'}selected{/if}>贵州省</option>
+                                    <option value="云南省" {if $price['receiveaddress'] == '云南省'}selected{/if}>云南省</option>
+                                    <option value="西藏自治区" {if $price['receiveaddress'] == '西藏自治区'}selected{/if}>西藏自治区</option>
+                                    <option value="陕西省" {if $price['receiveaddress'] == '陕西省'}selected{/if}>陕西省</option>
+                                    <option value="甘肃省" {if $price['receiveaddress'] == '甘肃省'}selected{/if}>甘肃省</option>
+                                    <option value="青海省" {if $price['receiveaddress'] == '青海省'}selected{/if}>青海省</option>
+                                    <option value="宁夏回族自治区" {if $price['receiveaddress'] == '宁夏回族自治区'}selected{/if}>宁夏回族自治区</option>
+                                    <option value="新疆维吾尔自治区" {if $price['receiveaddress'] == '新疆维吾尔自治区'}selected{/if}>新疆维吾尔自治区</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-2 control-label">物流公司</label>
+                            <div class="col-xs-5">
+                                <select name="companyid" id="companyid" class="form-control">
+                                    <option value="">请选择快递</option>
+                                    {loop $companys $com}
+                                    <option value="{$com['id']}" {if $price['companyid'] == $com['id']}selected{/if}>{$com['company']}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">基础价格</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="price" id="price" value="{$price['price']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">超重价格</label>
+                            <div class="col-xs-5">
+                                <input type="text" name="overprice" id="overprice" value="{$price['overprice']}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-xs-5">
+                                <input name="submit" type="submit" value="提交" id="submit" class="btn btn-primary btn-w-m">
+                                <input type="hidden" name="token" value="{$_W['token']}" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(".tpl-city").hide();
+    $(".tpl-district").hide();
+    $('#submit').on('click', function () {
+        if(!$("#companyid").val()){
+            alert('公司名称不可为空。');
+            return false;
+        }
+        if(!$("#price").val()){
+            alert('基础价格不可为空。');
+            return false;
+        }
+        if(!$("#overprice").val()){
+            alert('超重价格不可为空。');
+            return false;
+        }
+        $('#submit').val("正提交中,请勿关闭页面。");
+        $('#submit').prop('disabled', true);
+        var url = "{php echo $this->createWebUrl('express',array('op'=>'price','p'=>'add'))}"
+        $.ajax({
+            type: "POST",
+            url: url,
+            dataType: 'json',
+            data: $('#form').serialize(),
+            success: function (res) {
+                if (res.status) {
+                    alert('提交成功')
+                    location.reload();
+                }else{
+                    alert(res.content)
+                    $('#submit').val("提交");
+                    $('#submit').prop('disabled', false);
+                }
+            }
+        });
+    })
+</script>
