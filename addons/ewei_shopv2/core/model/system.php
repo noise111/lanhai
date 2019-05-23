@@ -989,7 +989,35 @@ class System_EweiShopV2Model {
                                 "route" => "status_1"
                             )
                         )
-                    )
+                    ),
+                    array(
+                        "title" => "多商户统计",
+                        "items" => array(
+                            array(
+                                "title" => "订单统计",
+                                "route" => "merch.order"
+                            ) ,
+                            array(
+                                "title" => "多商户统计",
+                                "route" => "merch.merch"
+                            ) ,
+
+                        )
+                    ) ,
+                    array(
+                        "title" => "导购统计",
+                        "items" => array(
+                            array(
+                                "title" => "订单统计",
+                                "route" => "commission.order"
+                            ) ,
+                            array(
+                                "title" => "导购统计",
+                                "route" => "commission.agent"
+                            ) ,
+
+                        )
+                    ) ,
                 )
             ) ,
             "statistics" => array(
@@ -1046,6 +1074,7 @@ class System_EweiShopV2Model {
                     )
                 )
             ) ,
+            "merch" => $this->pluginMenu("merch") ,
             "app" => $this->pluginMenu("app") ,
             "plugins" => array(
                 "title" => "应用",

@@ -3,7 +3,7 @@ if (!defined('IN_IA')) {
 	exit('Access Denied');
 }
 
-class Order_EweiShopV2Page extends PluginWebPage
+class Order_EweiShopV2Page extends WebPage
 {
 	public function main()
 	{

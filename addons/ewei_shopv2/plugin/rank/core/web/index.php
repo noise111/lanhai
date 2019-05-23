@@ -141,6 +141,16 @@ class Index_EweiShopV2Page extends PluginWebPage {
         print_r($list);
         echo "</pre>";
     }
+
+    public function type(){
+        $com = com("rank");
+        $list = $com->get_data(5, 86, 5);
+        echo "<pre>";
+        print_r($list);
+        echo "</pre>";
+    }
+
+
 }
 
 ?>

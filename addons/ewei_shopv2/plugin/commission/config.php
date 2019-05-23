@@ -48,8 +48,18 @@ return array(
 					array('title' => '入口设置', 'route' => 'cover'),
 					array('title' => '基础设置', 'route' => 'set')
 					)
-				)
-			)
+				),
+//            array(
+//                'title' => '榜单',
+//                'items' => array(
+//                    array('title' => '榜单设置', 'route' => 'leaderboardset'),
+//                    array('title' => '榜单分类', 'route' => 'leaderboardcate'),
+//                    array('title' => '所有榜单', 'route' => 'leaderboardlist'),
+////                    array('title' => '基础设置', 'route' => 'set')
+//                )
+//            ),
+			),
+
 		)
 	);
 

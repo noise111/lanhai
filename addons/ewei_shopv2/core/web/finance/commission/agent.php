@@ -3,13 +3,14 @@ if (!(defined('IN_IA')))
 {
 	exit('Access Denied');
 }
-class Agent_EweiShopV2Page extends PluginWebPage 
+class Agent_EweiShopV2Page extends WebPage
 {
 	public function main() 
 	{
+
 		global $_W;
 		global $_GPC;
-		$agentlevels = $this->model->getLevels(true, true);
+		$agentlevels = p("commission")->getLevels(true, true);
 		$level = $this->set['level'];
 		$pindex = max(1, intval($_GPC['page']));
 		$psize = 300;
@@ -87,13 +88,13 @@ class Agent_EweiShopV2Page extends PluginWebPage
 		}
 		foreach ($list as &$row ) 
 		{
-			$info = $this->model->getInfo($row['openid'], $array);
+			$info = p("commission")->getInfo($row['openid'], $array);
 			$row['level1_ordercount'] = $info['order1'];
 			$row['level2_ordercount'] = $info['order2'];
 			$row['level3_ordercount'] = $info['order3'];
 			$row['level_ordercount'] = $row['level1_ordercount'] + $row['level2_ordercount'] + $row['level3_ordercount'];
 			$row['ordermoney'] = $info['ordermoney'];
-			$sdata = $this->model->getStatistics($info);
+			$sdata = p("commission")->getStatistics($info);
 			$row['level_commission_total'] = $sdata['level_commission_total'];
 			$row['levelcount'] = $info['agentcount'];
 			if (1 <= $level) 
@@ -185,7 +186,7 @@ class Agent_EweiShopV2Page extends PluginWebPage
 		global $_GPC;
 		$level = intval($_GPC['level']);
 		$agentid = intval($_GPC['id']);
-		$member = $this->model->getInfo($agentid);
+		$member = p("commission")->getInfo($agentid);
 		$total = $member['agentcount'];
 		$level1 = $member['level1'];
 		$level2 = $member['level2'];
@@ -304,7 +305,7 @@ class Agent_EweiShopV2Page extends PluginWebPage
 			$pager = pagination($total, $pindex, $psize);
 			foreach ($list as &$row ) 
 			{
-				$info = $this->model->getInfo($row['openid'], array('total', 'pay'));
+				$info = p("commission")->getInfo($row['openid'], array('total', 'pay'));
 				$row['levelcount'] = $info['agentcount'];
 				if (1 <= $this->set['level']) 
 				{
@@ -420,10 +421,10 @@ class Agent_EweiShopV2Page extends PluginWebPage
 			{
 				pdo_update('ewei_shop_member', array('status' => 1, 'agenttime' => $time), array('id' => $member['id'], 'uniacid' => $_W['uniacid']));
 				plog('commission.agent.check', '审核分销商 <br/>分销商信息:  ID: ' . $member['id'] . ' /  ' . $member['openid'] . '/' . $member['nickname'] . '/' . $member['realname'] . '/' . $member['mobile']);
-				$this->model->sendMessage($member['openid'], array('nickname' => $member['nickname'], 'agenttime' => $time), TM_COMMISSION_BECOME);
+				p("commission")->sendMessage($member['openid'], array('nickname' => $member['nickname'], 'agenttime' => $time), TM_COMMISSION_BECOME);
 				if (!(empty($member['agentid']))) 
 				{
-					$this->model->upgradeLevelByAgent($member['agentid']);
+					p("commission")->upgradeLevelByAgent($member['agentid']);
 					if (p('globonus')) 
 					{
 						p('globonus')->upgradeLevelByAgent($member['agentid']);
