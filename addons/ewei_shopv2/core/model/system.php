@@ -602,16 +602,41 @@ class System_EweiShopV2Model {
                                 "route" => "dispatch",
                                 "desc" => "平台普通快递管理"
                             ) ,
+//                            array(
+//                                "title" => "同城配送",
+//                                "route" => "cityexpress",
+//                                "desc" => "平台同城配送管理"
+//                            ),
+//                            array(
+//                                "title" => "自建配送",
+//                                "route" => "selfexpress",
+//                                "desc" => "平台同城配送管理"
+//                            ),
+                        )
+                    ) ,
+                    array(
+                        "title" => "自建配送",
+                        "items" => array(
                             array(
-                                "title" => "同城配送",
-                                "route" => "cityexpress",
-                                "desc" => "平台同城配送管理"
+                                "title" => "配送列表",
+                                "route" => "list",
+                                "desc" => "平台自建配送管理"
+                            ) ,
+                            array(
+                                "title" => "配送人员",
+                                "route" => "personnel",
+                                "desc" => "平台自建配送管理"
                             ),
                             array(
-                                "title" => "自建配送",
-                                "route" => "selfexpress",
-                                "desc" => "平台同城配送管理"
-                            )
+                                "title" => "仓库管理",
+                                "route" => "warehouse",
+                                "desc" => "平台自建配送管理"
+                            ),
+                            array(
+                                "title" => "配送路线",
+                                "route" => "route",
+                                "desc" => "平台自建配送管理"
+                            ) ,
                         )
                     ) ,
                     array(

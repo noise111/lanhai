@@ -10,9 +10,10 @@ return array(
     "name" => "特约零售商", 
     "v3" => true, 
     "menu" => array( 
-        "title" => "页面", 
+        "title" => "多商户",
         "plugincom" => 1, 
-        "icon" => "page", 
+        "icon" => "xiaochengxu",
+        "iconcolor" => "",
         "items" => array( 
             array( 
                 "title" => "入驻申请", 
