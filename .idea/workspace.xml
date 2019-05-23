@@ -2,20 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ee3aa07-d82d-418b-8952-cedec49a6740" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/category.php" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/category.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/model/system.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/model/system.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/commission/agent.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/commission/agent.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/merch.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/merch.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/order.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/order.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/config.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/template/web_v3/set.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/template/web_v3/set.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/set/web.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/set/web.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/config.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/agent.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/agent.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/order.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/order.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/merch.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/merch.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/order.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/order.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/member/list.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/member/list.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/post/basic.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/post/basic.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,141 +17,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="system.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/model/system.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-229">
-              <caret line="1001" column="55" lean-forward="false" selection-start-line="1001" selection-start-column="55" selection-end-line="1001" selection-end-column="55" />
-              <folding>
-                <marker date="1558589778427" expanded="true" signature="71974:72093" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_system_copyright_notice&quot;)}" />
-                <marker date="1558589778427" expanded="true" signature="73330:73565" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
-                <marker date="1558589778427" expanded="true" signature="73845:74080" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
-                <marker date="1558589778427" expanded="true" signature="74316:74411" ph="select * fro... ${tablename(&quot;ewei_shop_funbar&quot;)}" />
-                <marker date="1558589778427" expanded="true" signature="75924:75988" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1558589778427" expanded="true" signature="76509:76573" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="agent.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/commission/agent.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1151">
-              <caret line="436" column="13" lean-forward="false" selection-start-line="436" selection-start-column="13" selection-end-line="436" selection-end-column="13" />
-              <folding>
-                <marker date="1558584301204" expanded="true" signature="2019:2546" ph="select dm.*,... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="8447:8538" ph="SELECT * FRO... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="9274:9398" ph="select count... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="12628:13058" ph="select dm.*,... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="17626:17769" ph="SELECT id,av... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="18081:18212" ph="SELECT id,op... ${tablename('ewei_shop_member')}" />
-                <marker date="1558584301204" expanded="true" signature="19819:19954" ph="SELECT id,op... ${tablename('ewei_shop_member')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="user.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/commission/user.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="47" lean-forward="false" selection-start-line="5" selection-start-column="34" selection-end-line="5" selection-end-column="47" />
-              <folding>
-                <marker date="1558574846007" expanded="true" signature="374:995" ph="select dm.id... ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="1151:1604" ph="select COUNT... ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="2722:2846" ph="select count... ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="5202:5466" ph="select dm.* ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="11364:11508" ph="SELECT id,av... ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="11816:11948" ph="SELECT id,op... ${tablename('ewei_shop_member')}" />
-                <marker date="1558574846007" expanded="true" signature="13516:13652" ph="SELECT id,op... ${tablename('ewei_shop_member')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="agent.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/agent.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2679">
-              <caret line="33" column="49" lean-forward="false" selection-start-line="33" selection-start-column="49" selection-end-line="33" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="page_web_plugin.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/inc/page_web_plugin.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="merch.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/merch.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="75" column="28" lean-forward="false" selection-start-line="75" selection-start-column="18" selection-end-line="75" selection-end-column="28" />
-              <folding>
-                <marker date="1558590015089" expanded="true" signature="1233:1654" ph="select u.*,s... ${tablename('ewei_shop_merch_user')}" />
-                <marker date="1558590015089" expanded="true" signature="2756:2936" ph="select u.id ${tablename('ewei_shop_merch_user')}" />
-                <marker date="1558590015089" expanded="true" signature="3223:3293" ph="select * fro... ${tablename('ewei_shop_merch_user')}" />
-                <marker date="1558590015089" expanded="true" signature="3798:4328" ph="select u.id,... ${tablename('ewei_shop_merch_user')}" />
-                <marker date="1558590015089" expanded="true" signature="4407:4611" ph="select sum(o... ${tablename('ewei_shop_merch_user')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="order.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/merch/order.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="91">
-              <caret line="8" column="5" lean-forward="true" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="5" />
-              <folding>
-                <marker date="1558589899146" expanded="true" signature="1509:1874" ph="select o.*, ${tablename('ewei_shop_order')}" />
-                <marker date="1558589899146" expanded="true" signature="2142:2421" ph="SELECT g.thu... ${tablename('ewei_shop_order_goods')}" />
-                <marker date="1558589899146" expanded="true" signature="2567:2883" ph="select o.id ${tablename('ewei_shop_order')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="order.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/order.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="29" column="63" lean-forward="false" selection-start-line="29" selection-start-column="63" selection-end-line="29" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="merch.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/merch.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-57">
-              <caret line="12" column="71" lean-forward="false" selection-start-line="12" selection-start-column="71" selection-end-line="12" selection-end-column="71" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="order.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/order.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="26" column="34" lean-forward="false" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -168,18 +26,20 @@
       <find>应用</find>
       <find>set(</find>
       <find>小店</find>
-      <find>article</find>
       <find>type</find>
-      <find>文章</find>
       <find>统计</find>
       <find>finance</find>
       <find>$this-&gt;model</find>
+      <find>article</find>
+      <find>文章</find>
+      <find>榜单名</find>
     </findStrings>
     <replaceStrings>
       <replace>leaderboard</replace>
-      <replace>榜单</replace>
       <replace>p(&quot;commission&quot;)</replace>
       <replace>p(&quot;merch&quot;)</replace>
+      <replace>榜单</replace>
+      <replace>rank</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -194,7 +54,6 @@
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/_header.html" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/merch/template/web_v3/set/web.html" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/core/web/rank.php" />
-        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/core/web/leaderboardcate.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/config.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/finance/commission/agent.php" />
@@ -205,6 +64,11 @@
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/commission/order.html" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/merch.html" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/order.html" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/config.php" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/category.html" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/category.php" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/post/basic.html" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php" />
       </list>
     </option>
   </component>
@@ -268,26 +132,7 @@
               <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="finance" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="finance" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="model" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
@@ -302,7 +147,7 @@
               <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="article" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
@@ -310,7 +155,7 @@
               <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="article" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -319,7 +164,17 @@
               <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="article" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="article" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
@@ -328,53 +183,9 @@
               <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="article" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="finance" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="finance" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="commission" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="finance" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="merch" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -387,10 +198,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="G:\www\lanhai\addons\ewei_shopv2\plugin\rank\template\web_v3" />
+      <recent name="G:\www\lanhai\addons\ewei_shopv2\plugin\rank\core\web" />
       <recent name="G:\www\lanhai\addons\ewei_shopv2\template\web_v3\finance" />
       <recent name="G:\www\lanhai\addons\ewei_shopv2\core\web\finance" />
       <recent name="G:\www\lanhai\addons\ewei_shopv2\plugin\commission\template\web_v3" />
-      <recent name="G:\www\lanhai\addons\ewei_shopv2\plugin\commission\core\web" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -415,18 +227,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1558574991183</updated>
-      <workItem from="1558574992532" duration="9620000" />
+      <workItem from="1558574992532" duration="12868000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9620000" />
+    <option name="totallyTimeSpent" value="12868000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="94" width="1920" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -595,14 +406,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/commission/core/web/leaderboardcate.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -623,14 +426,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="401">
           <caret line="51" column="20" lean-forward="true" selection-start-line="51" selection-start-column="20" selection-end-line="51" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="134" column="5" lean-forward="true" selection-start-line="134" selection-start-column="5" selection-end-line="134" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -685,21 +480,6 @@
         <state relative-caret-position="361">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/model/system.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-229">
-          <caret line="1001" column="55" lean-forward="false" selection-start-line="1001" selection-start-column="55" selection-end-line="1001" selection-end-column="55" />
-          <folding>
-            <marker date="1558589778427" expanded="true" signature="71974:72093" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_system_copyright_notice&quot;)}" />
-            <marker date="1558589778427" expanded="true" signature="73330:73565" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
-            <marker date="1558589778427" expanded="true" signature="73845:74080" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
-            <marker date="1558589778427" expanded="true" signature="74316:74411" ph="select * fro... ${tablename(&quot;ewei_shop_funbar&quot;)}" />
-            <marker date="1558589778427" expanded="true" signature="75924:75988" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
-            <marker date="1558589778427" expanded="true" signature="76509:76573" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -771,9 +551,80 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/finance/merch/order.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="26" column="34" lean-forward="false" selection-start-line="26" selection-start-column="34" selection-end-line="26" selection-end-column="34" />
+        <state relative-caret-position="361">
+          <caret line="25" column="26" lean-forward="true" selection-start-line="25" selection-start-column="26" selection-end-line="25" selection-end-column="26" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/model/system.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="1432" column="47" lean-forward="false" selection-start-line="1432" selection-start-column="47" selection-end-line="1432" selection-end-column="47" />
+          <folding>
+            <marker date="1558589778427" expanded="true" signature="71974:72093" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_system_copyright_notice&quot;)}" />
+            <marker date="1558589778427" expanded="true" signature="73330:73565" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
+            <marker date="1558589778427" expanded="true" signature="73845:74080" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order_comment&quot;)}" />
+            <marker date="1558589778427" expanded="true" signature="74316:74411" ph="select * fro... ${tablename(&quot;ewei_shop_funbar&quot;)}" />
+            <marker date="1558589778427" expanded="true" signature="75924:75988" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
+            <marker date="1558589778427" expanded="true" signature="76509:76573" ph="SELECT COUNT... ${tablename(&quot;ewei_shop_order&quot;)}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="18" column="57" lean-forward="false" selection-start-line="18" selection-start-column="57" selection-end-line="18" selection-end-column="57" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/category.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="15" column="47" lean-forward="true" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="14" column="56" lean-forward="true" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/category.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="21" column="32" lean-forward="false" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
+          <folding>
+            <marker date="1558591891581" expanded="true" signature="193:331" ph="SELECT * FRO... ${tablename('ewei_shop_article_category')}" />
+            <marker date="1558591891581" expanded="true" signature="1447:1585" ph="SELECT id,ca... ${tablename('ewei_shop_article_category')}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/template/web_v3/post/basic.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="33" column="14" lean-forward="true" selection-start-line="33" selection-start-column="14" selection-end-line="33" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/rank/core/web/index.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="353">
+          <caret line="70" column="28" lean-forward="false" selection-start-line="70" selection-start-column="28" selection-end-line="70" selection-end-column="28" />
+          <folding>
+            <marker date="1558593149150" expanded="true" signature="1587:1600" ph="select * fro... " />
+            <marker date="1558593149150" expanded="true" signature="1587:1601" ph="select * fro... ${tablename()}" />
+            <marker date="1558593149150" expanded="true" signature="1587:1711" ph="select * fro... ${tablename(&quot;ewei_shop_rank_category&quot;)}" />
+            <marker date="1558593149150" expanded="true" signature="1587:1713" ph="select * fro... ${tablename(&quot;ewei_shop_rank_category&quot;)}" />
+          </folding>
         </state>
       </provider>
     </entry>

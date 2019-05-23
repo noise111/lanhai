@@ -55,7 +55,8 @@ class Index_EweiShopV2Page extends PluginWebPage {
     public function post(){
         global $_W;
         global $_GPC;
-        
+        //新增分类 2019052 lz
+        $category = pdo_fetchall(" select * from " . tablename("ewei_shop_rank_category") . " where uniacid=:uniacid and isshow = 1  order by displayorder desc ",array(":uniacid"=>$_W['uniacid']));
         $id = isset($_GPC['id']) ? intval($_GPC['id']) : 0;
         if($id){
             $item = pdo_get("ewei_shop_rank", array("id" => $id));
@@ -81,6 +82,7 @@ class Index_EweiShopV2Page extends PluginWebPage {
                 isset($_GPC['displayorder']) ?  $data['displayorder'] = intval($_GPC['displayorder']) : false;
                 isset($_GPC['range_id']) ?      $data['range_id'] = intval($_GPC['range_id']) : false;
                 isset($_GPC['goodsid']) ?       $data['goodsid'] = intval($_GPC['goodsid']) : false;
+//                print_r($data);die;
                 if(isset($data['name'])){
                     $db = pdo_get("ewei_shop_rank", array("name" => $data['name']));
                     if($db && $db['id'] != $id){

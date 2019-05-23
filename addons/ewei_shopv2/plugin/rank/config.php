@@ -16,7 +16,7 @@ return array(
 		'icon'      => 'page',
 		'items'     => array(
 			array('title' => '榜单列表', 'route' => 'index'),			
-			array('title' => '榜单类型', 'route' => 'type')
+			array('title' => '榜单类型', 'route' => 'category')
 			)
 		)
 	);
