@@ -417,181 +417,194 @@ class Order_EweiShopV2Model
 			m("member")->setCredit($order["openid"], "credit2", $order["deductcredit2"], array( "0", $_W["shopset"]["shop"]["name"] . "购物返还抵扣余额 余额: " . $order["deductcredit2"] . " 订单号: " . $order["ordersn"] ));
 		}
 	}
-	public function setGiveBalance($orderid = "", $type = 0) 
-	{
-		global $_W;
-        //设置优惠券关系（社交优惠券，在计算所有分润之前先确定关系）
-        com('coupon')->setCouponRelation($orderid); 
-		$order = pdo_fetch("select id,ordersn,price,openid,dispatchtype,addressid,carrier,status, uniacid from " . tablename("ewei_shop_order") . " where id=:id limit 1", array( ":id" => $orderid ));
-		$goods = pdo_fetchall("select og.goodsid,og.total,g.totalcnf,og.realprice,g.money,og.optionid,g.total as goodstotal,og.optionid,
+    public function setGiveBalance($orderid = "", $type = 0)
+    {
+        global $_W;
+        $refund = false;
+        $order = pdo_fetch("select id,ordersn,price,openid,dispatchtype,addressid,carrier,status,refundid, uniacid from " . tablename("ewei_shop_order") . " where id=:id limit 1", array( ":id" => $orderid ));
+        if($order['refundid']!='0'){
+            $refund_order = pdo_fetch("select id,status, uniacid from " . tablename("ewei_shop_order_refund") . " where id=:id limit 1", array( ":id" => $order['refundid'] ));
+            if($refund_order['status']!='-2'){
+                $refund = true;
+            }
+        }
+        if(!$refund){
+            //设置优惠券关系（社交优惠券，在计算所有分润之前先确定关系）
+            com('coupon')->setCouponRelation($orderid);
+        }
+        $goods = pdo_fetchall("select og.goodsid,og.total,g.totalcnf,og.realprice,g.money,og.optionid,g.total as goodstotal,og.optionid,
                               g.sales,g.salesreal," .
-                              " og.onlinestoreget, og.onlinehomeget, og.storeget, og.salerfirst, og.salermore, og.agentonline, og.agenthome, og.teambenefit " . 
-                              " from " . tablename("ewei_shop_order_goods") . " og " . 
-                              " left join " . tablename("ewei_shop_goods") . " g on g.id=og.goodsid " . 
-                              " where og.orderid=:orderid and og.uniacid=:uniacid ", array( ":uniacid" => $_W["uniacid"], ":orderid" => $orderid ));
-		$balance = 0;
-        $benefit_type = $this->getBuyType($orderid);
-        $benefit_data = array(
-            'store'     => 0,
-            'saler'     => 0,
-            'agent'     => 0,
-            'team'      => 0
-        );
-        $benefit_staffs = $this->_getOrderStaffs($orderid);
-        $is_first = $this->checkIsFirst($order['openid']);
-		foreach( $goods as $g ) 
-		{
-			$gbalance = trim($g["money"]);
-			if( !empty($gbalance) ) 
-			{
-				if( strexists($gbalance, "%") ) 
-				{
-					$balance += round(floatval(str_replace("%", "", $gbalance)) / 100 * $g["realprice"], 2);
-				}
-				else 
-				{
-					$balance += round($g["money"], 2) * $g["total"];
-				}
-			}
-            $benefit_return = $this->_getGoodsBenefit($benefit_type, $g, $is_first);
-            $benefit_data['store'] += $benefit_return['store'];
-            $benefit_data['saler'] += $benefit_return['saler'];
-            $benefit_data['agent'] += $benefit_return['agent'];
-            $benefit_data['team']  += $benefit_return['team'];
-		}
-		if( 0 < $balance ) 
-		{
-			$shopset = m("common")->getSysset("shop");
-			if( $type == 1 ) 
-			{
-				if( $order["status"] == 3 ) 
-				{
-					m("member")->setCredit($order["openid"], "credit2", $balance, array( 0, $shopset["name"] . "购物赠送余额 订单号: " . $order["ordersn"] ));
-				}
-			}
-			else 
-			{
-				if( $type == 2 && 1 <= $order["status"] ) 
-				{
-					m("member")->setCredit($order["openid"], "credit2", 0 - $balance, array( 0, $shopset["name"] . "购物取消订单扣除赠送余额 订单号: " . $order["ordersn"] ));
-				}
-			}
-		} 
-        
-        //检查这个订单是否已分润过
-        $order_benefit_log = pdo_get("ewei_shop_order_benefit_log", array("orderid" => $orderid));
-        if(empty($order_benefit_log)){
-            //线上支付门店核销
-            if($benefit_type == 2){
-                $benefit_data['store'] = $order['price'];
+            " og.onlinestoreget, og.onlinehomeget, og.storeget, og.salerfirst, og.salermore, og.agentonline, og.agenthome, og.teambenefit " .
+            " from " . tablename("ewei_shop_order_goods") . " og " .
+            " left join " . tablename("ewei_shop_goods") . " g on g.id=og.goodsid " .
+            " where og.orderid=:orderid and og.uniacid=:uniacid ", array( ":uniacid" => $_W["uniacid"], ":orderid" => $orderid ));
+        $balance = 0;
+        if(!$refund){
+            $benefit_type = $this->getBuyType($orderid);
+            $benefit_data = array(
+                'store'     => 0,
+                'saler'     => 0,
+                'agent'     => 0,
+                'team'      => 0
+            );
+            $benefit_staffs = $this->_getOrderStaffs($orderid);
+            $is_first = $this->checkIsFirst($order['openid']);
+            foreach( $goods as $g )
+            {
+                $gbalance = trim($g["money"]);
+                if( !empty($gbalance) )
+                {
+                    if( strexists($gbalance, "%") )
+                    {
+                        $balance += round(floatval(str_replace("%", "", $gbalance)) / 100 * $g["realprice"], 2);
+                    }
+                    else
+                    {
+                        $balance += round($g["money"], 2) * $g["total"];
+                    }
+                }
+                $benefit_return = $this->_getGoodsBenefit($benefit_type, $g, $is_first);
+                $benefit_data['store'] += $benefit_return['store'];
+                $benefit_data['saler'] += $benefit_return['saler'];
+                $benefit_data['agent'] += $benefit_return['agent'];
+                $benefit_data['team']  += $benefit_return['team'];
             }
-            
-            //门店分润
-            if(isset($benefit_staffs['store']) && $benefit_staffs['store'] && $benefit_data['store']){
-                $store = $benefit_staffs['store'];               
-                $value = floatval($benefit_data['store']);
-                $benefit = pdo_fetchcolumn("SELECT benefitbalance FROM " . tablename('ewei_shop_store') . " WHERE uniacid = {$_W['uniacid']} AND id = $store");
-                $new_benefit = floatval($benefit) + $value;
-                pdo_update("ewei_shop_store", array( 'benefitbalance' => $new_benefit ), array( "uniacid" => $_W['uniacid'], "id" =>  $store));
-                $log_data = array(
-                    'openid'    => 'store_' . $store,
-                    'num'       => $value,
-                    'remark'    => '用户购物门店分润：' . $value
+        }
+        if( 0 < $balance )
+        {
+            $shopset = m("common")->getSysset("shop");
+            if( $type == 1 )
+            {
+                if( $order["status"] == 3 )
+                {
+                    m("member")->setCredit($order["openid"], "credit2", $balance, array( 0, $shopset["name"] . "购物赠送余额 订单号: " . $order["ordersn"] ));
+                }
+            }
+            else
+            {
+                if( $type == 2 && 1 <= $order["status"] )
+                {
+                    m("member")->setCredit($order["openid"], "credit2", 0 - $balance, array( 0, $shopset["name"] . "购物取消订单扣除赠送余额 订单号: " . $order["ordersn"] ));
+                }
+            }
+        }
+        //检查这个订单不是退款订单
+        if(!$refund){
+            //检查这个订单是否已分润过
+            $order_benefit_log = pdo_get("ewei_shop_order_benefit_log", array("orderid" => $orderid));
+            if(empty($order_benefit_log)){
+                //线上支付门店核销
+                if($benefit_type == 2){
+                    $benefit_data['store'] = $order['price'];
+                }
+
+                //门店分润
+                if(isset($benefit_staffs['store']) && $benefit_staffs['store'] && $benefit_data['store']){
+                    $store = $benefit_staffs['store'];
+                    $value = floatval($benefit_data['store']);
+                    $benefit = pdo_fetchcolumn("SELECT benefitbalance FROM " . tablename('ewei_shop_store') . " WHERE uniacid = {$_W['uniacid']} AND id = $store");
+                    $new_benefit = floatval($benefit) + $value;
+                    pdo_update("ewei_shop_store", array( 'benefitbalance' => $new_benefit ), array( "uniacid" => $_W['uniacid'], "id" =>  $store));
+                    $log_data = array(
+                        'openid'    => 'store_' . $store,
+                        'num'       => $value,
+                        'remark'    => '用户购物门店分润：' . $value
+                    );
+                    $this->addBenefitLog($log_data);
+                }
+
+                //导购分润
+                if(isset($benefit_staffs['saler']) && !empty($benefit_staffs['saler']) && $benefit_data['saler']){
+                    $openid = $benefit_staffs['saler'];
+                    $value = floatval($benefit_data['saler']);
+                    $remark = '用户购物导购分润：' . $value;
+                    $saler = m("store")->getSalerInfo(array("openid" => $openid));
+                    m("member")->setBenefit($openid, 0, $value, $remark);
+                    //检查改店员所在的门店是否关闭
+                    //                if(!empty($saler['storeid'])){
+                    //                    $store = m("store")->getStoreInfo($saler['storeid']);
+                    //                    if($saler['merchid'] > 0){
+                    //                        $merch = pdo_get("ewei_shop_merch_user", array("id" => $saler['merchid']));
+                    //                    } else {
+                    //                        $merch = array(
+                    //                            'id'            => 0,
+                    //                            'status'        => 1
+                    //                        );
+                    //                    }
+                    //                    //正常情况
+                    //                    if($store && $store['status'] == 1 && $merch['status'] == 1){
+                    //                        m("member")->setBenefit($openid, 0, $value, $remark);
+                    //                    //店铺关闭或者不存在，$merch状态正常，导购的返佣分配给上级$merch
+                    //                    } else if((!$store || $store['status'] == 0) && $merch['id'] && $merch['status'] == 1){
+                    //                        $new_benefit = floatval($merch['benefitbalance']) + $value;
+                    //                        pdo_update("ewei_shop_merch_user", array("benefitbalance" => $new_benefit), array("id" => $merch['id']));
+                    //                        $remark = '用户购物导购分润（门店不可用）：' . $value;
+                    //                        $log_data = array(
+                    //                            'openid'    => 'merch_' . $merch['id'],
+                    //                            'num'       => $value,
+                    //                            'remark'    => $remark
+                    //                        );
+                    //                        $this->addBenefitLog($log_data);
+                    //
+                    //                    //店铺关闭或者不存在，$merch状态不正常，导购返佣分配给上级$agent
+                    //                    } else if((!$store || $store['status'] == 0) && (!$merch || $merch['status'] == 0) && $merch['agentid']){
+                    //                        $benefit_staffs['agent_plus'] = $merch['agentid'];
+                    //                        $benefit_data['agent_plus'] = $value;
+                    //                    }
+                    //                }
+                }
+
+                //运营中心分润
+                if(isset($benefit_staffs['agent']) && $benefit_staffs['agent'] && $benefit_data['agent']){
+                    $agent_id = $benefit_staffs['agent'];
+                    $value = floatval($benefit_data['agent']);
+                    //这里benefit数组中的openid是会员的id
+                    $agent_member = m('member')->getMember($agent_id);
+                    $openid = $agent_member['openid'];
+                    $remark = '用户购物运营中心分润：' . $value;
+                    m("member")->setBenefit($openid, 0, $value, $remark);
+                }
+                if(isset($benefit_staffs['agent_plus']) && $benefit_staffs['agent_plus'] && $benefit_data['agent_plus']){
+                    $agent_id = $benefit_staffs['agent_plus'];
+                    $value = floatval($benefit_data['agent_plus']);
+                    $remark = "用户购物运营中心分润（零售商不可用）：" . $value;
+                    $agent_member = m('member')->getMember($agent_id);
+                    $openid = $agent_member['openid'];
+                    m("member")->setBenefit($openid, 0, $value, $remark);
+                }
+
+                //插入分润记录
+                $benefit_log = array(
+                    'uniacid'           => $order['uniacid'],
+                    'orderid'           => $orderid,
+                    'openid'            => $order['openid'],
+                    'storeid'           => $benefit_staffs['store'],
+                    'storebenefit'      => $benefit_data['store'],
+                    'saleropenid'       => $benefit_staffs['saler'],
+                    'salerbenefit'      => $benefit_data['saler'],
+                    'agentid'           => $benefit_staffs['agent'],
+                    'agentbenefit'      => $benefit_data['agent'],
+                    'agent_plus'        => isset($benefit_staffs['agent_plus']) ? $benefit_staffs['agent_plus'] : 0,
+                    'agent_plus_benefit'        => isset($benefit_data['agent_plus']) ? $benefit_data['agent_plus'] : 0,
+                    'team'              => $benefit_staffs['team'],
+                    'teambenefit'       => $benefit_data['team'],
+                    'createtime'        => time()
                 );
-                $this->addBenefitLog($log_data);
+                com('coupon')->setCouponBenefit($orderid);
+                pdo_insert('ewei_shop_order_benefit_log', $benefit_log);
+                m('notice')->sendSalerBenefitMessage($orderid);
+                m('notice')->sendCommissionBenefitMessage($orderid);
+
+                //完成订单送券
+                $check_data = array(
+                    'order_status'      => 3,
+                    'orderid'           => $orderid
+                );
+                com("coupon")->checkSocialPoint($order['openid'], 'finishorder', $check_data);
             }
-            
-            //导购分润
-            if(isset($benefit_staffs['saler']) && !empty($benefit_staffs['saler']) && $benefit_data['saler']){
-                $openid = $benefit_staffs['saler'];
-                $value = floatval($benefit_data['saler']);
-                $remark = '用户购物导购分润：' . $value;  
-                $saler = m("store")->getSalerInfo(array("openid" => $openid));
-                m("member")->setBenefit($openid, 0, $value, $remark);
-                //检查改店员所在的门店是否关闭
-//                if(!empty($saler['storeid'])){
-//                    $store = m("store")->getStoreInfo($saler['storeid']);
-//                    if($saler['merchid'] > 0){
-//                        $merch = pdo_get("ewei_shop_merch_user", array("id" => $saler['merchid']));
-//                    } else {
-//                        $merch = array(
-//                            'id'            => 0,
-//                            'status'        => 1                                    
-//                        );
-//                    }
-//                    //正常情况
-//                    if($store && $store['status'] == 1 && $merch['status'] == 1){
-//                        m("member")->setBenefit($openid, 0, $value, $remark);
-//                    //店铺关闭或者不存在，$merch状态正常，导购的返佣分配给上级$merch
-//                    } else if((!$store || $store['status'] == 0) && $merch['id'] && $merch['status'] == 1){
-//                        $new_benefit = floatval($merch['benefitbalance']) + $value;
-//                        pdo_update("ewei_shop_merch_user", array("benefitbalance" => $new_benefit), array("id" => $merch['id']));
-//                        $remark = '用户购物导购分润（门店不可用）：' . $value;  
-//                        $log_data = array(
-//                            'openid'    => 'merch_' . $merch['id'],
-//                            'num'       => $value,
-//                            'remark'    => $remark
-//                        );
-//                        $this->addBenefitLog($log_data);
-//
-//                    //店铺关闭或者不存在，$merch状态不正常，导购返佣分配给上级$agent
-//                    } else if((!$store || $store['status'] == 0) && (!$merch || $merch['status'] == 0) && $merch['agentid']){
-//                        $benefit_staffs['agent_plus'] = $merch['agentid'];
-//                        $benefit_data['agent_plus'] = $value;
-//                    }
-//                }
-            }
-            
-            //运营中心分润
-            if(isset($benefit_staffs['agent']) && $benefit_staffs['agent'] && $benefit_data['agent']){
-                $agent_id = $benefit_staffs['agent'];
-                $value = floatval($benefit_data['agent']);
-                //这里benefit数组中的openid是会员的id
-                $agent_member = m('member')->getMember($agent_id);
-                $openid = $agent_member['openid'];
-                $remark = '用户购物运营中心分润：' . $value;
-                m("member")->setBenefit($openid, 0, $value, $remark);
-            }
-            if(isset($benefit_staffs['agent_plus']) && $benefit_staffs['agent_plus'] && $benefit_data['agent_plus']){
-                $agent_id = $benefit_staffs['agent_plus'];
-                $value = floatval($benefit_data['agent_plus']);
-                $remark = "用户购物运营中心分润（零售商不可用）：" . $value;
-                $agent_member = m('member')->getMember($agent_id);
-                $openid = $agent_member['openid'];
-                m("member")->setBenefit($openid, 0, $value, $remark);
-            }
-            
-            //插入分润记录
-            $benefit_log = array(
-                'uniacid'           => $order['uniacid'],
-                'orderid'           => $orderid,
-                'openid'            => $order['openid'],
-                'storeid'           => $benefit_staffs['store'],
-                'storebenefit'      => $benefit_data['store'],
-                'saleropenid'       => $benefit_staffs['saler'],
-                'salerbenefit'      => $benefit_data['saler'],
-                'agentid'           => $benefit_staffs['agent'],
-                'agentbenefit'      => $benefit_data['agent'],
-                'agent_plus'        => isset($benefit_staffs['agent_plus']) ? $benefit_staffs['agent_plus'] : 0,
-                'agent_plus_benefit'        => isset($benefit_data['agent_plus']) ? $benefit_data['agent_plus'] : 0,
-                'team'              => $benefit_staffs['team'],
-                'teambenefit'       => $benefit_data['team'],
-                'createtime'        => time()
-            );
-            com('coupon')->setCouponBenefit($orderid);
-            pdo_insert('ewei_shop_order_benefit_log', $benefit_log);
-            m('notice')->sendSalerBenefitMessage($orderid);
-            m('notice')->sendCommissionBenefitMessage($orderid);
-            
-            //完成订单送券
-            $check_data = array(
-                'order_status'      => 3,
-                'orderid'           => $orderid
-            );
-            com("coupon")->checkSocialPoint($order['openid'], 'finishorder', $check_data);
         }
         m('notice')->sendStoreOrderMessage($orderid);
-	}
+    }
 	public function setStocksAndCredits($orderid = "", $type = 0) 
 	{
 		global $_W;

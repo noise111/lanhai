@@ -64,10 +64,6 @@ class Personnel_EweiShopV2Page extends WebPage
 		$id = intval($_GPC['id']);
 		$item = pdo_fetch('SELECT * FROM ' . tablename('ewei_shop_selfexpress_personnel') . ' WHERE id =:id and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':id' => $id));
 
-		if (!empty($item)) {
-			$saler = m('member')->getMember($item['openid']);
-			$store = pdo_fetch('SELECT * FROM ' . tablename('ewei_shop_store') . ' WHERE id =:id and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':id' => $item['storeid']));
-		}
 		if ($_W['ispost']) {
 			$data = array(
                 'uniacid' => $_W['uniacid'],
@@ -78,80 +74,34 @@ class Personnel_EweiShopV2Page extends WebPage
                 'mobile' => trim($_GPC['mobile']),
 //                'roleid' => intval($_GPC['roleid'])
             );
-//			if (empty($data['storeid'])) {
-//				show_json(0, '请选择所属门店');
-//			}
 
-			if (p('newstore')) {
-				$data['getnotice'] = intval($_GPC['getnotice']);
-
-				if (empty($item['username'])) {
-					if (empty($_GPC['username'])) {
-						show_json(0, '用户名不能为空!');
-					}
-
-					$usernames = pdo_fetchcolumn('SELECT count(*) FROM ' . tablename('ewei_shop_selfexpress_personnel') . ' WHERE username=:username limit 1', array(':username' => $_GPC['username']));
-
-					if (0 < $usernames) {
-						show_json(0, '该用户名已被使用，请修改后重新提交!');
-					}
-
-					$data['username'] = $_GPC['username'];
-				}
-
-				if (!empty($_GPC['pwd'])) {
-					$salt = random(8);
-
-					while (1) {
-						$saltcount = pdo_fetchcolumn('select count(*) from ' . tablename('ewei_shop_selfexpress_personnel') . ' where salt=:salt limit 1', array(':salt' => $salt));
-
-						if ($saltcount <= 0) {
-							break;
-						}
-
-						$salt = random(8);
-					}
-
-					$pwd = md5(trim($_GPC['pwd']) . $salt);
-					$data['pwd'] = $pwd;
-					$data['salt'] = $salt;
-				}
-				else {
-					if (empty($item)) {
-						show_json(0, '用户密码不能为空!');
-					}
-				}
-			}
-
-			$m = m('member')->getMember($data['openid']);
-
-			if (!empty($id)) {
-				pdo_update('ewei_shop_selfexpress_personnel', $data, array('id' => $id, 'uniacid' => $_W['uniacid']));
-				plog('shop.verify.saler.edit', '编辑配送员 ID: ' . $id . ' <br/>配送员信息: ID: ' . $m['id'] . ' / ' . $m['openid'] . '/' . $m['nickname'] . '/' . $m['realname'] . '/' . $m['mobile'] . ' ');
-			}
-			else {
-                $params = array(
-                    ':openid'       => $data['openid'],
-                    ':uniacid'      => $_W['uniacid']
-                );
-                //查找配送员
-                $sql = "SELECT * FROM " . tablename("ewei_shop_selfexpress_personnel") . " WHERE openid = :openid AND uniacid = :uniacid";
-                $saler_db = pdo_fetch($sql, $params);
-                if($saler_db){
-                    if($saler_db['is_delete'] == 1){
-                        $data['is_delete'] = 0;
-                        $data['pass'] = 0;
-                        pdo_update('ewei_shop_selfexpress_personnel', $data, array('id' => $saler_db['id']));
-                        $id = $saler_db['id'];
-                    } else {
-                        show_json(0, '此会员已经成为配送员，没法重复添加');
-                    }
-                } else {
-                    pdo_insert('ewei_shop_selfexpress_personnel', $data);
-                    $id = pdo_insertid();
-                    plog('shop.verify.saler.add', '添加配送员 ID: ' . $id . '  <br/>配送员信息: ID: ' . $m['id'] . ' / ' . $m['openid'] . '/' . $m['nickname'] . '/' . $m['realname'] . '/' . $m['mobile'] . ' ');
+			if(empty($_GPC['id'])){
+                $haspersonnel = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where salername = :salername ",array(":salername"=>$_GPC['salername']));
+                if(!empty($haspersonnel)){
+                    show_json(0, '配送员已存在');
                 }
-                m("store")->deleteSalerRelation($data['openid']);
+
+                $haspersonnelmobile = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where mobile = :mobile ",array(":mobile"=>$_GPC['mobile']));
+                if(!empty($haspersonnelmobile)){
+                    show_json(0, '手机号码已存在');
+                }
+                pdo_insert('ewei_shop_selfexpress_personnel', $data);
+                $id = pdo_insertid();
+                plog('shop.personnel.add', '添加配送员 ID: ' . $id . '  <br/>配送员信息: ID: ' . $id . ' / ' . $data['salername'] . '/' . $data['mobile'] .  ' ');
+			}else{
+
+                $haspersonnel = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where salername = :salername  and id != :id",array(":salername"=>$_GPC['salername'],":id"=>$id));
+                if(!empty($haspersonnel)){
+                    show_json(0, '配送员已存在');
+                }
+                $haspersonnelmobile = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where mobile = :mobile  and id != :id",array(":mobile"=>$_GPC['mobile'],":id"=>$id));
+                if(!empty($haspersonnelmobile)){
+                    show_json(0, '手机号码已存在');
+                }
+
+                pdo_update('ewei_shop_selfexpress_personnel', $data, array('id' => $id, 'uniacid' => $_W['uniacid']));
+				plog('shop.personnel.edit', '编辑配送员 ID: ' . $id . ' <br/>配送员信息: ID: ' . $_GPC['id'] . ' / ' . $data['salername'] . '/' . $data['mobile'] .  ' ');
+
 			}
 			show_json(1, array('url' => webUrl('shop/personnel')));
 		}
@@ -174,7 +124,7 @@ class Personnel_EweiShopV2Page extends WebPage
 		foreach ($items as $item) {
 			//pdo_delete('ewei_shop_selfexpress_personnel', array('id' => $item['id']));
             pdo_update("ewei_shop_selfexpress_personnel", array('is_delete' => 1), array('id' => $item['id']));
-			plog('shop.verify.saler.delete', '删除配送员 ID: ' . $item['id'] . ' 配送员名称: ' . $item['salername'] . ' ');
+			plog('shop.personnel.delete', '删除配送员 ID: ' . $item['id'] . ' 配送员名称: ' . $item['salername'] . ' ');
 		}
 
 		show_json(1, array('url' => referer()));
@@ -194,7 +144,7 @@ class Personnel_EweiShopV2Page extends WebPage
 
 		foreach ($items as $item) {
 			pdo_update('ewei_shop_selfexpress_personnel', array('status' => intval($_GPC['status'])), array('id' => $item['id']));
-			plog('shop.verify.saler.edit', '修改配送员状态<br/>ID: ' . $item['id'] . '<br/>配送员名称: ' . $item['salername'] . '<br/>状态: ' . $_GPC['status'] == 1 ? '启用' : '禁用');
+			plog('shop.personnel.edit', '修改配送员状态<br/>ID: ' . $item['id'] . '<br/>配送员名称: ' . $item['salername'] . '<br/>状态: ' . $_GPC['status'] == 1 ? '启用' : '禁用');
 		}
 
 		show_json(1, array('url' => referer()));

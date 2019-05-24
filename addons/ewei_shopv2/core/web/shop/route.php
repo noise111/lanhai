@@ -3,7 +3,7 @@ if (!defined('IN_IA')) {
 	exit('Access Denied');
 }
 
-class Warehouse_EweiShopV2Page extends WebPage
+class Route_EweiShopV2Page extends WebPage
 {
 //	public function __construct($_com = 'verify')
 //	{
@@ -30,9 +30,9 @@ class Warehouse_EweiShopV2Page extends WebPage
 			$paras[':type'] = $type;
 		}
 
-		$sql = 'SELECT s.*, u.merchname FROM ' . tablename('ewei_shop_selfexpress_warehouse') . 's LEFT JOIN '. tablename('ewei_shop_merch_user') .' u ON u.id = s.merchid  WHERE ' . $condition . ' ORDER BY displayorder desc,id desc';
+		$sql = 'SELECT s.*, u.merchname FROM ' . tablename('ewei_shop_selfexpress_route') . 's LEFT JOIN '. tablename('ewei_shop_merch_user') .' u ON u.id = s.merchid  WHERE ' . $condition . ' ORDER BY displayorder desc,id desc';
 		$sql .= ' LIMIT ' . ($pindex - 1) * $psize . ',' . $psize;
-        $sql_count = 'SELECT count(*) FROM ' . tablename('ewei_shop_selfexpress_warehouse') . " s " . (' WHERE ' . $condition);
+        $sql_count = 'SELECT count(*) FROM ' . tablename('ewei_shop_selfexpress_route') . " s " . (' WHERE ' . $condition);
 
         $total = pdo_fetchcolumn($sql_count, $paras);
 
@@ -41,8 +41,15 @@ class Warehouse_EweiShopV2Page extends WebPage
 		$list = pdo_fetchall($sql, $paras);
 		foreach ($list as &$row) {
 			$row['salercount'] = pdo_fetchcolumn('select count(*) from ' . tablename('ewei_shop_saler') . ' where storeid=:storeid limit 1', array(':storeid' => $row['id']));
-		}
 
+			//配送员名称
+			$row['personnelname'] = pdo_fetchcolumn('select salername from ' . tablename('ewei_shop_selfexpress_personnel') . ' where id=:id limit 1', array(':id' => $row['personnelid']));
+            //配送员电话
+			$row['personnelmobile'] = pdo_fetchcolumn('select mobile from ' . tablename('ewei_shop_selfexpress_personnel') . ' where id=:id limit 1', array(':id' => $row['personnelid']));
+			//路线仓库
+			$row['warehousename'] = pdo_fetchcolumn('select storename from ' . tablename('ewei_shop_selfexpress_warehouse') . ' where id=:id limit 1', array(':id' => $row['warehouseid']));
+		}
+//		print_r($list);
 		unset($row);
 		include $this->template();
 	}
@@ -62,9 +69,9 @@ class Warehouse_EweiShopV2Page extends WebPage
 		global $_W;
 		global $_GPC;
 		$id = intval($_GPC['id']);
-		$area_set = m('util')->get_area_config_set();
-		$new_area = intval($area_set['new_area']);
-		$address_street = intval($area_set['address_street']);
+//		$area_set = m('util')->get_area_config_set();
+//		$new_area = intval($area_set['new_area']);
+//		$address_street = intval($area_set['address_street']);
 
 		if ($_W['ispost']) {
 			if (!empty($_GPC['perms'])) {
@@ -74,24 +81,34 @@ class Warehouse_EweiShopV2Page extends WebPage
 				$perms = '';
 			}
 
-//			if (empty($_GPC['logo'])) {
-//				show_json(0, '仓库LOGO不能为空');
-//			}
+			if (empty($_GPC['storename'])) {
+				show_json(0, '配送路线名称不能为空');
+			}else{
+				$hasroute = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_route") . " where storename = :storename ",array(":storename"=>$_GPC['storename']));
+				if($id == $hasroute['id']){
+				}else{
+					if(!empty($hasroute)){
+                        show_json(0, '配送路线已存在');
+					}
+				}
+			}
+
+
             
-//            if($_GPC['province'] == '请选择省份' || $_GPC['city'] == '请选择城市' || $_GPC['area'] == '请选择区域'){
-//                show_json(0, '请完善仓库的省市区信息');
-//            }
+            if($_GPC['province'] == '请选择省份' || $_GPC['city'] == '请选择城市' || $_GPC['area'] == '请选择区域'){
+                show_json(0, '请完善配送路线的省市区信息');
+            }
 
-			if (empty($_GPC['map']['lng']) || empty($_GPC['map']['lat'])) {
-				show_json(0, '仓库位置不能为空');
-			}
+//			if (empty($_GPC['map']['lng']) || empty($_GPC['map']['lat'])) {
+//				show_json(0, '配送路线位置不能为空');
+//			}
 
-			if (empty($_GPC['address'])) {
-				show_json(0, '仓库地址不能为空');
-			}
+//			if (empty($_GPC['address'])) {
+//				show_json(0, '配送路线地址不能为空');
+//			}
 			else {
 				if (30 < mb_strlen($_GPC['address'], 'UTF-8')) {
-					show_json(0, '仓库地址不能超过30个字符');
+					show_json(0, '配送路线地址不能超过30个字符');
 				}
 			}
 
@@ -139,26 +156,49 @@ class Warehouse_EweiShopV2Page extends WebPage
 
 			if (!empty($_GPC['cates'])) {
 				if (3 < count($_GPC['cates'])) {
-					show_json(0, '仓库分类不能超过3个');
+					show_json(0, '配送路线分类不能超过3个');
 				}
 
 				$cates = implode(',', $_GPC['cates']);
 			}
 
 //			if (empty($_GPC['tel']) || strlen(trim($_GPC['tel'])) <= 0) {
-//				show_json(0, '仓库电话不能为空');
+//				show_json(0, '配送路线电话不能为空');
 //			}
-//			else {
-//				if (20 < strlen($_GPC['tel'])) {
-//					show_json(0, '仓库电话不能大于20个字符');
-//				}
-//			}
+			else {
+				if (20 < strlen($_GPC['tel'])) {
+					show_json(0, '配送路线电话不能大于20个字符');
+				}
+			}
 
-//			if (!empty($_GPC['saletime'])) {
-//				if (20 < strlen($_GPC['saletime'])) {
-//					show_json(0, '营业时间不能大于20个字符');
-//				}
-//			}
+			if (!empty($_GPC['saletime'])) {
+				if (20 < strlen($_GPC['saletime'])) {
+					show_json(0, '营业时间不能大于20个字符');
+				}
+			}
+
+            if (!empty($_GPC['personnelid'])) {
+                if (1 == count($_GPC['personnelid'])) {
+
+                }else{
+                    show_json(0, '配送员不能超过1个');
+				}
+                $personnelid = implode(',', $_GPC['personnelid']);
+            }else{
+                show_json(0, '请选择1个配送员');
+			}
+            if (!empty($_GPC['warehouseid'])) {
+                if (1 == count($_GPC['warehouseid'])) {
+//                    show_json(0, '配送员不能超过1个');
+                }else{
+                    show_json(0, '仓库不能超过1个');
+				}
+
+                $warehouseid = implode(',', $_GPC['warehouseid']);
+            }else{
+                show_json(0, '请选择1个仓库');
+			}
+//            show_json(-9,array("list"=>$_GPC["personnelid"]));
 
 			$data = array(
                 'uniacid' => $_W['uniacid'], 
@@ -185,7 +225,9 @@ class Warehouse_EweiShopV2Page extends WebPage
                 'status' => intval($_GPC['status']), 
                 'cates' => $cates, 
                 'perms' => $perms,
-                'merchid' => intval($_GPC['merchid'])
+                'merchid' => intval($_GPC['merchid']),
+                'personnelid' => $personnelid,
+                'warehouseid' => $warehouseid,
             );
             
             //获取地区码
@@ -194,42 +236,33 @@ class Warehouse_EweiShopV2Page extends WebPage
             $data['citycode'] = $area_code['city'];
             $data['areacode'] = $area_code['area'];
 
-			if (p('newstore')) {
-				$data['storegroupid'] = intval($_GPC['storegroupid']);
-			}
+//			if (p('newstore')) {
+//				$data['storegroupid'] = intval($_GPC['storegroupid']);
+//			}
 
 			$data['order_printer'] = is_array($_GPC['order_printer']) ? implode(',', $_GPC['order_printer']) : '';
 			$data['order_template'] = intval($_GPC['order_template']);
 			$data['ordertype'] = is_array($_GPC['ordertype']) ? implode(',', $_GPC['ordertype']) : '';
 
 			if (!empty($id)) {
-                $haswarehouse = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_warehouse") . " where storename = :storename  and id != :id",array(":storename"=>$_GPC['storename'],":id"=>$id));
-                if(!empty($haswarehouse)){
-                    show_json(0, '仓库已存在');
-                }
-				pdo_update('ewei_shop_selfexpress_warehouse', $data, array('id' => $id, 'uniacid' => $_W['uniacid']));
-				plog('shop.warehouse.edit', '编辑仓库 ID: ' . $id);
+				pdo_update('ewei_shop_selfexpress_route', $data, array('id' => $id, 'uniacid' => $_W['uniacid']));
+				plog('shop.route.edit', '编辑配送路线 ID: ' . $id);
 			}
 			else {
-
-                $haswarehouse = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_warehouse") . " where storename = :storename ",array(":storename"=>$_GPC['storename']));
-                if(!empty($haswarehouse)){
-                    show_json(0, '仓库已存在');
-                }
-				pdo_insert('ewei_shop_selfexpress_warehouse', $data);
+				pdo_insert('ewei_shop_selfexpress_route', $data);
 				$id = pdo_insertid();
-				plog('shop.warehouse.add', '添加仓库 ID: ' . $id);
+				plog('shop.route.add', '添加配送路线 ID: ' . $id);
 			}
 
-			show_json(1, array('url' => webUrl('shop.warehouse')));
+			show_json(1, array('url' => webUrl('shop.route')));
 		}
 
-		if (p('newstore')) {
-			$storegroup = pdo_fetchall('SELECT * FROM ' . tablename('ewei_shop_newstore_storegroup') . ' WHERE  uniacid=:uniacid  ', array(':uniacid' => $_W['uniacid']));
-			$category = pdo_fetchall('SELECT * FROM ' . tablename('ewei_shop_newstore_category') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
-		}
+//		if (p('newstore')) {
+//			$storegroup = pdo_fetchall('SELECT * FROM ' . tablename('ewei_shop_newstore_storegroup') . ' WHERE  uniacid=:uniacid  ', array(':uniacid' => $_W['uniacid']));
+//			$category = pdo_fetchall('SELECT * FROM ' . tablename('ewei_shop_newstore_category') . ' WHERE uniacid = :uniacid', array(':uniacid' => $_W['uniacid']));
+//		}
 
-		$item = pdo_fetch('SELECT * FROM ' . tablename('ewei_shop_selfexpress_warehouse') . ' WHERE id =:id and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':id' => $id));
+		$item = pdo_fetch('SELECT * FROM ' . tablename('ewei_shop_selfexpress_route') . ' WHERE id =:id and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':id' => $id));
 		$perms = explode(',', $item['perms']);
 
 		if ($printer = com('printer')) {
@@ -240,11 +273,21 @@ class Warehouse_EweiShopV2Page extends WebPage
 		}
 
         //获取特约零售商信息
-        $merch_model = p('merch');
-        $merch_data = $merch_model->getMerch();
+//        $merch_model = p('merch');
+//        $merch_data = $merch_model->getMerch();
 		$label = explode(',', $item['label']);
 		$tag = explode(',', $item['tag']);
 		$cates = explode(',', $item['cates']);
+
+
+		//获取配送员数组
+		$personnel = pdo_fetchall("select * from " . tablename("ewei_shop_selfexpress_personnel") . " where uniacid=:uniacid and status = 1 order by id asc", array( ":uniacid" => $_W["uniacid"] ));
+//		print_r($item);
+
+		//获取仓库信息
+		$warehouse = pdo_fetchall("select * from " . tablename("ewei_shop_selfexpress_warehouse") . " where uniacid=:uniacid and status = 1 order by id asc", array( ":uniacid" => $_W["uniacid"] ));
+
+
 		include $this->template();
 	}
 
@@ -258,11 +301,11 @@ class Warehouse_EweiShopV2Page extends WebPage
 			$id = is_array($_GPC['ids']) ? implode(',', $_GPC['ids']) : 0;
 		}
 
-		$items = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_warehouse') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
+		$items = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_route') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
 
 		foreach ($items as $item) {
-			pdo_delete('ewei_shop_selfexpress_warehouse', array('id' => $item['id']));
-			plog('shop.warehouse.delete', '删除仓库 ID: ' . $item['id'] . ' 仓库名称: ' . $item['storename'] . ' ');
+			pdo_delete('ewei_shop_selfexpress_route', array('id' => $item['id']));
+			plog('shop.route.delete', '删除配送路线 ID: ' . $item['id'] . ' 配送路线名称: ' . $item['storename'] . ' ');
 		}
 
 		show_json(1, array('url' => referer()));
@@ -274,11 +317,11 @@ class Warehouse_EweiShopV2Page extends WebPage
 		global $_GPC;
 		$id = intval($_GPC['id']);
 		$displayorder = intval($_GPC['value']);
-		$item = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_warehouse') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
+		$item = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_route') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
 
 		if (!empty($item)) {
-			pdo_update('ewei_shop_selfexpress_warehouse', array('displayorder' => $displayorder), array('id' => $id));
-			plog('shop.warehouse.edit', '修改仓库排序 ID: ' . $item['id'] . ' 仓库名称: ' . $item['storename'] . ' 排序: ' . $displayorder . ' ');
+			pdo_update('ewei_shop_selfexpress_route', array('displayorder' => $displayorder), array('id' => $id));
+			plog('shop.route.edit', '修改配送路线排序 ID: ' . $item['id'] . ' 配送路线名称: ' . $item['storename'] . ' 排序: ' . $displayorder . ' ');
 		}
 
 		show_json(1);
@@ -294,11 +337,11 @@ class Warehouse_EweiShopV2Page extends WebPage
 			$id = is_array($_GPC['ids']) ? implode(',', $_GPC['ids']) : 0;
 		}
 
-		$items = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_warehouse') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
+		$items = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_route') . (' WHERE id in( ' . $id . ' ) AND uniacid=') . $_W['uniacid']);
 
 		foreach ($items as $item) {
-			pdo_update('ewei_shop_selfexpress_warehouse', array('status' => intval($_GPC['status'])), array('id' => $item['id']));
-			plog('shop.warehouse.edit', '修改仓库状态<br/>ID: ' . $item['id'] . '<br/>仓库名称: ' . $item['storename'] . '<br/>状态: ' . $_GPC['status'] == 1 ? '启用' : '禁用');
+			pdo_update('ewei_shop_selfexpress_route', array('status' => intval($_GPC['status'])), array('id' => $item['id']));
+			plog('shop.route.edit', '修改配送路线状态<br/>ID: ' . $item['id'] . '<br/>配送路线名称: ' . $item['storename'] . '<br/>状态: ' . $_GPC['status'] == 1 ? '启用' : '禁用');
 		}
 
 		show_json(1, array('url' => referer()));
@@ -322,7 +365,7 @@ class Warehouse_EweiShopV2Page extends WebPage
 			$condition .= ' AND `storename` LIKE :keyword';
 			$params[':keyword'] = '%' . $kwd . '%';
 		}
-		$ds = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_warehouse') . (' WHERE 1 ' . $condition . ' order by id asc'), $params);
+		$ds = pdo_fetchall('SELECT id,storename FROM ' . tablename('ewei_shop_selfexpress_route') . (' WHERE 1 ' . $condition . ' order by id asc'), $params);
 
 		if ($_GPC['suggest']) {
 			exit(json_encode(array('value' => $ds)));

@@ -56,7 +56,7 @@
 			<th style="width:25px;"></th>
                         <th>配送员</th>
                         <th>姓名</th>
-                        <th style="display: none;">所属特约零售商</th>
+                        <th style="width: 160px;">手机号码</th>
                         <th style="display: none;">所属门店</th>
                         <th style="display: none;">角色</th>
                         <th style="display: none;">审核</th>
@@ -74,7 +74,7 @@
                         <!--<td><img src='{php echo tomedia($row['avatar'])}' style='width:30px;height:30px;padding1px;border:1px solid #ccc' onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'"/> {$row['nickname']}</td>-->
                         <td>{$row['id']}</td>
 			<td>{$row['salername']}</td>
-                        <td style="display: none;">{if $row['merchid'] == 0}总店{else}{$row['merchname']}{/if}</td>
+                        <td style="">{$row['mobile']}</td>
                         <td style="display: none;">{if empty($row['salername'])}全店核销{else}{$row['storename']}{/if}</td>
                         <td style="display: none;">{$row['rolename']}</td>
                         <td style="display: none;">
@@ -136,7 +136,7 @@
                             </div>
                         </td>
                         <!--<td colspan="6" class="text-right">-->
-                        <td colspan="2" class="text-right">
+                        <td colspan="3" class="text-right">
                             {$pager}
                         </td>
                     </tr>
