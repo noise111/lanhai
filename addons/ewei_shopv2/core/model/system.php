@@ -825,70 +825,135 @@ class System_EweiShopV2Model {
                     )
                 )
             ) ,
-            "store" => array(
-                "title" => "门店",
-                "subtitle" => "门店",
-                "icon" => "mendianguanli",
+
+            "selfexpress" => array(
+                "title" => "自建配送",
+                "subtitle" => "自建配送管理",
+                "icon" => "order",
                 "items" => array(
                     array(
-                        "title" => "直营门店管理",
-                        "items" => array(
-                            array(
-                                "title" => "直营门店管理",
-                                "route" => "",
-                                "extends" => array(
-                                    "store.diypage.settings",
-                                    "store.diypage.page",
-                                    "store.goods",
-                                    "store.goods.goodsoption"
-                                )
-                            ) ,
-                            array(
-                                "title" => "店员管理",
-                                "route" => "saler"
-                            ) ,
-                            array(
-                                "title" => "店员角色",
-                                "route" => "salerrole"
-                            ) ,
-                            array(
-                                "title" => "关键词设置",
-                                "route" => "set"
-                            )
-                        )
+                        "title" => "配送列表",
+                        "route" => "",
+                        "desc" => "配送列表管理"
+                    ) ,
+//                    array(
+//                        "title" => "配送列表",
+//                        "route" => "list",
+//                        "desc" => "配送列表管理"
+//                    ) ,
+                    array(
+                        "title" => "配送人员",
+                        "route" => "personnel",
+                        "desc" => "配送人员管理"
                     ) ,
                     array(
-                        "title" => "特约门店管理",
-                        "items" => array(
-                            array(
-                                "title" => "特约门店管理",
-                                "route" => "merch_store"
-                            ) ,
-                            array(
-                                "title" => "店员管理",
-                                "route" => "merch_store.saler"
-                            ) 
-                        )
+                        "title" => "仓库管理",
+                        "route" => "warehouse",
+                        "desc" => "仓库管理"
                     ) ,
-                    // array(
-                    //     "title" => "门店商品管理",
-                    //     "items" => array(
-                    //         array("title" => "记次时商品管理", "route" => "verifygoods", "extends" => array(
-                    //             "store.verifygoods.detail",
-                    //             "store.verifygoods.verifygoodslog"
-                    //         ))
-                    //     )
-                    // ) ,
-                    // array(
-                    //     "title" => "记次时商品统计",
-                    //     "route" => "verify.log"
-                    // ) ,
                     array(
-                        "title" => "核销订单记录",
-                        "route" => "verifyorder.log"
-                    )
+                        "title" => "配送路线",
+                        "route" => "route",
+                        "desc" => "自建配送管理"
+                    ) ,
+
+//                    array(
+//                        "title" => "维权",
+//                        "route" => "list",
+//                        "items" => array(
+//                            array(
+//                                "title" => "维权申请",
+//                                "route" => "status4",
+//                                "desc" => "维权申请管理"
+//                            ) ,
+//                            array(
+//                                "title" => "维权完成",
+//                                "route" => "status5",
+//                                "desc" => "维权完成管理"
+//                            )
+//                        )
+//                    ) ,
+//                    array(
+//                        "title" => "工具",
+//                        "items" => array(
+//                            array(
+//                                "title" => "自定义导出",
+//                                "route" => "export",
+//                                "desc" => "订单自定义导出"
+//                            ) ,
+//                            array(
+//                                "title" => "批量发货",
+//                                "route" => "batchsend",
+//                                "desc" => "订单批量发货"
+//                            )
+//                        )
+//                    )
                 )
             ) ,
+//            "store" => array(
+//                "title" => "门店",
+//                "subtitle" => "门店",
+//                "icon" => "mendianguanli",
+//                "items" => array(
+//                    array(
+//                        "title" => "直营门店管理",
+//                        "items" => array(
+//                            array(
+//                                "title" => "直营门店管理",
+//                                "route" => "",
+//                                "extends" => array(
+//                                    "store.diypage.settings",
+//                                    "store.diypage.page",
+//                                    "store.goods",
+//                                    "store.goods.goodsoption"
+//                                )
+//                            ) ,
+//                            array(
+//                                "title" => "店员管理",
+//                                "route" => "saler"
+//                            ) ,
+//                            array(
+//                                "title" => "店员角色",
+//                                "route" => "salerrole"
+//                            ) ,
+//                            array(
+//                                "title" => "关键词设置",
+//                                "route" => "set"
+//                            )
+//                        )
+//                    ) ,
+//                    array(
+//                        "title" => "特约门店管理",
+//                        "items" => array(
+//                            array(
+//                                "title" => "特约门店管理",
+//                                "route" => "merch_store"
+//                            ) ,
+//                            array(
+//                                "title" => "店员管理",
+//                                "route" => "merch_store.saler"
+//                            )
+//                        )
+//                    ) ,
+//                    // array(
+//                    //     "title" => "门店商品管理",
+//                    //     "items" => array(
+//                    //         array("title" => "记次时商品管理", "route" => "verifygoods", "extends" => array(
+//                    //             "store.verifygoods.detail",
+//                    //             "store.verifygoods.verifygoodslog"
+//                    //         ))
+//                    //     )
+//                    // ) ,
+//                    // array(
+//                    //     "title" => "记次时商品统计",
+//                    //     "route" => "verify.log"
+//                    // ) ,
+//                    array(
+//                        "title" => "核销订单记录",
+//                        "route" => "verifyorder.log"
+//                    )
+//                )
+//            ) ,
             "sale" => array(
                 "title" => "营销",
                 "subtitle" => "营销设置",

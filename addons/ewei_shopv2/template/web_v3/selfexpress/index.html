@@ -1,0 +1,132 @@
+{template '_header'}
+
+<div class="page-header">
+    当前位置：<span class="text-primary">配送列表管理</span>
+</div>
+<div class="page-content">
+    <form action="" method="get">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r" value="selfexpress" />
+        <div class="page-toolbar">
+
+            <div class="col-sm-6 pull-right">
+                <div class="input-group">
+                    <input type="text" class="input-sm form-control" name='keyword' value="{$_GPC['keyword']}" placeholder="配送列表名称">
+                    <span class="input-group-btn">
+                     <button class="btn btn-primary" type="submit"> 搜索</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    {if count($list) > 0}
+    <div class="page-table-header">
+        <input type="checkbox">
+        <div class="btn-group">
+            {ifp 'selfexpress.edit'}
+            <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('selfexpress/status',array('status'=>1))}">
+                <i class='icow icow-qiyong'></i> 启用
+            </button>
+            <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch'  data-href="{php echo webUrl('selfexpress/status',array('status'=>0))}">
+                <i class='icow icow-jinyong'></i> 禁用
+            </button>
+            {/if}
+            {ifp 'selfexpress.delete'}
+            <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认要删除?" data-href="{php echo webUrl('selfexpress/delete')}">
+                <i class='icow icow-shanchu1'></i> 删除
+            </button>
+            {/if}
+        </div>
+    </div><!--Mi-->
+    <table class="table table-hover table-responsive">
+        <thead>
+        <tr>
+            <th style="width:25px;"></th>
+            <th style='width:50px'>顺序</th>
+            <th style='width: 200px'>日期</th>
+            <th style='width: 300px;'>描述</th>
+            <th style="">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {loop $list $row}
+        <tr>
+            <td><input type='checkbox'   value="{$row['id']}"/></td>
+            <td>
+                {ifp 'selfexpress.edit'}
+                <a href='javascript:;' data-toggle='ajaxEdit' data-href="{php echo webUrl('selfexpress/displayorder',array('id'=>$row['id']))}" >{$row['displayorder']}</a>
+                {else}
+                {$row['displayorder']}
+                {/if}
+            </td>
+            <td>{$row['createtime']}</td>
+            <td>订单总数：{$row['ordercount']} 货物种类：{$row['goodscount']}</td>
+            <td>
+                {ifp 'selfexpress.view|selfexpress.edit'}
+                <a class='btn btn-default  btn-sm btn-op btn-operation' href="{php echo webUrl('selfexpress/edit', array('id' => $row['id']))}">
+                    <span data-toggle="tooltip" data-placement="top" title="" data-original-title=" {ifp 'selfexpress.edit'}编辑{else}查看 {/if}">
+                      {ifp 'selfexpress.edit'}
+                        <i class='icow icow-bianji2'></i>
+                       {else}
+                        <i class='icow icow-chakan-copy'></i>
+                        {/if}
+                    </span>
+                </a>
+                {/if}
+                {ifp 'selfexpress.delete'}
+                <a class='btn btn-default  btn-sm btn-op btn-operation' data-toggle="ajaxRemove"  href="{php echo webUrl('selfexpress/delete', array('id' => $row['id']))}" data-confirm="确认删除此配送列表吗？">
+                                  <span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">
+                                     <i class='icow icow-shanchu1'></i>
+                                </span>
+                </a>
+                {/if}
+            </td>
+
+        </tr>
+        {/loop}
+        </tbody>
+        <tfoot>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td colspan="2">
+                <div class="btn-group">
+                    {ifp 'selfexpress.edit'}
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch' data-href="{php echo webUrl('selfexpress/status',array('status'=>1))}">
+                        <i class='icow icow-qiyong'></i> 启用
+                    </button>
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch'  data-href="{php echo webUrl('selfexpress/status',array('status'=>0))}">
+                        <i class='icow icow-jinyong'></i> 禁用
+                    </button>
+                    {/if}
+                    {ifp 'selfexpress.delete'}
+                    <button class="btn btn-default btn-sm btn-operation" type="button" data-toggle='batch-remove' data-confirm="确认要删除?" data-href="{php echo webUrl('selfexpress/delete')}">
+                        <i class='icow icow-shanchu1'></i> 删除
+                    </button>
+                    {/if}
+                </div>
+            </td>
+
+            <td colspan="2" class="text-right">
+                {$pager}
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+
+    </form>
+
+
+    {else}
+    <div class='panel panel-default'>
+        <div class='panel-body' style='text-align: center;padding:30px;'>
+            暂时没有任何配送列表!
+        </div>
+    </div>
+    {/if}
+</div>
+{template '_footer'}
+<!--OTEzNzAyMDIzNTAzMjQyOTE0-->
