@@ -7,10 +7,10 @@ if( !defined("IN_IA") )
 return array( 
     "version" => "1.0", 
     "id" => "merch", 
-    "name" => "特约零售商", 
+    "name" => "联盟商",
     "v3" => true, 
     "menu" => array( 
-        "title" => "多商户",
+        "title" => "联盟商",
         "plugincom" => 1, 
         "icon" => "xiaochengxu",
         "iconcolor" => "",
@@ -30,7 +30,7 @@ return array(
                             ) 
             ), 
             array( 
-                "title" => "特约零售商管理", 
+                "title" => "联盟商管理",
                 "route" => "user", 
                 "items" => array( 
                                 array( 
@@ -69,7 +69,7 @@ return array(
                         "route" => "order" 
                         ), 
                     array( 
-                        "title" => "特约零售商统计", 
+                        "title" => "联盟商统计",
                         "route" => "merch" 
                     ) 
                 ) 
@@ -159,7 +159,7 @@ return array(
                         "extends" => array( "merch.cover.merchlist", "merch.cover.merchuser" ) 
                     ), 
                     array( 
-                        "title" => "特约零售商分类幻灯", 
+                        "title" => "联盟商分类幻灯",
                         "route" => "category.swipe", 
                         "extend" => "merch.category.edit_swipe" 
                     ) 

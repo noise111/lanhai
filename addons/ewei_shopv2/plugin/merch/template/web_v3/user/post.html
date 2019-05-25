@@ -12,7 +12,7 @@
     }
 </style>
 <div class="page-header">
-    当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}特约零售商 <small>{if !empty($item['id'])}修改【{$item['merchname']}】{/if}</small>
+    当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}联盟商 <small>{if !empty($item['id'])}修改【{$item['merchname']}】{/if}</small>
  </span>
 </div>
 
@@ -20,7 +20,7 @@
     <div class="page-sub-toolbar">
         <span class='pull-left'>
 		{ifp 'merch.group.add'}
-			<a class="btn btn-primary btn-sm" href="{php echo webUrl('merch/user/add')}">添加新特约零售商</a>
+			<a class="btn btn-primary btn-sm" href="{php echo webUrl('merch/user/add')}">添加新联盟商</a>
 		{/if}
 	</span>
     </div>

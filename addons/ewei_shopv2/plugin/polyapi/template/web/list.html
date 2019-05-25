@@ -68,7 +68,7 @@
                 <option value='saler' {if $_GPC['searchfield']=='saler'}selected{/if}>核销员</option>
                 <option value='store' {if $_GPC['searchfield']=='store'}selected{/if}>核销门店</option>
                 {if $merch_plugin}
-                <option value='merch' {if $_GPC['searchfield']=='merch'}selected{/if}>特约零售商名称</option>
+                <option value='merch' {if $_GPC['searchfield']=='merch'}selected{/if}>联盟商名称</option>
                 {/if}
                 <option value='dispatchname' {if $_GPC['searchfield']=='dispatchname'}selected{/if}>快递公司</option>
             </select>
@@ -245,7 +245,7 @@
                 {/if}
                 {if $item['merchdeductenough']>0}
                 <tr>
-                    <td  style='border:none;text-align:right;'>特约零售商满额立减：</td>
+                    <td  style='border:none;text-align:right;'>联盟商满额立减：</td>
                     <td  style='border:none;text-align:right;;'>-￥{php echo number_format( $item['merchdeductenough'],2)}</td>
                 </tr>
                 {/if}
@@ -319,7 +319,7 @@
     <tr style=";border-bottom:none;background:#f9f9f9;">
         <td colspan='4' style='text-align:left'>
             {if !empty($item['merchname']) && $item['merchid'] > 0}
-            特约零售商名称:<span class="text-info">{$item['merchname']}</span>
+            联盟商名称:<span class="text-info">{$item['merchname']}</span>
             {/if}
             {if !empty($agentid)}
             <b>分销订单级别:</b> {$item['level']}级 <b>分销佣金:</b> {$item['commission']} 元

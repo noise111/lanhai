@@ -31,7 +31,7 @@
                 <div class="input-group">
                     <div class="input-group-select">
                         <select name='searchfield'  class='form-control  input-sm select-md'   style="width:110px;"  >
-                            <option value='member' {if $_GPC['searchfield']=='member'}selected{/if}>特约零售商信息</option>
+                            <option value='member' {if $_GPC['searchfield']=='member'}selected{/if}>联盟商信息</option>
                             <option value='applyno' {if $_GPC['searchfield']=='applyno'}selected{/if}>提现单号</option>
                         </select>
                     </div>
@@ -57,7 +57,7 @@
         <tr>
             <!--<th style="width:25px;"><input type='checkbox' /></th>-->
             <th style="width:200px;">提现单号</th>
-            <th>特约零售商信息</th>
+            <th>联盟商信息</th>
             <th>申请金额<br>抽成后金额</th>
             {if $status > 1}
             {php $col++}

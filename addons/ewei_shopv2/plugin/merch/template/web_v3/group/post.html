@@ -1,12 +1,12 @@
 {template '_header'}
 <div class="page-header">
-	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}特约零售商分组 <small>{if !empty($item['id'])}修改【{$item['groupname']}】{/if}</small></span>
+	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}联盟商分组 <small>{if !empty($item['id'])}修改【{$item['groupname']}】{/if}</small></span>
 </div>
 <div class="page-content">
 	<div class="page-sub-toolbar">
 		<span>
 		{ifp 'merch.group.add'}
-			<a class="btn btn-primary btn-sm" href="{php echo webUrl('merch/group/add')}">添加新特约零售商分组</a>
+			<a class="btn btn-primary btn-sm" href="{php echo webUrl('merch/group/add')}">添加新联盟商分组</a>
 		{/if}
 	</span>
 	</div>
@@ -35,7 +35,7 @@
 			<label class='radio-inline'>
 				<input type='radio' name='goodschecked' value=0' {if $item['goodschecked']==0}checked{/if} /> 否
 			</label>
-			<span class="help-block">特约零售商添加的商品是否免审核</span>
+			<span class="help-block">联盟商添加的商品是否免审核</span>
 			{else}
 			<div class='form-control-static'>{if empty($item['goodschecked'])}否{else}是{/if}</div>
 			{/if}
@@ -52,7 +52,7 @@
 			<label class='radio-inline'>
 				<input type='radio' name='commissionchecked' value=0' {if $item['commissionchecked']==0}checked{/if} /> 否
 			</label>
-			<span class="help-block">特约零售商添加的商品是否可以设置商品佣金</span>
+			<span class="help-block">联盟商添加的商品是否可以设置商品佣金</span>
 			{else}
 			<div class='form-control-static'>{if empty($item['commissionchecked'])}否{else}是{/if}</div>
 			{/if}
@@ -69,7 +69,7 @@
 			<label class='radio-inline'>
 				<input type='radio' name='changepricechecked' value=0' {if $item['changepricechecked']==0}checked{/if} /> 否
 			</label>
-			<span class="help-block">特约零售商是否可以修改订单价格</span>
+			<span class="help-block">联盟商是否可以修改订单价格</span>
 			{else}
 			<div class='form-control-static'>{if empty($item['changepricechecked'])}否{else}是{/if}</div>
 			{/if}
@@ -86,7 +86,7 @@
 			<label class='radio-inline'>
 				<input type='radio' name='finishchecked' value=0' {if $item['finishchecked']==0}checked{/if} /> 否
 			</label>
-			<span class="help-block">特约零售商是否可以在后台点击确认收货</span>
+			<span class="help-block">联盟商是否可以在后台点击确认收货</span>
 			{else}
 			<div class='form-control-static'>{if empty($item['finishchecked'])}否{else}是{/if}</div>
 			{/if}
@@ -105,7 +105,7 @@
 			<label class='radio-inline'>
 				<input type='radio' name='isdefault' value='0' {if $item['isdefault']==0}checked{/if} /> 否
 			</label>
-			<span class="help-block">特约零售商入驻后默认的分组</span>
+			<span class="help-block">联盟商入驻后默认的分组</span>
 			{else}
 			<div class='form-control-static'>{if empty($item['isdefault'])}否{else}是{/if}</div>
 			{/if}

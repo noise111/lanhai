@@ -11,7 +11,7 @@ define(['core', 'tpl', 'biz/plugin/diyform'], function (core, tpl, diyform) {
             var html = btn.html();
             var diyformdata = false;
             if ($('#merchname').isEmpty()) {
-                FoxUI.toast.show('请填写特约零售商名称!');
+                FoxUI.toast.show('请填写联盟商名称!');
                 return
             }
             if ($('#salecate').isEmpty()) {

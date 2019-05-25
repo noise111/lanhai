@@ -4,7 +4,7 @@
 
 <div class="page-header">
 
-    当前位置：<span class="text-primary"> 特约零售商管理 </span>
+    当前位置：<span class="text-primary"> 联盟商管理 </span>
 
 </div>
 
@@ -32,7 +32,7 @@
 
                     <a class='btn btn-primary btn-sm' href="{php echo webUrl('merch/user/add',array('status'=>$_GPC['status']))}">
 
-                        <i class="fa fa-plus"></i> 添加特约零售商</a>
+                        <i class="fa fa-plus"></i> 添加联盟商</a>
 
                 </span>
 
@@ -90,7 +90,7 @@
 
                 </div>
 
-                <input type="text" class="form-control input-sm"  name="keyword" value="{$_GPC['keyword']}" placeholder="特约零售商名称/联系人/手机号"/>
+                <input type="text" class="form-control input-sm"  name="keyword" value="{$_GPC['keyword']}" placeholder="联盟商名称/联系人/手机号"/>
 
 				 <span class="input-group-btn">
 
@@ -156,7 +156,7 @@
 
         <th style="width:25px;"></th>
 
-        <th >特约零售商名称</th>
+        <th >联盟商名称</th>
 
         <th>主营项目</th>
 
@@ -249,7 +249,7 @@
 
             {ifp 'merch.user.delete'}
 
-            <a data-toggle='ajaxRemove' href="{php echo webUrl('merch/user/delete', array('id' => $item['id']))}"class="btn btn-default btn-sm btn-op btn-operation" data-confirm='确认要删除此特约零售商吗?'>
+            <a data-toggle='ajaxRemove' href="{php echo webUrl('merch/user/delete', array('id' => $item['id']))}"class="btn btn-default btn-sm btn-op btn-operation" data-confirm='确认要删除此联盟商吗?'>
 
                 <span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除">
 
@@ -329,7 +329,7 @@
 
     <div class='panel-body' style='text-align: center;padding:30px;'>
 
-        暂时没有任何特约零售商!
+        暂时没有任何联盟商!
 
     </div>
 

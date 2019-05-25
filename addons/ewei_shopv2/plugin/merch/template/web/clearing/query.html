@@ -1,8 +1,8 @@
 <div style='max-height:500px;overflow:auto;min-width:850px;'>
 <table class="table table-hover" style="min-width:850px;">
     <thead>
-        <th>特约零售商名称</th>
-        <th>特约零售商信息</th>
+        <th>联盟商名称</th>
+        <th>联盟商信息</th>
     </thead>
     <tbody>
         {loop $ds $row}
@@ -14,7 +14,7 @@
         {/loop}
         {if count($ds)<=0}
         <tr>
-            <td colspan='3' align='center'>未找到特约零售商</td>
+            <td colspan='3' align='center'>未找到联盟商</td>
         </tr>
         {/if}
     </tbody>

@@ -100,7 +100,7 @@
 
             {php echo tpl_selector('openids',array('key'=>'openid','text'=>'nickname', 'thumb'=>'avatar','multi'=>1,'placeholder'=>'昵称/姓名/手机号','buttontext'=>'选择通知人', 'items'=>$salers,'url'=>webUrl('member/query') ))}
 
-            <span class='help-block'>选择特约零售商下面所有通知的通知人，可以指定多个人，如果不填写则不通知</span>
+            <span class='help-block'>选择联盟商下面所有通知的通知人，可以指定多个人，如果不填写则不通知</span>
 
             {else}
 
@@ -138,7 +138,7 @@
 
                 <input type="text" name="data[merch_applytitle]" class="form-control" value="{$data['tm']['merch_applytitle']}" />
 
-                <div class="help-block">标题，默认"特约零售商入驻申请"</div>
+                <div class="help-block">标题，默认"联盟商入驻申请"</div>
 
             </div>
 
@@ -154,9 +154,9 @@
 
                 <textarea  name="data[merch_apply]" class="form-control" >{$data['tm']['merch_apply']}</textarea>
 
-                模板变量: [特约零售商名称] [主营项目] [联系人] [手机号] [申请时间]
+                模板变量: [联盟商名称] [主营项目] [联系人] [手机号] [申请时间]
 
-                <br/>如果不填写默认内容为: [特约零售商名称]在[申请时间]提交了入驻申请，请到后台查看~
+                <br/>如果不填写默认内容为: [联盟商名称]在[申请时间]提交了入驻申请，请到后台查看~
 
             </div>
 
@@ -242,7 +242,7 @@
 
             {php echo tpl_selector('applyopenids',array('key'=>'openid','text'=>'nickname', 'thumb'=>'avatar','multi'=>1,'placeholder'=>'昵称/姓名/手机号','buttontext'=>'选择通知人', 'items'=>$applysalers,'url'=>webUrl('member/query') ))}
 
-            <span class='help-block'>选择特约零售商下面所有通知的通知人，可以指定多个人，如果不填写则不通知</span>
+            <span class='help-block'>选择联盟商下面所有通知的通知人，可以指定多个人，如果不填写则不通知</span>
 
             {else}
 
@@ -306,7 +306,7 @@
 
                 <textarea  name="data[merch_applymoney]" class="form-control" >{$data['tm']['merch_applymoney']}</textarea>
 
-                模板变量  [特约零售商名称] [金额] [联系人] [手机号] [申请时间]
+                模板变量  [联盟商名称] [金额] [联系人] [手机号] [申请时间]
 
                 {else}
 

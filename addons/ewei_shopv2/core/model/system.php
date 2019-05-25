@@ -1081,14 +1081,14 @@ class System_EweiShopV2Model {
                         )
                     ),
                     array(
-                        "title" => "多商户统计",
+                        "title" => "联盟商统计",
                         "items" => array(
                             array(
                                 "title" => "订单统计",
                                 "route" => "merch.order"
                             ) ,
                             array(
-                                "title" => "多商户统计",
+                                "title" => "联盟商统计",
                                 "route" => "merch.merch"
                             ) ,
 

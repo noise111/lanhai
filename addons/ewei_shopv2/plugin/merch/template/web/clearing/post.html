@@ -13,11 +13,11 @@
 <form id="setform" action="" method="post" class="form-horizontal form-validate">
     <input type="hidden" name="clearno" value="{$item['clearno']}">
 <div class="form-group">
-    <label class="col-sm-2 control-label must">特约零售商名称</label>
+    <label class="col-sm-2 control-label must">联盟商名称</label>
     <div class="col-sm-8">
         {ife 'merch.clearing' $item}
         {if !$id}
-        {php echo tpl_selector('merchid',array('required'=>true,'preview'=>false,'text'=>'merchname','type'=>'text','placeholder'=>'特约零售商名称/姓名/手机号','buttontext'=>'选择特约零售商 ', 'items'=>$merch,'url'=>webUrl('merch/clearing/query') ))}
+        {php echo tpl_selector('merchid',array('required'=>true,'preview'=>false,'text'=>'merchname','type'=>'text','placeholder'=>'联盟商名称/姓名/手机号','buttontext'=>'选择特约零售商 ', 'items'=>$merch,'url'=>webUrl('merch/clearing/query') ))}
         {else}
         <input type="hidden" name="merchid" value="{$merch['id']}">
         <div class="form-control-static">{$merch['merchname']}</div>
@@ -35,7 +35,7 @@
         {ife 'merch.clearing' $item}
         {if !$id}
         {php echo tpl_daterange('datetime', array('starttime'=>$_GPC['datetime']['start'],'endtime'=>$_GPC['datetime']['end'],'sm'=>true,'placeholder'=>'按结算时间查询'),true);}
-        <div class="help-block">请先选择特约零售商,再选择时间! 否则不计算</div>
+        <div class="help-block">请先选择联盟商,再选择时间! 否则不计算</div>
         {else}
         <div class="form-control-static">{php echo date('Y/m/d H:i',$item['starttime'])} - {php echo date('Y/m/d H:i',$item['endtime'])}</div>
         {/if}
@@ -134,9 +134,9 @@
         </div>
     </div>
 
-    <div class="form-group-title">特约零售商自身促销</div>
+    <div class="form-group-title">联盟商自身促销</div>
     <div class="form-group">
-        <label class="col-sm-2 control-label must">特约零售商满减金额</label>
+        <label class="col-sm-2 control-label must">联盟商满减金额</label>
         <div class="col-sm-6 col-xs-12">
             {ife 'merch.clearing' $item}
             <input type="text" name="merchdeductenough" class="form-control" readonly required value="{$item['merchdeductenough']}" />
@@ -146,7 +146,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-2 control-label must">特约零售商优惠券金额</label>
+        <label class="col-sm-2 control-label must">联盟商优惠券金额</label>
         <div class="col-sm-6 col-xs-12">
             {ife 'merch.clearing' $item}
             <input type="text" name="merchcouponprice" class="form-control" readonly required value="{$item['merchcouponprice']}" />
