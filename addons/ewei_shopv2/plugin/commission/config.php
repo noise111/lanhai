@@ -6,18 +6,20 @@ if (!defined('IN_IA')) {
 return array(
 	'version' => '1.0',
 	'id'      => 'commission',
-	'name'    => '人人分销',
+	'name'    => '导购',
 	'v3'      => true,
 	'menu'    => array(
 		'plugincom' => 1,
-		'icon'      => 'page',
+        'title' => '导购',
+		'icon'      => 'member',
+		'iconcolor'      => 'rgb(7, 89, 135)',
 		'items'     => array(
-			array('title' => '分销商管理', 'route' => 'agent'),
+			array('title' => '导购管理', 'route' => 'agent'),
 			array('title' => '增长趋势统计', 'route' => 'increase'),
-			array('title' => '分销商等级', 'route' => 'level'),
-			array('title' => '分销订单', 'route' => 'statistics.order'),
-			array('title' => '分销商统计', 'route' => 'statistics.agent'),
-			array('title' => '分销关系', 'route' => 'statistics.user'),
+			array('title' => '导购等级', 'route' => 'level'),
+			array('title' => '导购订单', 'route' => 'statistics.order'),
+			array('title' => '导购商统计', 'route' => 'statistics.agent'),
+			array('title' => '导购关系', 'route' => 'statistics.user'),
 			array(
 				'title' => '提现申请',
 				'route' => 'apply',

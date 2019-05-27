@@ -391,10 +391,12 @@ if( !class_exists("CommissionModel") )
 			$set = $this->getSet();
 			$level = intval($set["level"]);
 			$member = m("member")->getMember($openid);
+//            return $this->getInfo;die;
 			$agentLevel = $this->getLevel($openid);
 			$time = time();
 			$day_times = intval($set["settledays"]) * 3600 * 24;
 			$agentcount = 0;
+			$agentcount0 = 0;
 			$ordercount0 = 0;
 			$ordermoney0 = 0;
 			$ordercount = 0;
@@ -587,6 +589,10 @@ if( !class_exists("CommissionModel") )
 				$level1_agentids = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where agentid=:agentid and isagent=1 and status=1 and uniacid=:uniacid ", array( ":uniacid" => $_W["uniacid"], ":agentid" => $member["id"] ), "id");
 				$level1 = count($level1_agentids);
 				$agentcount += $level1;
+
+                $level1_agentids0 = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where agentid=:agentid and isagent=1 and status=0 and uniacid=:uniacid ", array( ":uniacid" => $_W["uniacid"], ":agentid" => $member["id"] ), "id");
+                $level10 = count($level1_agentids0);
+                $agentcount0 += $level10;
 			}
 			if( 2 <= $level && 0 < $level1 ) 
 			{
@@ -751,6 +757,11 @@ if( !class_exists("CommissionModel") )
 				$level2_agentids = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where agentid in( " . implode(",", array_keys($level1_agentids)) . ") and isagent=1 and status=1 and uniacid=:uniacid", array( ":uniacid" => $_W["uniacid"] ), "id");
 				$level2 = count($level2_agentids);
 				$agentcount += $level2;
+
+                $level2_agentids0 = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where agentid in( " . implode(",", array_keys($level1_agentids0)) . ") and isagent=1 and status=0 and uniacid=:uniacid", array( ":uniacid" => $_W["uniacid"] ), "id");
+                $level20 = count($level2_agentids0);
+                $agentcount0 += $level20;
+
 			}
 			if( 3 <= $level && 0 < $level2 ) 
 			{
@@ -915,8 +926,14 @@ if( !class_exists("CommissionModel") )
 				$level3_agentids = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where uniacid=:uniacid and agentid in( " . implode(",", array_keys($level2_agentids)) . ") and isagent=1 and status=1", array( ":uniacid" => $_W["uniacid"] ), "id");
 				$level3 = count($level3_agentids);
 				$agentcount += $level3;
+
+                $level3_agentids0 = pdo_fetchall("select id from " . tablename("ewei_shop_member") . " where uniacid=:uniacid and agentid in( " . implode(",", array_keys($level2_agentids0)) . ") and isagent=1 and status=0", array( ":uniacid" => $_W["uniacid"] ), "id");
+                $level30 = count($level3_agentids0);
+                $agentcount0 += $level30;
 			}
 			$member["agentcount"] = $agentcount;
+			//20190527 新增 所有分销商不管是否通过社审核
+			$member["agentcount0"] = $agentcount0;
 			$member["ordercount"] = $ordercount;
 			$member["ordermoney"] = $ordermoney;
 			$member["order1"] = $order1;

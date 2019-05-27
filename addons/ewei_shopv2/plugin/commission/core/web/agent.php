@@ -89,8 +89,10 @@ class Agent_EweiShopV2Page extends PluginWebPage
 		foreach( $list as &$row ) 
 		{
 			$info = $this->model->getInfo($row["openid"], array( "total", "pay" ));
+//            $row["llist"] = $info;
 			$row["levelcount"] = $info["agentcount"];
-			if( 1 <= $level ) 
+			$row["levelcount0"] = $info["agentcount0"];
+			if( 1 <= $level )
 			{
 				$row["level1"] = $info["level1"];
 			}
@@ -154,6 +156,7 @@ class Agent_EweiShopV2Page extends PluginWebPage
 			}
 			m("excel")->export($list, array( "title" => "分销商数据-" . date("Y-m-d-H-i", time()), "columns" => $columns ));
 		}
+//		print_r($list);
 		$pager = pagination2($total, $pindex, $psize);
 		load()->func("tpl");
 		include($this->template());
@@ -184,6 +187,7 @@ class Agent_EweiShopV2Page extends PluginWebPage
 		$agentid = intval($_GPC["id"]);
 		$member = $this->model->getInfo($agentid);
 		$total = $member["agentcount"];
+		$total0 = $member["agentcount0"];
 		$level1 = $member["level1"];
 		$level2 = $member["level2"];
 		$level3 = $member["level3"];

@@ -13,6 +13,11 @@
 				<li class="active"><a data-toggle="tab" href="#tab-basic" aria-expanded="true"> 基本信息</a></li>
 				<li class=""><a data-toggle="tab" href="#tab-trade" aria-expanded="false"> 交易信息</a></li>		                            
                 <li class=""><a data-toggle="tab" href="#tab-coupon-relation" aria-expanded="false"> 归属信息</a></li>
+				{if $hascommission}
+				{ifp 'commission.agent.main'}
+				<li class=""><a data-toggle="tab" href="#tab-commission" aria-expanded="false"> 导购/分销商 信息</a></li>
+				{/if}
+				{/if}
 				{if $hasglobonus}
 				<li class=""><a data-toggle="tab" href="#tab-globonus" aria-expanded="false">股东信息</a></li>
 				{/if}

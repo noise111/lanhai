@@ -60,7 +60,7 @@
            </div>
         </div>
         <div class="info" style="text-align: center">
-            <p class="pull-left" style="color: #999;width: 120px;"> 下级分销商：</p>
+            <p class="pull-left" style="color: #999;width: 120px;"> 下级导购：</p>
             <div  class="pull-left">
                 总共：<span class="text-danger">{$member['agentcount']}</span> 人<br/>
                 {if $this->set['level']>=1}一级：<span class="text-danger">{$level1} </span>  人{/if}<br/>
@@ -71,6 +71,10 @@
         </div>
         <div style="padding: 40px 20px;float: left">
             下级会员(非分销商): <span style='color:red'>{$level11}</span> 人    <br/>
+        </div>
+    <!--20190527 新增未通过审核分销商-->
+        <div style="padding: 40px 20px;float: left">
+            下级会员(未通过审核分销商): <span style='color:red'>{$total0}</span> 人    <br/>
         </div>
         <div style="clear: both"></div>
 </div>
@@ -85,16 +89,23 @@
     <div class="page-toolbar m-b-sm m-t-sm ">
         <div class="col-sm-12 pull-right">
             <span class="pull-left">
-                 {php echo tpl_daterange('time', array('sm'=>true, 'placeholder'=>'成为分销商时间'),true);}
+                 {php echo tpl_daterange('time', array('sm'=>true, 'placeholder'=>'成为导购时间'),true);}
             </span>
             <div class="input-group">
                 <span class="input-group-select">
                      <select name='isagent'  class='form-control  input-sm'  >
-                         <option value=''>是否分销商</option>
+                         <option value=''>是否导购</option>
                          <option value='0' {if $_GPC['isagent']=='0'}selected{/if}>不是</option>
                          <option value='1' {if $_GPC['isagent']=='1'}selected{/if}>是</option>
                      </select>
                 </span>
+                <!--<span class="input-group-select">-->
+                     <!--<select name='isagent'  class='form-control  input-sm'  >-->
+                         <!--<option value=''>是否通过审核</option>-->
+                         <!--<option value='0' {if $_GPC['status']=='0'}selected{/if}>不是</option>-->
+                         <!--<option value='1' {if $_GPC['status']=='1'}selected{/if}>是</option>-->
+                     <!--</select>-->
+                <!--</span>-->
                 <span class="input-group-select">
                      <select name='level' class='form-control  input-sm' >
                          <option value=''>下线层级</option>
@@ -152,7 +163,7 @@
             <th>姓名<br/>手机号码</th>
             <th >等级</th>
             <th>累计佣金<br/>打款佣金</th>
-            <th>下级分销商</th>
+            <th>下级导购</th>
 
             <th>注册时间</th>
             <th>审核时间</th>
@@ -274,8 +285,8 @@
                         </a>
                         {/if}
                     {ifp 'commission.agent.delete'}
-                    <a class="btn  btn-op btn-operation" data-toggle='ajaxRemove' href="{php echo webUrl('commission/agent/delete',array('id' => $row['id']));}" title="删除" data-confirm="确定要删除该分销商吗？">
-                                       <span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除分销商">
+                    <a class="btn  btn-op btn-operation" data-toggle='ajaxRemove' href="{php echo webUrl('commission/agent/delete',array('id' => $row['id']));}" title="删除" data-confirm="确定要删除该导购吗？">
+                                       <span data-toggle="tooltip" data-placement="top" title="" data-original-title="删除导购">
                                                <i class='icow icow-shanchu1'></i>
                                             </span>
                     </a>
@@ -311,7 +322,7 @@
     {else}
     <div class='panel panel-default'>
         <div class='panel-body' style='text-align: center;padding:30px;'>
-            暂时没有任何分销商!
+            暂时没有任何导购!
         </div>
     </div>
     {/if}
