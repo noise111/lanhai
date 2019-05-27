@@ -11,6 +11,15 @@ class Express_EweiShopV2Model
 		$data = pdo_fetchall($sql);
 		return $data;
 	}
+
+    public function getExpresspersonnelList()
+    {
+        global $_W;
+        $sql = 'select * from ' . tablename('ewei_shop_selfexpress_personnel') . ' where status=1 order by id asc';
+        $data = (pdo_fetchall($sql));
+//        print_r($data);die;
+        return $data;
+    }
 }
 
 if (!defined('IN_IA')) {

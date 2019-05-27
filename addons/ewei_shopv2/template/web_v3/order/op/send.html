@@ -26,7 +26,8 @@
 						<label class="col-sm-2 control-label">快递公司</label>
 						<div class="col-sm-9 col-xs-12">
 							<select class="form-control" name="express" {if $item['city_express_state']==1}disabled="disabled"{/if} id="express">
-                                <option value="" data-name="">{if $item['city_express_state']==0}其他快递{else}同城配送{/if}</option>
+							<option value="zj" data-name="自建配送">自建配送</option>
+							<option value="" data-name="">{if $item['city_express_state']==0}其他快递{else}同城配送{/if}</option>
                                 {loop $express_list $value}
                                 <option value="{$value['express']}" {if $item['express']==$value['express']}selected{/if} data-name="{$value['name']}">{$value['name']}</option>
                                 {/loop}
@@ -34,7 +35,19 @@
 							<input type='hidden' name='expresscom' id='expresscom' value="{$item['expresscom']}"/>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group psy">
+						<label class="col-sm-2 control-label">配送员</label>
+						<input type='hidden' name='isexpresspersonnel' id='isexpresspersonnel' value=""/>
+						<div class="col-sm-9 col-xs-12">
+							<select class="form-control" name="express" id="expresspersonnel">
+							{loop $expresspersonnel_list $personnelvalue}
+							<option value="{$personnelvalue['id']}" {if $item['expresspersonnelid']==$personnelvalue['id']}selected{/if} data-name="{$personnelvalue['salername']}">{$personnelvalue['salername']}</option>
+							{/loop}
+							</select>
+							<input type='hidden' name='expresspersonnelid' id='expresspersonnelid' value="{$item['expresspersonnelid']}"/>
+						</div>
+					</div>
+					<div class="form-group kdh">
 						<label class="col-sm-2 control-label must">快递单号</label>
 						<div class="col-sm-9 col-xs-12">
 							<input id="express_no" type="text" name="expresssn" class="form-control" {if $item['city_express_state']==1}disabled="disabled"{/if} value="{$item['expresssn']}" />
@@ -219,8 +232,26 @@
     $("#express").change(function () {
         var obj = $(this);
         var sel = obj.find("option:selected").attr("data-name");
+//        console.log(sel);
+        if(sel == '自建配送'){
+            $(".psy").show();
+            $(".kdh").hide();
+            $("#isexpresspersonnel").val(1);
+		}else{
+            $(".psy").hide();
+            $(".kdh").show();
+            $("#isexpresspersonnel").val('');
+		}
         $("#expresscom").val(sel);
     });
+
+    $("#expresspersonnel").change(function(){
+        var obj2 = $(this);
+//        var sel2 = obj2.find("option:selected").attr("data-name");
+        var sel2 = obj2.find("option:selected").val();
+//        console.log(sel2);
+        $("#expresspersonnelid").val(sel2);
+	});
 
 	$("input[name=sendtype]").off("click").on("click",function(){
 		window.sendtype = $(this).val();

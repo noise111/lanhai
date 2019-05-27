@@ -509,11 +509,24 @@ class Op_EweiShopV2Page extends WebPage
 		{
 			if( $item["city_express_state"] == 0 ) 
 			{
-				if(!empty($item['addressid']) && empty($_GPC["expresssn"]) ) 
-				{
-					show_json(0, "请输入快递单号！");
-				}
-				if( !empty($item["transid"]) ) 
+			    if($_GPC["isexpresspersonnel"] != 1){
+                    if(!empty($item['addressid']) && empty($_GPC["expresssn"]))
+                    {
+//                        show_json(0, array('list'=>$_GPC));
+                        show_json(0, "请输入快递单号！");
+                    }
+                }else{
+                    if(empty($_GPC['expresspersonnelid'])){
+//                        show_json(0, array('list2'=>$_GPC));
+                        show_json(0, "请选择配送员！");
+                    }
+                }
+
+//                show_json(0, array('list3'=>$_GPC));
+				if(!empty($_GPC["isexpresspersonnel"]) && empty($_GPC['expresspersonnelid'])){
+                    show_json(0, "请选择配送员！");
+                }
+				if( !empty($item["transid"]) )
 				{
 				}
                 
@@ -557,7 +570,8 @@ class Op_EweiShopV2Page extends WebPage
                     "express" => trim($_GPC["express"]), 
                     "expresscom" => trim($_GPC["expresscom"]), 
                     "expresssn" => trim($_GPC["expresssn"]), 
-                    "sendtime" => $time 
+                    "sendtime" => $time ,
+                    "expresspersonnelid" => $_GPC['expresspersonnelid'] ,
                 );
 				if( intval($_GPC["sendtype"]) == 1 || 0 < $item["sendtype"] ) 
 				{
@@ -567,7 +581,11 @@ class Op_EweiShopV2Page extends WebPage
 					}
 					$ogoods = array( );
 					$ogoods = pdo_fetchall("select sendtype from " . tablename("ewei_shop_order_goods") . "\r\n                        where orderid = " . $item["id"] . " and uniacid = " . $_W["uniacid"] . " order by sendtype desc ");
-					$senddata = array( "sendtype" => $ogoods[0]["sendtype"] + 1, "sendtime" => $data["sendtime"] );
+					$senddata = array(
+					    "sendtype" => $ogoods[0]["sendtype"] + 1,
+                        "sendtime" => $data["sendtime"] ,
+//                        "expresspersonnelid" => $data["expresspersonnelid"] ,
+                    );
 					$data["sendtype"] = $ogoods[0]["sendtype"] + 1;
 					$goodsid = $_GPC["ordergoodsid"];
 					foreach( $goodsid as $key => $value ) 
@@ -575,7 +593,7 @@ class Op_EweiShopV2Page extends WebPage
 						pdo_update("ewei_shop_order_goods", $data, array( "id" => $value, "uniacid" => $_W["uniacid"] ));
 					}
 					$send_goods = pdo_fetch("select * from " . tablename("ewei_shop_order_goods") . "\r\n                        where orderid = " . $item["id"] . " and sendtype = 0 and uniacid = " . $_W["uniacid"] . " limit 1 ");
-					if( empty($send_goods) ) 
+					if( empty($send_goods) )
 					{
 						$senddata["status"] = 2;
 					}
@@ -650,6 +668,10 @@ class Op_EweiShopV2Page extends WebPage
 			$address = pdo_fetch("SELECT * FROM " . tablename("ewei_shop_member_address") . " WHERE id = :id and uniacid=:uniacid", array( ":id" => $item["addressid"], ":uniacid" => $_W["uniacid"] ));
 		}
 		$express_list = m("express")->getExpressList();
+
+		//获取配送员列表
+        $expresspersonnel_list = m("express")->getExpresspersonnelList();
+
         //获取批次信息
         $batch_list = array();
         foreach($order_goods as &$ogoods){
@@ -758,6 +780,8 @@ class Op_EweiShopV2Page extends WebPage
 			$address = pdo_fetch("SELECT * FROM " . tablename("ewei_shop_member_address") . " WHERE id = :id and uniacid=:uniacid", array( ":id" => $item["addressid"], ":uniacid" => $_W["uniacid"] ));
 		}
 		$express_list = m("express")->getExpressList();
+		//获取配送员列表
+        $expresspersonnel_list = m("express")->getExpresspersonnelList();
 		include($this->template("order/op/send"));
 	}
 	public function changeaddress() 
