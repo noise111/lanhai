@@ -891,6 +891,62 @@ class System_EweiShopV2Model {
                 )
             ) ,
             "commission" => $this->pluginMenu("commission") ,
+            "reservation" => array(
+                "title" => "预约",
+                "subtitle" => "预约管理",
+                "icon" => "mendianguanli",
+                "items" => array(
+                    array(
+                        "title" => "预约记录",
+                        "route" => ""
+                    ),
+                    array(
+                        "title" => "预约管理",
+                        "items" => array(
+//                            array(
+//                                "title" => "预约管理",
+//                                "route" => "",
+//                                "extends" => array(
+//                                    "reservation.diypage.settings",
+//                                    "reservation.diypage.page",
+//                                    "reservation.goods",
+//                                    "reservation.goods.goodsoption"
+//                                )
+//                            ) ,
+                            array(
+                                "title" => "服务人员管理",
+                                "route" => "saler"
+                            ) ,
+                            array(
+                                "title" => "服务人员角色",
+                                "route" => "salerrole"
+                            ) ,
+//                            array(
+//                                "title" => "关键词设置",
+//                                "route" => "set"
+//                            )
+                        )
+                    ) ,
+                    // array(
+                    //     "title" => "门店商品管理",
+                    //     "items" => array(
+                    //         array("title" => "记次时商品管理", "route" => "verifygoods", "extends" => array(
+                    //             "store.verifygoods.detail",
+                    //             "store.verifygoods.verifygoodslog"
+                    //         ))
+                    //     )
+                    // ) ,
+                    // array(
+                    //     "title" => "记次时商品统计",
+                    //     "route" => "verify.log"
+                    // ) ,
+//                    array(
+//                        "title" => "预约记录",
+//                        "route" => "reservationlist"
+//                    ),
+                )
+            ) ,
+
             "store" => array(
                 "title" => "门店",
                 "subtitle" => "门店",

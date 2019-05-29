@@ -1,0 +1,203 @@
+{template '_header'}
+<script type="text/javascript" src="../addons/ewei_shopv2/static/js/dist/area/cascade.js"></script>
+<style>
+    .checkbox-inline{
+        display: block;
+    }    .btns a i{
+        display: inline-block;
+        width: 100%;
+        height: 20px;
+        background: #f95959;
+    }
+    .btn-color {
+        width: 25px;
+        height: 25px;
+        border: 1px solid #fff;
+        margin: 2px;
+        padding: 0;
+    }
+
+</style>
+<div class="page-header">
+    当前位置：<span class="text-primary">预约详情
+    </span>
+</div>
+
+<div class="page-content">
+<form action="{php echo webUrl('reservation.detail')}" method="post" class="form-horizontal form-validate" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{$item['id']}"/>
+    <input type="hidden" name="finishtime" value="{$item['finishtime']}"/>
+
+    <div class="form-group">
+        <label class="col-lg control-label must">分配人员</label>
+        <div class="col-sm-9 col-xs-12">
+            <select id="sel-merchid" name="merchid" class="select form-control select-group">
+                <option value="0" selected="true">未分配</option>
+                {loop $reservationsaler $key $res_saler}
+                    <option value="{$res_saler['id']}" {if $item['workerid'] == $res_saler['id']}selected="true"{/if}>{$res_saler['salername']}</option>
+                {/loop}
+            </select>
+        </div>
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label class="col-lg control-label">联系人信息</label>-->
+        <!--<div class="col-sm-10 col-xs-12">-->
+            <!--<label class="radio-inline" style="float: left;padding-left:0px;">姓名</label>-->
+            <!--<div class="col-sm-9 col-xs-12" style="width: 120px; float: left; margin: 0px 20px 0px -5px;">-->
+                <!--<input type="text" value="{$item['name']}" class="form-control" name="realname"-->
+                       <!--style="width:120px;padding:5px;">-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <div class="form-group">
+        <label class="col-lg control-label">联系人信息</label>
+        <div class="col-sm-10 col-xs-12">
+            {ife 'reservation.reservationlist' $item}
+                <label class="radio-inline" style="float: left;padding-left:0px;">姓名</label>
+                <div class="col-sm-9 col-xs-12" style="width: 120px; float: left; margin: 0px 20px 0px -5px;">
+                    <input type="text" value="{$item['name']}" class="form-control" name="realname"
+                           style="width:120px;padding:5px;">
+                </div>
+                <label class="radio-inline" style="float: left;">电话</label>
+                <div class="col-sm-9 col-xs-12" style="width: 120px; float: left; margin: 0px 20px 0px -5px;">
+                    <input type="text" value="{$item['mobile']}" class="form-control" name="mobile"
+                           style="width:120px;padding:5px;">
+                </div>
+                <label class="radio-inline" style="float: left;">面积（平方米）</label>
+                <div class="col-sm-9 col-xs-12" style="width: 120px; float: left; margin: 0px 20px 0px -5px;">
+                    <input type="text" value="{$item['area']}" class="form-control" name="area"
+                           style="width:120px;padding:5px;">
+                </div>
+            {else}
+                <div class='form-control-static'>联系人:{$item['name']} 联系电话:{$item['mobile']}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">户型</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'reservation' $item}
+            {loop $housetype $key $housetypex}
+            <label class='radio-inline'>
+                <input type='radio' name='housetype' value="{$key}" {if $item['housetype']==$key}checked{/if} />{$housetypex}
+            </label>
+            {/loop}
+            <!--<label class='radio-inline'>-->
+                <!--<input type='radio' name='housetype' value=0' {if $item['status']==0}checked{/if} /> 否-->
+            <!--</label>-->
+            {else}
+            <div class='form-control-static'>{if $item['status']==1}是{else}否{/if}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">预约地址</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'reservation.reservationlist' $item}
+            <textarea name="desc" class="form-control richtext" rows="5">{$item['add']}</textarea>
+            {else}
+            <div class='form-control-static'>{$item['add']}</div>
+            {/if}
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="col-lg control-label">已服务</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'reservation' $item}
+            <label class='radio-inline'>
+                <input type='radio' name='status' value=1' {if $item['status']==1}checked{/if} /> 是
+            </label>
+            <label class='radio-inline'>
+                <input type='radio' name='status' value=0' {if $item['status']==0}checked{/if} /> 否
+            </label>
+            {else}
+            <div class='form-control-static'>{if $item['status']==1}是{else}否{/if}</div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label">备注</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'reservation' $item}
+            <textarea name="remark" class="form-control richtext" rows="5">{$item['remark']}</textarea>
+            {else}
+            <div class='form-control-static'>{$item['remark']}</div>
+            {/if}
+        </div>
+    </div>
+
+
+
+    <div class="form-group"></div>
+    <div class="form-group">
+        <label class="col-lg control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'reservation' $item}
+            <input type="submit" value="提交" class="btn btn-primary"/>
+
+            {/if}
+            <input type="button" name="back" onclick='history.back()' {ifp  'reservation'}style='margin-left:10px;'{/if} value="返回列表" class="btn btn-default" />
+        </div>
+    </div>
+</form>
+</div>
+<script language='javascript'>
+    $(function () {
+        $(':radio[name=type]').click(function () {
+            type = $("input[name='type']:checked").val();
+
+            if (type == '1' || type == '3') {
+                $('#pick_info').show();
+            } else {
+                $('#pick_info').hide();
+            }
+        })
+    })
+
+    //添加标签
+    function addLabelItem(){
+        if($('.label-items')[0].childElementCount<8)
+        {
+            var html= '<div class="input-group recharge-item"  style="width:300px;margin-top:5px">';
+            html+='<span class="input-group-addon">内容</span>';
+            html+='<input type="text" class="form-control"  style="width:200px;" maxlength="20" name="lab[]"  />';
+            html+='<div class="input-group-btn"><button class="btn btn-danger" type="button" onclick="removeLabelItem(this)"><i class="fa fa-remove"></i></button></div></div>';
+
+            $('.label-items').append(html);
+        }else{
+            tip.msgbox.err("标签最多八个!");
+        }
+    }
+
+    //添加角标
+    function addTagItem(){
+        if($('.tag-items')[0].childElementCount<3)
+        {
+            var html= '<div class="input-group recharge-item"  style="width:300px;margin-top:5px">';
+            html+='<span class="input-group-addon">内容</span>';
+            html+='<input type="text" class="form-control"  style="width:200px;" maxlength="3" name="tag[]"  />';
+            html+='<div class="input-group-btn"><button class="btn btn-danger" type="button" onclick="removeTagItem(this)"><i class="fa fa-remove"></i></button></div></div>';
+
+            $('.tag-items').append(html);
+        }else{
+            tip.msgbox.err("角标最多三个!");
+        }
+    }
+
+    //删除标签
+    function removeLabelItem(obj){
+        $(obj).closest('.recharge-item').remove();
+    }
+    //删除角标
+    function removeTagItem(obj){
+        $(obj).closest('.recharge-item').remove();
+    }
+
+    cascdeInit("{php echo $new_area}","{php echo $address_street}","{php echo isset($item['province'])?$item['province']:''}","{php echo isset($item['city'])?$item['city']:''}","{php echo isset($item['area'])?$item['area']:''}","''");
+</script>
+{template '_footer'}

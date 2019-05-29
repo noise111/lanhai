@@ -1,0 +1,300 @@
+{template '_header'}
+<style type='text/css'>
+    .trhead td {  background:#efefef;text-align: center}
+    .trbody td {  text-align: center; vertical-align:top;border-left:1px solid #f2f2f2;overflow: hidden; font-size:12px;}
+    .trorder { background:#f8f8f8;border:1px solid #f2f2f2;text-align:left;}
+    .ops { border-right:1px solid #f2f2f2; text-align: center;}
+    .ops a,.ops span{
+        margin: 3px 0;
+    }
+    .table-top .op:hover{
+        color: #000;
+    }
+    .tables{
+        border:1px solid #e5e5e5;
+        font-size: 12px;
+        line-height: 18px;
+    }
+    .tables:hover{
+        border:1px solid #b1d8f5;
+    }
+    .table-row,.table-header,.table-footer,.table-top{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        justify-content: center;
+        -webkit-justify-content: center;
+        -webkit-align-content: space-around;
+        align-content: space-around;
+    }
+    .tables  .table-row>div{
+        padding: 14px 0 !important;
+    }
+    .tables  .table-row.table-top>div{
+        padding: 11px 0;
+    }
+    .tables    .table-row .ops.list-inner{
+        border-right:none;
+    }
+    .tables .list-inner{
+        border-right: 1px solid #efefef;
+        vertical-align: middle;
+    }
+    .table-row .goods-des .title{
+        width:180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .table-row .goods-des{
+        width:300px;
+        border-right: 1px solid #efefef;
+        vertical-align: middle;
+    }
+    .table-row .list-inner{
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        text-align: center;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-align-items: center;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+    .saler>div{
+        width:130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .table-row .list-inner.ops,  .table-row .list-inner.paystyle{
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        -webkit-justify-content: center;
+        justify-content: center;
+    }
+    .table-header .others{
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        text-align: center;
+    }
+    .table-footer{
+        border-top: 1px solid #efefef;
+    }
+    .table-footer>div, .table-top>div{
+        -webkit-box-flex: 1;
+        -webkit-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+        height:100%;
+    }
+    .fixed-header div{
+        padding:0;
+    }
+    .fixed-header.table-header{
+        display: none;
+    }
+    .fixed-header.table-header.active{
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+</style>
+
+<div class="page-header">
+    当前位置：<span class="text-primary">预约上门列表</span>
+    <!--<span>订单数:  <span class='text-danger'>{$total}</span> 订单金额:  <span class='text-danger'>{$totalmoney}</span> {if !empty($magent['nickname'])}订单推广人:  <span class='text-danger'>{$magent['nickname']}</span>{/if}</span>-->
+</div>
+<div class="page-content">
+
+    <div class="fixed-header table-header" style="padding: 0 50px;">
+        <div style='border-left:1px solid #f2f2f2;width: 400px;text-align: left;'>商品</div>
+        <div class="others">姓名</div>
+        <div class="others">电话</div>
+        <div class="others">面积</div>
+        <div class="others">户型</div>
+        <div class="others">家庭住址</div>
+        <div class="others">状态</div>
+    </div>
+    <form action="./index.php" method="get" class="form-horizontal" role="form" id="search">
+        <input type="hidden" name="c" value="site" />
+        <input type="hidden" name="a" value="entry" />
+        <input type="hidden" name="m" value="ewei_shopv2" />
+        <input type="hidden" name="do" value="web" />
+        <input type="hidden" name="r" value="reservation" />
+        <div class="page-toolbar">
+            <div class="input-group">
+                <span class="input-group-select">
+                    <select name="status" class="form-control" style="width:100px;padding:0 5px;">
+                        <option value="" {if $_GPC['status'] === ''}selected{/if}>是否服务</option>
+                        <option value="1" {if $_GPC['status'] === 1} selected="selected" {/if}>未服务</option>
+                        <option value="2" {if $_GPC['status'] === 2} selected="selected" {/if}>已服务</option>
+                    </select>
+                </span>
+                <span class="input-group-select">
+                    <select name='searchtime'  class='form-control'   style="width:100px;padding:0 5px;"  id="searchtime">
+                        <option value=''>不按时间</option>
+                        <option value='create' {if $_GPC['searchtime']=='create'}selected{/if}>预约时间</option>
+                        <!--<option value='pay' {if $_GPC['searchtime']=='pay'}selected{/if}>付款时间</option>-->
+                        <!--<option value='send' {if $_GPC['searchtime']=='send'}selected{/if}>发货时间</option>-->
+                        <option value='finish' {if $_GPC['searchtime']=='finish'}selected{/if}>完成时间</option>
+                    </select>
+                </span>
+                <span class="input-group-btn">
+                    {php echo tpl_form_field_daterange('time', array('starttime'=>date('Y-m-d H:i', $starttime),'endtime'=>date('Y-m-d H:i', $endtime)),true);}
+                </span>
+
+                <span class="input-group-select">
+                    <select name='searchfield'  class='form-control'   style="width:110px;padding:0 5px;"  >
+                        <option value='name' {if $_GPC['searchfield']=='name'}selected{/if}>姓名</option>
+                        <option value='mobile' {if $_GPC['searchfield']=='mobile'}selected{/if}>联系方式</option>
+                        <option value='add' {if $_GPC['searchfield']=='add'}selected{/if}>地址</option>
+                    </select>
+                </span>
+                <input type="text" class="form-control input-sm"  name="keyword" id="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词"/>
+                <input type="hidden" name="export" id="export" value="0">
+                <span class="input-group-btn">
+                        <button type="button" data-export="0" class="btn btn-primary btn-submit"> 搜索</button>
+                        <!--<button type="button" data-export="1" class="btn btn-success btn-submit" >导出</button>-->
+                </span>
+            </div>
+
+        </div>
+
+    </form>
+
+
+    {if count($list)>0}
+    <div class="row">
+        <div class="col-md-12">
+            <div  class="">
+                <div class="table-header" style='background:#f8f8f8;height: 35px;line-height: 35px;padding: 0 20px'>
+                    <div style='border-left:1px solid #f2f2f2;width: 400px;text-align: left;'>预约信息</div>
+                    <div class="others">姓名/电话</div>
+                    <!--<div class="others">支付/配送</div>-->
+                    <!--<div class="others">面积</div>-->
+                    <div class="others">状态</div>
+                    <div class="others">操作</div>
+                </div>
+                {loop $list $item}
+                <div class="table-row"><div style='height:20px;padding:0;border-top:none;'>&nbsp;</div></div>
+                <div class="tables">
+                    <div class='table-row table-top' style="padding:0  20px;background: #f7f7f7">
+                        <div style="text-align: left;color: #8f8e8e;">
+                            <span style="font-weight: bold;margin-right: 10px;color: #2d2d31">提交时间：{php echo date('Y-m-d H:i:s',$item['createtime'])}</span>
+                            {if $item['finishtime']}
+                            <span class="label label-success">服务时间：{php echo date('Y-m-d H:i:s',$item['finishtime'])}</span>
+                            {/if}
+                            <!--<label class='label label-danger'>2</label>-->
+                            <!--<label class='label label-default'>3</label>-->
+
+                        </div>
+                    </div>
+                    <div class='table-row' style="margin:0  20px">
+                        <div class="goods-des" style='width:400px;text-align: left'>
+
+                            <div style="display: -webkit-box;display: -webkit-flex;display: -ms-flexbox;display: flex;margin: 10px 0">
+                                <!--<img src="{php echo tomedia($g['thumb'])}" style='width:70px;height:70px;border:1px solid #efefef; padding:1px;'onerror="this.src='../addons/ewei_shopv2/static/images/nopic.png'">-->
+                                <div style="-webkit-box-flex: 1;-webkit-flex: 1;-ms-flex: 1;flex: 1;margin-left: 10px;text-align: left;display: flex;align-items: center">
+                                    <div >
+                                        <div>
+                                            <!--<span class="label label-danger">{$item['housetypename']}</span>-->
+                                            <span class="label label-primary">{$item['housetypename']}</span>
+                                        </div>
+                                        <div class="title">
+                                            地址：{$item['add']}
+                                            <br/>
+                                            <!--面积：{$item['area']} &nbsp;(平方米)-->
+                                        </div>
+                                    </div>
+                                    <span style="float: right;text-align: right;display: inline-block;width:130px;">
+                                        面积：{$item['area']} &nbsp;(平方米)
+                                    </span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="list-inner saler"   style='text-align: center;' >
+                            <div>
+                                {$item['name']}
+                                <br/>
+                                {$item['mobile']}
+                            </div>
+                        </div>
+
+
+                        <div  class="list-inner"  style='text-align:center' >
+                            {if $item['status'] == 1}
+                            <span class="label label-success">已服务</span>
+                            {else}
+                            <span class="label label-primary">未服务</span>
+                            {/if}
+                            {$item['status']}
+                        </div>
+
+                        <div  class='ops list-inner' style='line-height:20px;text-align:center' >
+                            <a class="btn  btn-op btn-operation" href="{php echo webUrl('reservation.detail',array('id'=>$item['id']))}">
+                                <span data-toggle="tooltip" data-placement="top" title="" data-original-title="服务详情">
+                                    <i class="icow icow-bianji2"></i>
+                                </span>
+                            </a>
+                        </div>
+
+                    </div>
+                    {if !empty($item['remark'])}
+                    <div class="table-row"><div  style='background:#fdeeee;color:red;flex: 1;padding:14px 32px !important;'>服务备注: {$item['remark']}</div></div>
+                    {/if}
+
+                </div>
+                {/loop}
+                <div style="padding: 20px;text-align: right" >
+                    {$pager}
+                </div>
+            </div>
+        </div>
+    </div>
+    {else}
+    <div class="panel panel-default">
+        <div class="panel-body empty-data">暂时没有任何订单!</div>
+    </div>
+    {/if}
+</div>
+
+<script>
+    //没有选中时间段不能导出
+    $(function () {
+        $('.btn-submit').click(function () {
+            var e = $(this).data('export');
+            if(e==1 ){
+                if($('#keyword').val() !='' ){
+                    $('#export').val(1);
+                    $('#search').submit();
+                }else if($('#searchtime').val()!=''){
+                    $('#export').val(1);
+                    $('#search').submit();
+                }else{
+                    tip.msgbox.err('请先选择时间段!');
+                    return;
+                }
+            }else{
+                $('#export').val(0);
+                $('#search').submit();
+            }
+        })
+    })
+</script>
+{template '_footer'}
+
+<!--4000097827-->

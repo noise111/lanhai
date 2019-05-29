@@ -1,0 +1,69 @@
+{template '_header'}
+
+<div class="page-header">
+	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}角色 <small>{if !empty($item['id'])}修改【{$item['rolename']}】{/if}</small></span>
+</div>
+<div class="page-content">
+    {ifp 'reservation.salerrole.add'}
+    <div class="page-sub-toolbar">
+        <a class="btn btn-primary btn-sm" href="{php echo webUrl('reservation/salerrole/add')}">添加新角色</a>
+    </div>
+    {/if}
+    <form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$item['id']}" />
+            <div class="form-group">
+                <label class="col-lg control-label must">角色名</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="rolename" class="form-control" value="{$item['rolename']}" data-rule-required='true'/>
+                </div>
+            </div>        
+
+            <div class="form-group">
+                <label class="col-lg control-label">状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class='radio-inline'>
+                        <input type='radio' name='status' value='1' {if $item['status']==1}checked{/if} /> 启用
+                    </label>
+                    <label class='radio-inline'>
+                        <input type='radio' name='status' value='0' {if $item['status']==0}checked{/if} /> 禁用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg control-label">关键词</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="rolekey" class="form-control" value="{$item['rolekey']}" />
+                </div>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<label class="col-lg control-label">权限</label>-->
+                <!--<div class="col-sm-9 col-xs-12">-->
+                    <!--<label class="checkbox-inline">-->
+                        <!--<input type="checkbox" name="shoppingguide" value="1" aria-invalid="false" class="valid" {if $item['shoppingguide'] == 1}checked="checked"{/if} >导购-->
+                    <!--</label>-->
+                    <!--<label class="checkbox-inline">-->
+                        <!--<input type="checkbox" name="storemanager" value="1" aria-invalid="false" class="valid" {if $item['storemanager'] == 1}checked="checked"{/if} >店长-->
+                    <!--</label>-->
+                    <!--<label class="checkbox-inline">-->
+                        <!--<input type="checkbox" name="verify" value="1" aria-invalid="false" class="valid" {if $item['verify'] == 1}checked="checked"{/if} >核销-->
+                    <!--</label>-->
+                    <!--<label class="checkbox-inline">-->
+                        <!--<input type="checkbox" name="deliver" value="1" aria-invalid="false" class="valid" {if $item['deliver'] == 1}checked="checked"{/if} >发货-->
+                    <!--</label>-->
+                <!--</div>-->
+            <!--</div>-->
+
+           <div class="form-group"></div>
+            <div class="form-group">
+                    <label class="col-lg control-label"></label>
+                    <div class="col-sm-9 col-xs-12">
+                       <input type="submit" value="提交" class="btn btn-primary"  />
+                       <input type="button" name="back" onclick='history.back()' value="返回列表" class="btn btn-default" />
+                    </div>
+            </div>
+    </form>
+</div>
+
+{template '_footer'}
+
+ 
