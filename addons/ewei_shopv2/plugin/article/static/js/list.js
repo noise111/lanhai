@@ -1,1 +1,80 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('F([\'p\',\'t\'],5(p,t){b 3={6:1,7:0};3.v=5(A){3.i=A.i;s.r.e(\'u\');8(3.i==2){8(!3.o){3.6=1;3.7=0}y{3.o=K}$(H).I(\'n\',"#D .C").l(\'n\',"#D .C",5(){b k=0;b a=$(m).J(".c-a-M");b 4=a.z(".4");b 7=$(m).h(\'7\');3.6=1;3.7=7;$(m).G(\'l\').L().T(\'l\');8(4.V>0){k=4.w()}a.9(a.9());a.z(".4").w(k);s.r.e(\'u\');$("#4").9("");3.g()});3.q()}$(\'.c-d\').f({X:5(){3.g()}});3.g()};3.q=5(){$("#4 .c-B").n(5(){3.o=N})};3.g=5(){b h={6:3.6};8(3.i==2){h.7=3.7}8(3.6>1){$(".f-x").e()}$(".d-E").j();$("#4").e();$.U(p.P(\'O/B/Q\'),h,5(9){s.r.j();8(9!=\'\'){3.6++;$("#4").R(9);$(\'.c-d\').f(\'v\');3.q()}y{$(\'.c-d\').f(\'S\');$(".f-x").j();8(3.6==1){$(".d-E").e();$("#4").j()}}})};W 3});',60,60,'|||modal|container|function|page|cateid|if|html|tab|var|fui|content|show|infinite|getList|data|template|hide|left|on|this|click|toArticle|core|bindEvents|loader|FoxUI|tpl|mini|init|scrollLeft|loading|else|find|params|list|item|listTab|empty|define|addClass|document|off|closest|false|siblings|scroll|true|article|getUrl|getlist|append|stop|removeClass|get|length|return|onLoading'.split('|'),0,{}))
+define(['core', 'tpl'], function(core, tpl) {
+    var modal = {
+        page: 1,
+        cateid: 0
+    };
+    modal.init = function(params) {
+        modal.template = params.template;
+        FoxUI.loader.show('mini');
+        if (modal.template == 2) {
+            if (!modal.toArticle) {
+                modal.page = 1;
+                modal.cateid = 0
+            } else {
+                modal.toArticle = false
+            }
+            $(document).off('click', "#listTab .item").on('click', "#listTab .item", function() {
+                var left = 0;
+                var tab = $(this).closest(".fui-tab-scroll");
+                var container = tab.find(".container");
+                var cateid = $(this).data('cateid');
+                modal.page = 1;
+                modal.cateid = cateid;
+                $(this).addClass('on').siblings().removeClass('on');
+                if (container.length > 0) {
+                    left = container.scrollLeft()
+                }
+                tab.html(tab.html());
+                tab.find(".container").scrollLeft(left);
+                FoxUI.loader.show('mini');
+                $("#container").html("");
+                modal.getList()
+            });
+            modal.bindEvents()
+        }
+        $('.fui-content').infinite({
+            onLoading: function() {
+                modal.getList()
+            }
+        });
+        modal.getList()
+    };
+    modal.bindEvents = function() {
+        $("#container .fui-list").click(function() {
+            modal.toArticle = true
+        })
+    };
+    modal.getList = function() {
+        var data = {
+            page: modal.page
+        };
+        var f_cateid = $('#listTab .item.on').attr('data-cateid');
+        // console.log(f_cateid);
+        if (modal.template == 2) {
+            //data.cateid = modal.cateid
+            data.cateid = f_cateid
+        }
+        if (modal.page > 1) {
+            $(".infinite-loading").show()
+        }
+        $(".content-empty").hide();
+        $("#container").show();
+        $.get(core.getUrl('article/list/getlist'), data, function(html) {
+            FoxUI.loader.hide();
+            if (html != '') {
+                modal.page++;
+                $("#container").append(html);
+                $('.fui-content').infinite('init');
+                modal.bindEvents()
+            } else {
+                $('.fui-content').infinite('stop');
+                $(".infinite-loading").hide();
+                if (modal.page == 1) {
+                    $(".content-empty").show();
+                    $("#container").hide()
+                }
+            }
+        })
+    };
+    return modal
+});

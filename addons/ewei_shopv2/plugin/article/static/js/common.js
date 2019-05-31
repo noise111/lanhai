@@ -1,1 +1,110 @@
-eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('14([\'k\',\'G\'],6(k,G){7 2={};2.Z=6(n){2.o=n.o;2.a=n.a;2.g=n.g;2.w=h;4(2.o){7 H=1c 1e.19();H.1b(6(r){4(M.1d()==16){7 B=r.F.B;7 C=r.F.C;7 A=l;$.10(2.o,6(i,D){4($.E(D)==B||$.E(D)==C){A=h}});4(A){2.v(h);4(2.g>0){2.L()}}e{2.w=l;2.v(l)}}e{S.1a.u("1n错误，请刷新重试!")}},{1s:h})}e{}$("#1f").1q(6(){7 9=$(M);7 8=9.f(\'8\');7 d=9.f(\'d\');4(!2.w){p}4(d){9.m("i").s("c-P").s("j-K").z("c-x");9.f({\'d\':0});4(N(8).O(\'+\')<0){9.f({\'8\':8-1}).m("I").j(8-1)}}e{9.m("i").z("c-P").z("j-K").s("c-x");9.f({\'d\':1});4(N(8).O(\'+\')<0){7 y=8+1>J?\'J+\':8+1;9.f({\'8\':y}).m("I").j(y)}}k.t(\'3/x\',{a:2.a})})};2.L=6(){k.t(\'3/1t\',{a:2.a,g:2.g},l,l,h)};2.v=6(d){4(d){$(".5-3-b .5-3-W").q();$(".5-3-b .5-3-V").q();k.t(\'3/1h\',{a:2.a},6(r){7 R=r.U.b;4(r.1i){$(".5-3-b").1o(2.X(R))}e{$(".5-1r").1u();S.T.u({c:\'c c-13\',b:r.U.T,11:[{j:\'确定\',15:\'17-18\',12:6(){1g.Y(\'1p\')}}]})}})}e{$(".5-3-b .5-3-W").q();$(".5-3-b .5-3-V").u()}};2.X=6(Q){p 1k(1m(1l.1j(Q)))};p 2});',62,93,'||modal|article|if|fui|function|var|num|_this|aid|content|icon|state|else|data|shareid|true||text|core|false|find|params|areas|return|remove||removeClass|json|show|getContent|cando|like|endnum|addClass|areaok|city|province|area|trim|address|tpl|geolocation|span|100000|danger|doShare|this|String|indexOf|likefill|str|con|FoxUI|message|result|notread|gps|base64|call|init|each|buttons|onclick|wrong|define|extraClass|BMAP_STATUS_SUCCESS|btn|default|Geolocation|toast|getCurrentPosition|new|getStatus|BMap|likebtn|WeixinJSBridge|getcontent|status|atob|decodeURIComponent|window|escape|API|html|closeWindow|click|page|enableHighAccuracy|share|hide'.split('|'),0,{}))
+define(['core', 'tpl'], function(core, tpl) {
+    var modal = {};
+    modal.init = function(params) {
+        modal.areas = params.areas;
+        modal.aid = params.aid;
+        modal.shareid = params.shareid;
+        modal.cando = true;
+        if (modal.areas) {
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r) {
+                if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                    var city = r.address.city;
+                    var province = r.address.province;
+                    var areaok = false;
+                    $.each(modal.areas, function(i, area) {
+                        if ($.trim(area) == city || $.trim(area) == province) {
+                            areaok = true
+                        }
+                    });
+                    if (areaok) {
+                        modal.getContent(true);
+                        if (modal.shareid > 0) {
+                            modal.doShare()
+                        }
+                    } else {
+                        modal.cando = false;
+                        modal.getContent(false)
+                    }
+                } else {
+                    FoxUI.toast.show("API错误，请刷新重试!")
+                }
+            }, {
+                enableHighAccuracy: true
+            })
+        } else {}
+        $("#likebtn").click(function() {
+            var _this = $(this);
+            var num = _this.data('num');
+            var state = _this.data('state');
+            if (!modal.cando) {
+                return
+            }
+            if (state) {
+                _this.find("i").removeClass("icon-likefill").removeClass("text-danger").addClass("icon-like");
+                _this.data({
+                    'state': 0
+                });
+                if (String(num).indexOf('+') < 0) {
+                    _this.data({
+                        'num': num - 1
+                    }).find("span").text(num - 1)
+                }
+            } else {
+                _this.find("i").addClass("icon-likefill").addClass("text-danger").removeClass("icon-like");
+                _this.data({
+                    'state': 1
+                });
+                if (String(num).indexOf('+') < 0) {
+                    var endnum = num + 1 > 100000 ? '100000+' : num + 1;
+                    _this.data({
+                        'num': endnum
+                    }).find("span").text(endnum)
+                }
+            }
+            core.json('article/like', {
+                aid: modal.aid
+            })
+        })
+    };
+    modal.doShare = function() {
+        core.json('article/share', {
+            aid: modal.aid,
+            shareid: modal.shareid
+        }, false, false, true)
+    };
+    modal.getContent = function(state) {
+        if (state) {
+            $(".fui-article-content .fui-article-gps").remove();
+            $(".fui-article-content .fui-article-notread").remove();
+            core.json('article/getcontent', {
+                aid: modal.aid
+            }, function(r) {
+                var con = r.result.content;
+                if (r.status) {
+                    $(".fui-article-content").html(modal.base64(con))
+                } else {
+                    $(".fui-page").hide();
+                    FoxUI.message.show({
+                        icon: 'icon icon-wrong',
+                        content: r.result.message,
+                        buttons: [{
+                            text: '确定',
+                            extraClass: 'btn-default',
+                            onclick: function() {
+                                WeixinJSBridge.call('closeWindow')
+                            }
+                        }]
+                    })
+                }
+            })
+        } else {
+            $(".fui-article-content .fui-article-gps").remove();
+            $(".fui-article-content .fui-article-notread").show()
+        }
+    };
+    modal.base64 = function(str) {
+        return decodeURIComponent(escape(window.atob(str)))
+    };
+    return modal
+});

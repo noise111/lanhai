@@ -10,6 +10,7 @@ class Set_EweiShopV2Page extends PluginWebPage
 		global $_W;
 		global $_GPC;
 		$form_list = $this->model->getDiyformList();
+//		print_r($form_list);
 
 		if ($_W['ispost']) {
 			ca('diyform.set.edit');

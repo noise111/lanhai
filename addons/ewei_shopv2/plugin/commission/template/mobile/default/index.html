@@ -1,6 +1,17 @@
 {template '_header'}
 {template 'commission/common'}
-<script>document.title = "业务员中心"; </script>
+<style>
+    .fui-cell-groupo{
+        margin-top: 0;
+    }
+    .fui-cell-groupo:after{
+        content: " ";
+        width: 90%;
+        background: #ccc;
+        height: 1px;
+    }
+</style>
+<script>document.title = "导购中心"; </script>
 <div class="fui-page fui-page-current page-commission-index ">
     <div class='fui-content navbar'>
 
@@ -17,7 +28,7 @@
                         <div class='title'>{$member['nickname']} </div>
 
                         <!-- +手机号码  -->
-                        <div class='text'>手机号码：136****1111</div>
+                        <div class='text'>手机号码：{$member['mobile']} </div>
 
                         <div class='subtitle' {if $this->set['levelurl']!=''}onclick='location.href="{php echo $this->set['levelurl']}"'{/if}>
 
@@ -68,7 +79,7 @@
                             累计订单
                         </div>
                         <div class="flex_right">
-                            123
+                            {$member['ordercount']}
                         </div>
                     </div>
                 </div>
@@ -88,7 +99,7 @@
                             累计成交
                         </div>
                         <div class="flex_right">
-                            2000
+                            {$member['ordermoney']}
                         </div>
                     </div>
                 </div>
@@ -108,7 +119,7 @@
                             累计收益
                         </div>
                         <div class="flex_right">
-                            4000
+                            {$member['commission_total']}
                         </div>
                     </div>
                 </div>
@@ -127,7 +138,7 @@
 
         <div class='my_qianbao'>
             <div class="my_qianbao_qq">
-                <div class='wenzi'>业务佣金</div>
+                <div class='wenzi'>我的佣金</div>
                 <div class="wenzi2">{php echo number_format($member['commission_total'],2)}<span>元</span></div>
                 <a class="icon_wenzi external" href="{php echo mobileUrl('commission/order')}">
                     <i class="icon icon-xiaofei" style="color: #ffffff; font-size: 0.65rem;"></i>
@@ -142,10 +153,18 @@
                     <span>提现</span>
                 </a>
             </div>
+            <div class="my_qianbao_qq">
+                <div class='wenzi'>我的优惠券</div>
+                <div class="wenzi2">{$member['coupoin']}<span>张</span></div>
+                <a class="icon_wenzi external" href="{php echo mobileUrl('commission/withdraw')}">
+                    <i class="icon icon-tixian" style="color: #ffffff; font-size: 0.65rem; "></i>
+                    <span>提现</span>
+                </a>
+            </div>
         </div>
 
 
-        <div class="fui-cell-group">
+        <div class="fui-cell-group" style="display: none;">
             <a class="fui-cell" href="{php echo mobileUrl('commission/statistics')}">
                 <div class="fui-cell-icon ">
                     <i class="icon icon-rankfill" style="color:#9ec9f4; font-size: 0.9rem;"></i>
@@ -154,7 +173,7 @@
                 <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
             </a>
         </div>
-        <div class="tongji">
+        <div class="tongji" style="display: none;">
             <div class="tongji_text">
                 <div class="tongji_text_left">
                     0
@@ -184,6 +203,45 @@
                 <font>超额完成200元订单金额</font>
             </div>
         </div>
+
+        <div class="fui-cell-group">
+            <a class="fui-cell" href="{php echo mobileUrl('article/list')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-favorfill text-yellow"></i>
+                </div>
+                <div class="fui-cell-text">推荐成为导购</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+
+        <div class="fui-cell-group fui-cell-groupo">
+            <a class="fui-cell" href="{php echo mobileUrl('commission/statistics')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-favorfill text-black"></i>
+                </div>
+                <div class="fui-cell-text">业绩记录</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+        <div class="fui-cell-group fui-cell-groupo">
+            <a class="fui-cell" href="{php echo mobileUrl('rank/list')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-favorfill text-black"></i>
+                </div>
+                <div class="fui-cell-text">排行榜单</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+        <div class="fui-cell-group fui-cell-groupo">
+            <a class="fui-cell" href="{php echo mobileUrl('commission/memberlist')}">
+                <div class="fui-cell-icon ">
+                    <i class="icon icon-favorfill text-black"></i>
+                </div>
+                <div class="fui-cell-text">客户列表</div>
+                <div class="fui-cell-remark" style="font-size: 0.5rem;"></div>
+            </a>
+        </div>
+
 
         <div class="fui-cell-group">
             <a class="fui-cell" href="{php echo mobileUrl('article/list')}">

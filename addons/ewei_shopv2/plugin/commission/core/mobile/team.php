@@ -10,7 +10,7 @@ class Team_EweiShopV2Page extends CommissionMobileLoginPage
 	{
 		global $_W;
 		global $_GPC;
-
+		
 		include $this->template();
 	}
 

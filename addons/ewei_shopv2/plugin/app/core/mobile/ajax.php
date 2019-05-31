@@ -206,7 +206,74 @@ class Ajax_EweiShopV2Page extends AppMobilePage
         $sql = " select * from ims_ewei_shop_diyform_type where uniacid={$uniacid} and title='服务申请表单' ";
         $list = pdo_fetch($sql);
         $list['fields'] = unserialize($list['fields']);
-        app_json(array("list" => $list));
+//        $diylist = pdo_fetch(" select * from ims_ewei_shop_diyform_type where title='服务申请表单' ");
+        $diylist['fields'] = unserialize($list['fields']);
+        $housetype = $list['fields']['diyhuxing']['tp_text'];
+        app_json(array("list" => $list,"housetype"=>$housetype));
+    }
+
+
+
+    public function get_diyform_service_list(){
+
+        $diyform_data = $this->diyformData();
+//        app_json(array('sss'=>$diyform_data));die;
+        $result = array(
+//            'member'  => $memberArr,
+            'diyform' => array('template_flag' => $diyform_data['template_flag'], 'f_data' => $diyform_data['f_data'], 'fields' => $diyform_data['fields'])
+        );
+        app_json($result);
+    }
+
+    protected function diyformData()
+    {
+        $template_flag = 0;
+        $diyform_plugin = p('diyform');
+//        return $diyform_plugin;die;
+        if ($diyform_plugin) {
+            $set_config = $diyform_plugin->getSet();
+            $service_diyform_open = $set_config['service_diyform_open'];
+
+            if ($service_diyform_open == 1) {
+                $template_flag = 1;
+                $diyform_id = $set_config['service_diyform'];
+
+                if (!empty($diyform_id)) {
+                    $formInfo = $diyform_plugin->getDiyformInfo($diyform_id);
+                    $fields = $formInfo['fields'];
+                    $diyform_data = iunserializer($this->member['diyservicedata']);
+                    $f_data = $diyform_plugin->getDiyformData($diyform_data, $fields, $this->member);
+                }
+            }
+        }
+//        return $diyform_data;die;
+        $appDatas = array();
+
+        if ($diyform_plugin) {
+            $appDatas = $diyform_plugin->wxApp($fields, $f_data, $this->member);
+        }
+//        return $appDatas;die;
+        return array('template_flag' => $template_flag, 'f_data' => $appDatas['f_data'], 'fields' => $appDatas['fields'], 'set_config' => $set_config, 'diyform_plugin' => $diyform_plugin, 'formInfo' => $formInfo, 'diyform_id' => $diyform_id, 'diyform_data' => $diyform_data);
+    }
+
+
+    /**
+     * diy service 数据表入库
+     */
+    public function addservice_from(){
+        global $_GPC;
+        global $_W;
+        $list = $_GPC['diypostData'];
+        $list = serialize($list);
+        pdo_insert("ewei_shop_reservation",array("uniacid"=>$_W['uniacid'],"alldata"=>$list));
+        $id = pdo_insertid();
+        if($id){
+
+        }
+        $result=array(
+            "list" =>$list
+        );
+        app_json($result);
     }
 
 

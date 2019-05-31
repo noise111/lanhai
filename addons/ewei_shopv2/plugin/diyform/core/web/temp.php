@@ -19,6 +19,7 @@ class Temp_EweiShopV2Page extends PluginWebPage
 		$total = pdo_fetchcolumn('SELECT COUNT(*) FROM ' . tablename('ewei_shop_diyform_type') . ' WHERE uniacid=:uniacid and title like :name order by id desc ', array(':uniacid' => $_W['uniacid'], ':name' => '%' . $kw . '%'));
 		$pager = pagination2($total, $pindex, $psize);
 		$set = $this->getSet();
+//		print_r($set);
 
 		foreach ($items as $key => &$value) {
 			$value['err'] = false;
@@ -26,6 +27,10 @@ class Temp_EweiShopV2Page extends PluginWebPage
 				$value['use_flag1'] = 1;
 				$value['err'] = true;
 			}
+            if ($set['service_diyform_open'] && $set['user_diyform'] == $value['id']) {
+                $value['use_flags'] = 1;
+                $value['err'] = true;
+            }
 
 			if ($set['commission_diyform_open'] && $set['commission_diyform'] == $value['id']) {
 				$value['use_flag2'] = 1;
@@ -38,7 +43,7 @@ class Temp_EweiShopV2Page extends PluginWebPage
 				$value['err'] = true;
 			}
 		}
-
+//        print_r($items);
 		unset($value);
 		include $this->template();
 	}

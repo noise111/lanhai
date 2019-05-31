@@ -8,7 +8,7 @@ class Register_EweiShopV2Page extends PluginMobileLoginPage
 		$set = $_W['shopset']['merch'];
 
 		if (empty($set['apply_openmobile'])) {
-			$this->message('未开启特约零售商入驻申请', '', 'error');
+			$this->message('未开启联盟商入驻申请', '', 'error');
 		}
 
 		$reg = pdo_fetch('select * from ' . tablename('ewei_shop_merch_reg') . ' where openid=:openid and uniacid=:uniacid limit 1', array(':openid' => $_W['openid'], ':uniacid' => $_W['uniacid']));
@@ -55,7 +55,7 @@ class Register_EweiShopV2Page extends PluginMobileLoginPage
 
 		if ($_W['ispost']) {
 			if (empty($set['apply_openmobile'])) {
-				show_json(0, '未开启特约零售商入驻申请!');
+				show_json(0, '未开启联盟商入驻申请!');
 			}
 
 			if (!empty($user) && 1 <= $user['status']) {

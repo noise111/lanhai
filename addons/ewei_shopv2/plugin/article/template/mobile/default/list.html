@@ -1,6 +1,18 @@
 {template '_header'}
 <script>document.title = "{if !empty($article_sys['article_title'])}{$article_sys['article_title']}{else}{$_W['shopset']['shop']['name']}{/if}"; </script>
 <link rel="stylesheet" href="../addons/ewei_shopv2/plugin/article/template/mobile/default/images/mobile.css" />
+
+<style>
+	.fui-tab-scroll .item{
+		padding: 0.25rem 0.85rem;
+	}
+	.fui-header{
+		display: none;
+	}
+	.fui-header ~ .fui-content{
+		top:0;
+	}
+</style>
 <div class='fui-page  fui-page-current article-list-page'>
 
 	{if is_h5app()}
@@ -19,15 +31,25 @@
 		</div>
 	{/if}
 
+	<div class='fui-swipe-page'></div>
 	<div class='fui-content'>
-		
+		<div class='fui-swipe' >
+			<div class='fui-swipe-wrapper'>
+				{loop $advs $item}
+				<div class='fui-swipe-item' {if !empty($item['link'])}onclick="location.href='{$item['link']}'"{/if}>
+				<img src="{php echo tomedia($item['thumb'])}" />
+			</div>
+
+			{/loop}
+		</div>
+	</div>
 		{if $article_sys['article_temp']==2}
 			<div class="fui-article-list template-2">
 				<div class="fui-tab-scroll" id="listTab">
 					<div class='container'>
-						<span class='item on' data-cateid="">全部分类</span>
+						<!--<span class='item on' data-cateid="">全部分类</span>-->
 							{loop $categorys $i $category}
-								<span class='item' data-cateid="{$category['id']}">{$category['category_name']}</span>
+								<span class='item {if $i==0} on {/if}' data-cateid="{$category['id']}">{$category['category_name']}</span>
 							{/loop}
 					</div>
 				</div>
@@ -44,7 +66,7 @@
 				<div class="icon ">
 					<i class="icon icon-information"></i>
 				</div>
-				<div class="content">未找到文章~</div>
+				<div class="content">暂无数据~</div>
 		</div>
 		
 	</div>

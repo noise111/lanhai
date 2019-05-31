@@ -9,7 +9,7 @@ class Register_EweiShopV2Page extends CommissionMobileLoginPage
 	{
 		global $_W;
 		global $_GPC;
-		$openid = $_W["openid"];
+		$openid = $_W["openid"] = "sns_wa_oaaef4gNN8okMfXFvSDMLLMxR2TM";
 		$set = set_medias($this->set, "regbg");
 		$area_set = m("util")->get_area_config_set();
 		$new_area = intval($area_set["new_area"]);

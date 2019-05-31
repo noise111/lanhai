@@ -79,6 +79,7 @@ class Index_EweiShopV2Page extends CommissionMobileLoginPage
 				$hasdividend = true;
 			}
 		}
+//		print_r($member);
 		include $this->template();
 	}
 }

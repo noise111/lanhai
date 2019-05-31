@@ -16,7 +16,7 @@ class List_EweiShopV2Page extends PluginMobilePage
 		if ($article_sys['article_temp'] == 2) {
 			$categorys = pdo_fetchall('SELECT * FROM ' . tablename('ewei_shop_article_category') . ' WHERE uniacid=:uniacid and isshow=1 order by displayorder desc ', array(':uniacid' => $_W['uniacid']));
 		}
-
+        $advs = pdo_fetchall(" select * from " . tablename("ewei_shop_adv") . " where 1 and enabled = 1 order by displayorder desc ");
 		include $this->template();
 	}
 
