@@ -679,6 +679,31 @@
         {/if}
 
     </div>
+<label class="col-sm-2 control-label">定金</label>
+
+<div class="col-sm-9 col-xs-12">
+
+    {ife 'goods' $item}
+
+    <div class="input-group">
+
+        <input type="text" name="depositprice" id="depositprice" class="form-control" value="{$item['depositprice']}" />
+        <span class="input-group-addon">元 </span>
+        <span class="input-group-addon">&nbsp;</span>
+        <input type="text" name="depositpercent" id="depositpercent" class="form-control" value="{$item['depositpercent']}" />
+        <span class="input-group-addon">%</span>
+
+    </div>
+
+    <span class='help-block'>如 两项 都填写，默认取 固定定金金额 ，如两项都 不填写，无法使用 定金。</span>
+
+    {else}
+
+    <div class='form-control-static'>现价：{$item['marketprice']} 元 原价：{$item['productprice']} 元 成本：{$item['costprice']} 元</div>
+
+    {/if}
+
+</div>
 
     </div>
 

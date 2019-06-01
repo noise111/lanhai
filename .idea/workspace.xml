@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3ee3aa07-d82d-418b-8952-cedec49a6740" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/list.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/list.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/op.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/op.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/ajax.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/ajax.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/create.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/create.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/index.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/order/op/send.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/order/op/send.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/post.php" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/post.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/tab/basic.html" afterPath="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/tab/basic.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -44,280 +40,86 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="set.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/diyform/core/web/set.php">
+      <file leaf-file-name="post.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/post.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="17" column="15" lean-forward="false" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
+            <state relative-caret-position="285">
+              <caret line="24" column="53" lean-forward="false" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="temp.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/diyform/core/web/temp.php">
+      <file leaf-file-name="basic.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/tab/basic.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="21" column="22" lean-forward="false" selection-start-line="21" selection-start-column="22" selection-end-line="21" selection-end-column="22" />
+            <state relative-caret-position="347">
+              <caret line="689" column="45" lean-forward="false" selection-start-line="689" selection-start-column="33" selection-end-line="689" selection-end-column="45" />
               <folding>
-                <marker date="1559274530914" expanded="true" signature="418:574" ph="SELECT * FRO... ${tablename('ewei_shop_diyform_type')}" />
-                <marker date="1559274530914" expanded="true" signature="680:805" ph="SELECT COUNT... ${tablename('ewei_shop_diyform_type')}" />
-                <marker date="1559274530914" expanded="true" signature="2016:2107" ph="SELECT * FRO... ${tablename('ewei_shop_diyform_type')}" />
-                <marker date="1559274530914" expanded="true" signature="3373:3479" ph="SELECT id,ti... ${tablename('ewei_shop_diyform_type')}" />
+                <element signature="e#17956#17962#1" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="model.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/diyform/core/model.php">
+      <file leaf-file-name="post.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/post.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="36" lean-forward="false" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+            <state relative-caret-position="406">
+              <caret line="224" column="58" lean-forward="true" selection-start-line="224" selection-start-column="58" selection-end-line="224" selection-end-column="58" />
               <folding>
-                <marker date="1558574846427" expanded="true" signature="690:791" ph="select * fro... ${tablename('ewei_shop_diyform_category')}" />
-                <marker date="1558574846427" expanded="true" signature="11860:12024" ph="select * fro... ${tablename($table_name)}" />
-                <marker date="1558574846427" expanded="true" signature="12438:12586" ph="select * fro... ${tablename($table_name)}" />
-                <marker date="1558574846427" expanded="true" signature="13012:13135" ph="select * fro... ${tablename('ewei_shop_member_cart')}" />
-                <marker date="1558574846427" expanded="true" signature="13680:13825" ph="select diyfo... ${tablename('ewei_shop_order')}" />
-                <marker date="1558574846427" expanded="true" signature="14294:14400" ph="select count... ${tablename('ewei_shop_diyform_data')}" />
-                <marker date="1558574846427" expanded="true" signature="14726:14886" ph="select * fro... ${tablename('ewei_shop_diyform_temp')}" />
-                <marker date="1558574846427" expanded="true" signature="15249:15355" ph="select count... ${tablename('ewei_shop_goods')}" />
-                <marker date="1558574846427" expanded="true" signature="15786:15866" ph="select * fro... ${tablename('ewei_shop_diyform_type')}" />
-                <marker date="1558574846427" expanded="true" signature="16022:16121" ph="select * fro... ${tablename('ewei_shop_diyform_type')}" />
-                <marker date="1558574846427" expanded="true" signature="16395:16494" ph="select * fro... ${tablename('ewei_shop_diyform_data')}" />
-                <marker date="1558574846427" expanded="true" signature="16819:16918" ph="select * fro... ${tablename('ewei_shop_diyform_temp')}" />
-                <marker date="1558574846427" expanded="true" signature="17226:17324" ph="select count... ${tablename('ewei_shop_diyform_type')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="page_mobile.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/page_mobile.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="44" column="9" lean-forward="false" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
-              <folding>
-                <marker date="1558574845283" expanded="true" signature="2687:2769" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_wxapp_bind&quot;)}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="create.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/create.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="4014" column="40" lean-forward="false" selection-start-line="4014" selection-start-column="40" selection-end-line="4014" selection-end-column="40" />
-              <folding>
-                <marker date="1559369064330" expanded="true" signature="2897:3008" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_bargain_actor&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="3194:3298" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_bargain_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="3424:3518" ph="SELECT barga... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="10403:10533" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_fullback_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="11142:11263" ph="select * fro... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="15331:15582" ph="select ifnul... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="16627:16785" ph="select invoi... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="18360:18520" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="22275:22406" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="22528:22632" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="22766:22940" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="23062:23209" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="23522:23716" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="23843:24011" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="24112:24252" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="31898:32098" ph="select giftg... ${tablename(&quot;ewei_shop_gift&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="32317:32479" ph="select id as... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="32771:33051" ph="select id,go... ${tablename(&quot;ewei_shop_gift&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="33283:33416" ph="select id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="35659:35754" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_package&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="36203:36407" ph="select id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="36692:36929" ph="select title... ${tablename(&quot;ewei_shop_package_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="37067:37255" ph="select title... ${tablename(&quot;ewei_shop_package_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="38053:38193" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="44823:45075" ph="SELECT d.id,... ${tablename(&quot;ewei_shop_coupon_data&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="53808:53929" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="54599:54694" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_package&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="55166:55324" ph="select id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="55470:55707" ph="select title... ${tablename(&quot;ewei_shop_package_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="55850:56038" ph="select title... ${tablename(&quot;ewei_shop_package_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="56740:56880" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="60189:60401" ph="select id,ti... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="72035:72315" ph="select id,go... ${tablename(&quot;ewei_shop_gift&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="72535:72668" ph="select id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="124153:124395" ph="SELECT id,ti... ${tablename(&quot;ewei_shop_package&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="124724:124928" ph="SELECT id,ti... ${tablename(&quot;ewei_shop_package_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="126644:126824" ph="select giftg... ${tablename(&quot;ewei_shop_gift&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="127025:127187" ph="select id as... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="132206:132457" ph="select ifnul... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="133954:134166" ph="select id,ti... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="134983:135198" ph="select packa... ${tablename(&quot;ewei_shop_package_goods_option&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="135878:136057" ph="select packa... ${tablename(&quot;ewei_shop_package_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="136572:136779" ph="select id,di... ${tablename(&quot;ewei_shop_member_cart&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="137198:137404" ph="select id,di... ${tablename(&quot;ewei_shop_quick_cart&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="139291:139413" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="141733:141848" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="142353:142506" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="143039:143154" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="149145:149444" ph="select id,or... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="151310:151768" ph="SELECT m.id ${tablename(&quot;ewei_shop_member&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="152417:152567" ph="SELECT id as... ${tablename(&quot;ewei_shop_goods&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="157950:158295" ph="SELECT g.id ${tablename('ewei_shop_goods')}" />
-                <marker date="1559369064330" expanded="true" signature="159663:159915" ph="SELECT d.id,... ${tablename(&quot;ewei_shop_coupon_data&quot;)}" />
-                <marker date="1559369064330" expanded="true" signature="161069:161528" ph="SELECT s.*, ${tablename('ewei_shop_member_salercart')}" />
-                <marker date="1559369064330" expanded="true" signature="161782:161893" ph="SELECT * FRO... ${tablename('ewei_shop_saler')}" />
-                <marker date="1559369064330" expanded="true" signature="165113:165230" ph="DELETE FROM " />
-                <marker date="1559369064330" expanded="true" signature="165515:165789" ph="SELECT og.id... ${tablename('ewei_shop_order_goods')}" />
-                <marker date="1559369064330" expanded="true" signature="167078:167193" ph="SELECT id FR... ${tablename('ewei_shop_order')}" />
-                <marker date="1559369064330" expanded="true" signature="167391:167729" ph="SELECT g.ori... ${tablename('ewei_shop_order_goods')}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="list.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/list.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="509" column="41" lean-forward="false" selection-start-line="509" selection-start-column="31" selection-end-line="509" selection-end-column="41" />
-              <folding>
-                <marker date="1559368284757" expanded="true" signature="10816:11820" ph="select o.* ,... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="12059:13166" ph="select o.* ,... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="13206:14011" ph="select o.* ,... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="14262:14440" ph="select * fro... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="15281:15395" ph="SELECT id,rt... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="15449:15615" ph="SELECT openi... ${tablename(&quot;ewei_shop_member&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="15693:15899" ph="SELECT id,re... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="15957:16058" ph="SELECT id,di... ${tablename(&quot;ewei_shop_dispatch&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="16118:16378" ph="SELECT sm.id... ${tablename(&quot;ewei_shop_saler&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="23828:24638" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="28898:29145" ph="select commi... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="29942:30238" ph="select commi... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="31079:31374" ph="select commi... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="32216:32392" ph="select openi... ${tablename(&quot;ewei_shop_member&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="32484:32769" ph="SELECT sm.id... ${tablename(&quot;ewei_shop_saler&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="40579:40669" ph="select store... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="40788:40872" ph="select store... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="41530:41620" ph="select store... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="41732:41816" ph="select store... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="42510:42595" ph="select store... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="42804:42912" ph="select nickn... ${tablename(&quot;ewei_shop_member&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="43029:43166" ph="select saler... ${tablename(&quot;ewei_shop_merch_saler&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="46154:46227" ph="SELECT openi... ${tablename(&quot;ewei_shop_member&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="46479:46680" ph="SELECT count... " />
-                <marker date="1559368284757" expanded="true" signature="46952:47201" ph="SELECT count... " />
-                <marker date="1559368284757" expanded="true" signature="47496:47744" ph="SELECT count... " />
-                <marker date="1559368284757" expanded="true" signature="48600:49067" ph="SELECT COUNT... " />
-                <marker date="1559368284757" expanded="true" signature="49407:49874" ph="SELECT COUNT... " />
-                <marker date="1559368284757" expanded="true" signature="50033:50500" ph="SELECT COUNT... " />
-                <marker date="1559368284757" expanded="true" signature="50658:50826" ph="SELECT COUNT... " />
-                <marker date="1559368284757" expanded="true" signature="50995:51079" ph="select id,st... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="52451:52576" ph="select id,pa... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559368284757" expanded="true" signature="52738:52860" ph="select payty... ${tablename(&quot;ewei_shop_order&quot;)}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="op.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/op.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="214">
-              <caret line="586" column="73" lean-forward="false" selection-start-line="586" selection-start-column="55" selection-end-line="586" selection-end-column="73" />
-              <folding>
-                <marker date="1559369698985" expanded="true" signature="580:666" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="2152:2266" ph="select price... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="3582:3708" ph="select price... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="4543:4911" ph="select og.id... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="5291:5386" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="8602:8718" ph="SELECT goods... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="12807:12910" ph="select sendt... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="13575:13824" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="14076:14325" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="15335:15413" ph="select * fro... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="16553:16936" ph="select og.id... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="20891:21077" ph="select sendt... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="21600:21781" ph="select * fro... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="22232:22333" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_city_express&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="23076:23154" ph="select * fro... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="23889:24142" ph="select og.id... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="24344:24605" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="24792:24887" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="27729:27978" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="28230:28479" ph="select g.id,... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="28797:28892" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="29614:29709" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="30877:30989" ph="SELECT id, o... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559369698985" expanded="true" signature="32671:32795" ph="select invoi... ${tablename(&quot;ewei_shop_order&quot;)}" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="send.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/order/op/send.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5871">
-              <caret line="296" column="29" lean-forward="false" selection-start-line="296" selection-start-column="23" selection-end-line="296" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/index.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="461">
-              <caret line="1157" column="0" lean-forward="true" selection-start-line="1157" selection-start-column="0" selection-end-line="1157" selection-end-column="0" />
-              <folding>
-                <marker date="1559371100687" expanded="true" signature="1735:2165" ph="select id,or... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="2215:2281" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="2805:3299" ph="SELECT og.go... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="6140:6260" ph="select * fro... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="8073:8160" ph="select * fro... ${tablename(&quot;ewei_shop_verifygoods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="8320:8421" ph="select sum(v... ${tablename(&quot;ewei_shop_verifygoods_log&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="10202:10294" ph="select * fro... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="10397:10508" ph="select * fro... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="10793:10865" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_wxapp_page&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="12750:12866" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_fullback_goods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="12994:13191" ph="select `day`... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="14489:14570" ph="select * fro... ${tablename(&quot;ewei_shop_member_address&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="14856:14934" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="15018:15090" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="15635:15766" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="15888:15992" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="16126:16300" ph="select * fro... ${tablename(&quot;ewei_shop_merch_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="16422:16569" ph="select * fro... ${tablename(&quot;ewei_shop_store&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="25177:25264" ph="select * fro... ${tablename(&quot;ewei_shop_verifygoods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="25424:25525" ph="select sum(v... ${tablename(&quot;ewei_shop_verifygoods_log&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="29416:29531" ph="SELECT linkt... ${tablename(&quot;ewei_shop_virtual_type&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="29661:29766" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="29940:30079" ph="SELECT count... " />
-                <marker date="1559371100687" expanded="true" signature="33849:34016" ph="select expre... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="34111:34294" ph="select expre... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="34929:35285" ph="select g.tit... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="35771:36172" ph="select og.go... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="36823:36836" ph="select * fro... " />
-                <marker date="1559371100687" expanded="true" signature="36823:36837" ph="select * fro... ims_" />
-                <marker date="1559371100687" expanded="true" signature="36823:36918" ph="select * fro... ${tablename(&quot;&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="36823:36919" ph="select * fro... ${tablename(&quot;&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="36823:36935" ph="select * fro... ${tablename(&quot;&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="37554:37675" ph="SELECT id,cy... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="37789:37894" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="38061:38196" ph="SELECT count... " />
-                <marker date="1559371100687" expanded="true" signature="40278:40378" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="41687:41755" ph="select * fro... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="42548:42657" ph="SELECT id,cy... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="42847:42957" ph="select * fro... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="43129:43265" ph="select * fro... ${tablename(&quot;ewei_shop_address_applyfor&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="44979:45127" ph="select * fro... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="45712:45805" ph="select * fro... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="45896:46027" ph="select * fro... ${tablename(&quot;ewei_shop_cycelbuy_periods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="48505:48792" ph="select id,or... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="48842:48908" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="49402:49786" ph="SELECT og.go... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="52556:52676" ph="select * fro... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
-                <marker date="1559371100687" expanded="true" signature="55822:55917" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="247:335" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="513:607" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_goods_cards&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="2544:2671" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_commission_level&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="3522:3646" ph="select id,ti... ${tablename(&quot;ewei_shop_gift&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="14571:14670" ph="select level... ${tablename(&quot;ewei_shop_category&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="15122:15224" ph="select paren... ${tablename(&quot;ewei_shop_category&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="15455:15560" ph="select id,pa... ${tablename(&quot;ewei_shop_category&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="15683:15788" ph="select id,pa... ${tablename(&quot;ewei_shop_category&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="25950:26045" ph="SELECT nocom... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="27121:27250" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="27280:27349" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="29275:29445" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="29479:29586" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="29785:29946" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="29976:30079" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="36125:36256" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="36299:36450" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="36886:36956" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="37170:37247" ph="delete from " />
+                <marker date="1559376413624" expanded="true" signature="37369:37599" ph="SELECT id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="39001:39100" ph="select * fro... ${tablename(&quot;ewei_shop_goods_spec&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="39190:39466" ph="select a.id,... ${tablename(&quot;ewei_shop_goods_spec_item&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="39542:39642" ph="select * fro... ${tablename(&quot;ewei_shop_goods_param&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="40052:40143" ph="select * fro... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="42051:42089" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="42514:42552" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="43044:43082" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="43218:43256" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="43618:43656" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="44025:44063" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="44428:44466" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="44838:44876" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="45249:45287" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="45638:45676" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="46022:46060" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="46410:46448" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="46860:46898" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47016:47054" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47215:47253" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47354:47392" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47465:47503" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47578:47616" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47689:47727" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47800:47838" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="47911:47949" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="48022:48060" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="48133:48171" ph="..." />
+                <marker date="1559376413624" expanded="true" signature="61008:61123" ph="select id,st... ${tablename(&quot;ewei_shop_store&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="61482:61619" ph="select id,ni... ${tablename(&quot;ewei_shop_member&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="61680:61818" ph="select * fro... ${tablename(&quot;ewei_shop_dispatch&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="62005:62139" ph="select * fro... ${tablename(&quot;ewei_shop_virtual_type&quot;)}" />
+                <marker date="1559376413624" expanded="true" signature="62257:62487" ph="select detai... ${tablename(&quot;ewei_shop_goods&quot;)}" />
               </folding>
             </state>
           </provider>
@@ -327,7 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>container</find>
       <find>文章</find>
       <find>业务</find>
       <find>$merch_user</find>
@@ -338,7 +139,6 @@
       <find>fields</find>
       <find>member</find>
       <find>$items</find>
-      <find>openid</find>
       <find>submit</find>
       <find>dispatchtype</find>
       <find>$address</find>
@@ -357,6 +157,8 @@
       <find>express(</find>
       <find>no_check_goods</find>
       <find>expresspersonelid</find>
+      <find>openid</find>
+      <find>deposit</find>
     </findStrings>
     <replaceStrings>
       <replace>shop.warehouse</replace>
@@ -397,8 +199,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/selfexpress/personnel/index.html" />
-        <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/selfexpress/route.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/selfexpress/warehouse.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/selfexpress/personnel.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/selfexpress/index.php" />
@@ -448,6 +248,8 @@
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/order/op/send.html" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/op.php" />
         <option value="$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/index.php" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/tab/basic.html" />
+        <option value="$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/post.php" />
       </list>
     </option>
   </component>
@@ -531,52 +333,7 @@
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="web" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="order" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="mobile" type="2a2b976b:PhpTreeStructureProvider$1" />
-            </path>
-            <path>
-              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="plugin" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="app" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="core" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="mobile" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="order" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="goods" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
@@ -600,7 +357,7 @@
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="order" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="goods" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
             <path>
               <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
@@ -609,8 +366,18 @@
               <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="order" type="2a2b976b:PhpTreeStructureProvider$1" />
-              <item name="op" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="goods" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="tab" type="2a2b976b:PhpTreeStructureProvider$1" />
+            </path>
+            <path>
+              <item name="lanhai" type="b2602c69:ProjectViewProjectNode" />
+              <item name="lanhai" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="addons" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="ewei_shopv2" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="template" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="web_v3" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="goods" type="2a2b976b:PhpTreeStructureProvider$1" />
+              <item name="tpl" type="2a2b976b:PhpTreeStructureProvider$1" />
             </path>
           </expand>
           <select />
@@ -666,12 +433,12 @@
       <workItem from="1558927395637" duration="554000" />
       <workItem from="1558929696777" duration="27461000" />
       <workItem from="1559038189748" duration="43349000" />
-      <workItem from="1559296193457" duration="11369000" />
+      <workItem from="1559296193457" duration="13413000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="148092000" />
+    <option name="totallyTimeSpent" value="150136000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="94" width="1920" height="900" extended-state="0" />
@@ -707,27 +474,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/shop/adv/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" column="18" lean-forward="true" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/pc/core/mobile/goods/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="250" column="9" lean-forward="false" selection-start-line="250" selection-start-column="9" selection-end-line="250" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="37" column="44" lean-forward="false" selection-start-line="37" selection-start-column="44" selection-end-line="37" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/diypage/core/mobile/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
@@ -1123,30 +869,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/ajax.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="268" column="28" lean-forward="true" selection-start-line="268" selection-start-column="28" selection-end-line="268" selection-end-column="28" />
-          <folding>
-            <marker date="1559355372417" expanded="true" signature="323:561" ph="select o.id,... ims_ewei_shop_order" />
-            <marker date="1559355372417" expanded="true" signature="1400:1505" ph="select * fro... ims_ewei_shop_xcx_adv" />
-            <marker date="1559355372417" expanded="true" signature="1520:1621" ph="select * fro... ims_ewei_shop_adv" />
-            <marker date="1559355372417" expanded="true" signature="2076:2180" ph="select * fro... ims_ewei_shop_banner" />
-            <marker date="1559355372417" expanded="true" signature="2654:2760" ph="select * fro... ims_ewei_shop_category" />
-            <marker date="1559355372417" expanded="true" signature="5947:5988" ph="select * fro... ims_ewei_shop_goods" />
-            <marker date="1559355372417" expanded="true" signature="5947:6034" ph="select * fro... ims_ewei_shop_banner" />
-            <marker date="1559355372417" expanded="true" signature="5947:6081" ph="select * fro... ims_ewei_shop_goods" />
-            <marker date="1559355372417" expanded="true" signature="6131:6197" ph="select count... ${tablename('ewei_shop_goods')}" />
-            <marker date="1559355372417" expanded="true" signature="6655:6710" ph="select * fro... ims_ewei_shop_diyform_type" />
-            <marker date="1559355372417" expanded="true" signature="6655:6720" ph="select * fro... ims_ewei_shop_diyform_type" />
-            <marker date="1559355372417" expanded="true" signature="6655:6724" ph="select * fro... ims_ewei_shop_diyform_type" />
-            <marker date="1559355372417" expanded="true" signature="6655:6738" ph="select * fro... ims_ewei_shop_diyform_type" />
-            <marker date="1559355372417" expanded="true" signature="6655:6739" ph="select * fro... ims_ewei_shop_diyform_type" />
-            <marker date="1559355372417" expanded="true" signature="6865:6926" ph="select * fro... ims_ewei_shop_diyform_type" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/order/list.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -1300,8 +1022,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/order/index.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="461">
-          <caret line="1157" column="0" lean-forward="true" selection-start-line="1157" selection-start-column="0" selection-end-line="1157" selection-end-column="0" />
+        <state relative-caret-position="404">
+          <caret line="1155" column="23" lean-forward="true" selection-start-line="1155" selection-start-column="23" selection-end-line="1155" selection-end-column="23" />
           <folding>
             <marker date="1559371100687" expanded="true" signature="1735:2165" ph="select id,or... ${tablename(&quot;ewei_shop_order&quot;)}" />
             <marker date="1559371100687" expanded="true" signature="2215:2281" ph="select count... ${tablename(&quot;ewei_shop_order&quot;)}" />
@@ -1351,6 +1073,109 @@
             <marker date="1559371100687" expanded="true" signature="49402:49786" ph="SELECT og.go... ${tablename(&quot;ewei_shop_order_goods&quot;)}" />
             <marker date="1559371100687" expanded="true" signature="52556:52676" ph="select * fro... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
             <marker date="1559371100687" expanded="true" signature="55822:55917" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_order_refund&quot;)}" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/plugin/app/core/mobile/ajax.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="268" column="28" lean-forward="true" selection-start-line="268" selection-start-column="28" selection-end-line="268" selection-end-column="28" />
+          <folding>
+            <marker date="1559355372417" expanded="true" signature="323:561" ph="select o.id,... ims_ewei_shop_order" />
+            <marker date="1559355372417" expanded="true" signature="1400:1505" ph="select * fro... ims_ewei_shop_xcx_adv" />
+            <marker date="1559355372417" expanded="true" signature="1520:1621" ph="select * fro... ims_ewei_shop_adv" />
+            <marker date="1559355372417" expanded="true" signature="2076:2180" ph="select * fro... ims_ewei_shop_banner" />
+            <marker date="1559355372417" expanded="true" signature="2654:2760" ph="select * fro... ims_ewei_shop_category" />
+            <marker date="1559355372417" expanded="true" signature="5947:5988" ph="select * fro... ims_ewei_shop_goods" />
+            <marker date="1559355372417" expanded="true" signature="5947:6034" ph="select * fro... ims_ewei_shop_banner" />
+            <marker date="1559355372417" expanded="true" signature="5947:6081" ph="select * fro... ims_ewei_shop_goods" />
+            <marker date="1559355372417" expanded="true" signature="6131:6197" ph="select count... ${tablename('ewei_shop_goods')}" />
+            <marker date="1559355372417" expanded="true" signature="6655:6710" ph="select * fro... ims_ewei_shop_diyform_type" />
+            <marker date="1559355372417" expanded="true" signature="6655:6720" ph="select * fro... ims_ewei_shop_diyform_type" />
+            <marker date="1559355372417" expanded="true" signature="6655:6724" ph="select * fro... ims_ewei_shop_diyform_type" />
+            <marker date="1559355372417" expanded="true" signature="6655:6738" ph="select * fro... ims_ewei_shop_diyform_type" />
+            <marker date="1559355372417" expanded="true" signature="6655:6739" ph="select * fro... ims_ewei_shop_diyform_type" />
+            <marker date="1559355372417" expanded="true" signature="6865:6926" ph="select * fro... ims_ewei_shop_diyform_type" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/post.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="24" column="53" lean-forward="false" selection-start-line="24" selection-start-column="53" selection-end-line="24" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/template/web_v3/goods/tab/basic.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="347">
+          <caret line="689" column="45" lean-forward="false" selection-start-line="689" selection-start-column="33" selection-end-line="689" selection-end-column="45" />
+          <folding>
+            <element signature="e#17956#17962#1" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/addons/ewei_shopv2/core/web/goods/post.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="224" column="58" lean-forward="true" selection-start-line="224" selection-start-column="58" selection-end-line="224" selection-end-column="58" />
+          <folding>
+            <marker date="1559376413624" expanded="true" signature="247:335" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="513:607" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_goods_cards&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="2544:2671" ph="SELECT * FRO... ${tablename(&quot;ewei_shop_commission_level&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="3522:3646" ph="select id,ti... ${tablename(&quot;ewei_shop_gift&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="14571:14670" ph="select level... ${tablename(&quot;ewei_shop_category&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="15122:15224" ph="select paren... ${tablename(&quot;ewei_shop_category&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="15455:15560" ph="select id,pa... ${tablename(&quot;ewei_shop_category&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="15683:15788" ph="select id,pa... ${tablename(&quot;ewei_shop_category&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="25950:26045" ph="SELECT nocom... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="27121:27250" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="27280:27349" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="29275:29445" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="29479:29586" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="29785:29946" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="29976:30079" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="36125:36256" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="36299:36450" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="36886:36956" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="37170:37247" ph="delete from " />
+            <marker date="1559376413624" expanded="true" signature="37369:37599" ph="SELECT id,ti... ${tablename(&quot;ewei_shop_goods&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="39001:39100" ph="select * fro... ${tablename(&quot;ewei_shop_goods_spec&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="39190:39466" ph="select a.id,... ${tablename(&quot;ewei_shop_goods_spec_item&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="39542:39642" ph="select * fro... ${tablename(&quot;ewei_shop_goods_param&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="40052:40143" ph="select * fro... ${tablename(&quot;ewei_shop_goods_option&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="42051:42089" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="42514:42552" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="43044:43082" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="43218:43256" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="43618:43656" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="44025:44063" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="44428:44466" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="44838:44876" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="45249:45287" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="45638:45676" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="46022:46060" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="46410:46448" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="46860:46898" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47016:47054" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47215:47253" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47354:47392" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47465:47503" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47578:47616" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47689:47727" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47800:47838" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="47911:47949" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="48022:48060" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="48133:48171" ph="..." />
+            <marker date="1559376413624" expanded="true" signature="61008:61123" ph="select id,st... ${tablename(&quot;ewei_shop_store&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="61482:61619" ph="select id,ni... ${tablename(&quot;ewei_shop_member&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="61680:61818" ph="select * fro... ${tablename(&quot;ewei_shop_dispatch&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="62005:62139" ph="select * fro... ${tablename(&quot;ewei_shop_virtual_type&quot;)}" />
+            <marker date="1559376413624" expanded="true" signature="62257:62487" ph="select detai... ${tablename(&quot;ewei_shop_goods&quot;)}" />
           </folding>
         </state>
       </provider>

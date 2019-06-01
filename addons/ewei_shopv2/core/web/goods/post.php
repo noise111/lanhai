@@ -220,7 +220,9 @@ if( $_W["ispost"] )
         "originbarcode" => trim($_GPC['originbarcode']),
         "couponbarcode" => trim($_GPC['couponbarcode']),
         "barcodecoupontype" => intval($_GPC['barcodecoupontype']),
-        "verifybarcode" => trim($_GPC['verifybarcode'])
+        "verifybarcode" => trim($_GPC['verifybarcode']),
+        "depositprice" => trim($_GPC['depositprice']),
+        "depositpercent" => trim($_GPC['depositpercent']),
     );
 	if( p("offic") ) 
 	{
