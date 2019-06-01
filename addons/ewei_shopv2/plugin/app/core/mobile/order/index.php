@@ -1079,11 +1079,11 @@ class Index_EweiShopV2Page extends AppMobilePage
 		}
 		if( !empty($cycelid) ) 
 		{
-			$order = pdo_fetch("select expresscom,expresssn,addressid,status,express,sendtype from " . tablename("ewei_shop_cycelbuy_periods") . " where id=:id and uniacid=:uniacid", array( ":id" => $cycelid, ":uniacid" => $uniacid ));
+			$order = pdo_fetch("select expresscom,expresssn,addressid,status,express,sendtype,expresspersonnelid from " . tablename("ewei_shop_cycelbuy_periods") . " where id=:id and uniacid=:uniacid", array( ":id" => $cycelid, ":uniacid" => $uniacid ));
 		}
 		else 
 		{
-			$order = pdo_fetch("select expresscom,expresssn,addressid,status,express,sendtype from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
+			$order = pdo_fetch("select expresscom,expresssn,addressid,status,express,sendtype,expresspersonnelid from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
 			if( empty($order) ) 
 			{
 				app_error(AppError::$OrderNotFound);
@@ -1152,7 +1152,12 @@ class Index_EweiShopV2Page extends AppMobilePage
 				}
 			}
 		}
-		app_json(array( "com" => $order["expresscom"], "sn" => $order["expresssn"], "status" => $status, "count" => count($goods), "thumb" => tomedia($goods[0]["thumb"]), "expresslist" => $expresslist, "bundlelist" => $bundlelist ));
+
+		//添加 自建配送配送员 信息
+		$expresspersonneliddata = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where id = :id and uniacid = $uniacid limit 1",array(':id'=>$order['expresspersonnelid']));
+
+
+		app_json(array( "com" => $order["expresscom"], "sn" => $order["expresssn"], "status" => $status, "count" => count($goods), "thumb" => tomedia($goods[0]["thumb"]), "expresslist" => $expresslist, "bundlelist" => $bundlelist,"expresspersonnelid"=>$order['expresspersonnelid'],"expresspersonneliddata"=> $expresspersonneliddata));
 	}
 	public function cycelbuy_list() 
 	{

@@ -3806,7 +3806,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 		}
 		$addressid = intval($_GPC["addressid"]);
 		$address = false;
-		if( !empty($addressid) && $dispatchtype == 0 && !$isonlyverifygoods ) 
+		if( !empty($addressid) && ($dispatchtype == 0 or $dispatchtype == 2) && !$isonlyverifygoods )
 		{
 			$address = pdo_fetch("select * from " . tablename("ewei_shop_member_address") . " where id=:id and openid=:openid and uniacid=:uniacid   limit 1", array( ":uniacid" => $uniacid, ":openid" => $openid, ":id" => $addressid ));
 			if( empty($address) ) 
@@ -3962,7 +3962,12 @@ class Create_EweiShopV2Page extends AppMobilePage
 		$order["status"] = 0;
 		$order["iswxappcreate"] = 1;
 		$order["remark"] = trim($_GPC["remark"]);
-		$order["addressid"] = (empty($dispatchtype) ? $addressid : 0);
+		if($dispatchtype == '' || $dispatchtype == 0 || $dispatchtype == 2){
+            $order["addressid"] = $addressid;
+        }else{
+            $order["addressid"] = 0;
+        }
+//		$order["addressid"] = (empty($dispatchtype) ? $addressid : 0);
 		$order["goodsprice"] = $goodsprice;
 		$order["dispatchtype"] = $dispatchtype;
 		$order["dispatchid"] = $dispatchid;
@@ -4004,7 +4009,11 @@ class Create_EweiShopV2Page extends AppMobilePage
         $order["isvirtual"] = ($isvirtual ? 1 : 0);
         $order["isvirtualsend"] = ($isvirtualsend ? 1 : 0);
         $order["invoicename"] = trim($_GPC["invoicename"]);
+//        $order["city_express_state"] = (empty($dispatch_array["city_express_state"]) == true ? 0 : $dispatch_array["city_express_state"]);
         $order["city_express_state"] = (empty($dispatch_array["city_express_state"]) == true ? 0 : $dispatch_array["city_express_state"]);
+        if($dispatchtype == 2){
+            $order["expresscom"] = "自建配送";
+        }
         if($order['storeid']){
             $store = pdo_get("ewei_shop_store", array("id" => $order['storeid']));
             $order['merchid'] = $store['merchid'];
@@ -4013,6 +4022,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 		{
 			$order["address"] = iserializer($address);
 		}
+//        app_json(array( "order" => $order ));
 		pdo_insert("ewei_shop_order", $order);
 		$orderid = pdo_insertid();
 

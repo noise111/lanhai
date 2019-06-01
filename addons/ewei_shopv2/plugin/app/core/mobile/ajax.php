@@ -263,9 +263,13 @@ class Ajax_EweiShopV2Page extends AppMobilePage
     public function addservice_from(){
         global $_GPC;
         global $_W;
+//        $result=array(
+//            "list" =>$_W['openid']
+//        );
+//        app_json($result);
         $list = $_GPC['diypostData'];
         $list = serialize($list);
-        pdo_insert("ewei_shop_reservation",array("uniacid"=>$_W['uniacid'],"alldata"=>$list));
+        pdo_insert("ewei_shop_reservation",array("uniacid"=>$_W['uniacid'],"alldata"=>$list,'openid'=>$_W['openid']));
         $id = pdo_insertid();
         if($id){
 

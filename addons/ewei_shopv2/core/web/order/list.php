@@ -507,11 +507,17 @@ class List_EweiShopV2Page extends WebPage
 				$value["dispatchname"] = (empty($value["addressid"]) ? "自提" : $value["dispatchname"]);
 				if( empty($value["dispatchname"]) ) 
 				{
-					$value["dispatchname"] = "快递";
+				    if($value['expresscom'] == '自建配送'){
+                        $value["dispatchname"] = "自建配送";
+                    }else{
+                        $value["dispatchname"] = "快递";
+                    }
+
 				}
 				if( $value["city_express_state"] == 1 ) 
 				{
 					$value["dispatchname"] = "同城配送";
+//                    $value["dispatchname"] = "自建配送";
 				}
 				if( $pt == 3 ) 
 				{

@@ -584,7 +584,7 @@ class Op_EweiShopV2Page extends WebPage
 					$senddata = array(
 					    "sendtype" => $ogoods[0]["sendtype"] + 1,
                         "sendtime" => $data["sendtime"] ,
-//                        "expresspersonnelid" => $data["expresspersonnelid"] ,
+                        "expresspersonnelid" => $data["expresspersonnelid"] ,
                     );
 					$data["sendtype"] = $ogoods[0]["sendtype"] + 1;
 					$goodsid = $_GPC["ordergoodsid"];
