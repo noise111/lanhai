@@ -144,7 +144,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 			{
 				if( !empty($quickid) ) 
 				{
-					$sql = "SELECT c.goodsid,c.total,g.maxbuy,g.type,g.intervalfloor,g.intervalprice,g.issendfree,g.isnodiscount,g.ispresell,g.presellprice as gpprice,o.presellprice,g.preselltimeend,g.presellsendstatrttime,g.presellsendtime,g.presellsendtype" . ",g.weight,o.weight as optionweight,g.title,g.thumb,ifnull(o.marketprice, g.marketprice) as marketprice,o.title as optiontitle,c.optionid," . " g.storeids,g.isverify,g.isforceverifystore,g.deduct,g.manydeduct,g.virtual,o.virtual as optionvirtual,discounts," . " g.deduct2,g.ednum,g.edmoney,g.edareas,g.edareas_code,g.diyformtype,g.diyformid,diymode,g.dispatchtype,g.dispatchid,g.dispatchprice,g.minbuy " . " ,g.isdiscount,g.isdiscount_time,g.isdiscount_discounts,g.cates,g.isfullback, " . " g.virtualsend,invoice,o.specs,g.merchid,g.checked,g.merchsale,g.unite_total," . " g.buyagain,g.buyagain_islong,g.buyagain_condition, g.buyagain_sale, g.hasoption, g.threen" . " FROM " . tablename("ewei_shop_quick_cart") . " c " . " left join " . tablename("ewei_shop_goods") . " g on c.goodsid = g.id " . " left join " . tablename("ewei_shop_goods_option") . " o on c.optionid = o.id " . " where c.openid=:openid and c.selected=1 and  c.deleted=0 and c.uniacid=:uniacid and c.quickid=" . $quickid . "  order by c.id desc";
+					$sql = "SELECT c.goodsid,c.total,g.maxbuy,g.type,g.intervalfloor,g.intervalprice,g.issendfree,g.isnodiscount,g.ispresell,g.presellprice as gpprice,o.presellprice,g.preselltimeend,g.presellsendstatrttime,g.presellsendtime,g.presellsendtype" . ",g.weight,o.weight as optionweight,g.title,g.thumb,ifnull(o.marketprice, g.marketprice) as marketprice,o.title as optiontitle,c.optionid," . " g.storeids,g.isverify,g.isforceverifystore,g.deduct,g.manydeduct,g.virtual,o.virtual as optionvirtual,discounts," . " g.deduct2,g.ednum,g.edmoney,g.edareas,g.edareas_code,g.diyformtype,g.diyformid,diymode,g.dispatchtype,g.dispatchid,g.dispatchprice,g.minbuy " . " ,g.isdiscount,g.isdiscount_time,g.isdiscount_discounts,g.cates,g.isfullback, " . " g.virtualsend,invoice,o.specs,g.merchid,g.checked,g.merchsale,g.unite_total," . " g.buyagain,g.buyagain_islong,g.buyagain_condition, g.buyagain_sale, g.hasoption, g.threen,g.depositpercent,g.depositprice " . " FROM " . tablename("ewei_shop_quick_cart") . " c " . " left join " . tablename("ewei_shop_goods") . " g on c.goodsid = g.id " . " left join " . tablename("ewei_shop_goods_option") . " o on c.optionid = o.id " . " where c.openid=:openid and c.selected=1 and  c.deleted=0 and c.uniacid=:uniacid and c.quickid=" . $quickid . "  order by c.id desc";
 					$goods = pdo_fetchall($sql, array( ":uniacid" => $uniacid, ":openid" => $openid ));
 				}
 				else 
@@ -155,7 +155,7 @@ class Create_EweiShopV2Page extends AppMobilePage
                            " g.deduct2,g.ednum,g.edmoney,g.edareas,g.diyformtype,g.diyformid,diymode,g.dispatchtype,g.dispatchid,g.dispatchprice,g.minbuy " .
                            " ,g.isdiscount,g.isdiscount_time,g.isdiscount_discounts,g.cates, " . 
                            " g.virtualsend,invoice,o.specs,g.merchid,g.checked,g.merchsale," . 
-                           " g.buyagain,g.buyagain_islong,g.buyagain_condition, g.buyagain_sale" .
+                           " g.buyagain,g.buyagain_islong,g.buyagain_condition, g.buyagain_sale,g.depositpercent,g.depositprice " .
                            " FROM " . tablename("ewei_shop_member_cart") . " c " .
                            " left join " . tablename("ewei_shop_goods") . " g on c.goodsid = g.id " . 
                            " left join " . tablename("ewei_shop_goods_option") . " o on c.optionid = o.id " .
@@ -236,7 +236,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 			}
 			else 
 			{
-				$sql = "SELECT id as goodsid,type,title,weight,issendfree,isnodiscount,isfullback,ispresell,presellprice,preselltimeend,presellsendstatrttime,presellsendtime,presellsendtype, " . " thumb,marketprice,storeids,isverify,isforceverifystore,deduct," . " manydeduct,`virtual`,maxbuy,usermaxbuy,discounts,total as stock,deduct2,showlevels," . " ednum,edmoney,edareas," . " diyformtype,diyformid,diymode,dispatchtype,dispatchid,dispatchprice,cates,minbuy, " . " isdiscount,isdiscount_time,isdiscount_discounts, " . " virtualsend,invoice,needfollow,followtip,followurl,merchid,checked,merchsale, " . " buyagain,buyagain_islong,buyagain_condition, buyagain_sale" . " FROM " . tablename("ewei_shop_goods") . " where id=:id and uniacid=:uniacid  limit 1";
+				$sql = "SELECT id as goodsid,type,title,weight,issendfree,isnodiscount,isfullback,ispresell,presellprice,preselltimeend,presellsendstatrttime,presellsendtime,presellsendtype, " . " thumb,marketprice,storeids,isverify,isforceverifystore,deduct," . " manydeduct,`virtual`,maxbuy,usermaxbuy,discounts,total as stock,deduct2,showlevels," . " ednum,edmoney,edareas," . " diyformtype,diyformid,diymode,dispatchtype,dispatchid,dispatchprice,cates,minbuy " . " isdiscount,isdiscount_time,isdiscount_discounts, " . " virtualsend,invoice,needfollow,followtip,followurl,merchid,checked,merchsale, " . " buyagain,buyagain_islong,buyagain_condition, buyagain_sale,depositprice,depositpercent" . " FROM " . tablename("ewei_shop_goods") . " where id=:id and uniacid=:uniacid  limit 1";
 				$data = pdo_fetch($sql, array( ":uniacid" => $uniacid, ":id" => $id ));
 				if( !empty($bargain_act) ) 
 				{
@@ -536,6 +536,10 @@ class Create_EweiShopV2Page extends AppMobilePage
 				else 
 				{
 					$gprice = $g["marketprice"] * $g["total"];
+					//计算定金
+					$gdepositprice = $g["depositprice"];
+//					$gdepositpercent = $g["depositpercent"] * $gprice/100;
+					$gdepositpercent = $g["depositpercent"];
 					$prices = m("order")->getGoodsDiscountPrice($g, $level);
 					if( empty($bargain_id) ) 
 					{
@@ -591,6 +595,8 @@ class Create_EweiShopV2Page extends AppMobilePage
 				{
 					$goodsprice += $g["ggprice"];
 				}
+                $goodsdepositprice += $gdepositprice;
+                $goodsdepositpercent += $gdepositpercent;
 				$total += $g["total"];
 				if( empty($bargain_id) ) 
 				{
@@ -944,6 +950,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 							$giftgoods = explode(",", $value["giftgoodsid"]);
 							foreach( $giftgoods as $k => $val ) 
 							{
+
 								$gifts[$key]["gift"][$k] = pdo_fetch("select id,title,thumb,marketprice from " . tablename("ewei_shop_goods") . " where uniacid = " . $uniacid . " and status = 2 and id = " . $val . " ");
 							}
 							$gifts[$key]["gift"] = set_medias($gifts[$key]["gift"], array( "thumb" ));
@@ -1004,9 +1011,11 @@ class Create_EweiShopV2Page extends AppMobilePage
 			}
 			$createInfo = array( "id" => $id, "gdid" => intval($_GPC["gdid"]), "fromcart" => $fromcart, "addressid" => (!empty($address) && !$isverify && !$isvirtual ? $address["id"] : 0), "storeid" => (!empty($carrier_list) && !$isverify && !$isvirtual ? $carrier_list[0]["id"] : 0), "couponcount" => $couponcount, "isvirtual" => $isvirtual, "isverify" => $isverify, "goods" => $goodsdata, "merchs" => $merchs, "orderdiyformid" => $orderdiyformid, "mustbind" => $mustbind );
 			$buyagain = $buyagainprice;
+//            app_json(array('list'=>666));
 		}
 		else 
 		{
+//		    app_json(array('list'=>777));
 			$merchdata = $this->merchData();
 			extract($merchdata);
 			$merch_array = array( );
@@ -1024,11 +1033,13 @@ class Create_EweiShopV2Page extends AppMobilePage
 			}
 			$goods = array( );
 			$goodsprice = 0;
+			$goodsdepositpercent = 0;
+			$goodsdepositprice = 0;
 			$marketprice = 0;
 			$goods_list = array( );
 			foreach( $g as $key => $value ) 
 			{
-				$goods[$key] = pdo_fetch("select id,title,thumb,marketprice,merchid,dispatchtype,dispatchid,dispatchprice from " . tablename("ewei_shop_goods") . "\r\n                            where id = " . $value["goodsid"] . " and uniacid = " . $uniacid . " ");
+				$goods[$key] = pdo_fetch("select id,title,thumb,marketprice,merchid,dispatchtype,dispatchid,dispatchprice,depositprice,depositpercent from " . tablename("ewei_shop_goods") . "\r\n                            where id = " . $value["goodsid"] . " and uniacid = " . $uniacid . " ");
 				if( $is_openmerch == 1 ) 
 				{
 					$merchid = $goods[$key]["merchid"];
@@ -1064,7 +1075,10 @@ class Create_EweiShopV2Page extends AppMobilePage
 				}
 				$goodsprice += price_format($goods[$key]["packageprice"]);
 				$marketprice += price_format($goods[$key]["marketprice"]);
+                $goodsdepositpercent += price_format($goods[$key]["goodsdepositpercent"]);
+                $goodsdepositprice += price_format($goods[$key]["goodsdepositprcie"]);
 			}
+//            app_json(array('list'=>$g));
 			$address = pdo_fetch("select * from " . tablename("ewei_shop_member_address") . " where openid=:openid and deleted=0 and isdefault=1  and uniacid=:uniacid limit 1", array( ":uniacid" => $uniacid, ":openid" => $openid ));
 			$total = count($goods);
 			$dispatch_price = $package["freight"];
@@ -1115,11 +1129,12 @@ class Create_EweiShopV2Page extends AppMobilePage
 			$allgoods[$k]["shopname"] = $v["shopname"];
 			foreach( $v["goods"] as $g ) 
 			{
-				$allgoods[$k]["goods"][] = array( "id" => $g["goodsid"], "goodsid" => $g["goodsid"], "title" => $g["title"], "thumb" => tomedia($g["thumb"]), "optionid" => (int) $g["optionid"], "optiontitle" => $g["optiontitle"], "hasdiscount" => empty($g["isnodiscount"]) && !empty($g["dflag"]), "total" => $g["total"], "price" => ($g["unitprice"] < $g["marketprice"] ? (double) $g["marketprice"] : (double) $g["unitprice"]), "marketprice" => (double) $g["marketprice"], "merchid" => $g["merchid"], "cates" => $g["cates"], "unit" => $g["unit"], "totalmaxbuy" => $g["totalmaxbuy"], "minbuy" => $g["minbuy"], "promotionprice" => (($g["unitprice"] < $g["marketprice"] ? (double) $g["marketprice"] : (double) $g["unitprice"])) - $g["isdiscountprice"] );
+				$allgoods[$k]["goods"][] = array( "id" => $g["goodsid"], "goodsid" => $g["goodsid"], "title" => $g["title"], "thumb" => tomedia($g["thumb"]), "optionid" => (int) $g["optionid"], "optiontitle" => $g["optiontitle"], "hasdiscount" => empty($g["isnodiscount"]) && !empty($g["dflag"]), "total" => $g["total"], "price" => ($g["unitprice"] < $g["marketprice"] ? (double) $g["marketprice"] : (double) $g["unitprice"]), "marketprice" => (double) $g["marketprice"], "merchid" => $g["merchid"], "cates" => $g["cates"], "unit" => $g["unit"], "totalmaxbuy" => $g["totalmaxbuy"], "minbuy" => $g["minbuy"], "promotionprice" => (($g["unitprice"] < $g["marketprice"] ? (double) $g["marketprice"] : (double) $g["unitprice"])) - $g["isdiscountprice"],"depositprice"=>$g['depositprice'],"depositpercent"=>$g['depositpercent'] );
 			}
 		}
+//        app_json($allgoods);
 		$sysset = m("common")->getSysset("trade");
-		$result = array( "member" => array( "realname" => $member["realname"], "mobile" => $member["carrier_mobile"] ), "showTab" => 0 < count($carrier_list) && !$isverify && !$isvirtual, "showAddress" => !$isverify && !$isvirtual, "isverify" => $isverify, "isvirtual" => $isvirtual, "set_realname" => $sysset["set_realname"], "set_mobile" => $sysset["set_mobile"], "carrierInfo" => (!empty($carrier_list) ? $carrier_list[0] : false), "storeInfo" => false, "address" => $address, "goods" => $allgoods, "merchid" => $merch_id, "packageid" => $packageid, "fullbackgoods" => $fullbackgoods, "giftid" => $giftid, "gift" => $gift, "gifts" => $gifts, "gifttitle" => $gifttitle, "changenum" => $changenum, "hasinvoice" => (bool) $hasinvoice, "invoicename" => $invoicename, "couponcount" => (int) $couponcount, "deductcredit" => $deductcredit, "deductmoney" => $deductmoney, "deductcredit2" => $deductcredit2, "stores" => $stores, "storeids" => implode(",", $storeids), "fields" => (!empty($order_formInfo) ? $fields : false), "f_data" => (!empty($order_formInfo) ? $f_data : false), "dispatch_price" => $dispatch_price, "goodsprice" => $goodsprice, "taskdiscountprice" => $taskdiscountprice, "discountprice" => $discountprice, "isdiscountprice" => $isdiscountprice, "showenough" => (empty($saleset["showenough"]) ? false : true), "enoughmoney" => $saleset["enoughmoney"], "enoughdeduct" => $saleset["enoughdeduct"], "merch_showenough" => (empty($merch_saleset["merch_showenough"]) ? false : true), "merch_enoughmoney" => (double) $merch_saleset["merch_enoughmoney"], "merch_enoughdeduct" => (double) $merch_saleset["merch_enoughdeduct"], "merchs" => (array) $merchs, "realprice" => round($realprice, 2), "total" => $total, "buyagain" => round($buyagain, 2), "fromcart" => (int) $fromcart, "isonlyverifygoods" => $isonlyverifygoods, "isforceverifystore" => $isforceverifystore, "city_express_state" => (empty($dispatch_array["city_express_state"]) ? 0 : $dispatch_array["city_express_state"]), "canusecard" => $canusecard, "card_info" => $card_info, "carddiscountprice" => $carddiscountprice, "card_free_dispatch" => $card_free_dispatch );
+		$result = array( "member" => array( "realname" => $member["realname"], "mobile" => $member["carrier_mobile"] ), "showTab" => 0 < count($carrier_list) && !$isverify && !$isvirtual, "showAddress" => !$isverify && !$isvirtual, "isverify" => $isverify, "isvirtual" => $isvirtual, "set_realname" => $sysset["set_realname"], "set_mobile" => $sysset["set_mobile"], "carrierInfo" => (!empty($carrier_list) ? $carrier_list[0] : false), "storeInfo" => false, "address" => $address, "goods" => $allgoods, "merchid" => $merch_id, "packageid" => $packageid, "fullbackgoods" => $fullbackgoods, "giftid" => $giftid, "gift" => $gift, "gifts" => $gifts, "gifttitle" => $gifttitle, "changenum" => $changenum, "hasinvoice" => (bool) $hasinvoice, "invoicename" => $invoicename, "couponcount" => (int) $couponcount, "deductcredit" => $deductcredit, "deductmoney" => $deductmoney, "deductcredit2" => $deductcredit2, "stores" => $stores, "storeids" => implode(",", $storeids), "fields" => (!empty($order_formInfo) ? $fields : false), "f_data" => (!empty($order_formInfo) ? $f_data : false), "dispatch_price" => $dispatch_price, "goodsprice" => $goodsprice,"goodsdepositprice" => $goodsdepositprice,"goodsdepositpercent" => $goodsdepositpercent, "taskdiscountprice" => $taskdiscountprice, "discountprice" => $discountprice, "isdiscountprice" => $isdiscountprice, "showenough" => (empty($saleset["showenough"]) ? false : true), "enoughmoney" => $saleset["enoughmoney"], "enoughdeduct" => $saleset["enoughdeduct"], "merch_showenough" => (empty($merch_saleset["merch_showenough"]) ? false : true), "merch_enoughmoney" => (double) $merch_saleset["merch_enoughmoney"], "merch_enoughdeduct" => (double) $merch_saleset["merch_enoughdeduct"], "merchs" => (array) $merchs, "realprice" => round($realprice, 2), "total" => $total, "buyagain" => round($buyagain, 2), "fromcart" => (int) $fromcart, "isonlyverifygoods" => $isonlyverifygoods, "isforceverifystore" => $isforceverifystore, "city_express_state" => (empty($dispatch_array["city_express_state"]) ? 0 : $dispatch_array["city_express_state"]), "canusecard" => $canusecard, "card_info" => $card_info, "carddiscountprice" => $carddiscountprice, "card_free_dispatch" => $card_free_dispatch );
 		if( $iscycel ) 
 		{
 			$cycelset = m("common")->getSysset("cycelbuy");
@@ -1416,6 +1431,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 		$seckill_dispatchprice = 0;
 		$dispatchid = intval($_GPC["dispatchid"]);
 		$totalprice = floatval($_GPC["totalprice"]);
+//		$isdeposit = intval($_GPC['isdeposit']);//是否支付定金；1：支付定金；0：支付全款
 		$dflag = $_GPC["dflag"];
 		$addressid = intval($_GPC["addressid"]);
 		$address = pdo_fetch("select * from " . tablename("ewei_shop_member_address") . " where  id=:id and openid=:openid and uniacid=:uniacid limit 1", array( ":uniacid" => $uniacid, ":openid" => $openid, ":id" => $addressid ));
@@ -1962,6 +1978,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 		}
 		$return_array = array( );
 		$return_array["price"] = $dispatch_price + $seckill_dispatchprice;
+//		$return_array["deposits"] = $dispatch_price + $seckill_dispatchprice;
 		$return_array["couponcount"] = (int) $couponcount;
 		$return_array["realprice"] = round($realprice, 2);
 		$return_array["deductenough_money"] = $deductenough_money;
@@ -3359,6 +3376,8 @@ class Create_EweiShopV2Page extends AppMobilePage
 		global $_GPC;
 		$openid = $_W["openid"];
 		$uniacid = $_W["uniacid"];
+//		app_json(array('sss' => $_GPC));
+		//如果$_GPC['isdeposit'] 为真 则使用定金，未false不使用
 		$member = m("member")->getMember($openid);
 		if( $member["isblack"] == 1 ) 
 		{
@@ -3500,7 +3519,7 @@ class Create_EweiShopV2Page extends AppMobilePage
                    " dispatchtype,dispatchid,dispatchprice,merchid,merchsale,cates," . 
                    " isdiscount,isdiscount_time,isdiscount_discounts, virtualsend," .
                    " buyagain,buyagain_islong,buyagain_condition, buyagain_sale,verifygoodsdays,verifygoodslimittype,verifygoodslimitdate, " .
-                   " onlinestoreget, onlinehomeget, storeget, salerfirst, salermore, agentonline, agenthome, teambenefit " .
+                   " onlinestoreget, onlinehomeget, storeget, salerfirst, salermore, agentonline, agenthome, teambenefit,depositprice,depositpercent " .
                    " FROM " . tablename("ewei_shop_goods") . 
                    " where id=:id and uniacid=:uniacid  limit 1";
 			$data = pdo_fetch($sql, array( ":uniacid" => $uniacid, ":id" => $goodsid ));
@@ -3847,6 +3866,8 @@ class Create_EweiShopV2Page extends AppMobilePage
 		$allgoods = $temp_goods;
         $couponprice = 0;
         //分配优惠券id
+        $deposits = 0;
+//        app_json(array('list'=>$_GPC['isdeposit'],'sss'=>$_GPC));die;
         foreach($allgoods as $key => &$g){
             if(isset($couponid[$key]) && !empty($couponid[$key])){
                 $coupon_return = $this->saler_calculate_coupon($couponid[$key], $g);
@@ -3860,8 +3881,26 @@ class Create_EweiShopV2Page extends AppMobilePage
                 $couponprice += 0;
                 $g['couponid'] = 0;
             }
-        }
+            //计算定金
+            if($_GPC['isdeposit'] == "true"){
+                if($g['depositprice'] > 0 || $g['depositpercent'] > 0){
+                    if($g['depositprice'] > 0){
+                        $deposits += $g['depositprice'];
+                    }
+                    //注释取消定金类型
+//                    else{
+//                        $deposits += $g['marketprice']*$g['depositpercent']/100;
+////                        $deposits += $g['depositpercent'];
+////                    $deposits += 1;
+//                    }
+                }else{
+                }
 
+            }else{
+//                $deposits +=2;
+            }
+        }
+//        app_json(array('list'=>$allgoods,"aaaa"=>$deposits));die;
 		if( $isonlyverifygoods ) 
 		{
 			$addressid = 0;
@@ -4009,6 +4048,13 @@ class Create_EweiShopV2Page extends AppMobilePage
         $order["isvirtual"] = ($isvirtual ? 1 : 0);
         $order["isvirtualsend"] = ($isvirtualsend ? 1 : 0);
         $order["invoicename"] = trim($_GPC["invoicename"]);
+        if($_GPC['isdeposit'] == "true"){
+            $order["deposits"] = $deposits;
+            $order["paymoney"] = 0;
+        }else{
+            $order["deposits"] = 0;
+            $order["paymoney"] = 0;
+        }
 //        $order["city_express_state"] = (empty($dispatch_array["city_express_state"]) == true ? 0 : $dispatch_array["city_express_state"]);
         $order["city_express_state"] = (empty($dispatch_array["city_express_state"]) == true ? 0 : $dispatch_array["city_express_state"]);
         if($dispatchtype == 2){
@@ -4023,6 +4069,7 @@ class Create_EweiShopV2Page extends AppMobilePage
 			$order["address"] = iserializer($address);
 		}
 //        app_json(array( "order" => $order ));
+
 		pdo_insert("ewei_shop_order", $order);
 		$orderid = pdo_insertid();
 

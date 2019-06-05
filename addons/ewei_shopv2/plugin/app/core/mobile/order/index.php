@@ -802,8 +802,9 @@ class Index_EweiShopV2Page extends AppMobilePage
             "iscycelbuy" => $order["iscycelbuy"], 
             "isonlyverifygoods" => $isonlyverifygoods,
             "paytype" => $order['paytype'],
-            "saleropenid" => $order['saleropenid']
-                
+            "saleropenid" => $order['saleropenid'],
+            "paymoney" => $order['paymoney'],
+
         );
 		if( $order["iscycelbuy"] == 1 ) 
 		{

@@ -5,101 +5,385 @@
 require(EWEI_SHOPV2_PLUGIN . "app/core/page_mobile.php");
 class Pay_EweiShopV2Page extends AppMobilePage 
 {
-	public function main() 
-	{
-		global $_W;
-		global $_GPC;
-		$openid = $_W["openid"];
-		$uniacid = $_W["uniacid"];
-		$member = m("member")->getMember($openid, true);
-		$orderid = intval($_GPC["id"]);
-		if( empty($orderid) ) 
-		{
-			app_error(AppError::$ParamsError);
-		}
-		$order = pdo_fetch("select * from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
-		if( empty($order) ) 
-		{
-			app_error(AppError::$OrderNotFound);
-			exit();
-		}
-		if( $order["status"] == -1 ) 
-		{
-			app_error(AppError::$OrderCannotPay);
-		}
-		else 
-		{
-			if( 1 <= $order["status"] ) 
-			{
-				app_error(AppError::$OrderAlreadyPay);
-			}
-		}
-		$log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
-		if( !empty($log) && $log["status"] != "0" ) 
-		{
-			app_error(AppError::$OrderAlreadyPay);
-		}
-		if( !empty($log) && $log["status"] == "0" ) 
-		{
-			pdo_delete("core_paylog", array( "plid" => $log["plid"] ));
-			$log = NULL;
-		}
-		if( empty($log) ) 
-		{
-			$log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $order["price"], "status" => 0 );
-			pdo_insert("core_paylog", $log);
-			$plid = pdo_insertid();
-		}
-		$set = m("common")->getSysset(array( "shop", "pay" ));
-		$credit = array( "success" => false );
-		if( isset($set["pay"]) && $set["pay"]["credit"] == 1 ) 
-		{
-			$credit = array( "success" => true, "current" => $member["credit2"] );
-		}
-		$wechat = array( "success" => false );
-		if( !empty($set["pay"]["wxapp"]) && 0 < $order["price"] && $this->iswxapp ) 
-		{
-			$tid = $order["ordersn"];
-			if( !empty($order["ordersn2"]) ) 
-			{
-				$var = sprintf("%02d", $order["ordersn2"]);
-				$tid .= "GJ" . $var;
-			}
-			$payinfo = array( "openid" => $_W["openid_wa"], "title" => $set["shop"]["name"] . "订单", "tid" => $tid, "fee" => $order["price"] );
-			$res = $this->model->wxpay($payinfo, 14);
-			if( !is_error($res) ) 
-			{
-				$wechat = array( "success" => true, "payinfo" => $res );
-				if( !empty($res["package"]) && strexists($res["package"], "prepay_id=") ) 
-				{
-					$prepay_id = str_replace("prepay_id=", "", $res["package"]);
-					pdo_update("ewei_shop_order", array( "wxapp_prepay_id" => $prepay_id ), array( "id" => $orderid, "uniacid" => $_W["uniacid"] ));
-				}
-			}
-			else 
-			{
-				$wechat["payinfo"] = $res;
-			}
-		}
-		if( !empty($order["addressid"]) ) 
-		{
-			$cash = array( "success" => $order["cash"] == 1 && isset($set["pay"]) && $set["pay"]["cash"] == 1 && $order["isverify"] == 0 && $order["isvirtual"] == 0 );
-		}
-		$alipay = array( "success" => false );
-		if( !empty($set["pay"]["nativeapp_alipay"]) && 0 < $order["price"] && !$this->iswxapp ) 
-		{
-			$params = array( "out_trade_no" => $log["tid"], "total_amount" => $order["price"], "subject" => $set["shop"]["name"] . "订单", "body" => $_W["uniacid"] . ":0:NATIVEAPP" );
-			$sec = m("common")->getSec();
-			$sec = iunserializer($sec["sec"]);
-			$alipay_config = $sec["nativeapp"]["alipay"];
-			if( !empty($alipay_config) ) 
-			{
-				$res = $this->model->alipay_build($params, $alipay_config);
-				$alipay = array( "success" => true, "payinfo" => $res );
-			}
-		}
-		app_json(array( "order" => array( "id" => $order["id"], "ordersn" => $order["ordersn"], "price" => $order["price"], "title" => $set["shop"]["name"] . "订单" ), "credit" => $credit, "wechat" => $wechat, "alipay" => $alipay, "cash" => $cash ));
-	}
+//	public function main()
+//	{
+//		global $_W;
+//		global $_GPC;
+//		$openid = $_W["openid"];
+//		$uniacid = $_W["uniacid"];
+//		$member = m("member")->getMember($openid, true);
+//		$orderid = intval($_GPC["id"]);
+//		if( empty($orderid) )
+//		{
+//			app_error(AppError::$ParamsError);
+//		}
+//		$order = pdo_fetch("select * from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
+////        app_error($order);
+//		//用 订金 替代 总金额
+//        if($order['paymoney'] > 0){
+//            $order["price"] = $order['goodsprice'] - $order['paymoney'] + $order['couponprice'];
+//        }else{
+//            if(intval($order["deposits"]) > 0){
+//                $order["price"] = $order["deposits"];
+//            }
+//        }
+//
+//		if( empty($order) )
+//		{
+//			app_error(AppError::$OrderNotFound);
+//			exit();
+//		}
+//		if( $order["status"] == -1 )
+//		{
+//			app_error(AppError::$OrderCannotPay);//订单已关闭
+//		}
+//		else
+//		{
+//			if( 1 <= $order["status"] )
+//			{
+//			    if(($order['paymoney']+$order['couponprice']) < $order['goodsprice']){
+//
+//                }else{
+//                    app_error(AppError::$OrderAlreadyPay);
+//                }
+//
+//			}
+//		}
+//        //原版
+//		$log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+//
+//        //20190604修改
+////        $log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid order by plid desc limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+//        //20190604 修改 增加多次支付
+////        $log = pdo_fetchall("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+//
+//		if( !empty($log) && $log["status"] != "0" )
+//		{
+////			app_error(7777);
+//            if($log['fee'] < $order['goodsprice']){
+//
+//            }else {
+//                app_error(AppError::$OrderAlreadyPay);
+//            }
+//		}
+//		if( !empty($log) && $log["status"] == "0" )
+//		{
+//			pdo_delete("core_paylog", array( "plid" => $log["plid"] ));
+//			$log = NULL;
+//		}
+//		if( empty($log) )
+//		{
+//			$log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $order["price"], "status" => 0 );
+//			pdo_insert("core_paylog", $log);
+//			$plid = pdo_insertid();
+//		}
+//		$set = m("common")->getSysset(array( "shop", "pay" ));
+//		$credit = array( "success" => false );
+//		if( isset($set["pay"]) && $set["pay"]["credit"] == 1 )
+//		{
+//			$credit = array( "success" => true, "current" => $member["credit2"] );
+//		}
+//		$wechat = array( "success" => false );
+//		if( !empty($set["pay"]["wxapp"]) && 0 < $order["price"] && $this->iswxapp )
+//		{
+//			$tid = $order["ordersn"];
+//			if( !empty($order["ordersn2"]) )
+//			{
+//				$var = sprintf("%02d", $order["ordersn2"]);
+//				$tid .= "GJ" . $var;
+//			}
+//			$payinfo = array( "openid" => $_W["openid_wa"], "title" => $set["shop"]["name"] . "订单", "tid" => $tid, "fee" => $order["price"] );
+//			$res = $this->model->wxpay($payinfo, 14);
+//			if( !is_error($res) )
+//			{
+//				$wechat = array( "success" => true, "payinfo" => $res );
+//				if( !empty($res["package"]) && strexists($res["package"], "prepay_id=") )
+//				{
+//					$prepay_id = str_replace("prepay_id=", "", $res["package"]);
+//					pdo_update("ewei_shop_order", array( "wxapp_prepay_id" => $prepay_id ), array( "id" => $orderid, "uniacid" => $_W["uniacid"] ));
+//				}
+//			}
+//			else
+//			{
+//				$wechat["payinfo"] = $res;
+//			}
+//		}
+//		if( !empty($order["addressid"]) )
+//		{
+//			$cash = array( "success" => $order["cash"] == 1 && isset($set["pay"]) && $set["pay"]["cash"] == 1 && $order["isverify"] == 0 && $order["isvirtual"] == 0 );
+//		}
+//		$alipay = array( "success" => false );
+//		if( !empty($set["pay"]["nativeapp_alipay"]) && 0 < $order["price"] && !$this->iswxapp )
+//		{
+//			$params = array( "out_trade_no" => $log["tid"], "total_amount" => $order["price"], "subject" => $set["shop"]["name"] . "订单", "body" => $_W["uniacid"] . ":0:NATIVEAPP" );
+//			$sec = m("common")->getSec();
+//			$sec = iunserializer($sec["sec"]);
+//			$alipay_config = $sec["nativeapp"]["alipay"];
+//			if( !empty($alipay_config) )
+//			{
+//				$res = $this->model->alipay_build($params, $alipay_config);
+//				$alipay = array( "success" => true, "payinfo" => $res );
+//			}
+//		}
+//		if($order["deposits"] > 0 ){
+//            $isdeposit = 1;
+//        }else{
+//            $isdeposit = 0;
+//        }
+//		app_json(array( "order" => array( "id" => $order["id"], "ordersn" => $order["ordersn"], "price" => $order["price"],"deposits" => $order["deposits"],"paymoney"=>$order['paymoney'], "title" => $set["shop"]["name"] . "订单" ), "credit" => $credit, "wechat" => $wechat, "alipay" => $alipay, "cash" => $cash ,"isdeposit"=>$isdeposit));
+//	}
+
+    /**
+     * 20190604 修改main
+     */
+    public function main()
+    {
+        global $_W;
+        global $_GPC;
+        $openid = $_W["openid"];
+        $uniacid = $_W["uniacid"];
+        $member = m("member")->getMember($openid, true);
+        $orderid = intval($_GPC["id"]);
+        if( empty($orderid) )
+        {
+            app_error(AppError::$ParamsError);
+        }
+        $order = pdo_fetch("select * from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
+//        app_error($order);
+        //用 订金 替代 总金额
+        if($order['paymoney'] > 0){
+            $order["price"] = $order['goodsprice'] - $order['paymoney'] - $order['couponprice'];
+        }else{
+            if(intval($order["deposits"]) > 0){
+                $order["price"] = $order["deposits"];
+            }
+        }
+
+        if( empty($order) )
+        {
+            app_error(AppError::$OrderNotFound);
+            exit();
+        }
+        if( $order["status"] == -1 )
+        {
+            app_error(AppError::$OrderCannotPay);//订单已关闭
+        }
+        else
+        {
+            if( 1 <= $order["status"] )
+            {
+                if(($order['paymoney']+$order['couponprice']) < $order['goodsprice']){
+
+                }else{
+                    app_error(AppError::$OrderAlreadyPay);
+                }
+
+            }
+        }
+        //原版
+//		$log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+
+        //20190604修改
+        $logs = pdo_fetchall("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid order by plid asc ", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+//        app_error((count($logs)));
+        if(count($logs) >= 2){
+//            app_error($logs);
+            //需要支付尾款
+            if(!empty($logs[1]) && $logs[1]['status'] != "0"){
+                $paymoney = 0;
+                foreach ($logs as $kk1 => $vv1){
+                    $paymoney += $logs[$kk1]['fee'];
+                }
+                if($paymoney >= $order['paymoney']){
+//                    app_error("订单已支付");
+                    app_error(AppError::$OrderAlreadyPay);
+
+                }else{
+
+                    if( !empty($logs[1]) && $logs[1]["status"] == "0" )
+                    {
+                        pdo_delete("core_paylog", array( "plid" => $logs[1]["plid"] ));
+                        $log = NULL;
+                    }
+                    if( empty($logs[1]) )
+                    {
+                        $endpaymoney = $order['goodsprice'] - $order['paymoney'] - $order['couponprice'];
+                        $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $endpaymoney, "status" => 0 );
+                        pdo_insert("core_paylog", $log);
+                        $plid = pdo_insertid();
+                    }
+                }
+
+            }else{
+                //有尾款支付记录 但是未支付 重新生产一条 未支付记录
+                if( !empty($logs[1]) && $logs[1]["status"] == "0" )
+                {
+//                app_error(3);
+                    pdo_delete("core_paylog", array( "plid" => $logs[1]["plid"] ));
+                    $logs[1] = NULL;
+                }
+                if( empty($logs[1]) )
+                {
+                    $endpaymoney = $order['goodsprice'] - $order['paymoney'] - $order['couponprice'];
+                    $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $endpaymoney, "status" => 0 );
+                    pdo_insert("core_paylog", $log);
+                    $plid = pdo_insertid();
+                }
+            }
+        }else if(count($logs) > 0){
+            //只有一条
+//            app_error($logs);
+            if(!empty($logs[0]) && $logs[0]["status"] != "0"){
+                if($logs[0]['fee'] < $order['goodsprice']){
+                    //只有一条并没有支付尾款
+                    $endpaymoney = $order['goodsprice'] - $order['paymoney'] - $order['couponprice'];
+                    $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $endpaymoney, "status" => 0 );
+//                    app_error($log);
+                    pdo_insert("core_paylog", $log);
+                    $plid = pdo_insertid();
+
+                }else {
+//                    app_error("订单已支付");
+                    app_error(AppError::$OrderAlreadyPay);
+                }
+            }
+            if( !empty($logs[0]) && $logs[0]["status"] == "0" )
+            {
+//                app_error(3);
+                pdo_delete("core_paylog", array( "plid" => $logs[0]["plid"] ));
+                $logs[0] = NULL;
+            }
+            if( empty($logs[0]) )
+            {
+                $endpaymoney = $order['goodsprice'] - $order['paymoney'] - $order['couponprice'];
+                $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $endpaymoney, "status" => 0 );
+                pdo_insert("core_paylog", $log);
+                $plid = pdo_insertid();
+            }
+
+        }else{
+//            app_error("没有支付记录");
+            $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $order["price"], "status" => 0 );
+            pdo_insert("core_paylog", $log);
+            $plid = pdo_insertid();
+
+        }
+//        app_error(7777);
+
+
+
+//        if( !empty($log) && $log["status"] != "0" )
+//        {
+////			app_error(7777);
+//            if($log['fee'] < $order['goodsprice']){
+//
+//            }else {
+//                app_error(AppError::$OrderAlreadyPay);
+//            }
+//        }
+//        if( !empty($log) && $log["status"] == "0" )
+//        {
+//            pdo_delete("core_paylog", array( "plid" => $log["plid"] ));
+//            $log = NULL;
+//        }
+//        if( empty($log) )
+//        {
+//            $log = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $order["price"], "status" => 0 );
+//            pdo_insert("core_paylog", $log);
+//            $plid = pdo_insertid();
+//        }
+//
+//
+//        $logs = pdo_fetchall("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+//        $paymoney = 0;
+//        foreach ($logs as $kk => $vv){
+//            if($logs[$kk]["status"] != "0"){
+//                $paymoney += $logs[$kk]['fee'];
+//            }
+//
+//        }
+//        if($paymoney >= ($order['paymoney']+$order['couponprice'])){
+//            app_error(1111111);
+////            app_error(AppError::$OrderAlreadyPay);
+//        }else{
+//            $endpaymoney = $order['goodsprice'] - $order['paymoney'] + $order['couponprice'];
+//            foreach ($logs as $kk => $vv){
+//                if($logs[$kk]["status"] != "0"){
+//                    $paymoney += $logs[$kk]['fee'];
+//                }
+//                if( !empty($logs[$kk]) && $logs[$kk]["status"] == "0" )
+//                {
+//                    pdo_delete("core_paylog", array( "plid" => $logs[$kk]["plid"] ));
+////                    $log = NULL;
+//                }
+//
+//            }
+//
+//            $log2 = array( "uniacid" => $uniacid, "openid" => $member["uid"], "module" => "ewei_shopv2", "tid" => $order["ordersn"], "fee" => $endpaymoney, "status" => 0 );
+////            app_error($log);
+//            pdo_insert("core_paylog", $log2);
+//            $log = $log2;
+//            $plid = pdo_insertid();
+//        }
+//        app_error($log);
+
+
+        $set = m("common")->getSysset(array( "shop", "pay" ));
+        $credit = array( "success" => false );
+        if( isset($set["pay"]) && $set["pay"]["credit"] == 1 )
+        {
+            $credit = array( "success" => true, "current" => $member["credit2"] );
+        }
+        $wechat = array( "success" => false );
+        if( !empty($set["pay"]["wxapp"]) && 0 < $order["price"] && $this->iswxapp )
+        {
+            $tid = $order["ordersn"];
+            if( !empty($order["ordersn2"]) )
+            {
+                $var = sprintf("%02d", $order["ordersn2"]);
+                $tid .= "GJ" . $var;
+            }
+            $payinfo = array( "openid" => $_W["openid_wa"], "title" => $set["shop"]["name"] . "订单", "tid" => $tid, "fee" => $order["price"] );
+            $res = $this->model->wxpay($payinfo, 14);
+            if( !is_error($res) )
+            {
+                $wechat = array( "success" => true, "payinfo" => $res );
+                if( !empty($res["package"]) && strexists($res["package"], "prepay_id=") )
+                {
+                    $prepay_id = str_replace("prepay_id=", "", $res["package"]);
+                    pdo_update("ewei_shop_order", array( "wxapp_prepay_id" => $prepay_id ), array( "id" => $orderid, "uniacid" => $_W["uniacid"] ));
+                }
+            }
+            else
+            {
+                $wechat["payinfo"] = $res;
+            }
+        }
+        if( !empty($order["addressid"]) )
+        {
+            $cash = array( "success" => $order["cash"] == 1 && isset($set["pay"]) && $set["pay"]["cash"] == 1 && $order["isverify"] == 0 && $order["isvirtual"] == 0 );
+        }
+        $alipay = array( "success" => false );
+        if( !empty($set["pay"]["nativeapp_alipay"]) && 0 < $order["price"] && !$this->iswxapp )
+        {
+            $params = array( "out_trade_no" => $log["tid"], "total_amount" => $order["price"], "subject" => $set["shop"]["name"] . "订单", "body" => $_W["uniacid"] . ":0:NATIVEAPP" );
+            $sec = m("common")->getSec();
+            $sec = iunserializer($sec["sec"]);
+            $alipay_config = $sec["nativeapp"]["alipay"];
+            if( !empty($alipay_config) )
+            {
+                $res = $this->model->alipay_build($params, $alipay_config);
+                $alipay = array( "success" => true, "payinfo" => $res );
+            }
+        }
+        if($order["deposits"] > 0 ){
+            $isdeposit = 1;
+        }else{
+            $isdeposit = 0;
+        }
+        app_json(array( "order" => array( "id" => $order["id"], "ordersn" => $order["ordersn"], "price" => $order["price"],"deposits" => $order["deposits"],"paymoney"=>$order['paymoney'], "title" => $set["shop"]["name"] . "订单" ), "credit" => $credit, "wechat" => $wechat, "alipay" => $alipay, "cash" => $cash ,"isdeposit"=>$isdeposit));
+    }
+
 	public function complete() 
 	{
 		global $_W;
@@ -112,6 +396,7 @@ class Pay_EweiShopV2Page extends AppMobilePage
 			app_error(AppError::$ParamsError);
 		}
 		$type = trim($_GPC["type"]);
+//        app_error($type);
 		if( !in_array($type, array( "wechat", "alipay", "credit", "cash" )) ) 
 		{
 			app_error(AppError::$OrderPayNoPayType);
@@ -125,16 +410,23 @@ class Pay_EweiShopV2Page extends AppMobilePage
 		$set["pay"]["weixin_jie"] = (!empty($set["pay"]["weixin_jie_sub"]) ? 1 : $set["pay"]["weixin_jie"]);
 		$member = m("member")->getMember($openid, true);
 		$order = pdo_fetch("select * from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid and openid=:openid limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid, ":openid" => $openid ));
+//        app_error($order);
 		if( empty($order) ) 
 		{
 			app_error(AppError::$OrderNotFound);
 		}
-		if( 1 <= $order["status"] ) 
+		if( 1 <= $order["status"] && $order["paymoney"] >= $order["price"])
 		{
 			$this->success($orderid);
 		}
-		$log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
-		if( empty($log) ) 
+		//原版
+//		$log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+
+        //20190605 修改
+        $log = pdo_fetch("SELECT * FROM " . tablename("core_paylog") . " WHERE `uniacid`=:uniacid AND `module`=:module AND `tid`=:tid order by plid desc limit 1", array( ":uniacid" => $uniacid, ":module" => "ewei_shopv2", ":tid" => $order["ordersn"] ));
+
+//        app_error($log);
+		if( empty($log) )
 		{
 			app_error(AppError::$OrderPayFail);
 		}
@@ -259,6 +551,7 @@ class Pay_EweiShopV2Page extends AppMobilePage
 			$record = array( );
 			$record["status"] = "1";
 			$record["type"] = "cash";
+			//更新 支付记录表 支付类型为：现金；支付状态为：成功
 			pdo_update("core_paylog", $record, array( "plid" => $log["plid"] ));
 			$ret = array( );
 			$ret["result"] = "success";
@@ -271,7 +564,11 @@ class Pay_EweiShopV2Page extends AppMobilePage
 			$ret["uniacid"] = $log["uniacid"];
 			@session_start();
 			$_SESSION[EWEI_SHOPV2_PREFIX . "_order_pay_complete"] = 1;
+			//更新 订单表 支付状态为：1
 			m("order")->setOrderPayType($order["id"], 1);
+			//更新 订单表 已经支付多少钱
+            m("order")->setOrderPayMoney($order["id"],$log["plid"]);
+
 			$pay_result = m("order")->payResult($ret);
 			$this->success($orderid);
 		}
@@ -296,6 +593,9 @@ class Pay_EweiShopV2Page extends AppMobilePage
 					$record["type"] = "wechat";
 					pdo_update("core_paylog", $record, array( "plid" => $log["plid"] ));
 					m("order")->setOrderPayType($order["id"], 21);
+                    //更新 订单表 已经支付多少钱
+                    m("order")->setOrderPayMoney($order["id"],$log["plid"]);
+
 					$ret = array( );
 					$ret["result"] = "success";
 					$ret["type"] = "wechat";
@@ -352,6 +652,9 @@ class Pay_EweiShopV2Page extends AppMobilePage
 						$ret["uniacid"] = $log["uniacid"];
 						$ret["deduct"] = intval($_GPC["deduct"]) == 1;
 						m("order")->setOrderPayType($order["id"], 22);
+                        //更新 订单表 已经支付多少钱
+                        m("order")->setOrderPayMoney($order["id"],$log["plid"]);
+
 						$pay_result = m("order")->payResult($ret);
 						pdo_update("ewei_shop_order", array( "apppay" => 2 ), array( "id" => $order["id"] ));
 						$this->success($order["id"]);
@@ -548,5 +851,12 @@ class Pay_EweiShopV2Page extends AppMobilePage
 		$log_data = array( "uniacid" => $uniacid, "openid" => $openid, "type" => 2, "logno" => $order["ordersn"], "title" => "小程序商城消费", "createtime" => TIMESTAMP, "status" => 1, "money" => 0 - $fee, "rechargetype" => "wxapp", "remark" => "小程序端余额支付" );
 		pdo_insert("ewei_shop_member_log", $log_data);
 	}
+
+
+	public function ttstst(){
+        global $_W;
+        global $_GPC;
+        m("order")->setOrderPayMoney(8,602);
+    }
 }
 ?>

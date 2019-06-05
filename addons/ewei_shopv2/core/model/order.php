@@ -2940,5 +2940,31 @@ class Order_EweiShopV2Model
             return array();
         }
     }
+
+
+    /**
+     * 更新 订单表 已支付N元
+     */
+    public function setOrderPayMoney($orderid,$plid){
+        global $_W;
+        $orderdata = pdo_fetch(" select * from " . tablename("ewei_shop_order") . " where 1 and id = {$orderid} limit 1 ");
+        $paylog = pdo_fetch(" select * from " . tablename("core_paylog") . " where 1 and plid = {$plid} limit 1 ");
+//        app_json(array("list"=>$paylog));
+        if($paylog['status'] == 1){
+            if($orderdata['paymoney'] > 0){
+                $paymoney = $orderdata['paymoney'];
+                $paymoney = $paymoney+$paylog['fee'];
+                pdo_update("ewei_shop_order",array("paymoney"=>$paymoney),array("id"=>$orderid));
+            }else{
+                $paymoney = $paylog['fee'];
+                pdo_update("ewei_shop_order",array("paymoney"=>$paymoney),array("id"=>$orderid));
+            }
+
+        }else{
+            $paymoney = 0;
+        }
+//        app_json(array("list"=>$paymoney));
+
+    }
 }
 ?>
