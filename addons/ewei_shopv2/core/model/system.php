@@ -761,20 +761,28 @@ class System_EweiShopV2Model {
                 "subtitle" => "订单管理",
                 "icon" => "order",
                 "items" => array(
+
+
+                    array(
+                        "title" => "待付款",
+                        "route" => "list.status0",
+                        "desc" => "待付款订单管理"
+                    ) ,
                     array(
                         "title" => "待发货",
                         "route" => "list.status1",
                         "desc" => "待发货订单管理"
                     ) ,
+
                     array(
                         "title" => "待收货",
                         "route" => "list.status2",
                         "desc" => "待收货订单管理"
                     ) ,
                     array(
-                        "title" => "待付款",
-                        "route" => "list.status0",
-                        "desc" => "待付款订单管理"
+                        "title" => "待付尾款",
+                        "route" => "list.status22",
+                        "desc" => "待付尾款订单管理"
                     ) ,
                     array(
                         "title" => "已完成",

@@ -239,6 +239,238 @@ class Verify_EweiShopV2ComModel extends ComModel
 		$carrier = unserialize($order["carrier"]);
 		return array( "order" => $order, "store" => $store, "saler" => $saler, "lastverifys" => $lastverifys, "allgoods" => $allgoods, "goods" => $goods, "verifyinfo" => $verifyinfo, "carrier" => $carrier );
 	}
+
+    /**
+     * 20190612 新增 自建配送核销
+     * @param $orderid
+     * @param int $times
+     * @param string $verifycode
+     * @param string $openid
+     * @return array 返回 消息状态 和 消息文本
+     */
+    public function allow2($orderid, $times = 0, $verifycode = "", $openid = "")
+    {
+        global $_W;
+        global $_GPC;
+        if( empty($openid) )
+        {
+            $openid = $_W["openid"];
+            if(empty($openid)){
+                return error(-1, "未登录!");
+            }else{
+                $mobile = (pdo_getcolumn("ewei_shop_member",array('openid' => $openid),'mobile',1));
+            }
+        }
+        $uniacid = $_W["uniacid"];
+        $store = false;
+        $merchid = 0;
+        $lastverifys = 0;
+        $verifyinfo = false;
+        if( $times <= 0 )
+        {
+            $times = 1;
+        }
+        $merch_plugin = p("merch");
+        $order = pdo_fetch("select * from " . tablename("ewei_shop_order") . " where id=:id and uniacid=:uniacid  limit 1", array( ":id" => $orderid, ":uniacid" => $uniacid ));
+        if( empty($order) )
+        {
+            return error(-1, "订单不存在!");
+        }
+        if( empty($order["isverify"]) && empty($order["dispatchtype"]) && empty($order["istrade"]) )
+        {
+            return error(-1, "订单无需核销!");
+        }
+        if( $order["verifyendtime"] < time() && 0 < $order["verifyendtime"] )
+        {
+            return error(-1, "该记录已失效，兑换期限已过!");
+        }
+        if( $order["paytype"] != 3 && $order["status"] < 1 )
+        {
+            return error(-1, "该订单尚未支付!");
+        }
+        $merchid = $order["merchid"];
+        if( empty($merchid) )
+        {
+            $saler = pdo_debug(pdo_fetch("select * from " . tablename("ewei_shop_selfexpress_personnel") . " where mobile=:mobile and uniacid=:uniacid and status=1 limit 1", array( ":uniacid" => $_W["uniacid"], ":mobile" => $mobile )));
+            return error(-1111, array("list"=>$saler));
+        }
+        else
+        {
+            if( $merch_plugin )
+            {
+                $saler = pdo_fetch("select * from " . tablename("ewei_shop_selfexpress_personnel") . " where mobile=:mobile and uniacid=:uniacid and status=1 and merchid=:merchid limit 1", array( ":uniacid" => $_W["uniacid"], ":mobile" => $mobile, ":merchid" => $merchid ));
+            }
+        }
+        if( empty($saler) )
+        {
+            return error(-1, "无核销权限!");
+        }
+        if( !empty($order["storeid"]) && !empty($saler["storeid"]) && $order["storeid"] != $saler["storeid"] )
+        {
+            return error(1, "该商品无法在您所属门店核销!请重新确认!");
+        }
+        $newstore_plugin = p("newstore");
+        $sqlstr = "";
+        if( $newstore_plugin )
+        {
+            $sqlstr .= ",og.trade_time,og.optime,og.peopleid,og.trade_time,og.optime,g.tempid";
+        }
+        $allgoods = pdo_fetchall("select og.id, og.qrcodeid, og.qrcodeno, og.goodsid,og.price,g.title,g.thumb,og.total,g.credit,og.optionid,o.title as optiontitle,g.isverify,g.storeids,g.status" . $sqlstr . " from " . tablename("ewei_shop_order_goods") . " og " . " left join " . tablename("ewei_shop_goods") . " g on g.id=og.goodsid " . " left join " . tablename("ewei_shop_goods_option") . " o on o.id=og.optionid " . " where og.orderid=:orderid and og.uniacid=:uniacid ", array( ":uniacid" => $uniacid, ":orderid" => $orderid ));
+        if( empty($allgoods) )
+        {
+            return error(-1, "订单异常!");
+        }
+        foreach($allgoods as &$item){
+            $item = set_medias($item, "thumb");
+        }
+        $goods = $allgoods[0];
+        $goods = set_medias($goods, "thumb");
+        if( $order["isverify"] || $order["istrade"] )
+        {
+            if( count($allgoods) != 1 )
+            {
+                $gift = false;
+                foreach( $allgoods as $key => $value )
+                {
+                    if( $value["status"] == 2 )
+                    {
+                        $gift = true;
+                    }
+                }
+                if( $gift )
+                {
+                    return error(-1, "核销单异常!");
+                }
+            }
+            if( 0 < $order["refundid"] && 0 < $order["refundstate"] )
+            {
+                return error(-1, "订单维权中,无法核销!");
+            }
+            if( $order["status"] == -1 && 0 < $order["refundtime"] )
+            {
+                return error(-1, "订单状态变更,无法核销!");
+            }
+            $storeids = array( );
+            if( !empty($goods["storeids"]) )
+            {
+                $storeids = explode(",", $goods["storeids"]);
+            }
+            if( !empty($storeids) && !empty($saler["storeid"]) && !in_array($saler["storeid"], $storeids) )
+            {
+                return error(-1, "您无此门店的核销权限!");
+            }
+            if( $order["verifytype"] == 0 )
+            {
+                if( !empty($order["verified"]) )
+                {
+                    return error(-1, "此订单已核销!");
+                }
+            }
+            else
+            {
+                if( $order["verifytype"] == 1 )
+                {
+                    $verifyinfo = iunserializer($order["verifyinfo"]);
+                    if( !is_array($verifyinfo) )
+                    {
+                        $verifyinfo = array( );
+                    }
+                    $lastverifys = $goods["total"] - count($verifyinfo);
+                    if( $lastverifys <= 0 )
+                    {
+                        return error(-1, "此订单已全部使用!");
+                    }
+                    if( $lastverifys < $times )
+                    {
+                        return error(-1, "最多核销 " . $lastverifys . " 次!");
+                    }
+                }
+                else
+                {
+                    if( $order["verifytype"] == 2 )
+                    {
+                        $verifyinfo = iunserializer($order["verifyinfo"]);
+                        $verifys = 0;
+                        foreach( $verifyinfo as $v )
+                        {
+                            if( !empty($verifycode) && trim($v["verifycode"]) === trim($verifycode) && $v["verified"] )
+                            {
+                                return error(-1, "消费码 " . $verifycode . " 已经使用!");
+                            }
+                            if( $v["verified"] )
+                            {
+                                $verifys++;
+                            }
+                        }
+                        $lastverifys = count($verifyinfo) - $verifys;
+                        if( count($verifyinfo) <= $verifys )
+                        {
+                            return error(-1, "消费码都已经使用过了!");
+                        }
+                    }
+                    else
+                    {
+                        if( $order["verifytype"] == 3 && !empty($order["verified"]) )
+                        {
+                            return error(-1, "此订单已核销!");
+                        }
+                    }
+                }
+            }
+            if( !empty($saler["storeid"]) )
+            {
+                if( 0 < $merchid )
+                {
+                    $store = pdo_fetch("select * from " . tablename("ewei_shop_store") . " where id=:id and uniacid=:uniacid and merchid = :merchid limit 1", array( ":id" => $saler["storeid"], ":uniacid" => $_W["uniacid"], ":merchid" => $merchid ));
+                }
+                else
+                {
+                    $store = pdo_fetch("select * from " . tablename("ewei_shop_store") . " where id=:id and uniacid=:uniacid limit 1", array( ":id" => $saler["storeid"], ":uniacid" => $_W["uniacid"] ));
+                }
+            }
+        }
+        else
+        {
+            if( $order["dispatchtype"] == 1 )
+            {
+                if( 3 <= $order["status"] )
+                {
+                    return error(-1, "订单已经完成，无法进行自提!");
+                }
+                if( 0 < $order["refundid"] && 0 < $order["refundstate"] )
+                {
+                    return error(-1, "订单维权中,无法进行自提!");
+                }
+                if( $order["status"] == -1 && 0 < $order["refundtime"] )
+                {
+                    return error(-1, "订单状态变更,无法进行自提!");
+                }
+                if( !empty($order["storeid"]) )
+                {
+                    if( 0 < $merchid )
+                    {
+                        $store = pdo_fetch("select * from " . tablename("ewei_shop_store") . " where id=:id and uniacid=:uniacid and merchid = :merchid limit 1", array( ":id" => $order["storeid"], ":uniacid" => $_W["uniacid"], ":merchid" => $merchid ));
+                    }
+                    else
+                    {
+                        $store = pdo_fetch("select * from " . tablename("ewei_shop_store") . " where id=:id and uniacid=:uniacid limit 1", array( ":id" => $order["storeid"], ":uniacid" => $_W["uniacid"] ));
+                    }
+                }
+                if( empty($store) )
+                {
+                    return error(-1, "订单未选择自提门店!");
+                }
+                if( !empty($saler["storeid"]) && $saler["storeid"] != $order["storeid"] )
+                {
+                    return error(-1, "您无此门店的自提权限!");
+                }
+            }
+        }
+        $carrier = unserialize($order["carrier"]);
+        return array( "order" => $order, "store" => $store, "saler" => $saler, "lastverifys" => $lastverifys, "allgoods" => $allgoods, "goods" => $goods, "verifyinfo" => $verifyinfo, "carrier" => $carrier );
+    }
+
+
 	public function verify($orderid = 0, $times = 0, $verifycode = "", $openid = "") 
 	{
 		global $_W;

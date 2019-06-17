@@ -108,10 +108,12 @@ class Cart_EweiShopV2Page extends AppMobilePage
 				}
 			}
 		}      
-        $data = pdo_fetch('select id,total,diyformid from ' . tablename('ewei_shop_member_cart') . ' where goodsid=:id and openid=:openid and   optionid=:optionid  and deleted=0 and  uniacid=:uniacid   limit 1', array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid'], ':optionid' => $optionid, ':id' => $id));		
+        $data = pdo_fetch('select id,total,diyformid from ' . tablename('ewei_shop_member_cart') . ' where goodsid=:id and openid=:openid and   optionid=:optionid  and deleted=0 and  uniacid=:uniacid   limit 1', array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid'], ':optionid' => $optionid, ':id' => $id));
+//        app_json(array('lis'=>$data));
         if (empty($data)) 
         {
             $data = array('uniacid' => $_W['uniacid'], 'merchid' => $goods['merchid'], 'openid' => $_W['openid'], 'goodsid' => $id, 'optionid' => $optionid, 'marketprice' => $goods['marketprice'], 'total' => $total, 'selected' => 1, 'diyformid' => $diyformid, 'diyformdata' => $diyformdata, 'diyformfields' => $diyformfields, 'createtime' => time());
+            $iscart = 0;
             pdo_insert('ewei_shop_member_cart', $data);
         }
         else 
@@ -120,12 +122,14 @@ class Cart_EweiShopV2Page extends AppMobilePage
             $data['diyformdata'] = $diyformdata;
             $data['diyformfields'] = $diyformfields;
             $data['total'] += $total;
+            $iscart = 1;
             pdo_update('ewei_shop_member_cart', $data, array('id' => $data['id']));
         }       
 		$cartcount = pdo_fetchcolumn('select sum(total) from ' . tablename('ewei_shop_member_cart') . ' where openid=:openid and deleted=0 and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':openid' => $_W['openid']));
         $return = array(
             'isnew'         => false,
-            'cartcount'     => $cartcount
+            'cartcount'     => $cartcount,
+            'iscart' => $iscart,
         );
         
 		app_json($return);

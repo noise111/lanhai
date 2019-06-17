@@ -21,7 +21,21 @@ class Index_EweiShopV2Page extends AppMobilePage
 		$merch_data = m("common")->getPluginset("merch");
 		if( $merch_plugin && $merch_data["is_openmerch"] ) 
 		{
-			$statics = array( "order_0" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=0  and uniacid=:uniacid limit 1", $params), "order_1" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=1 and refundid=0 and uniacid=:uniacid limit 1", $params), "order_2" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=2 and refundid=0 and uniacid=:uniacid limit 1", $params), "order_4" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and refundstate=1 and uniacid=:uniacid limit 1", $params), "cart" => pdo_fetchcolumn("select ifnull(sum(total),0) from " . tablename("ewei_shop_member_cart") . " where uniacid=:uniacid and openid=:openid and deleted=0 ", $params), "favorite" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_member_favorite") . " where uniacid=:uniacid and openid=:openid and deleted=0 ", $params) );
+			$statics = array(
+                //待付款
+			    "order_0" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=0  and uniacid=:uniacid limit 1", $params),
+                //待发货
+                "order_1" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=1 and refundid=0 and uniacid=:uniacid limit 1", $params),
+                //待收货
+                "order_2" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and status=2 and refundid=0 and uniacid=:uniacid limit 1", $params),
+                //
+                "order_4" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and refundstate=1 and uniacid=:uniacid limit 1", $params),
+                //待付尾款
+                "order_x" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where openid=:openid and (status=1 or status=3) and paymoney = deposits and uniacid=:uniacid limit 1", $params),
+                "cart" => pdo_fetchcolumn("select ifnull(sum(total),0) from " . tablename("ewei_shop_member_cart") . " where uniacid=:uniacid and openid=:openid and deleted=0 ", $params),
+                "favorite" => pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_member_favorite") . " where uniacid=:uniacid and openid=:openid and deleted=0 ", $params)
+
+            );
 		}
 		else 
 		{

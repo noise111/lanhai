@@ -1,0 +1,213 @@
+{template '_header'}
+<script type="text/javascript" src="../addons/ewei_shopv2/static/js/dist/area/cascade.js"></script>
+<style>
+    .checkbox-inline{
+        display: block;
+    }    .btns a i{
+             display: inline-block;
+             width: 100%;
+             height: 20px;
+             background: #f95959;
+         }
+    .btn-color {
+        width: 25px;
+        height: 25px;
+        border: 1px solid #fff;
+        margin: 2px;
+        padding: 0;
+    }
+
+</style>
+<div class="page-header">
+    当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}配送路线
+        <small>{if !empty($item['id'])}修改【{$item['storename']}】{/if}</small>
+    </span>
+</div>
+
+<div class="page-content">
+    {ifp 'shop.route.add'}
+    <div class="page-sub-toolbar">
+        <a class="btn btn-primary btn-sm" href="{php echo webUrl('shop/route/add')}">添加新配送路线</a>
+    </div>
+    {/if}
+    <form {ife 'shop.route' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="{$item['id']}"/>
+    <div class="form-group">
+        <label class="col-lg control-label must">配送路线名称</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'shop.route' $item}
+            <input type="text" name="storename" class="form-control" value="{$item['storename']}"
+                   data-rule-required="true"/>
+            {else}
+            <div class='form-control-static'>{$item['storename']}</div>
+            {/if}
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-lg control-label must">关联配送员【一个】</label>
+        <div class="col-sm-9 col-xs-12">
+            {ifp 'shop.list.edit'}
+            <select name='personnelid[]' class='form-control select2' multiple data-placeholder="无配送员">
+                {loop $personnel $personnel}
+                <option value='{$personnel['id']}' {if in_array($personnel['id'],explode(',',$item['personnelid']))}selected{/if}>{$personnel['salername']}</option>
+                {/loop}
+            </select>
+            {else}
+            <div class='form-control-static'>
+                {if empty($item['personnelid'])}
+                无配送员
+                {else}
+                {php echo pdo_fetchcolumn('select salername from '.tablename('ewei_shop_selfexpress_personnel').' where id=:id and status =1 limit 1',array(':id'=>$item['personnelid']))}
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label must">关联仓库【一个】</label>
+        <div class="col-sm-9 col-xs-12">
+            {ifp 'shop.list.edit'}
+            <select name='warehouseid[]' class='form-control select2' multiple data-placeholder="无仓库">
+                {loop $warehouse $warehouse}
+                <option value='{$warehouse['id']}' {if in_array($warehouse['id'],explode(',',$item['warehouseid']))}selected{/if}>{$warehouse['storename']}</option>
+                {/loop}
+            </select>
+            {else}
+            <div class='form-control-static'>
+                {if empty($member['groupid'])}
+                无仓库
+                {else}
+                {php echo pdo_fetchcolumn('select storename from '.tablename('ewei_shop_selfexpress_warehouse').' where id=:id and status = 1 limit 1',array(':id'=>$item['warehouseid']))}
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-lg control-label must">关联小区【多个】</label>
+        <div class="col-sm-9 col-xs-12">
+            {ifp 'shop.list.edit'}
+            <select name='data[groupid][]' class='form-control select2' multiple data-placeholder="无标签组">
+                {loop $groups $group}
+                <option value='{$group['id']}' {if in_array($group['id'],explode(',',$member['groupid']))}selected{/if}>{$group['groupname']}</option>
+                {/loop}
+            </select>
+            {else}
+            <div class='form-control-static'>
+                {if empty($member['groupid'])}
+                无分组
+                {else}
+                {php echo pdo_fetchcolumn('select groupname from '.tablename('ewei_shop_member_group').' where id=:id limit 1',array(':id'=>$member['groupid']))}
+                {/if}
+            </div>
+            {/if}
+        </div>
+    </div>
+
+
+
+
+
+    <div class="form-group">
+        <label class="col-lg control-label">配送路线简介</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'shop.route' $item}
+            <textarea name="desc" class="form-control richtext" rows="5">{$item['desc']}</textarea>
+            {else}
+            <div class='form-control-static'>{$item['desc']}</div>
+            {/if}
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group">
+        <label class="col-lg control-label">状态</label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'shop.route' $item}
+            <label class='radio-inline'>
+                <input type='radio' name='status' value='1' {if $item['status']==1}checked{/if} /> 启用
+            </label>
+            <label class='radio-inline'>
+                <input type='radio' name='status' value='0' {if $item['status']==0}checked{/if} /> 禁用
+            </label>
+            {else}
+            <div class='form-control-static'>{if $item['status']==1}启用{else}禁用{/if}</div>
+            {/if}
+        </div>
+    </div>
+
+
+
+
+    <div class="form-group"></div>
+    <div class="form-group">
+        <label class="col-lg control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            {ife 'shop.route' $item}
+            <input type="submit" value="提交" class="btn btn-primary"/>
+
+            {/if}
+            <input type="button" name="back" onclick='history.back()' {ifp  'shop.route.add|shop.route.edit'}style='margin-left:10px;'{/if} value="返回列表" class="btn btn-default" />
+        </div>
+    </div>
+    </form>
+</div>
+<script language='javascript'>
+    $(function () {
+        $(':radio[name=type]').click(function () {
+            type = $("input[name='type']:checked").val();
+
+            if (type == '1' || type == '3') {
+                $('#pick_info').show();
+            } else {
+                $('#pick_info').hide();
+            }
+        })
+    })
+
+    //添加标签
+    function addLabelItem(){
+        if($('.label-items')[0].childElementCount<8)
+        {
+            var html= '<div class="input-group recharge-item"  style="width:300px;margin-top:5px">';
+            html+='<span class="input-group-addon">内容</span>';
+            html+='<input type="text" class="form-control"  style="width:200px;" maxlength="20" name="lab[]"  />';
+            html+='<div class="input-group-btn"><button class="btn btn-danger" type="button" onclick="removeLabelItem(this)"><i class="fa fa-remove"></i></button></div></div>';
+
+            $('.label-items').append(html);
+        }else{
+            tip.msgbox.err("标签最多八个!");
+        }
+    }
+
+    //添加角标
+    function addTagItem(){
+        if($('.tag-items')[0].childElementCount<3)
+        {
+            var html= '<div class="input-group recharge-item"  style="width:300px;margin-top:5px">';
+            html+='<span class="input-group-addon">内容</span>';
+            html+='<input type="text" class="form-control"  style="width:200px;" maxlength="3" name="tag[]"  />';
+            html+='<div class="input-group-btn"><button class="btn btn-danger" type="button" onclick="removeTagItem(this)"><i class="fa fa-remove"></i></button></div></div>';
+
+            $('.tag-items').append(html);
+        }else{
+            tip.msgbox.err("角标最多三个!");
+        }
+    }
+
+    //删除标签
+    function removeLabelItem(obj){
+        $(obj).closest('.recharge-item').remove();
+    }
+    //删除角标
+    function removeTagItem(obj){
+        $(obj).closest('.recharge-item').remove();
+    }
+
+    cascdeInit("{php echo $new_area}","{php echo $address_street}","{php echo isset($item['province'])?$item['province']:''}","{php echo isset($item['city'])?$item['city']:''}","{php echo isset($item['area'])?$item['area']:''}","''");
+</script>
+{template '_footer'}

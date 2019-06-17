@@ -228,8 +228,28 @@ class List_EweiShopV2Page extends WebPage
 								}
 								else 
 								{
-									$statuscondition = " AND o.status = " . intval($status);
-									$priceStatus = " AND o.status = " . intval($status);
+                                    if( $status == "22" )
+                                    {
+//                                        $statuscondition = " AND ( (o.status=1 or o.status=3) and o.paymoney = o.deposits  )";
+//                                        $priceStatus = " AND (  (o.status=1 or o.status=3) and o.paymoney = o.deposits )";
+
+                                        $statuscondition = " AND ( o.paymoney = o.deposits  and paytype !=0 )";
+                                        $priceStatus = " AND ( o.paymoney = o.deposits and paytype !=0 )";
+                                    }else{
+                                        if( $status == "3" )
+                                        {
+//                                        $statuscondition = " AND ( (o.status=1 or o.status=3) and o.paymoney = o.deposits  )";
+//                                        $priceStatus = " AND (  (o.status=1 or o.status=3) and o.paymoney = o.deposits )";
+
+                                            $statuscondition = " AND ( o.status=3 and o.paymoney = o.price  )";
+                                            $priceStatus = " AND (  o.status=3 and o.paymoney = o.price )";
+                                        }else{
+                                            $statuscondition = " AND o.status = " . intval($status);
+                                            $priceStatus = " AND o.status = " . intval($status);
+                                        }
+
+                                    }
+
 								}
 							}
 						}
@@ -237,6 +257,7 @@ class List_EweiShopV2Page extends WebPage
 				}
 			}
 		}
+//		print_r($statuscondition);
 		$agentid = intval($_GPC["agentid"]);
 		$p = p("commission");
 		$level = 0;
@@ -375,7 +396,8 @@ class List_EweiShopV2Page extends WebPage
 			{
 				$sql .= "LIMIT " . ($pindex - 1) * $psize . "," . $psize;
 			}
-			$list = pdo_fetchall($sql, $paras);
+			$list = (pdo_fetchall($sql, $paras));
+//			print_r($list);
 		}
 		else 
 		{
@@ -466,7 +488,19 @@ class List_EweiShopV2Page extends WebPage
 				$pt = $value["paytype"];
 				$value["statusvalue"] = $s;
 				$value["statuscss"] = $orderstatus[$value["status"]]["css"];
-				$value["status"] = $orderstatus[$value["status"]]["name"];
+				if($value["status"] == 3){
+				    if($value['paymoney'] == $value['deposits']){
+                        $value["status"] = "待付尾款";
+                        $value["statuscss"] = "danger";
+                    }else{
+                        $value["status"] = $orderstatus[$value["status"]]["name"];
+                    }
+
+
+                }else{
+                    $value["status"] = $orderstatus[$value["status"]]["name"];
+                }
+
 				if( $pt == 3 && empty($value["statusvalue"]) ) 
 				{
 					$value["statuscss"] = $orderstatus[1]["css"];
@@ -1175,6 +1209,7 @@ class List_EweiShopV2Page extends WebPage
 		$stores = pdo_fetchall("select id,storename from " . tablename("ewei_shop_store") . " where uniacid=:uniacid ", array( ":uniacid" => $uniacid ));
 		$r_type = array( "退款", "退货退款", "换货" );
 		load()->func("tpl");
+//		print_r($list);
 		include($this->template("order/list"));
 	}
 	public function main() 
@@ -1201,6 +1236,12 @@ class List_EweiShopV2Page extends WebPage
 		global $_GPC;
 		$orderData = $this->orderData(2, "status2");
 	}
+    public function status22()
+    {
+        global $_W;
+        global $_GPC;
+        $orderData = $this->orderData(22, "status22");
+    }
 	public function status3() 
 	{
 		global $_W;

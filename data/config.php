@@ -5,7 +5,7 @@ $config = array();
 
 $config['db']['master']['host'] = '127.0.0.1';
 $config['db']['master']['username'] = 'root';
-$config['db']['master']['password'] = '123456';
+$config['db']['master']['password'] = 'root';
 $config['db']['master']['port'] = '3306';
 $config['db']['master']['database'] = 'lanhai';
 $config['db']['master']['charset'] = 'utf8mb4';
@@ -41,7 +41,7 @@ $config['setting']['authkey'] = '7675a1ba';
 $config['setting']['founder'] = '1';
 $config['setting']['development'] = 0;
 $config['setting']['referrer'] = 0;
-$config['setting']['https'] = 1;
+$config['setting']['https'] = 0;
 
 // --------------------------  CONFIG UPLOAD  --------------------------- //
 $config['upload']['image']['extentions'] = array('gif', 'jpg', 'jpeg', 'png');

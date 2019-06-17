@@ -43,15 +43,18 @@ class Index_EweiShopV2Page extends AppMobilePage
 			$show_status = intval($show_status);
 			switch( $show_status ) 
 			{
-				case 0: $condition .= " and status=0 and paytype!=3";
+				case 0: $condition .= " and status=0 and paytype!=3 and paymoney =0 ";
 				break;
-				case 2: $condition .= " and (status=2 or status=0 and paytype=3)";
+				case 2: $condition .= " and (status=2 or status=0 and paytype=3) and paymoney =0";
 				break;
-				case 4: $condition .= " and refundstate>0";
+//				case 4: $condition .= " and refundstate>0";
+//				break;
+            //20190610新增 未付尾款 状态
+                case 4: $condition .= "and paymoney !=0 and paymoney <= price and `status` = 1 ";
+                    break;
+				case 5: $condition .= " and userdeleted=1 and paymoney !=0";
 				break;
-				case 5: $condition .= " and userdeleted=1 ";
-				break;
-				default: $condition .= " and status=" . intval($show_status);
+				default: $condition .= " and status=" . intval($show_status) . " and paymoney !=0 ";
 			}
 			if( $show_status != 5 ) 
 			{
@@ -62,13 +65,15 @@ class Index_EweiShopV2Page extends AppMobilePage
 		{
 			$condition .= " and userdeleted=0 ";
 		}
+//        app_json(array( "condition" => $condition ));
 		$com_verify = com("verify");
-		$list = pdo_fetchall("select id,ordersn,price,userdeleted,isparent,refundstate,paytype,status,
+		$list = (pdo_fetchall("select id,ordersn,price,userdeleted,isparent,refundstate,paytype,status,
                 addressid,refundid,isverify,dispatchtype,verifytype,verifyinfo,verifycode,iscomment,iscycelbuy,verified, 
-                couponprice, goodsprice, saleropenid from " . 
+                couponprice, goodsprice, saleropenid,paymoney,deposits from " .
                 tablename("ewei_shop_order") . 
                 " where 1 " . $condition . 
-                " order by createtime desc LIMIT " . ($pindex - 1) * $psize . "," . $psize, $params);
+                " order by createtime desc LIMIT " . ($pindex - 1) * $psize . "," . $psize, $params));
+//        app_json(array( "list" => $list ));
 		$total = pdo_fetchcolumn("select count(*) from " . tablename("ewei_shop_order") . " where 1 " . $condition, $params);
 		$refunddays = intval($_W["shopset"]["trade"]["refunddays"]);
 		if( $is_openmerch == 1 ) 

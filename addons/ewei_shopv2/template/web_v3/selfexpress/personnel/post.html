@@ -4,17 +4,17 @@
 	当前位置：<span class="text-primary">{if !empty($item['id'])}编辑{else}添加{/if}配送员 <small>{if !empty($item['id'])}修改【{$item['salername']}】{/if}</small></span>
 </div>
 <div class="page-content">
-    {ifp 'shop.personnel.add'}
+    {ifp 'selfexpress.personnel.add'}
     <div class="page-sub-toolbar">
-        <a class="btn btn-primary btn-sm" href="{php echo webUrl('shop/personnel/add')}">添加新配送员</a>
+        <a class="btn btn-primary btn-sm" href="{php echo webUrl('selfexpress/personnel/add')}">添加新配送员</a>
     </div>
     {/if}
-    <form {ife 'shop.personnel' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data">
+    <form {ife 'selfexpress.personnel' $item}action="" method="post"{/if} class="form-horizontal form-validate" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{$item['id']}" />
             <div class="form-group" style="display: none;">
                 <label class="col-lg control-label must">选择会员</label>
                 <div class="col-sm-9 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                        {php echo tpl_selector('openid',array('key'=>'openid', 'required'=>true, 'text'=>'nickname', 'thumb'=>'avatar','placeholder'=>'昵称/姓名/手机号','buttontext'=>'选择会员 ', 'items'=>$saler,'url'=>webUrl('member/query',array('no_wa'=>1))))}
                     <span class="help-block">暂时不支持选择小程序的会员</span>
                     {else}
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="col-lg control-label must">配送员姓名</label>
                 <div class="col-sm-9 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                     <input type="text" name="salername" class="form-control" value="{$item['salername']}" data-rule-required='true'/>
                     {else}
                     <div class='form-control-static'>{$item['salername']}</div>
@@ -40,7 +40,7 @@
             <div class="form-group">
                 <label class="col-lg control-label must">手机号</label>
                 <div class="col-sm-9 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                     <input type="text" name="mobile" class="form-control" value="{$item['mobile']}" />
                     {else}
                     <div class='form-control-static'>{$item['mobile']}</div>
@@ -51,7 +51,7 @@
              <div class="form-group" style="display: none;">
                 <label class="col-lg control-label must">所属门店</label>
                 <div class="col-sm-9 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                       {php echo tpl_selector('storeid',array('text'=>'storename','preview'=>true,'type'=>'text',  'thumb'=>'avatar','placeholder'=>'门店名称','buttontext'=>'选择门店 ', 'items'=>$store,'url'=>webUrl('store/query')))}
                       <span class='help-block'>平台所属的门店，用于核销订单</span>
                     {else}
@@ -62,7 +62,7 @@
             <div class="form-group" style="display: none;">
                 <label class="col-lg control-label">角色</label>
                 <div class="col-sm-3 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                     <select class="form-control" name="roleid">
                         <option value="0">请选择...</option>
                         {loop $role $r}
@@ -76,7 +76,7 @@
             <div class="form-group">
                 <label class="col-lg control-label">状态</label>
                 <div class="col-sm-9 col-xs-12">
-                    {ife 'shop.personnel' $item}
+                    {ife 'selfexpress.personnel' $item}
                         <label class='radio-inline'>
                             <input type='radio' name='status' value=1' {if $item['status']==1}checked{/if} /> 启用
                         </label>
@@ -93,7 +93,7 @@
             <div class="form-group">
                     <label class="col-lg control-label"></label>
                     <div class="col-sm-9 col-xs-12">
-                           {ife 'shop.personnel' $item}
+                           {ife 'selfexpress.personnel' $item}
                             <input type="submit" value="提交" class="btn btn-primary"  />
                         {/if}
                        <input type="button" name="back" onclick='history.back()' value="返回列表" class="btn btn-default" />
@@ -117,7 +117,7 @@
             $('#module-menus1').html(dat);
         });
     }
-    
+
     function select_role(o) {
         $("#userid").val(o.id);
         $("#user").val( o.rolename );

@@ -63,7 +63,7 @@ class Personnel_EweiShopV2Page extends WebPage
 		global $_GPC;
 		$id = intval($_GPC['id']);
 		$item = pdo_fetch('SELECT * FROM ' . tablename('ewei_shop_selfexpress_personnel') . ' WHERE id =:id and uniacid=:uniacid limit 1', array(':uniacid' => $_W['uniacid'], ':id' => $id));
-
+//		print_r($item);
 		if ($_W['ispost']) {
 			$data = array(
                 'uniacid' => $_W['uniacid'],
@@ -74,7 +74,7 @@ class Personnel_EweiShopV2Page extends WebPage
                 'mobile' => trim($_GPC['mobile']),
 //                'roleid' => intval($_GPC['roleid'])
             );
-
+//            show_json(0, array("list"=>$data));
 			if(empty($_GPC['id'])){
                 $haspersonnel = pdo_fetch(" select * from " . tablename("ewei_shop_selfexpress_personnel") . " where salername = :salername ",array(":salername"=>$_GPC['salername']));
                 if(!empty($haspersonnel)){
@@ -98,7 +98,7 @@ class Personnel_EweiShopV2Page extends WebPage
                 if(!empty($haspersonnelmobile)){
                     show_json(0, '手机号码已存在');
                 }
-
+//                show_json(0, array('url' => $data));
                 pdo_update('ewei_shop_selfexpress_personnel', $data, array('id' => $id, 'uniacid' => $_W['uniacid']));
 				plog('selfexpress.personnel.edit', '编辑配送员 ID: ' . $id . ' <br/>配送员信息: ID: ' . $_GPC['id'] . ' / ' . $data['salername'] . '/' . $data['mobile'] .  ' ');
 

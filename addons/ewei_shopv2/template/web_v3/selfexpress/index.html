@@ -48,6 +48,7 @@
             <th style="width:25px;"></th>
             <th style='width:50px'>顺序</th>
             <th style='width: 200px'>日期</th>
+            <th style='width: 200px'>配送员姓名</th>
             <th style='width: 300px;'>描述</th>
             <th style="">操作</th>
         </tr>
@@ -64,7 +65,8 @@
                 {/if}
             </td>
             <td>{$row['createtime']}</td>
-            <td>订单总数：{$row['ordercount']} 货物种类：{$row['goodscount']}</td>
+            <td>{$row['personnelsalername']}</td>
+            <td>货物数量：{$row['goodscount']}</td>
             <td>
                 {ifp 'selfexpress.view|selfexpress.edit'}
                 <a class='btn btn-default  btn-sm btn-op btn-operation' href="{php echo webUrl('selfexpress/edit', array('id' => $row['id']))}">

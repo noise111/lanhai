@@ -52,6 +52,23 @@ class Ajax_EweiShopV2Page extends AppMobilePage
         app_json(array( "list" => $list ));
 	}
 
+    /**
+     * 首页 广告
+     */
+    public function get_adv2(){
+        global $_GPC;
+        global $_W;
+        $uniacid = $_W['uniacid'];
+        $sql = " select * from ims_ewei_shop_adv where enabled = 1 and uniacid = {$uniacid} order by displayorder desc ";
+        $parms=array();
+        $list = pdo_fetchall($sql,$parms);
+        foreach ($list as $k => $v){
+            $list[$k]['thumb'] = tomedia($list[$k]['thumb']);
+            unset($list[$k]['shopid']);
+            unset($list[$k]['iswxapp']);
+        }
+        app_json(array( "list" => $list ));
+    }
 
     /**
      * 首页 广告
@@ -70,6 +87,8 @@ class Ajax_EweiShopV2Page extends AppMobilePage
         }
         app_json(array( "list" => $list ));
     }
+
+
 
 
     /**
@@ -180,7 +199,8 @@ class Ajax_EweiShopV2Page extends AppMobilePage
 
         //上架中
         $condition .= ' and status = 1';
-        $condition .= ' and status = 1';
+        //存货大于0
+        $condition .= ' and total > 0';
 
         $page = ((!(empty($_GPC['page'])) ? intval($_GPC['page']) : 1));
         $pagesize = 5;
@@ -191,6 +211,19 @@ class Ajax_EweiShopV2Page extends AppMobilePage
         $list = (pdo_fetchall($sql,$params));
         foreach ($list as $k => $v){
             $list[$k]['thumb'] = tomedia($list[$k]['thumb']);
+            $list[$k]['keywords2'] = str_replace('，',',',$list[$k]['keywords']);
+            $list[$k]['keywords2'] = explode(',',$list[$k]['keywords2']);
+
+//            for($i=0; $i < count($list[$k]['keywords2']); $i++){
+            for($i=0; $i < 2; $i++){
+                if(($list[$k]['keywords2'][$i] == '')){
+
+                }else{
+                    $list[$k]['keywords2title'][] = $list[$k]['keywords2'][$i];
+                }
+
+            }
+
         }
         app_json(array("total"=>$total,"maxpage"=>ceil($total/$pagesize), "list" => $list));
     }
